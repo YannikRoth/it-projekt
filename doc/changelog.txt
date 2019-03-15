@@ -1,1 +1,3 @@
-This file contains all important changes of which other team members need to be informed
+15.03.2019 -> (baumd) Added draft of view
+
+14.03.2019 -> (rothy) This file contains all important changes of which other team members need to be informed
