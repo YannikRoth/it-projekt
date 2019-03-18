@@ -3,6 +3,7 @@ package server.model.gameplay;
 import java.util.Map;
 
 import globals.CardAge;
+import globals.ResourceMapType;
 import globals.ResourceType;
 import globals.exception.IllegalParameterException;
 
@@ -17,7 +18,7 @@ public class Card extends AbstractPlayable{
 	 */
 	
 	public Card() throws IllegalParameterException {
-		cost = new CostMap(1,0,0,0,0,0,0,0);
+		cost = new ResourceMap(ResourceMapType.COST,1,0,0,0,0,0,0,0);
 		cardAge = CardAge.ONE;
 	}
 
