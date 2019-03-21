@@ -26,7 +26,7 @@ public class ResourceMap extends HashMap<ResourceType, Integer>{
 	private ResourceMapType type;
 	
 	public ResourceMap(ResourceMapType type, int amountCoins, int amountWood, int amountStone, int amountBrick, int amountOre, int amountPapyrus, int amountFabric, int amountGlas) throws IllegalParameterException {
-		
+		super();
 		this.type = type;
 		
 		if(amountCoins < 0 || amountWood < 0 || amountStone < 0 || amountBrick < 0 || amountOre < 0 || amountPapyrus < 0 || amountFabric < 0 || amountGlas < 0) {

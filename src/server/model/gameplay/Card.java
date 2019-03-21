@@ -1,5 +1,6 @@
 package server.model.gameplay;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import globals.CardAge;
@@ -7,19 +8,25 @@ import globals.ResourceMapType;
 import globals.ResourceType;
 import globals.exception.IllegalParameterException;
 
-public class Card extends AbstractPlayable{
+/**
+ * Represent a card in the system
+ * @author rothy
+ *
+ */
+
+public class Card implements Serializable{
 	
 	private Map<ResourceType, Integer> cost = null;
+	private Map<ResourceType, Integer> produce = null;
 	private CardAge cardAge;
+	private int minPlayer = 0;
 	
-	/**
-	 * Constructor is to be filled after CSV importer has been finalized
-	 * @throws IllegalParameterException 
-	 */
-	
-	public Card() throws IllegalParameterException {
-		cost = new ResourceMap(ResourceMapType.COST,1,0,0,0,0,0,0,0);
-		cardAge = CardAge.ONE;
+	public Card(ResourceMap cost, ResourceMap produce, CardAge age, int minPlayer) {
+		this.cost = cost;
+		this.produce = produce;
+		this.cardAge = age;
+		this.minPlayer = minPlayer;
+		
 	}
 
 }
