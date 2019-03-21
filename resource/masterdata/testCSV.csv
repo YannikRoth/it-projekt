@@ -1,4 +1,4 @@
-﻿id;age;name;cardType;minPlayer
-1;1;Card1;RAWMATERIAL;3
-2;1;Card2;GILDEN;5
-3;1;Card3;MANUFACTURING;7
+﻿id;age;name;cardType;minPlayer;costInCoins;costInZiegel;costInErz;costInHolz;costInStein;costInGlas;costInStoff
+1;1;Card1;RAWMATERIAL;3;1;0;0;1;0;2;0
+2;1;Card2;GILDEN;5;2;0;0;1;1;1;0
+3;1;Card3;MANUFACTURING;7;3;0;0;0;0;2;1

@@ -25,6 +25,7 @@ public class ResourceMap extends HashMap<ResourceType, Integer>{
 	
 	private ResourceMapType type;
 	
+	@Deprecated
 	public ResourceMap(ResourceMapType type, int amountCoins, int amountWood, int amountStone, int amountBrick, int amountOre, int amountPapyrus, int amountFabric, int amountGlas) throws IllegalParameterException {
 		super();
 		this.type = type;
@@ -36,6 +37,11 @@ public class ResourceMap extends HashMap<ResourceType, Integer>{
 		this.put(ResourceType.WOOD, amountWood);
 		
 	}
+	
+	public ResourceMap() {
+		//do nothing
+	}
+	
 	
 	
 }

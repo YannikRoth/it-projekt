@@ -16,8 +16,8 @@ import server.model.init.CardLoader;
 
 public class Card implements Serializable{
 	
-	private Map<ResourceType, Integer> cost = null;
-	private Map<ResourceType, Integer> produce = null;
+	private Map<ResourceType, Integer> cost = new ResourceMap();;
+	private Map<ResourceType, Integer> produce = new ResourceMap();
 	
 	private int id;
 	private CardAge cardAge;
@@ -66,6 +66,11 @@ public class Card implements Serializable{
 			if(fieldName.equals("minPlayer")) {
 				this.minPlayer = Integer.parseInt(values[i]);
 				System.out.println(minPlayer);
+				continue;
+			}
+			if(fieldName.equals("costInCoins")) {
+				this.cost.put(ResourceType.COIN, Integer.parseInt(values[i]));
+				System.out.println("Cost is: " + cost.get(ResourceType.COIN));
 				continue;
 			}
 			//TODO needs to be completely implemented
