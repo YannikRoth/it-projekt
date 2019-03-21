@@ -1,4 +1,4 @@
-﻿id;age;name
-1;1;Card1
-2;1;Card2
-3;1;Card3
+﻿id;age;name;cardType;minPlayer
+1;1;Card1;RAWMATERIAL;3
+2;1;Card2;GILDEN;5
+3;1;Card3;MANUFACTURING;7
