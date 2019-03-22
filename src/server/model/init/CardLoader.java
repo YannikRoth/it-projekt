@@ -27,6 +27,8 @@ public class CardLoader {
 	
 	/**
 	 * Add field definitions
+	 * KEY: field column
+	 * VALUE: field column name
 	 */
 	static {
 		field_mapping.put(0, "id");
@@ -68,28 +70,27 @@ public class CardLoader {
 		field_mapping.put(36, "sciencePointsSchriften");
 		field_mapping.put(37, "sciencePointsKompass");
 		field_mapping.put(38, "sciencePointsMeter");
-		field_mapping.put(39, "sciencePointsStein");
-		field_mapping.put(40, "sciencePointsZahnrad");
-		field_mapping.put(41, "coinsfromWonderStage");
-		field_mapping.put(42, "pointsFromWonderStage");
-		field_mapping.put(43, "pointsFromNeigbourWonderStage");
-		field_mapping.put(44, "coinsForBrownCards");
-		field_mapping.put(45, "coinsForBrownNeigbourCards");
-		field_mapping.put(46, "pointsForBrownCards");
-		field_mapping.put(47, "pointsForNeigbourBrownCards");
-		field_mapping.put(48, "coinsForGreyCards");
-		field_mapping.put(49, "coinsForGreyNeigbourCards");
-		field_mapping.put(50, "pointsForGreyCards");
-		field_mapping.put(51, "pointsForNeigbourGreyCards");
-		field_mapping.put(52, "coinsForYellowCards");
-		field_mapping.put(53, "coinsForYellowNeigbourCards");
-		field_mapping.put(54, "pointsForYellowCards");
-		field_mapping.put(55, "pointsForNeigbourYellowCards");
-		field_mapping.put(56, "pointsForPurpleCards");
-		field_mapping.put(57, "pointsForNeigbourBlueCards");
-		field_mapping.put(58, "pointsForNeigbourGreenCards");
-		field_mapping.put(59, "pointsForNeigbourRedCards");
-		field_mapping.put(60, "pointsforNeigbourDefeattoken");
+		field_mapping.put(39, "coinsfromWonderStage");
+		field_mapping.put(40, "pointsFromWonderStage");
+		field_mapping.put(41, "pointsFromNeigbourWonderStage");
+		field_mapping.put(42, "coinsForBrownCards");
+		field_mapping.put(43, "coinsForBrownNeigbourCards");
+		field_mapping.put(44, "pointsForBrownCards");
+		field_mapping.put(45, "pointsForNeigbourBrownCards");
+		field_mapping.put(46, "coinsForGreyCards");
+		field_mapping.put(47, "coinsForGreyNeigbourCards");
+		field_mapping.put(48, "pointsForGreyCards");
+		field_mapping.put(49, "pointsForNeigbourGreyCards");
+		field_mapping.put(50, "coinsForYellowCards");
+		field_mapping.put(51, "coinsForYellowNeigbourCards");
+		field_mapping.put(52, "pointsForYellowCards");
+		field_mapping.put(53, "pointsForNeigbourYellowCards");
+		field_mapping.put(54, "pointsForPurpleCards");
+		field_mapping.put(55, "pointsForNeigbourBlueCards");
+		field_mapping.put(56, "pointsForNeigbourGreenCards");
+		field_mapping.put(57, "pointsForNeigbourRedCards");
+		field_mapping.put(58, "pointsforNeigbourDefeattoken");
+
 		
 	}
 	
@@ -121,6 +122,7 @@ public class CardLoader {
 				}
 				
 				Card c = new Card(myEntries.get(i));
+				
 			}
 
 			csvReader.close();

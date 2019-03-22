@@ -79,5 +79,13 @@ public class Card implements Serializable{
 			
 		}
 	}
+	
+	/**
+	 * Required for import --> select correct Array-Index
+	 * @return int value of CardAge
+	 */
+	public int getCardAgeValue() {
+		return this.cardAge.getAgeValue();
+	}
 
 }
