@@ -38,8 +38,8 @@ public class ResourceMap extends HashMap<ResourceType, Integer>{
 		
 	}
 	
-	public ResourceMap() {
-		//do nothing
+	public ResourceMap(ResourceMapType type) {
+		this.type = type;
 	}
 	
 	

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import globals.CardAge;
 import globals.CardType;
+import globals.ResourceMapType;
 import globals.ResourceType;
 import server.model.init.CardLoader;
 
@@ -16,8 +17,8 @@ import server.model.init.CardLoader;
 
 public class Card implements Serializable{
 	
-	private Map<ResourceType, Integer> cost = new ResourceMap();;
-	private Map<ResourceType, Integer> produce = new ResourceMap();
+	private Map<ResourceType, Integer> cost = new ResourceMap(ResourceMapType.COST);;
+	private Map<ResourceType, Integer> produce = new ResourceMap(ResourceMapType.PRODUCE);
 	
 	private int id;
 	private CardAge cardAge;
