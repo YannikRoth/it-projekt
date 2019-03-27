@@ -87,5 +87,13 @@ public class Card implements Serializable{
 	public int getCardAgeValue() {
 		return this.cardAge.getAgeValue();
 	}
+	
+	/**
+	 * This method provides cost information about this specific card
+	 * @return the cost of this card as a ResourceMap
+	 */
+	public Map<ResourceType, Integer> getCost(){
+		return this.cost;
+	}
 
 }

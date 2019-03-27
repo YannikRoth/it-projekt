@@ -66,7 +66,7 @@ public class CardLoader {
 		field_mapping.put(32, "produceGlas");
 		field_mapping.put(33, "produceStoff");
 		field_mapping.put(34, "producePapyrus");
-		field_mapping.put(35, "produceAlternate");
+		field_mapping.put(35, "produceAlternate"); //probably not relevant
 		field_mapping.put(36, "sciencePointsSchriften");
 		field_mapping.put(37, "sciencePointsKompass");
 		field_mapping.put(38, "sciencePointsMeter");
