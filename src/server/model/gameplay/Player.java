@@ -16,19 +16,14 @@ import globals.ResourceType;
  */
 public class Player {
 	
-	private int amountCoins;
-	private int amountWood;
-	private int amountBrick;
-	private int amountGlas;
-	
 	private Map<ResourceType, Integer> resources;
-	private ArrayList<HashMap<ResourceType, Integer>> alternateResource;
+	private ArrayList<HashMap<ResourceType, Integer>> alternateResources;
 	private List<Card> cards;
 	
 	
 	public Player() {
 		this.resources = new ResourceMap(ResourceMapType.PRODUCE);
-		this.alternateResource = new ArrayList<>();
+		this.alternateResources = new ArrayList<>();
 		this.cards = new ArrayList<>();
 	}
 	
@@ -43,7 +38,7 @@ public class Player {
 		Map<ResourceType, Boolean> checkedResources = new HashMap<>();
 		
 		//make a copy because elements will be deleted
-		ArrayList<HashMap<ResourceType, Integer>> alternateResourceCopy = (ArrayList<HashMap<ResourceType, Integer>>) alternateResource.clone();
+		ArrayList<HashMap<ResourceType, Integer>> alternateResourceCopy = (ArrayList<HashMap<ResourceType, Integer>>) alternateResources.clone();
 		
 		//evaluate the easy ones : one card produces one or more resources at the same time
 		for (Map.Entry<ResourceType, Integer> entry : c.getCost()
