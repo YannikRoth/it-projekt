@@ -44,7 +44,7 @@ public class Player {
 		for (Map.Entry<ResourceType, Integer> entry : c.getCost()
 				.entrySet()
 				.stream()
-				.filter(v -> v.getValue() > 0)
+				.filter(v -> v.getValue() > 0) //get only values with effective cost
 				.collect(Collectors.toSet())
 				) {
 			ResourceType key = entry.getKey();
@@ -60,7 +60,7 @@ public class Player {
 			
 		}
 		
-		//evaluate the difficult onnes : one card produces alternating products
+		//evaluate the difficult ones : one card produces alternating products
 		for (Map.Entry<ResourceType, Boolean> entry : checkedResources
 				.entrySet()
 				.stream()
@@ -72,7 +72,7 @@ public class Player {
 			int amountRequired = c.getCost().get(searchResourceType);
 			
 			for(HashMap<ResourceType, Integer> aR : alternateResourceCopy) {
-				if(aR.get(searchResourceType)> 0) {
+				if(aR.get(searchResourceType) + this.resources.get(searchResourceType)> 0) {
 					amountRequired--;
 					alternateResourceCopy.remove(aR);
 				}

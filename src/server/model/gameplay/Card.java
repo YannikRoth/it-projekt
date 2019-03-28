@@ -17,14 +17,21 @@ import server.model.init.CardLoader;
 
 public class Card implements Serializable{
 	
+	//resource maps for cost and production
 	private Map<ResourceType, Integer> cost = new ResourceMap(ResourceMapType.COST);;
 	private Map<ResourceType, Integer> produce = new ResourceMap(ResourceMapType.PRODUCE);
 	
+	//special card information
+	private int winningPoints = 0;
+	
+	//further attributes concerning gameplay
 	private int id;
 	private CardAge cardAge;
 	private String cardName;
 	private CardType cardType;
 	private int minPlayer;
+	
+	
 	
 	@Deprecated
 	public Card(ResourceMap cost, ResourceMap produce, CardAge age, int minPlayer) {
@@ -94,6 +101,14 @@ public class Card implements Serializable{
 	 */
 	public Map<ResourceType, Integer> getCost(){
 		return this.cost;
+	}
+	
+	/**
+	 * This method provides production information about this specific card
+	 * @return the production map  of this card as a ResouceMap
+	 */
+	public Map<ResourceType, Integer> getProduction(){
+		return this.produce;
 	}
 
 }

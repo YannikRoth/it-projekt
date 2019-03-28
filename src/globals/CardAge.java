@@ -1,16 +1,22 @@
 package globals;
 
 public enum CardAge {
-	ONE(1), TWO(2), THREE(2);
+	ONE(1, "LEFT"), TWO(2, "RIGHT"), THREE(2, "LEFT");
 	
-	int ageValue = 0;
+	private int ageValue = 0;
+	private String turnDirection;
 	
-	private CardAge(int i) {
+	private CardAge(int i, String s) {
 		ageValue = i;
+		turnDirection = s;
 	}
 	
 	public int getAgeValue() {
 		return this.ageValue;
+	}
+	
+	public String getTurnDirection() {
+		return this.turnDirection;
 	}
 
 }
