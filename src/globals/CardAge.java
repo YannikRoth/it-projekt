@@ -8,5 +8,9 @@ public enum CardAge {
 	private CardAge(int i) {
 		ageValue = i;
 	}
+	
+	public int getAgeValue() {
+		return this.ageValue;
+	}
 
 }
