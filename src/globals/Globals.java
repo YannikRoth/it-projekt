@@ -8,6 +8,5 @@ package globals;
 public class Globals {
 	
 	public final int PORTNR = 8080;
-	public final String SERVER = "localhost";
 
 }
