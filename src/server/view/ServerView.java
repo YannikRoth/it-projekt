@@ -21,7 +21,11 @@ import javafx.stage.WindowEvent;
 import server.ServiceLocator;
 import server.model.ServerModel;
 import server.model.gameplay.ServerAction;
-
+/**
+ * Server view for Server MVC
+ * @author david
+ *
+ */
 public class ServerView {
 	ServerModel model;
 	private Stage stage;
@@ -46,6 +50,10 @@ public class ServerView {
 		setTexts();
 	}
 	
+	/**
+	 * builds view elements
+	 * @author david
+	 */
 	public void buildView() {
 		//Damit beim schliessen die Threads "gekillt" werden
 		this.stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -112,6 +120,10 @@ public class ServerView {
 		this.stage.setScene(scene);
 	}
 	
+	/**
+	 * set or refresh text elements ind view, based on locale object
+	 * @author david
+	 */
 	public void setTexts() {
 		fieldDomain.setPromptText(translator.getString("text.nodomain"));
 		fieldIpAdress.setPromptText(translator.getString("text.noipadress"));

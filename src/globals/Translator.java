@@ -6,7 +6,12 @@ import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 import server.ServiceLocator;
-
+/**
+ * Class for translation in User-Interfaces
+ * Based on system language
+ * @author david
+ *
+ */
 public class Translator {
 	// Supported languages for translations
 	final Locale[] locales = new Locale[] { 
@@ -28,6 +33,12 @@ public class Translator {
 		setLanguage(System.getProperty("user.language"));
 	}
 	
+	/**
+	 * Set the new language in parameter, if the programm supports the language
+	 * if the programm don't support, default language will be german (de)
+	 * @author david
+	 * @param Language (de, en, ...)
+	 */
 	public void setLanguage(String Language) {
 		for (Locale l : locales) {
 			if(Language.equalsIgnoreCase(l.getLanguage()))
