@@ -1,5 +1,6 @@
 package client.view;
 
+import client.model.ClientModel;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -25,6 +26,8 @@ import javafx.stage.Stage;
  */
 
 public class ClientView extends Application{
+	
+	private ClientModel model;
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -110,5 +113,10 @@ public class ClientView extends Application{
 		primaryStage.setTitle("7 Wonders");
 		primaryStage.setScene(scene);
 		primaryStage.show();
+	}
+	
+	//TODO -> above code needs to be changed to constructor mehtod!
+	public ClientView(ClientModel model) {
+		this.model = model;
 	}
 }
