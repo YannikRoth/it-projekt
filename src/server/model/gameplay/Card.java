@@ -90,6 +90,10 @@ public class Card implements Serializable{
 		
 	}
 
+	/**
+	 * Constructor of card. Will iterate through all fieldMappings.
+	 * @param values array in the same order as the masterdata, usually given by default
+	 */
 	public Card(String[] values) {
 		Map<Integer, String> mapping = CardLoader.getFieldMapping();
 		
