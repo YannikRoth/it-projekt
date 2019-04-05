@@ -108,15 +108,16 @@ public class ClientView extends Application{
         });
 		
 		Scene scene = new Scene(borderPaneMain);
-//		scene.getStylesheets().add(getClass().getResource("TTTStyle.css").toExternalForm());
+//		scene.getStylesheets().add(getClass().getResource("./server/view/ServerStyle.css").toExternalForm());
 		primaryStage.sizeToScene();
 		primaryStage.setTitle("7 Wonders");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
-	
-	//TODO -> above code needs to be changed to constructor mehtod!
-	public ClientView(ClientModel model) {
-		this.model = model;
-	}
+
+//	//TODO -> above code needs to be changed to constructor mehtod!
+//	public ClientView(ClientModel model) {
+//		this.model = model;
+//	}
+
 }
