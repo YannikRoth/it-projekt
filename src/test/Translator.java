@@ -5,7 +5,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public class Translator {
-	static Locale locale = new Locale("en");
+	static Locale locale = new Locale(System.getProperty("user.language"));
 	static ResourceBundle resourceBundle = ResourceBundle.getBundle(Translator.class.getName(), locale);
 	
 	public static void main(String[] args) {
@@ -13,7 +13,7 @@ public class Translator {
 		
 		System.out.println(getString("program.menu.file"));
 		
-		locale = new Locale("de");
+		locale = new Locale("en");
 		resourceBundle = ResourceBundle.getBundle(Translator.class.getName(), locale);
 		System.out.println("Loaded resources for " + locale.getLanguage());
 		System.out.println(getString("program.menu.file"));

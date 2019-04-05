@@ -3,6 +3,7 @@ package server.view;
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
 
+import globals.Translator;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,19 +18,32 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import server.ServiceLocator;
 import server.model.ServerModel;
 import server.model.gameplay.ServerAction;
 
 public class ServerView {
 	ServerModel model;
 	private Stage stage;
+	private Translator translator;
+	
+	private TextField fieldDomain;
+	private TextField fieldIpAdress;
+	private TextField fieldPort;
 	private Button btnChangePort;
 	private Button btnRestartServer;
+	
+	TableColumn<ServerAction,String> tblcolTimestamp;
+	TableColumn<ServerAction,String> tblcolIpAdress;
+	TableColumn<ServerAction,String> tblcolPlayer;
+	TableColumn<ServerAction,String> tblcolAction;
 	
 	public ServerView(Stage primaryStage, ServerModel model) {
 		this.stage = primaryStage;
 		this.model = model;
+		translator = ServiceLocator.getTranslator();
 		buildView();
+		setTexts();
 	}
 	
 	public void buildView() {
@@ -49,23 +63,20 @@ public class ServerView {
 		pane.setTop(hBox);
 		
 		//TODO: Insert correct values from model
-		TextField fieldDomain	= new TextField();
-		fieldDomain.setPromptText("No domain name");
+		fieldDomain	= new TextField();
 		fieldDomain.setEditable(false);
 		
-		TextField fieldIpAdress = new TextField();
-		fieldIpAdress.setPromptText("No IP-Adress");
+		fieldIpAdress = new TextField();
 		fieldIpAdress.setEditable(false);
 		try {
 			fieldIpAdress.setText(Inet4Address.getLocalHost().getHostAddress());
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		TextField fieldPort		= new TextField();
-		fieldPort.setPromptText("No Port");
+		fieldPort		= new TextField();
 		fieldPort.setEditable(false);
 		
-		this.btnChangePort		= new Button("Change Port");
+		this.btnChangePort		= new Button();
 		this.btnRestartServer	= new Button("Restart Server");
 		
 		hBox.getChildren().addAll(fieldDomain, fieldIpAdress, fieldPort, btnChangePort, btnRestartServer);
@@ -75,19 +86,19 @@ public class ServerView {
 		tableView.setItems(serverActionData);
 		pane.setCenter(tableView);
 		
-		TableColumn<ServerAction,String> tblcolTimestamp= new TableColumn<ServerAction,String>("Timestamp");
+		tblcolTimestamp= new TableColumn<ServerAction,String>();
 		tblcolTimestamp.setMinWidth(130);
 		tblcolTimestamp.setCellValueFactory(new PropertyValueFactory<ServerAction,String>("timestamp"));
 		
-		TableColumn<ServerAction,String> tblcolIpAdress	= new TableColumn<ServerAction,String>("IP-Adress");
+		tblcolIpAdress	= new TableColumn<ServerAction,String>();
 		tblcolIpAdress.setMinWidth(80);
 		tblcolIpAdress.setCellValueFactory(new PropertyValueFactory<ServerAction,String>("ipAdress"));
 		
-		TableColumn<ServerAction,String> tblcolPlayer	= new TableColumn<ServerAction,String>("Player");
+		tblcolPlayer	= new TableColumn<ServerAction,String>();
 		tblcolPlayer.setMinWidth(90);
 		tblcolPlayer.setCellValueFactory(new PropertyValueFactory<ServerAction,String>("userName"));
 		
-		TableColumn<ServerAction,String> tblcolAction	= new TableColumn<ServerAction,String>("Action");
+		tblcolAction	= new TableColumn<ServerAction,String>();
 		tblcolAction.setMinWidth(350);
 		tblcolAction.setCellValueFactory(new PropertyValueFactory<ServerAction,String>("action"));
 		
@@ -97,8 +108,21 @@ public class ServerView {
 		Scene scene = new Scene(pane);
 		scene.getStylesheets().add(getClass().getResource("ServerStyle.css").toExternalForm());
 		this.stage.sizeToScene();
-		this.stage.setTitle("7wonders Server");
+		this.stage.setTitle(ServiceLocator.getTranslator().getString("server.name"));
 		this.stage.setScene(scene);
+	}
+	
+	public void setTexts() {
+		fieldDomain.setPromptText(translator.getString("text.nodomain"));
+		fieldIpAdress.setPromptText(translator.getString("text.noipadress"));
+		fieldPort.setPromptText(translator.getString("text.noport"));
+		btnChangePort.setText(translator.getString("button.changeport"));
+		btnRestartServer.setText(translator.getString("button.restartserver"));
+		
+		tblcolTimestamp.setText(translator.getString("column.timestamp"));
+		tblcolIpAdress.setText(translator.getString("column.ipadress"));
+		tblcolPlayer.setText(translator.getString("column.player"));
+		tblcolAction.setText(translator.getString("column.action"));
 	}
 
 	public void start() {

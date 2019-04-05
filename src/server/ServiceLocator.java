@@ -7,10 +7,13 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+import globals.Translator;
+
 public class ServiceLocator {
 
 	private static ServiceLocator instance = null;
 	private static Logger logger;
+	private static Translator translator;
 	
 	/**
 	 * Class initialization
@@ -35,6 +38,8 @@ public class ServiceLocator {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		translator = Translator.getTranslator();
 		
 		logger.info("static block of Service Locator has been executed");
 	}
@@ -68,4 +73,7 @@ public class ServiceLocator {
 		return logger;
 	}
 	
+	public static Translator getTranslator() {
+		return translator;
+	}
 }
