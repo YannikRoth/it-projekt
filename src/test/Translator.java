@@ -1,7 +1,30 @@
 package test;
 
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
 public class Translator {
-	public void main(String[] args) {
+	static Locale locale = new Locale("en");
+	static ResourceBundle resourceBundle = ResourceBundle.getBundle(Translator.class.getName(), locale);
+	
+	public static void main(String[] args) {
+		System.out.println("Loaded resources for " + locale.getLanguage());
+		
+		System.out.println(getString("program.menu.file"));
+		
+		locale = new Locale("de");
+		resourceBundle = ResourceBundle.getBundle(Translator.class.getName(), locale);
+		System.out.println(getString("program.menu.file"));
 		
 	}
+	
+    public static String getString(String identifier) {
+        try {
+            return resourceBundle.getString(identifier);
+        } catch (MissingResourceException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
 }
