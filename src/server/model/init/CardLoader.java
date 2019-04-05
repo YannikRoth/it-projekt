@@ -7,6 +7,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
@@ -14,6 +15,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 
 import globals.ResourceType;
+import server.ServiceLocator;
 import server.model.gameplay.Card;
 import server.model.gameplay.ResourceMap;
 
@@ -22,7 +24,7 @@ import server.model.gameplay.ResourceMap;
  *
  */
 public class CardLoader {
-	
+	private static Logger logger = ServiceLocator.getLogger();
 	private static Map<Integer, String> field_mapping = new HashMap<>();
 	
 	/**
@@ -122,6 +124,7 @@ public class CardLoader {
 				}
 				
 				Card c = new Card(myEntries.get(i));
+				logger.info("Card name " + c.getCardName());
 				
 			}
 

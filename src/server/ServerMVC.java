@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import server.controller.ServerController;
 import server.model.ServerModel;
+import server.model.init.CardLoader;
 import server.view.ServerView;
 import java.util.logging.Logger;
 
@@ -30,5 +31,6 @@ public class ServerMVC extends Application {
 		view.start();
 		
 		logger.info("MVC started");
+		//CardLoader.importCards();
 	}
 }

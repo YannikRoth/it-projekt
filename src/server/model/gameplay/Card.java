@@ -4,11 +4,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import globals.CardAge;
 import globals.CardType;
 import globals.ResourceMapType;
 import globals.ResourceType;
+import server.ServiceLocator;
 import server.model.init.CardLoader;
 
 /**
@@ -18,6 +20,8 @@ import server.model.init.CardLoader;
  */
 
 public class Card implements Serializable{
+	
+	private Logger logger = ServiceLocator.getLogger();
 	
 	//resource maps for cost and production
 	private Map<ResourceType, Integer> cost = new ResourceMap(ResourceMapType.COST);;
@@ -391,6 +395,10 @@ public class Card implements Serializable{
 	 */
 	public Integer getProducationValue(ResourceType t) {
 		return this.produce.get(t);
+	}
+	
+	public String getCardName() {
+		return this.cardName;
 	}
 
 }
