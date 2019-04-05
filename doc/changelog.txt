@@ -1,3 +1,5 @@
+05.04.2019 -> (rothy) added Server MVC, Client MVC pattern, changed GIT config, added Service Locator for server
+
 15.03.2019 -> (rothy) created development branch
 
 15.03.2019 -> (baumd) Added draft of view

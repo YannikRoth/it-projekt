@@ -12,7 +12,10 @@ public class ServiceLocator {
 	private static ServiceLocator instance = null;
 	private static Logger logger;
 	
-	
+	/**
+	 * Class initialization
+	 * @author yannik roth
+	 */
 	static {
 		//init logger
 		logger = Logger.getLogger(ServiceLocator.class.getName());
@@ -20,7 +23,7 @@ public class ServiceLocator {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("YYY-MM-dd");
 			
 			FileHandler fhandler = new FileHandler("./log/serverlog"+
-					dateFormat.format(Calendar.getInstance().getTime())+".log");
+					dateFormat.format(Calendar.getInstance().getTime())+".log", true);
 			
 			logger.addHandler(fhandler);
 			SimpleFormatter format = new SimpleFormatter();
@@ -32,6 +35,8 @@ public class ServiceLocator {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		logger.info("static block of Service Locator has been executed");
 	}
 	
 	/**
@@ -52,11 +57,15 @@ public class ServiceLocator {
 		return instance == null ? new ServiceLocator() : instance;
 	}
 	
-	public static void main(String[] args) {
-		System.out.println("This is test");
-		ServiceLocator.logger.info("Hello Yannik");
-		logger.info("asdasd");
+	/**
+	 * Return logger for this service locator which is intended for server use.
+	 * Log files are written to log directory within this project.
+	 * Log files are not transmitted to server, as all *.log files are excluded
+	 * from GIT
+	 * @return
+	 */
+	public static Logger getLogger() {
+		return logger;
 	}
-	
 	
 }
