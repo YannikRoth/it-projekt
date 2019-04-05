@@ -1,5 +1,6 @@
 package server.model.gameplay;
 
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +21,8 @@ public class Player {
 	private ArrayList<HashMap<ResourceType, Integer>> alternateResources;
 	private List<Card> cards;
 	
+	//TODO: Handle name
+	private String playerName;
 	
 	public Player() {
 		this.resources = new ResourceMap(ResourceMapType.PRODUCE);
@@ -96,4 +99,16 @@ public class Player {
 
 	}
 
+	public Socket getSocket() {
+		//TODO: return players Socket
+		return new Socket();
+	}
+
+	public String getPlayerName() {
+		return playerName;
+	}
+
+	public void setPlayerName(String playerName) {
+		this.playerName = playerName;
+	}
 }
