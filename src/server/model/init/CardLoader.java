@@ -126,6 +126,7 @@ public class CardLoader {
 				Card c = new Card(myEntries.get(i));
 				logger.info("Card name " + c.getCardName());
 				
+				
 			}
 
 			csvReader.close();

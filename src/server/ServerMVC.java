@@ -31,6 +31,5 @@ public class ServerMVC extends Application {
 		view.start();
 		
 		logger.info("MVC started");
-		//CardLoader.importCards();
 	}
 }
