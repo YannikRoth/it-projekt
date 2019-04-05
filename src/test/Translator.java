@@ -15,6 +15,7 @@ public class Translator {
 		
 		locale = new Locale("de");
 		resourceBundle = ResourceBundle.getBundle(Translator.class.getName(), locale);
+		System.out.println("Loaded resources for " + locale.getLanguage());
 		System.out.println(getString("program.menu.file"));
 		
 	}
