@@ -21,12 +21,18 @@ import server.model.ServerModel;
 import server.model.gameplay.ServerAction;
 
 public class ServerView {
+	ServerModel model;
 	private Stage stage;
 	private Button btnChangePort;
 	private Button btnRestartServer;
 	
 	public ServerView(Stage primaryStage, ServerModel model) {
 		this.stage = primaryStage;
+		this.model = model;
+		buildView();
+	}
+	
+	public void buildView() {
 		//Damit beim schliessen die Threads "gekillt" werden
 		this.stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
@@ -90,7 +96,7 @@ public class ServerView {
 		//Final Initialisation
 		Scene scene = new Scene(pane);
 		scene.getStylesheets().add(getClass().getResource("ServerStyle.css").toExternalForm());
-		stage.sizeToScene();
+		this.stage.sizeToScene();
 		this.stage.setTitle("7wonders Server");
 		this.stage.setScene(scene);
 	}
