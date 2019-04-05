@@ -2,6 +2,7 @@ package client.view;
 
 import client.model.ClientModel;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
@@ -17,6 +18,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * Test version of ClientView. 
@@ -33,8 +35,17 @@ public class ClientView extends Application{
 		launch(args);
 	}
 
-	@Override
-	public void start(Stage primaryStage) throws Exception {
+	public ClientView(Stage primaryStage, ClientModel model) throws Exception {
+		this.model = model;
+		
+		//Damit beim schliessen die Threads "gekillt" werden
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent event) {
+				Platform.exit();
+				System.exit(0);
+			}
+		});
 		
 		BorderPane borderPaneMain = new BorderPane();
 		
@@ -115,9 +126,7 @@ public class ClientView extends Application{
 		primaryStage.show();
 	}
 
-//	//TODO -> above code needs to be changed to constructor mehtod!
-//	public ClientView(ClientModel model) {
-//		this.model = model;
-//	}
-
+	public void start(Stage stage) {
+		stage.show();
+	}
 }

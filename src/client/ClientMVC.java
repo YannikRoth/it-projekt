@@ -13,16 +13,15 @@ public class ClientMVC extends Application{
 	private ClientController control;
 	
 	public static void main(String[] args) {
-		System.out.println("Hello World");
-
+		launch(args);
 	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		this.model = new ClientModel();
-		this.view = new ClientView(model);
+		this.view = new ClientView(primaryStage, model);
 		this.control = new ClientController(model, view);
-		
+		view.start(primaryStage);
 	}
 
 }
