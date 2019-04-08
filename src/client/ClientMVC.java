@@ -6,6 +6,12 @@ import client.view.ClientView;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+/**
+ * 
+ * @author philipp
+ *
+ */
+
 public class ClientMVC extends Application{
 
 	private ClientModel model;
