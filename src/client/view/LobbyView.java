@@ -109,15 +109,15 @@ public class LobbyView extends Application {
 		this.stage.show();
 	}
 	
-	public void setTexts() {
-		btnNewGame.setText(translator.getString("button.newgame"));
-		btnRules.setText(translator.getString("button.rules"));
-		btnQuit.setText(translator.getString("button.quit"));
-		
-		tblcolNr.setText(translator.getString("column.nr"));
-		tblcolWaitingPlayer.setText(translator.getString("column.waitingplayers"));
-
-	}
+//	public void setTexts() {
+//		btnNewGame.setText(translator.getString("button.newgame"));
+//		btnRules.setText(translator.getString("button.rules"));
+//		btnQuit.setText(translator.getString("button.quit"));
+//		
+//		tblcolNr.setText(translator.getString("column.nr"));
+//		tblcolWaitingPlayer.setText(translator.getString("column.waitingplayers"));
+//
+//	}
 	public void start(Stage stage) {
 		stage.show();
 	}

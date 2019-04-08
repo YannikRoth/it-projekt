@@ -63,20 +63,35 @@ public class ClientView extends Application{
 		borderPaneMain.setCenter(tableOpponents);
 		
 		TableColumn ColPlayer	= new TableColumn("Player");
+		ColPlayer.setMinWidth(100);
 		TableColumn ColStone	= new TableColumn("Stone");
+		ColStone.setMinWidth(100);
 		TableColumn ColOre		= new TableColumn("Ore");
+		ColOre.setMinWidth(100);
 		TableColumn ColWood		= new TableColumn("Wood");
+		ColWood.setMinWidth(100);
 		TableColumn ColGlass	= new TableColumn("Glass");
+		ColGlass.setMinWidth(100);
 		TableColumn ColClay		= new TableColumn("Clay");
+		ColClay.setMinWidth(100);
 		TableColumn ColLoom		= new TableColumn("Loom");
+		ColLoom.setMinWidth(100);
 		TableColumn ColPaper	= new TableColumn("Paper");
+		ColPaper.setMinWidth(100);
 		TableColumn ColCoin		= new TableColumn("Coin");
+		ColCoin.setMinWidth(100);
 		TableColumn ColGeom 	= new TableColumn("Geom");
+		ColGeom.setMinWidth(100);
 		TableColumn ColWrit 	= new TableColumn("Writ");
+		ColWrit.setMinWidth(100);
 		TableColumn ColEng		= new TableColumn("Eng");
+		ColEng.setMinWidth(100);
 		TableColumn ColShield	= new TableColumn("Shield");
+		ColShield.setMinWidth(100);
 		TableColumn ColMilitary	= new TableColumn("Military");
+		ColMilitary.setMinWidth(100);
 		TableColumn ColWinning	= new TableColumn("Winning");
+		ColWinning.setMinWidth(100);
 		
 		tableOpponents.getColumns().addAll(ColPlayer, ColStone, ColOre, ColWood, ColGlass, ColClay, ColLoom, ColPaper, ColCoin, ColGeom, ColWrit, ColEng, ColShield, ColMilitary, ColWinning);
 		
@@ -122,13 +137,14 @@ public class ClientView extends Application{
 		
 		hBoxCards.getChildren().addAll(card1, card2, card3, card4, card5, card6, card7);
 		
+		
 		//Points
 		TableView tablePoints = new TableView();
 		tablePoints.setEditable(false);
 		hBoxPlayer.getChildren().addAll(tablePoints);
 		
 		TableColumn ColType		= new TableColumn("Type");
-		ColType.setMinWidth(150);
+		ColType.setMinWidth(100);
 		TableColumn ColAmount	= new TableColumn("Amount");
 		ColAmount.setMinWidth(100);
 		
@@ -143,6 +159,7 @@ public class ClientView extends Application{
 		deck.setFitWidth(600);
 		
 		hBoxDeck.getChildren().addAll(deck);
+		
 		
 		
 		//Menu "Game"
@@ -178,6 +195,7 @@ public class ClientView extends Application{
             }
         });
 		
+		this.stage.setResizable(false);
 		Scene scene = new Scene(borderPaneMain);
 //		scene.getStylesheets().add(getClass().getResource("./server/view/ServerStyle.css").toExternalForm());
 		this.stage.sizeToScene();
