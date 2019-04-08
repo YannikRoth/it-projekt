@@ -29,7 +29,7 @@ import server.model.gameplay.ServerAction;
  *
  */
 
-public class LobbyView extends Application {
+public class LobbyView {
 	LobbyModel model;
 	private Stage stage;
 	private Translator translator;
@@ -42,11 +42,6 @@ public class LobbyView extends Application {
 	
 	TableColumn<ServerAction,String> tblcolNr;
 	TableColumn<ServerAction,String> tblcolWaitingPlayer;
-	
-	
-	public static void main(String[] args) {
-		launch(args);
-	}
 	
 	public LobbyView(Stage primaryStage, LobbyModel model) {
 		this.stage = primaryStage;

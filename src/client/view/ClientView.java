@@ -29,14 +29,10 @@ import server.ServiceLocator;
  *
  */
 
-public class ClientView extends Application{
+public class ClientView {
 	private Stage stage;
 	private ClientModel model;
 	private Translator translator;
-	
-	public static void main(String[] args) {
-		launch(args);
-	}
 
 	public ClientView(Stage primaryStage, ClientModel model) {
 		this.stage = primaryStage;
