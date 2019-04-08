@@ -175,9 +175,13 @@ public class ClientView extends Application{
 		
 		//Menu "Help"
 		MenuItem itemM8 = new MenuItem("New Game");
+		itemM8.setOnAction(this::processNewGameItem);
 		MenuItem itemM9 = new MenuItem("Rules");
+		itemM9.setOnAction(this::processRulesItem);
 		MenuItem itemM10 = new MenuItem("Hint");
+		itemM10.setOnAction(this::processHintItem);
 		MenuItem itemM11 = new MenuItem("About");
+		itemM11.setOnAction(this::processAboutItem);
 		MenuItem itemM12 = new MenuItem("Quit");
 		itemM12.setOnAction(this::processQuitItem);
 		Menu menuHelp = new Menu("Help");
@@ -213,7 +217,24 @@ public class ClientView extends Application{
 	public Stage getStage() {
 		return this.stage;
 	}
+	
+	public void processNewGameItem(ActionEvent event) {
+	//TODO	
+	}
+	
 	public void processQuitItem(ActionEvent event) {
 		Platform.exit();
+	}
+	
+	public void processRulesItem(ActionEvent event) {
+	//TODO	
+	}
+	
+	public void processHintItem(ActionEvent event) {
+	//TODO	
+	}
+	
+	public void processAboutItem(ActionEvent event) {
+	//TODO	
 	}
 }
