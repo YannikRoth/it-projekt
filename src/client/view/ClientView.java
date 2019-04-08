@@ -2,7 +2,6 @@ package client.view;
 
 import client.model.ClientModel;
 import globals.Translator;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -21,7 +20,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import server.ServiceLocator;
 
 /**
  * 
@@ -32,12 +30,11 @@ import server.ServiceLocator;
 public class ClientView {
 	private Stage stage;
 	private ClientModel model;
-	private Translator translator;
+	private Translator translator = Translator.getTranslator();
 
 	public ClientView(Stage primaryStage, ClientModel model) {
 		this.stage = primaryStage;
 		this.model = model;
-		translator = ServiceLocator.getTranslator();
 		buildView();
 //		setTexts();
 	}	

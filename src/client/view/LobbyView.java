@@ -1,9 +1,7 @@
 package client.view;
 
-import client.ClientMVC;
 import client.model.LobbyModel;
 import globals.Translator;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,7 +18,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import server.ServiceLocator;
 import server.model.gameplay.ServerAction;
 
 /**
@@ -32,7 +29,7 @@ import server.model.gameplay.ServerAction;
 public class LobbyView {
 	LobbyModel model;
 	private Stage stage;
-	private Translator translator;
+	private Translator translator = Translator.getTranslator();
 	
 	private Button btnNewGame;
 	private Button btnRules;
@@ -46,7 +43,6 @@ public class LobbyView {
 	public LobbyView(Stage primaryStage, LobbyModel model) {
 		this.stage = primaryStage;
 		this.model = model;
-		translator = ServiceLocator.getTranslator();
 		buildView();
 //		setTexts();
 	}	

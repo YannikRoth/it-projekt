@@ -45,7 +45,7 @@ public class ServerView {
 	public ServerView(Stage primaryStage, ServerModel model) {
 		this.stage = primaryStage;
 		this.model = model;
-		translator = ServiceLocator.getTranslator();
+		translator = Translator.getTranslator();
 		buildView();
 		setTexts();
 	}
@@ -116,7 +116,6 @@ public class ServerView {
 		Scene scene = new Scene(pane);
 		scene.getStylesheets().add(getClass().getResource("ServerStyle.css").toExternalForm());
 		this.stage.sizeToScene();
-		this.stage.setTitle(ServiceLocator.getTranslator().getString("server.name"));
 		this.stage.setScene(scene);
 	}
 	
@@ -125,6 +124,8 @@ public class ServerView {
 	 * @author david
 	 */
 	public void setTexts() {
+		stage.setTitle(translator.getString("server.name"));
+		
 		fieldDomain.setPromptText(translator.getString("text.nodomain"));
 		fieldIpAdress.setPromptText(translator.getString("text.noipadress"));
 		fieldPort.setPromptText(translator.getString("text.noport"));
