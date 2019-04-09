@@ -5,6 +5,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Logger;
 
+import server.ServiceLocator;
+
 
 /**
  * 
@@ -15,7 +17,7 @@ public class ServerRequestHandler extends Thread {
 	private ServerModel servermodel;
 	private ServerSocket listener;
 	private volatile boolean stop = false;
-	private final Logger logger = Logger.getLogger("");
+	private final Logger logger = ServiceLocator.getLogger();
 	
 	public ServerRequestHandler(ServerModel model) {
 		servermodel = model;

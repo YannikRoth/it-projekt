@@ -3,9 +3,11 @@ package server.model.clienthandling;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import server.ServiceLocator;
+
 public class ServerModel {
 
-	private final Logger logger = Logger.getLogger("");
+	private final Logger logger = ServiceLocator.getLogger();
 	private ArrayList<ServerClientThread> Clients = new ArrayList<ServerClientThread>();
 	
 	public ServerModel() {
