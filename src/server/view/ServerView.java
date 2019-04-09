@@ -1,15 +1,22 @@
 package server.view;
 
+import java.io.IOException;
 import java.net.Inet4Address;
+import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.stream.Stream;
 
 import globals.Translator;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -30,6 +37,11 @@ public class ServerView {
 	ServerModel model;
 	private Stage stage;
 	private Translator translator;
+	
+	MenuBar menuBar;
+	Menu menuLanguage;
+	MenuItem itemGerman;
+	MenuItem itemEnglish;
 	
 	private TextField fieldDomain;
 	private TextField fieldIpAdress;
@@ -66,9 +78,20 @@ public class ServerView {
 		
 		BorderPane pane = new BorderPane();
 		
-		//HBox Top line
+		//MenuBar Top
+		menuBar = new MenuBar();
+		pane.setTop(menuBar);
+		
+		menuLanguage = new Menu();
+		menuBar.getMenus().add(menuLanguage);
+		
+		itemGerman = new MenuItem();
+		itemEnglish = new MenuItem();
+		menuLanguage.getItems().addAll(itemGerman, itemEnglish);
+		
+		//HBox Center
 		HBox hBox = new HBox();
-		pane.setTop(hBox);
+		pane.setCenter(hBox);
 		
 		//TODO: Insert correct values from model
 		fieldDomain	= new TextField();
@@ -89,10 +112,10 @@ public class ServerView {
 		
 		hBox.getChildren().addAll(fieldDomain, fieldIpAdress, fieldPort, btnChangePort, btnRestartServer);
 		
-		//TableView Center
+		//TableView Bottom
 		TableView<ServerAction> tableView = new TableView<ServerAction>();
 		tableView.setItems(serverActionData);
-		pane.setCenter(tableView);
+		pane.setBottom(tableView);
 		
 		tblcolTimestamp= new TableColumn<ServerAction,String>();
 		tblcolTimestamp.setMinWidth(130);
@@ -126,16 +149,32 @@ public class ServerView {
 	public void setTexts() {
 		stage.setTitle(translator.getString("server.name"));
 		
-		fieldDomain.setPromptText(translator.getString("text.nodomain"));
-		fieldIpAdress.setPromptText(translator.getString("text.noipadress"));
-		fieldPort.setPromptText(translator.getString("text.noport"));
-		btnChangePort.setText(translator.getString("button.changeport"));
-		btnRestartServer.setText(translator.getString("button.restartserver"));
+		menuLanguage.setText(		translator.getString("menu.language"));
+		itemGerman.setText(			this.getLanguageDescription("language.german"));
+		itemEnglish.setText(		this.getLanguageDescription("language.english"));
 		
-		tblcolTimestamp.setText(translator.getString("column.timestamp"));
-		tblcolIpAdress.setText(translator.getString("column.ipadress"));
-		tblcolPlayer.setText(translator.getString("column.player"));
-		tblcolAction.setText(translator.getString("column.action"));
+		fieldDomain.setPromptText(	translator.getString("text.nodomain"));
+		fieldIpAdress.setPromptText(translator.getString("text.noipadress"));
+		fieldPort.setPromptText(	translator.getString("text.noport"));
+		btnChangePort.setText(		translator.getString("button.changeport"));
+		btnRestartServer.setText(	translator.getString("button.restartserver"));
+		
+		tblcolTimestamp.setText(	translator.getString("column.timestamp"));
+		tblcolIpAdress.setText(		translator.getString("column.ipadress"));
+		tblcolPlayer.setText(		translator.getString("column.player"));
+		tblcolAction.setText(		translator.getString("column.action"));
+	}
+	
+	/**
+	 * Method to check if the language item is the default system setting and return it into description
+	 * @param identifier
+	 * @return
+	 * @author david
+	 */
+	private String getLanguageDescription(String identifier) {
+		if(Translator.getDefaultLocale().getLanguage().substring(0, 2).equalsIgnoreCase(translator.getString(identifier).substring(0, 2)))
+			return translator.getString(identifier) + " " + translator.getString("language.default");
+		return translator.getString(identifier);
 	}
 
 	public void start() {
@@ -154,6 +193,10 @@ public class ServerView {
 	}
 	public Button getButtonRestartServer() {
 		return this.btnRestartServer;
+	}
+	
+	public Menu getMenuLanguage() {
+		return this.menuLanguage;
 	}
 	
 	public ObservableList<ServerAction> serverActionData = FXCollections.observableArrayList(
