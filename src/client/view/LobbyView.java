@@ -1,5 +1,7 @@
 package client.view;
 
+import java.util.Optional;
+
 import client.model.LobbyModel;
 import globals.Translator;
 import javafx.application.Platform;
@@ -13,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -43,6 +46,19 @@ public class LobbyView {
 	public LobbyView(Stage primaryStage, LobbyModel model) {
 		this.stage = primaryStage;
 		this.model = model;
+		
+		TextInputDialog dialog = new TextInputDialog("192.168.1.");
+		dialog.setTitle("Spielpartner wählen");
+		dialog.setHeaderText("Wählen Sie Ihren Spielepartner:");
+		dialog.setContentText("Adresse (IP):");
+		
+		Optional<String> result = dialog.showAndWait();
+		result.ifPresent(name -> {
+			//TODO: Set Server IP in model
+			System.out.println(name);
+		});
+		
+		
 		buildView();
 		setTexts();
 	}	
