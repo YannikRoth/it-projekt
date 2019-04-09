@@ -63,4 +63,8 @@ public class Translator {
             return "***";
         }
     }
+    
+    public Locale getLocale() {
+    	return this.locale;
+    }
 }

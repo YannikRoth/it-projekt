@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.WindowEvent;
+import server.ServiceLocator;
 import server.model.ServerModel;
 import server.model.gameplay.ServerAction;
 import server.view.ServerView;
@@ -55,13 +56,14 @@ public class ServerController{
 	private void AddMenuItemListeners() {
 		view.getMenuLanguage().getItems().stream()
 			.forEach(t->t.setOnAction((event) -> {
-				String newLanguage = ((MenuItem) event.getSource())
-											.getText().toLowerCase().substring(0, 2);
-				Translator.getTranslator().setLanguage(newLanguage);
-				view.setTexts();
+				
+				MenuItem i = (MenuItem) event.getSource();
+				String newLanguage = i.getText().toLowerCase().substring(0, 2);
+				
+				if(!Translator.getTranslator().getLocale().getLanguage().equalsIgnoreCase(newLanguage)) {
+					Translator.getTranslator().setLanguage(newLanguage);
+					view.setTexts();
+				}
 		}));
-	}
-	
-	private void changeLanguage(Event e) {
 	}
 }
