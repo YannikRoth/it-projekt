@@ -105,7 +105,6 @@ public class Card implements Serializable{
 			String fieldName = mapping.get(i);
 			if(fieldName.equals("id")) {
 				this.id = Integer.parseInt(values[i]);
-				System.out.println(this.id);
 				continue;
 			}
 			if(fieldName.equals("cardAge")) {
@@ -114,32 +113,26 @@ public class Card implements Serializable{
 						this.cardAge = cA;
 					}
 				}
-				System.out.println(this.cardAge);
 				continue;
 			}
 			if(fieldName.equals("cardName")) {
 				this.cardName = values[i];
-				System.out.println(cardName);
 				continue;
 			}
 			if(fieldName.equals("cardType")) {
 				this.cardType = CardType.valueOf(values[i]);
-				System.out.println(this.cardType);
 				continue;
 			}
 			if(fieldName.equals("minPlayer")) {
 				this.minPlayer = Integer.parseInt(values[i]);
-				System.out.println(minPlayer);
 				continue;
 			}
 			if(fieldName.equals("costInCoins")) {
 				this.cost.put(ResourceType.COIN, Integer.parseInt(values[i]));
-				System.out.println("Cost is: " + cost.get(ResourceType.COIN));
 				continue;
 			}
 			if(fieldName.equals("costInZiegel")) {
 				this.cost.put(ResourceType.BRICK, Integer.parseInt(values[i]));
-				System.out.println("Cost brick is: " + cost.get(ResourceType.BRICK));
 				continue;
 			}
 			if(fieldName.equals("costInErz")) {

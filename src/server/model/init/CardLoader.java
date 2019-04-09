@@ -21,7 +21,7 @@ import server.model.gameplay.ResourceMap;
 
 /**
  * This class needs to import all card from our db/csv and create card objects
- *
+ * @autor yannik roth
  */
 public class CardLoader {
 	private static Logger logger = ServiceLocator.getLogger();
