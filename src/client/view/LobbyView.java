@@ -7,7 +7,6 @@ import globals.Translator;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -33,7 +32,7 @@ import server.model.gameplay.ServerAction;
  */
 
 public class LobbyView {
-	LobbyModel model;
+	private LobbyModel model;
 	private Stage stage;
 	private Translator translator = Translator.getTranslator();
 	
@@ -125,10 +124,11 @@ public class LobbyView {
 		MenuBar menuBar = new MenuBar(menuLanguage);
 		borderPaneMain.setTop(menuBar);
 		
+		
+		this.stage.setResizable(false);
 		Scene scene = new Scene(borderPaneMain);
 		scene.getStylesheets().add(getClass().getResource("ClientStyle.css").toExternalForm());
 		this.stage.sizeToScene();
-		
 		this.stage.setScene(scene);
 		this.stage.show();
 	}
@@ -186,11 +186,11 @@ public class LobbyView {
 		return this.btnQuit;
 	}
 	
-	public MenuItem getGermanItem() {
+	public MenuItem getGermanItem2() {
 		return this.itemGerman;
 	}
 	
-	public MenuItem getEnglishItem() {
+	public MenuItem getEnglishItem2() {
 		return this.itemGerman;
 	}
 

@@ -1,6 +1,5 @@
 package client.controller;
 
-import java.util.EventObject;
 
 import client.model.ClientModel;
 import client.view.ClientView;

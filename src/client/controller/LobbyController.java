@@ -25,13 +25,14 @@ public class LobbyController {
 		processNewGameButton();
 		processRulesButton();
 		processQuitButton();
-		processGermanItem();
+		processGermanMenuItem();
 		processEnglishItem();
 		
 	}
 	
+	
 	private void processEnglishItem() {
-		view.getEnglishItem().setOnAction((e) -> {
+		view.getEnglishItem2().setOnAction((e) -> {
 			MenuItem i = (MenuItem) e.getSource();
 			String newLanguage = i.getText().toLowerCase().substring(0, 2);
 			if(!Translator.getTranslator().getLocale().getLanguage().equalsIgnoreCase(newLanguage)) {
@@ -40,9 +41,8 @@ public class LobbyController {
 			}
 		});
 	}
-
-	private void processGermanItem() {
-		view.getGermanItem().setOnAction((e) -> {
+	private void processGermanMenuItem() {
+		view.getGermanItem2().setOnAction((e) -> {
 			MenuItem i = (MenuItem) e.getSource();
 			String newLanguage = i.getText().toLowerCase().substring(0, 2);
 			if(!Translator.getTranslator().getLocale().getLanguage().equalsIgnoreCase(newLanguage)) {
