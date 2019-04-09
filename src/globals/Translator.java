@@ -55,6 +55,12 @@ public class Translator {
 		logger.info("Loaded resources for \"" + locale.getLanguage() + "\"");
 	}
 	
+	/**
+	 * 
+	 * @param As parameter the identifier of *.properties-Files is to use
+	 * @return the text in setup language
+	 * @author david
+	 */
     public String getString(String identifier) {
         try {
             return resourceBundle.getString(identifier);
