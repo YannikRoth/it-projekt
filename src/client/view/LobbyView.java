@@ -48,7 +48,7 @@ public class LobbyView {
 		this.model = model;
 		
 		TextInputDialog dialog = new TextInputDialog("192.168.1.");
-		dialog.setTitle("Spielpartner wählen");
+		dialog.setTitle(translator.getString("button.newgame"));
 		dialog.setHeaderText("Wählen Sie Ihren Spielepartner:");
 		dialog.setContentText("Adresse (IP):");
 		
