@@ -31,12 +31,18 @@ public class ClientView {
 	private Stage stage;
 	private ClientModel model;
 	private Translator translator = Translator.getTranslator();
+	Menu menuLanguage, menuHelp, menuGame;
+	
+	TableColumn ColPlayer, ColStone, ColOre, ColWood, ColGlass, ColClay, ColLoom, ColPaper, ColCoin, ColGeom, ColWrit, ColEng, ColShield, ColMilitary, ColWinning, ColType, ColAmount;
+	
+	MenuItem itemM1, itemM2, itemM3, itemM4, itemM5, itemM6, itemM7, itemM8, itemM9, itemM10, itemM11, itemM12, itemM13;
+	
 
 	public ClientView(Stage primaryStage, ClientModel model) {
 		this.stage = primaryStage;
 		this.model = model;
 		buildView();
-//		setTexts();
+		setTexts();
 	}	
 	public void buildView() {
 		//Damit beim schliessen die Threads "gekillt" werden
@@ -55,35 +61,35 @@ public class ClientView {
 		tableOpponents.setEditable(false);
 		borderPaneMain.setCenter(tableOpponents);
 		
-		TableColumn ColPlayer	= new TableColumn("Player");
+		ColPlayer	= new TableColumn("Player");
 		ColPlayer.setMinWidth(100);
-		TableColumn ColStone	= new TableColumn("Stone");
+		ColStone	= new TableColumn("Stone");
 		ColStone.setMinWidth(100);
-		TableColumn ColOre		= new TableColumn("Ore");
+		ColOre		= new TableColumn("Ore");
 		ColOre.setMinWidth(100);
-		TableColumn ColWood		= new TableColumn("Wood");
+		ColWood		= new TableColumn("Wood");
 		ColWood.setMinWidth(100);
-		TableColumn ColGlass	= new TableColumn("Glass");
+		ColGlass	= new TableColumn("Glass");
 		ColGlass.setMinWidth(100);
-		TableColumn ColClay		= new TableColumn("Clay");
+		ColClay		= new TableColumn("Clay");
 		ColClay.setMinWidth(100);
-		TableColumn ColLoom		= new TableColumn("Loom");
+		ColLoom		= new TableColumn("Loom");
 		ColLoom.setMinWidth(100);
-		TableColumn ColPaper	= new TableColumn("Paper");
+		ColPaper	= new TableColumn("Paper");
 		ColPaper.setMinWidth(100);
-		TableColumn ColCoin		= new TableColumn("Coin");
+		ColCoin		= new TableColumn("Coin");
 		ColCoin.setMinWidth(100);
-		TableColumn ColGeom 	= new TableColumn("Geom");
+		ColGeom 	= new TableColumn("Geom");
 		ColGeom.setMinWidth(100);
-		TableColumn ColWrit 	= new TableColumn("Writ");
+		ColWrit 	= new TableColumn("Writ");
 		ColWrit.setMinWidth(100);
-		TableColumn ColEng		= new TableColumn("Eng");
+		ColEng		= new TableColumn("Eng");
 		ColEng.setMinWidth(100);
-		TableColumn ColShield	= new TableColumn("Shield");
+		ColShield	= new TableColumn("Shield");
 		ColShield.setMinWidth(100);
-		TableColumn ColMilitary	= new TableColumn("Military");
+		ColMilitary	= new TableColumn("Military");
 		ColMilitary.setMinWidth(100);
-		TableColumn ColWinning	= new TableColumn("Winning");
+		ColWinning	= new TableColumn("Winning");
 		ColWinning.setMinWidth(100);
 		
 		tableOpponents.getColumns().addAll(ColPlayer, ColStone, ColOre, ColWood, ColGlass, ColClay, ColLoom, ColPaper, ColCoin, ColGeom, ColWrit, ColEng, ColShield, ColMilitary, ColWinning);
@@ -137,9 +143,9 @@ public class ClientView {
 		tablePoints.setEditable(false);
 		hBoxPlayer.getChildren().addAll(tablePoints);
 		
-		TableColumn ColType		= new TableColumn("Type");
+		ColType		= new TableColumn();
 		ColType.setMinWidth(100);
-		TableColumn ColAmount	= new TableColumn("Amount");
+		ColAmount	= new TableColumn();
 		ColAmount.setMinWidth(100);
 		
 		tablePoints.getColumns().addAll(ColType, ColAmount);
@@ -157,31 +163,32 @@ public class ClientView {
 		
 		
 		//Menu "Game"
-		MenuItem itemM1 = new MenuItem("Move one");
-		MenuItem itemM2 = new MenuItem("Move two");
-		MenuItem itemM3 = new MenuItem("Move three");
-		MenuItem itemM4 = new MenuItem("Move four");
-		MenuItem itemM5 = new MenuItem("Move five");
-		MenuItem itemM6 = new MenuItem("Move six");
-		MenuItem itemM7 = new MenuItem("Move seven");
-		Menu menuGame = new Menu("Game");
+		itemM1 = new MenuItem();
+		itemM2 = new MenuItem();
+		itemM3 = new MenuItem();
+		itemM4 = new MenuItem();
+		itemM5 = new MenuItem();
+		itemM6 = new MenuItem();
+		itemM7 = new MenuItem();
+		menuGame = new Menu();
 		menuGame.getItems().addAll(itemM1, itemM2, itemM3, itemM4, itemM5, itemM6, itemM7);
 		
 		//Menu "Help"
-		MenuItem itemM8 = new MenuItem("New Game");
-		itemM8.setOnAction(this::processNewGameItem);
-		MenuItem itemM9 = new MenuItem("Rules");
-		itemM9.setOnAction(this::processRulesItem);
-		MenuItem itemM10 = new MenuItem("Hint");
-		itemM10.setOnAction(this::processHintItem);
-		MenuItem itemM11 = new MenuItem("About");
-		itemM11.setOnAction(this::processAboutItem);
-		MenuItem itemM12 = new MenuItem("Quit");
-		itemM12.setOnAction(this::processQuitItem);
-		Menu menuHelp = new Menu("Help");
-		menuHelp.getItems().addAll(itemM8, itemM9, itemM10, itemM11, itemM12);
+		itemM8 = new MenuItem();
+		itemM9 = new MenuItem();
+		itemM10 = new MenuItem();
+		itemM11 = new MenuItem();
+		menuHelp = new Menu();
+		menuHelp.getItems().addAll(itemM8, itemM9, itemM10, itemM11);
 		
-		MenuBar menuBar = new MenuBar(menuHelp);
+		//Menu "Language"
+		itemM12 = new MenuItem();
+		itemM13 = new MenuItem();
+		menuLanguage = new Menu();
+		menuLanguage.getItems().addAll(itemM12, itemM13);
+		
+		
+		MenuBar menuBar = new MenuBar(menuHelp, menuLanguage);
 		borderPaneMain.setTop(menuBar);
 		
 		//DropDown Menu
@@ -195,11 +202,57 @@ public class ClientView {
 		
 		this.stage.setResizable(false);
 		Scene scene = new Scene(borderPaneMain);
-//		scene.getStylesheets().add(getClass().getResource("./server/view/ServerStyle.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("ClientStyle.css").toExternalForm());
 		this.stage.sizeToScene();
-		this.stage.setTitle("7 Wonders");
 		this.stage.setScene(scene);
 		this.stage.show();
+	}
+	
+	private String getLanguageDescription(String identifier) {
+		if(Translator.getDefaultLocale().getLanguage().substring(0, 2).equalsIgnoreCase(translator.getString(identifier).substring(0, 2)))
+			return translator.getString(identifier) + " " + translator.getString("language.default");
+		return translator.getString(identifier);
+	}
+	
+	public void setTexts() {
+		ColPlayer.setText(translator.getString("column.player"));
+		ColStone.setText(translator.getString("column.stone"));
+		ColOre.setText(translator.getString("column.ore"));
+		ColWood.setText(translator.getString("column.wood"));
+		ColGlass.setText(translator.getString("column.glass"));
+		ColClay.setText(translator.getString("column.clay"));
+		ColLoom.setText(translator.getString("column.loom"));
+		ColPaper.setText(translator.getString("column.paper"));
+		ColCoin.setText(translator.getString("column.coin"));
+		ColGeom.setText(translator.getString("column.geom"));
+		ColWrit.setText(translator.getString("column.writ"));
+		ColEng.setText(translator.getString("column.eng"));
+		ColShield.setText(translator.getString("column.shield"));
+		ColMilitary.setText(translator.getString("column.military"));
+		ColWinning.setText(translator.getString("column.winning"));
+		ColType.setText(translator.getString("column.type"));
+		ColAmount.setText(translator.getString("column.amount"));
+		
+		itemM1.setText(translator.getString("item.one"));
+		itemM2.setText(translator.getString("item.two"));
+		itemM3.setText(translator.getString("item.three"));
+		itemM4.setText(translator.getString("item.four"));
+		itemM5.setText(translator.getString("item.five"));
+		itemM6.setText(translator.getString("item.six"));
+		itemM7.setText(translator.getString("item.seven"));
+		itemM8.setText(translator.getString("item.rules"));
+		itemM9.setText(translator.getString("item.hint"));
+		itemM10.setText(translator.getString("item.about"));
+		itemM11.setText(translator.getString("item.quit"));
+		itemM12.setText(this.getLanguageDescription("language.german"));
+		itemM13.setText(this.getLanguageDescription("language.english"));
+		
+		menuHelp.setText(translator.getString("menu.help"));
+		menuGame.setText(translator.getString("menu.game"));
+		menuLanguage.setText(translator.getString("menu.language"));
+		
+		stage.setTitle(translator.getString("clientGame.name"));
+		
 	}
 
 	public void start() {
@@ -212,23 +265,31 @@ public class ClientView {
 		return this.stage;
 	}
 	
-	public void processNewGameItem(ActionEvent event) {
-	//TODO	
+	public Menu getMenuLanguage() {
+		return this.menuLanguage;
 	}
 	
-	public void processQuitItem(ActionEvent event) {
-		Platform.exit();
+	public MenuItem getRulesItem() {
+		return this.itemM8;
 	}
 	
-	public void processRulesItem(ActionEvent event) {
-	//TODO	
+	public MenuItem getHintItem() {
+		return this.itemM9;
 	}
 	
-	public void processHintItem(ActionEvent event) {
-	//TODO	
+	public MenuItem getAboutItem() {
+		return this.itemM10;
 	}
 	
-	public void processAboutItem(ActionEvent event) {
-	//TODO	
+	public MenuItem getQuitItem() {
+		return this.itemM11;
+	}
+	
+	public MenuItem getGermanItem() {
+		return this.itemM12;
+	}
+	
+	public MenuItem getEnglishItem() {
+		return this.itemM13;
 	}
 }

@@ -3,7 +3,15 @@ package client.controller;
 import client.ClientMVC;
 import client.model.LobbyModel;
 import client.view.LobbyView;
+import globals.Translator;
 import javafx.application.Platform;
+import javafx.scene.control.MenuItem;
+
+/**
+ * 
+ * @author philipp
+ *
+ */
 
 public class LobbyController {
 
@@ -14,21 +22,54 @@ public class LobbyController {
 		this.model = model;
 		this.view = view;
 		
-		processQuitButton();
 		processNewGameButton();
+		processRulesButton();
+		processQuitButton();
+		processGermanItem();
+		processEnglishItem();
+		
 	}
 	
-	public void processQuitButton() {
-		view.getQuitButton().setOnAction((e) -> {
-			Platform.exit();
-			System.exit(0);
+	private void processEnglishItem() {
+		view.getEnglishItem().setOnAction((e) -> {
+			MenuItem i = (MenuItem) e.getSource();
+			String newLanguage = i.getText().toLowerCase().substring(0, 2);
+			if(!Translator.getTranslator().getLocale().getLanguage().equalsIgnoreCase(newLanguage)) {
+				Translator.getTranslator().setLanguage(newLanguage);
+				view.setTexts();
+			}
 		});
 	}
-	
-	public void processNewGameButton() {
+
+	private void processGermanItem() {
+		view.getGermanItem().setOnAction((e) -> {
+			MenuItem i = (MenuItem) e.getSource();
+			String newLanguage = i.getText().toLowerCase().substring(0, 2);
+			if(!Translator.getTranslator().getLocale().getLanguage().equalsIgnoreCase(newLanguage)) {
+				Translator.getTranslator().setLanguage(newLanguage);
+				view.setTexts();
+			}
+		});
+	}
+
+
+	private void processNewGameButton() {
 		view.getNewGameButton().setOnAction((e) -> {
 			ClientMVC newGame = new ClientMVC();
 //			this.view.stop();
+		});
+	}
+	
+	private void processRulesButton() {
+		view.getRulesButton().setOnAction((e) -> {
+			System.out.println("TEST RULES");
+		});
+	}
+
+	private void processQuitButton() {
+		view.getQuitButton().setOnAction((e) -> {
+			Platform.exit();
+			System.exit(0);
 		});
 	}
 
