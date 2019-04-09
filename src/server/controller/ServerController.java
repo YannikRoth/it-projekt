@@ -2,7 +2,12 @@ package server.controller;
 
 import java.util.Optional;
 
+import globals.Translator;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputDialog;
+import javafx.stage.WindowEvent;
 import server.model.ServerModel;
 import server.model.gameplay.ServerAction;
 import server.view.ServerView;
@@ -16,6 +21,7 @@ public class ServerController{
 		this.view = view;
 		
 		AddViewButtonListeners();
+		AddMenuItemListeners();
 	}
 
 	/**
@@ -40,5 +46,22 @@ public class ServerController{
 			//TODO: Restart ServerSocket
 			view.serverActionData.add(new ServerAction("localhost", "Server", "Server restarted"));
 		});
+	}
+	
+	/**
+	 * Add listeners to menu and menuitems 
+	 * @author david
+	 */
+	private void AddMenuItemListeners() {
+		view.getMenuLanguage().getItems().stream()
+			.forEach(t->t.setOnAction((event) -> {
+				String newLanguage = ((MenuItem) event.getSource())
+											.getText().toLowerCase().substring(0, 2);
+				Translator.getTranslator().setLanguage(newLanguage);
+				view.setTexts();
+		}));
+	}
+	
+	private void changeLanguage(Event e) {
 	}
 }
