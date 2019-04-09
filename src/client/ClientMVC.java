@@ -33,7 +33,7 @@ public class ClientMVC extends Application{
 		this.control = new ClientController(model, view);
 		view.start(primaryStage);
 		
-		logger.info("MVC started");
+		logger.info("Client MVC started");
 	}
 
 }

@@ -30,6 +30,6 @@ public class ServerMVC extends Application {
 		this.control= new ServerController(model, view);
 		view.start();
 		
-		logger.info("MVC started");
+		logger.info("Server MVC started");
 	}
 }

@@ -33,7 +33,7 @@ public class LobbyMVC extends Application{
 		this.control = new LobbyController(model, view);
 		view.start(primaryStage);
 		
-		logger.info("MVC started");
+		logger.info("Lobby MVC started");
 	}
 
 }
