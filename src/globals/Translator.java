@@ -19,6 +19,7 @@ public class Translator {
 			new Locale("en")
 	};
 	private static Logger logger = ServiceLocator.getLogger();
+	private static Locale defaultLocale;
 	private static Locale locale;
 	private static Translator t;
 	private static ResourceBundle resourceBundle;
@@ -33,6 +34,10 @@ public class Translator {
 		setLanguage(System.getProperty("user.language"));
 	}
 	
+	public static Locale getDefaultLocale() {
+		return defaultLocale;
+	}
+	
 	/**
 	 * Set the new language in parameter, if the programm supports the language
 	 * if the programm don't support, default language will be german (de)
@@ -43,12 +48,17 @@ public class Translator {
 		for (Locale l : locales) {
 			if(Language.equalsIgnoreCase(l.getLanguage()))
 			{
+				if(locale == null)
+					defaultLocale = l;
 				locale = l;
 				break;
 			}
 		}
 		if(locale == null)
+		{
 			locale = locales[0];
+			defaultLocale = locale;
+		}
 		
 		resourceBundle = ResourceBundle.getBundle(this.getClass().getName(), locale);
 		

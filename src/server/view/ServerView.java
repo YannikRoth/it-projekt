@@ -150,8 +150,8 @@ public class ServerView {
 		stage.setTitle(translator.getString("server.name"));
 		
 		menuLanguage.setText(		translator.getString("menu.language"));
-		itemGerman.setText(			translator.getString("language.german"));
-		itemEnglish.setText(		translator.getString("language.english"));
+		itemGerman.setText(			this.getLanguageDescription("language.german"));
+		itemEnglish.setText(		this.getLanguageDescription("language.english"));
 		
 		fieldDomain.setPromptText(	translator.getString("text.nodomain"));
 		fieldIpAdress.setPromptText(translator.getString("text.noipadress"));
@@ -163,6 +163,18 @@ public class ServerView {
 		tblcolIpAdress.setText(		translator.getString("column.ipadress"));
 		tblcolPlayer.setText(		translator.getString("column.player"));
 		tblcolAction.setText(		translator.getString("column.action"));
+	}
+	
+	/**
+	 * Method to check if the language item is the default system setting and return it into description
+	 * @param identifier
+	 * @return
+	 * @author david
+	 */
+	private String getLanguageDescription(String identifier) {
+		if(Translator.getDefaultLocale().getLanguage().substring(0, 2).equalsIgnoreCase(translator.getString(identifier).substring(0, 2)))
+			return translator.getString(identifier) + " " + translator.getString("language.default");
+		return translator.getString(identifier);
 	}
 
 	public void start() {
