@@ -44,7 +44,7 @@ public class LobbyView {
 		this.stage = primaryStage;
 		this.model = model;
 		buildView();
-//		setTexts();
+		setTexts();
 	}	
 		
 	public void buildView() {
@@ -66,10 +66,10 @@ public class LobbyView {
 		borderPaneMain.setTop(hBoxButton);
 		borderPaneMain.setCenter(hBoxPlayer);
 		
-		this.btnNewGame = new Button("New Game");
+		this.btnNewGame = new Button();
 		this.btnRules	= new Button("Rules");
 		this.btnQuit = new Button("Quit");
-		this.btnQuit.setOnAction(this::processQuitButton);
+
 		
 		hBoxButton.getChildren().addAll(btnNewGame, btnRules, btnQuit);
 		
@@ -78,6 +78,7 @@ public class LobbyView {
 		
 		hBoxPlayer.getChildren().addAll(player, playerName);
 		
+		//TODO: Wartende Personen anzeigen
 		TableView<ServerAction> tableView = new TableView<ServerAction>();
 		tableView.setItems(serverActionData);
 		
@@ -93,23 +94,23 @@ public class LobbyView {
 		borderPaneMain.setBottom(tableView);
 		
 		Scene scene = new Scene(borderPaneMain);
-//		scene.getStylesheets().add(getClass().getResource("ServerStyle.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("ClientStyle.css").toExternalForm());
 		this.stage.sizeToScene();
 		this.stage.setTitle("7 Wonders");
 		this.stage.setScene(scene);
 		this.stage.show();
 	}
 	
-//	public void setTexts() {
-//		btnNewGame.setText(translator.getString("button.newgame"));
-//		btnRules.setText(translator.getString("button.rules"));
-//		btnQuit.setText(translator.getString("button.quit"));
-//		
-//		tblcolNr.setText(translator.getString("column.nr"));
-//		tblcolWaitingPlayer.setText(translator.getString("column.waitingplayers"));
-//
-//	}
-	public void start(Stage stage) {
+	public void setTexts() {
+		btnNewGame.setText(translator.getString("button.newgame"));
+		btnRules.setText(translator.getString("button.rules"));
+		btnQuit.setText(translator.getString("button.quit"));
+		
+		tblcolNr.setText(translator.getString("column.nr"));
+		tblcolWaitingPlayer.setText(translator.getString("column.waitingplayers"));
+
+	}
+	public void start() {
 		stage.show();
 	}
 	
@@ -121,14 +122,20 @@ public class LobbyView {
 		return this.stage;
 	}
 	
-	public void processNewGameButton(ActionEvent event) throws Exception {
-	//TODO
+	public Button getQuitButton() {
+		return this.btnQuit;
 	}
-    public void processQuitButton(ActionEvent event) {
-    	Platform.exit();
-    }
+	//TODO
+	public Button getNewGameButton() {
+		return this.btnNewGame;
+	}
+	//TODO
+	public Button getRulesButton() {
+		return null;
+	}
 	
 	public ObservableList<ServerAction> serverActionData = FXCollections.observableArrayList(
 		    new ServerAction("Nr", "Waiting Players", "test")
 		);
+	
 }

@@ -100,31 +100,32 @@ public class ClientView {
 		hBoxPlayer.setHgrow(borderPanePlayer, Priority.ALWAYS);
 		
 		//Cards
-		ImageView card1 = new ImageView(new Image("https://cf.geekdo-images.com/camo/6fd08fe60edcfe435528f3f3b9c369cc198a1faf/687474703a2f2f636f72726f6a6575782e66696c65732e776f726470726573732e636f6d2f323031322f31322f7a332d74656d706c652d696e746333613972696575722e6a70673f773d363035"));
+		Image image = new Image("https://cf.geekdo-images.com/camo/6fd08fe60edcfe435528f3f3b9c369cc198a1faf/687474703a2f2f636f72726f6a6575782e66696c65732e776f726470726573732e636f6d2f323031322f31322f7a332d74656d706c652d696e746333613972696575722e6a70673f773d363035");
+		ImageView card1 = new ImageView(image);
 		card1.setFitHeight(150);
 		card1.setFitWidth(100);
 		
-		ImageView card2 = new ImageView(new Image("https://cf.geekdo-images.com/camo/6fd08fe60edcfe435528f3f3b9c369cc198a1faf/687474703a2f2f636f72726f6a6575782e66696c65732e776f726470726573732e636f6d2f323031322f31322f7a332d74656d706c652d696e746333613972696575722e6a70673f773d363035"));
+		ImageView card2 = new ImageView(image);
 		card2.setFitHeight(150);
 		card2.setFitWidth(100);
 		
-		ImageView card3 = new ImageView(new Image("https://cf.geekdo-images.com/camo/6fd08fe60edcfe435528f3f3b9c369cc198a1faf/687474703a2f2f636f72726f6a6575782e66696c65732e776f726470726573732e636f6d2f323031322f31322f7a332d74656d706c652d696e746333613972696575722e6a70673f773d363035"));
+		ImageView card3 = new ImageView(image);
 		card3.setFitHeight(150);
 		card3.setFitWidth(100);
 		
-		ImageView card4 = new ImageView(new Image("https://cf.geekdo-images.com/camo/6fd08fe60edcfe435528f3f3b9c369cc198a1faf/687474703a2f2f636f72726f6a6575782e66696c65732e776f726470726573732e636f6d2f323031322f31322f7a332d74656d706c652d696e746333613972696575722e6a70673f773d363035"));
+		ImageView card4 = new ImageView(image);
 		card4.setFitHeight(150);
 		card4.setFitWidth(100);
 		
-		ImageView card5 = new ImageView(new Image("https://cf.geekdo-images.com/camo/6fd08fe60edcfe435528f3f3b9c369cc198a1faf/687474703a2f2f636f72726f6a6575782e66696c65732e776f726470726573732e636f6d2f323031322f31322f7a332d74656d706c652d696e746333613972696575722e6a70673f773d363035"));
+		ImageView card5 = new ImageView(image);
 		card5.setFitHeight(150);
 		card5.setFitWidth(100);
 		
-		ImageView card6 = new ImageView(new Image("https://cf.geekdo-images.com/camo/6fd08fe60edcfe435528f3f3b9c369cc198a1faf/687474703a2f2f636f72726f6a6575782e66696c65732e776f726470726573732e636f6d2f323031322f31322f7a332d74656d706c652d696e746333613972696575722e6a70673f773d363035"));
+		ImageView card6 = new ImageView(image);
 		card6.setFitHeight(150);
 		card6.setFitWidth(100);
 		
-		ImageView card7 = new ImageView(new Image("https://cf.geekdo-images.com/camo/6fd08fe60edcfe435528f3f3b9c369cc198a1faf/687474703a2f2f636f72726f6a6575782e66696c65732e776f726470726573732e636f6d2f323031322f31322f7a332d74656d706c652d696e746333613972696575722e6a70673f773d363035"));
+		ImageView card7 = new ImageView(image);
 		card7.setFitHeight(150);
 		card7.setFitWidth(100);
 		
@@ -180,11 +181,11 @@ public class ClientView {
 		Menu menuHelp = new Menu("Help");
 		menuHelp.getItems().addAll(itemM8, itemM9, itemM10, itemM11, itemM12);
 		
-		MenuBar menuBar = new MenuBar(menuGame, menuHelp);
+		MenuBar menuBar = new MenuBar(menuHelp);
 		borderPaneMain.setTop(menuBar);
 		
 		//DropDown Menu
-		ContextMenu contextMenu = new ContextMenu(menuGame, menuHelp);
+		ContextMenu contextMenu = new ContextMenu(menuGame);
 		borderPaneMain.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
             @Override
             public void handle(ContextMenuEvent event) {
@@ -201,7 +202,7 @@ public class ClientView {
 		this.stage.show();
 	}
 
-	public void start(Stage stage) {
+	public void start() {
 		stage.show();
 	}
 	public void stop() {
