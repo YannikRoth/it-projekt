@@ -191,7 +191,7 @@ public class LobbyView {
 	}
 	
 	public MenuItem getEnglishItem2() {
-		return this.itemGerman;
+		return this.itemEnglish;
 	}
 
 	public ObservableList<ServerAction> serverActionData = FXCollections.observableArrayList(
