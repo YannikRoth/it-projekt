@@ -16,6 +16,7 @@ import server.view.ServerView;
 public class ServerController{
 	private ServerModel model;
 	private ServerView view;
+	private Translator translator = Translator.getTranslator();
 
 	public ServerController(ServerModel model, ServerView view) {
 		this.model = model;
@@ -33,8 +34,8 @@ public class ServerController{
 	private void AddViewButtonListeners() {
 		view.getButtonChangePort().setOnAction((event) -> {
 			TextInputDialog dialog = new TextInputDialog();
-			dialog.setTitle("Change Port");
-			dialog.setHeaderText("Choose new server port:");
+			dialog.setTitle(		translator.getString("dlg.port.changeport"));
+			dialog.setHeaderText(	translator.getString("dlg.port.choosenew"));
 			
 			Optional<String> result = dialog.showAndWait();
 			result.ifPresent(name -> {
