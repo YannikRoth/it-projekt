@@ -107,7 +107,7 @@ public class CardLoader {
 				.withIgnoreQuotations(true)
 				.build();
 				 
-			CSVReader csvReader = new CSVReaderBuilder(new FileReader("./resource/masterdata/testCSV.csv"))
+			CSVReader csvReader = new CSVReaderBuilder(new FileReader("./resource/masterdata/card.csv"))
 			    .withSkipLines(1) //first line is header line, do not import
 			    .withCSVParser(parser)
 			    .build();

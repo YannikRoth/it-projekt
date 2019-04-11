@@ -179,7 +179,7 @@ public class BoardLoader {
 	}
 	
 	/**
-	 * Jusrt temporary to test the importer
+	 * Just temporary to test the importer
 	 * @param args
 	 */
 	public static void main(String[] args) {
