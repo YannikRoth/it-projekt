@@ -17,7 +17,9 @@ public class ServerModel {
 	
 	private ArrayList<ServerClientThread> Clients = new ArrayList<ServerClientThread>();
 	
-	//host cardset, are added whiel imported
+	//cards and boards are imported when class is initialized
+	//KEY = Item ID
+	// Value = Card or Board Object
 	private Map<Integer, Card> cards;
 	private Map<Integer, Board> boards;
 	
