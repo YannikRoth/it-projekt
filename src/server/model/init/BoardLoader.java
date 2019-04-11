@@ -14,6 +14,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 
 import server.ServiceLocator;
+import server.model.ServerModel;
 import server.model.gameplay.Board;
 
 public class BoardLoader {
@@ -136,7 +137,7 @@ public class BoardLoader {
 
 	}
 	
-	public static void importBoards() {
+	public static void importBoards(ServerModel m) {
 		try {
 			CSVParser parser = new CSVParserBuilder()
 				.withSeparator(';')
@@ -151,20 +152,9 @@ public class BoardLoader {
 			List<String[]> myEntries = csvReader.readAll();
 
 			//i is the row
-			for(int i = 0; i < myEntries.size(); i++) {
-				//j is the column				
-				for(int j = 0; j < myEntries.get(i).length; j++) {
-					System.out.println(field_mapping.get(j) + ": " + myEntries.get(i)[j]);
-					
-					//TODO Card objects have to be created here
-				}
-				
+			for(int i = 0; i < myEntries.size(); i++) {			
 				Board b = new Board(myEntries.get(i));
-				//TODO create board obj.
-				//Card c = new Card(myEntries.get(i));
-				//logger.info("Card name " + c.getCardName());
-				
-				
+				m.addBoardToMap(b);
 			}
 
 			csvReader.close();
@@ -178,14 +168,6 @@ public class BoardLoader {
 		}
 	}
 	
-	/**
-	 * Just temporary to test the importer
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		BoardLoader.importBoards();
-	}
-
 	public static Map<Integer, String> getFieldMapping() {
 		return field_mapping;
 	}

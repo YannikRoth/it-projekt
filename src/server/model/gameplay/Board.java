@@ -214,5 +214,8 @@ public class Board {
 		
 	}
 	
+	public int getId() {
+		return this.boardID;
+	}
 
 }

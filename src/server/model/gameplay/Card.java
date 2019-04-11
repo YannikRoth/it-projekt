@@ -393,5 +393,9 @@ public class Card implements Serializable{
 	public String getCardName() {
 		return this.cardName;
 	}
+	
+	public int getId() {
+		return this.id;
+	}
 
 }
