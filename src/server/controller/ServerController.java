@@ -3,12 +3,10 @@ package server.controller;
 import java.util.Optional;
 
 import globals.Translator;
-import javafx.event.Event;
-import javafx.event.EventHandler;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputDialog;
-import javafx.stage.WindowEvent;
-import server.ServiceLocator;
 import server.model.ServerModel;
 import server.model.gameplay.ServerAction;
 import server.view.ServerView;
@@ -34,8 +32,12 @@ public class ServerController{
 	private void AddViewButtonListeners() {
 		view.getButtonChangePort().setOnAction((event) -> {
 			TextInputDialog dialog = new TextInputDialog();
+			dialog.setGraphic(null);
 			dialog.setTitle(		translator.getString("dlg.port.changeport"));
 			dialog.setHeaderText(	translator.getString("dlg.port.choosenew"));
+			
+			((Button)dialog.getDialogPane().lookupButton(ButtonType.OK)).setText(translator.getString("dlg.ok"));
+			((Button)dialog.getDialogPane().lookupButton(ButtonType.CANCEL)).setText(translator.getString("dlg.cancel"));
 			
 			Optional<String> result = dialog.showAndWait();
 			result.ifPresent(name -> {
