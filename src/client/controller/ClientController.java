@@ -66,7 +66,16 @@ public class ClientController {
 
 	private void processAboutItem() {
 		// TODO Auto-generated method stub
-		
+		view.getAboutItem().setOnAction(e ->{
+			if (Desktop.isDesktopSupported()) {
+			    try {
+			        File myFile = new File("./resource/images/blackhat-logo.jpg");
+			        Desktop.getDesktop().open(myFile);
+			    } catch (IOException ex) {
+			        // no application registered for PDFs
+			    }
+			}
+		});
 	}
 
 	private void processHintItem() {
@@ -87,8 +96,6 @@ public class ClientController {
 			    }
 			}
 		});
-
-		
 	}
 
 }
