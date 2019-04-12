@@ -1,6 +1,10 @@
 package client.controller;
 
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+
 import client.model.ClientModel;
 import client.view.ClientView;
 import globals.Translator;
@@ -72,6 +76,18 @@ public class ClientController {
 
 	private void processRulesItem() {
 		// TODO Auto-generated method stub
+		view.getRulesItem().setOnAction((e) -> {
+			if (Desktop.isDesktopSupported()) {
+			    try {
+			    	String lang = Translator.getTranslator().getLocale().getLanguage(); 
+			        File myFile = new File("./resource/rules/"+lang+"_7WONDERS_RULES.pdf");
+			        Desktop.getDesktop().open(myFile);
+			    } catch (IOException ex) {
+			        // no application registered for PDFs
+			    }
+			}
+		});
+
 		
 	}
 
