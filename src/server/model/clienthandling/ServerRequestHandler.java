@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.util.logging.Logger;
 
 import server.ServiceLocator;
+import server.model.ServerModel;
 
 
 /**

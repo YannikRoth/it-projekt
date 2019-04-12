@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import server.ServiceLocator;
+import server.model.clienthandling.ServerClientThread;
 import server.model.gameplay.Board;
 import server.model.gameplay.Card;
 import server.model.init.BoardLoader;
@@ -41,11 +42,15 @@ public class ServerModel {
 	public void addBoardToMap(Board b) {
 		this.boards.put(b.getId(), b);
 	}
-	
+
 	public void addClient(ServerClientThread Client) {
-		//TODO Bedingungen wenn neuer Client erlaubt ist und wann nicht
+		// TODO Bedingungen wenn neuer Client erlaubt ist und wann nicht
 		if(true) {
 			Clients.add(Client);
+			Client.start();
+			logger.info("Client erfolgreich hinzugefügt");
+		}else {
+			logger.info("Client konnte nicht hinzugefügt werden");
 		}
 	}
 }
