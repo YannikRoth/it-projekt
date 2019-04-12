@@ -9,25 +9,25 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public class Translator_Test {
-	static Locale locale = new Locale(System.getProperty("user.language"));
-	static ResourceBundle resourceBundle = ResourceBundle.getBundle(Translator_Test.class.getName(), locale);
+	static Locale locale;
+	static ResourceBundle resourceBundle;
 	
 	public static void main(String[] args) throws MalformedURLException {
+		locale = new Locale(System.getProperty("user.language"));
 		System.out.println("Loaded resources for " + locale.getLanguage());
 		
 		String currentDir = System.getProperty("user.dir");
         System.out.println("Working Directory = " + currentDir);
 		
-        File file = new File(currentDir);
-        URL[] urls = {file.toURI().toURL()};
-        ClassLoader loader = new URLClassLoader(urls);
-        ResourceBundle rb = ResourceBundle.getBundle("server.Translator_Test", locale, loader);
+        File file = new File(currentDir + "\\resource");
+        System.out.println("User dir: " + currentDir + "\\resource");
         
-		System.out.println(getString("program.menu.file"));
-		
-		locale = new Locale("en");
-		resourceBundle = ResourceBundle.getBundle(Translator_Test.class.getName(), locale);
-		System.out.println("Loaded resources for " + locale.getLanguage());
+        URL[] urls = {file.toURI().toURL()};
+        System.out.println("User URL: " + file.toURI().toURL() );
+        
+        ClassLoader loader = new URLClassLoader(urls);
+        resourceBundle = ResourceBundle.getBundle("locale.Translator_Test", locale, loader);
+        
 		System.out.println(getString("program.menu.file"));
 		
 	}
