@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -57,6 +58,10 @@ public class LobbyView {
 		dialog.setTitle(translator.getString("title.ip"));
 		dialog.setHeaderText(translator.getString("header.opponents"));
 		dialog.setContentText(translator.getString("content.ip"));
+		
+		((Button)dialog.getDialogPane().lookupButton(ButtonType.OK)).setText(translator.getString("dlg.ok"));
+		((Button)dialog.getDialogPane().lookupButton(ButtonType.CANCEL)).setText(translator.getString("dlg.cancel"));
+		
 		
 		Optional<String> result = dialog.showAndWait();
 		result.ifPresent(name -> {
