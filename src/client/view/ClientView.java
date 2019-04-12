@@ -20,7 +20,7 @@ import javafx.stage.Stage;
 
 /**
  * Test version of ClientView. 
- * TODO Main method has to be extracted
+ * TODO Main method has to be extracted.
  * @author David Baumann
  *
  */
