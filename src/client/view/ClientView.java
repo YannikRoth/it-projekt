@@ -5,6 +5,7 @@ import globals.Translator;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Menu;
@@ -61,35 +62,35 @@ public class ClientView {
 		tableOpponents.setEditable(false);
 		borderPaneMain.setCenter(tableOpponents);
 		
-		ColPlayer	= new TableColumn("Player");
+		ColPlayer = new TableColumn("Player");
 		ColPlayer.setMinWidth(100);
-		ColStone	= new TableColumn("Stone");
+		ColStone = new TableColumn("Stone");
 		ColStone.setMinWidth(100);
-		ColOre		= new TableColumn("Ore");
+		ColOre = new TableColumn("Ore");
 		ColOre.setMinWidth(100);
-		ColWood		= new TableColumn("Wood");
+		ColWood = new TableColumn("Wood");
 		ColWood.setMinWidth(100);
-		ColGlass	= new TableColumn("Glass");
+		ColGlass = new TableColumn("Glass");
 		ColGlass.setMinWidth(100);
-		ColClay		= new TableColumn("Clay");
+		ColClay = new TableColumn("Clay");
 		ColClay.setMinWidth(100);
-		ColLoom		= new TableColumn("Loom");
+		ColLoom = new TableColumn("Loom");
 		ColLoom.setMinWidth(100);
-		ColPaper	= new TableColumn("Paper");
+		ColPaper = new TableColumn("Paper");
 		ColPaper.setMinWidth(100);
-		ColCoin		= new TableColumn("Coin");
+		ColCoin = new TableColumn("Coin");
 		ColCoin.setMinWidth(100);
-		ColGeom 	= new TableColumn("Geom");
+		ColGeom = new TableColumn("Geom");
 		ColGeom.setMinWidth(100);
-		ColWrit 	= new TableColumn("Writ");
+		ColWrit = new TableColumn("Writ");
 		ColWrit.setMinWidth(100);
-		ColEng		= new TableColumn("Eng");
+		ColEng = new TableColumn("Eng");
 		ColEng.setMinWidth(100);
-		ColShield	= new TableColumn("Shield");
+		ColShield = new TableColumn("Shield");
 		ColShield.setMinWidth(100);
-		ColMilitary	= new TableColumn("Military");
+		ColMilitary = new TableColumn("Military");
 		ColMilitary.setMinWidth(100);
-		ColWinning	= new TableColumn("Winning");
+		ColWinning = new TableColumn("Winning");
 		ColWinning.setMinWidth(100);
 		
 		tableOpponents.getColumns().addAll(ColPlayer, ColStone, ColOre, ColWood, ColGlass, ColClay, ColLoom, ColPaper, ColCoin, ColGeom, ColWrit, ColEng, ColShield, ColMilitary, ColWinning);
@@ -102,11 +103,13 @@ public class ClientView {
 		hBoxPlayer.getChildren().addAll(borderPanePlayer);
 		
 		HBox hBoxCards = new HBox();
+		hBoxCards.setSpacing(15);
+		hBoxCards.setPadding(new Insets(15,12,15,200));
 		borderPanePlayer.setTop(hBoxCards);
 		hBoxPlayer.setHgrow(borderPanePlayer, Priority.ALWAYS);
 		
 		//Cards
-		Image image = new Image("https://cf.geekdo-images.com/camo/6fd08fe60edcfe435528f3f3b9c369cc198a1faf/687474703a2f2f636f72726f6a6575782e66696c65732e776f726470726573732e636f6d2f323031322f31322f7a332d74656d706c652d696e746333613972696575722e6a70673f773d363035");
+		Image image = new Image("file:./resource/images/cards/SCN_0150.jpg");
 		ImageView card1 = new ImageView(image);
 		card1.setFitHeight(150);
 		card1.setFitWidth(100);
@@ -152,15 +155,15 @@ public class ClientView {
 		
 		//Deck
 		HBox hBoxDeck = new HBox();
+		hBoxDeck.setPadding(new Insets(15,12,15,270));
+		//hBoxDeck.setSpacing(10);
 		borderPanePlayer.setBottom(hBoxDeck);
 		
-		ImageView deck = new ImageView(new Image("https://www.theboardgamefamily.com/wp-content/uploads/2012/05/Ending-civilization-200x129.jpg"));
+		ImageView deck = new ImageView(new Image("file:./resource/images/boards/Board_01_A.jpg"));
 		deck.setFitHeight(250);
 		deck.setFitWidth(600);
 		
 		hBoxDeck.getChildren().addAll(deck);
-		
-		
 		
 		//Menu "Game"
 		itemM1 = new MenuItem();

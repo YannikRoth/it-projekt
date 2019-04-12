@@ -1,6 +1,7 @@
 package server.model.gameplay;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -396,6 +397,11 @@ public class Card implements Serializable{
 	
 	public int getId() {
 		return this.id;
+	}
+	
+	public String getImageFileName() {
+		DecimalFormat f = new DecimalFormat("0000");
+		return "SCN_" + f.format(this.id) + ".jpg";
 	}
 
 }
