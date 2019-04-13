@@ -1,5 +1,9 @@
 package client.controller;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+
 import client.ClientMVC;
 import client.model.LobbyModel;
 import client.view.LobbyView;
@@ -62,7 +66,15 @@ public class LobbyController {
 	
 	private void processRulesButton() {
 		view.getRulesButton().setOnAction((e) -> {
-			System.out.println("TEST RULES");
+			if (Desktop.isDesktopSupported()) {
+			    try {
+			    	String lang = Translator.getTranslator().getLocale().getLanguage(); 
+			        File myFile = new File("./resource/rules/"+lang+"_7WONDERS_RULES.pdf");
+			        Desktop.getDesktop().open(myFile);
+			    } catch (IOException ex) {
+			        // no application registered for PDFs
+			    }
+			}
 		});
 	}
 
