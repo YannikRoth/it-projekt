@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import globals.Translator;
@@ -14,12 +15,14 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -177,6 +180,27 @@ public class ServerView {
 		return translator.getString(identifier);
 	}
 
+	/**
+	 * Starts port input dialog
+	 * @return Optional with inserted port as String
+	 * @author david
+	 */
+	public Optional<String> startNewPortDialog() {
+		TextInputDialog dialog = new TextInputDialog();
+		dialog.setGraphic(null);
+		dialog.setTitle(		translator.getString("dlg.port.changeport"));
+		dialog.setHeaderText(	translator.getString("dlg.port.choosenew"));
+		
+		((Button)dialog.getDialogPane().lookupButton(ButtonType.OK)).setText(translator.getString("dlg.ok"));
+		((Button)dialog.getDialogPane().lookupButton(ButtonType.CANCEL)).setText(translator.getString("dlg.cancel"));
+		
+		final String port;
+		
+		Optional<String> result = dialog.showAndWait();
+		
+		return result;
+	}
+	
 	public void start() {
 		stage.show();
 	}

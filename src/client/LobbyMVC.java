@@ -31,7 +31,7 @@ public class LobbyMVC extends Application{
 		this.model = new LobbyModel();
 		this.view = new LobbyView(primaryStage, model);
 		this.control = new LobbyController(model, view);
-		view.start(primaryStage);
+		view.start();
 		
 		logger.info("Lobby MVC started");
 	}

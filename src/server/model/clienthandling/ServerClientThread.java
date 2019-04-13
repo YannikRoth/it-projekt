@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.logging.Logger;
 
+import server.ServiceLocator;
 import server.model.gameplay.Player;
 /**
  * 
@@ -16,7 +17,7 @@ import server.model.gameplay.Player;
 public class ServerClientThread extends Thread{
 	private Socket socket;
 	private Player player;
-	private final Logger logger = Logger.getLogger("");
+	private final Logger logger = ServiceLocator.getLogger();
 	
 	
 	public ServerClientThread(Socket socket) {

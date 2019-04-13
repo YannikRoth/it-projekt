@@ -31,7 +31,7 @@ public class ClientMVC extends Application{
 		this.model = new ClientModel();
 		this.view = new ClientView(primaryStage, model);
 		this.control = new ClientController(model, view);
-		view.start(primaryStage);
+		view.start();
 		
 		logger.info("Client MVC started");
 	}
