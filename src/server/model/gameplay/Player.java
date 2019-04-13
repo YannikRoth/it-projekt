@@ -1,13 +1,16 @@
 package server.model.gameplay;
 
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import globals.ResourceMapType;
 import globals.ResourceType;
+import server.ServiceLocator;
 
 /**
  * This class represents a player object. It will be created when a client connects to the server
@@ -15,11 +18,18 @@ import globals.ResourceType;
  *
  */
 public class Player {
+	private Logger logger = ServiceLocator.getLogger();
 	
-	private Map<ResourceType, Integer> resources;
-	private ArrayList<HashMap<ResourceType, Integer>> alternateResources;
+	//resources
+	private Map<ResourceType, Integer> resources; //only resources with single resource type
+	private ArrayList<HashMap<ResourceType, Integer>> alternateResources; //only resources with alternating resource types
 	private List<Card> cards;
 	
+	//TODO: Handle name
+	private String playerName;
+	
+	//game handling
+	private Socket socket;
 	
 	public Player() {
 		this.resources = new ResourceMap(ResourceMapType.PRODUCE);
@@ -32,6 +42,7 @@ public class Player {
 	 * @param Card c
 	 * @return <code>true</code> if the card can be played because the player has enough resources
 	 * @return <code>false</code> if the card can not be played because the player can't afford it
+	 * @author yannik roth
 	 */
 	public boolean isAbleToAffordCard(Card c) {
 		//every resource that can be afforded with non-alternating cards will be TRUE
@@ -96,4 +107,24 @@ public class Player {
 
 	}
 
+	public Socket getSocket() {
+		return this.socket;
+	}
+	
+	/**
+	 * This method assigns a network socket to the player. It can be used from the server
+	 * @param Socket s
+	 */
+	public void assignSocket(Socket s) {
+		this.socket = s;
+		logger.info("Assigned socket to player: " + this.playerName);
+	}
+
+	public String getPlayerName() {
+		return playerName;
+	}
+
+	public void setPlayerName(String playerName) {
+		this.playerName = playerName;
+	}
 }

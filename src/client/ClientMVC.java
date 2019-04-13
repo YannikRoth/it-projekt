@@ -1,28 +1,39 @@
 package client;
 
-import client.control.ClientControl;
+import java.util.logging.Logger;
+
+import client.controller.ClientController;
 import client.model.ClientModel;
 import client.view.ClientView;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import server.ServiceLocator;
+
+/**
+ * 
+ * @author philipp
+ *
+ */
 
 public class ClientMVC extends Application{
 
 	private ClientModel model;
 	private ClientView view;
-	private ClientControl control;
+	private ClientController control;
+	private Logger logger = ServiceLocator.getLogger();
 	
 	public static void main(String[] args) {
-		System.out.println("Hello World");
-
+		launch(args);
 	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		this.model = new ClientModel();
-		this.view = new ClientView(model);
-		this.control = new ClientControl(model, view);
+		this.view = new ClientView(primaryStage, model);
+		this.control = new ClientController(model, view);
+		view.start();
 		
+		logger.info("Client MVC started");
 	}
 
 }

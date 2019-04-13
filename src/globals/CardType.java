@@ -7,7 +7,7 @@ package globals;
  */
 public enum CardType {
 	
-	RAWMATERIAL(CardColor.BROWN), MANUFACTURING(CardColor.GREY), PROFAN(CardColor.GREEN), 
+	RAWMATERIAL(CardColor.BROWN), MANUFACTURING(CardColor.GREY), PROFAN(CardColor.BLUE), 
 	RESEARCH(CardColor.GREEN), TRADE(CardColor.YELLOW), MILITARY(CardColor.RED), GILDEN(CardColor.VIOLET);
 	
 	/**

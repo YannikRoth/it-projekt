@@ -7,6 +7,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
@@ -14,15 +15,17 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 
 import globals.ResourceType;
+import server.ServiceLocator;
+import server.model.ServerModel;
 import server.model.gameplay.Card;
 import server.model.gameplay.ResourceMap;
 
 /**
  * This class needs to import all card from our db/csv and create card objects
- *
+ * @autor yannik roth
  */
 public class CardLoader {
-	
+	private static Logger logger = ServiceLocator.getLogger();
 	private static Map<Integer, String> field_mapping = new HashMap<>();
 	
 	/**
@@ -98,14 +101,14 @@ public class CardLoader {
 	/**
 	 * This method imports the master data (card) from the CSV file
 	 */
-	public static void importCards() {
+	public static void importCards(ServerModel m) {
 		try {
 			CSVParser parser = new CSVParserBuilder()
 				.withSeparator(';')
 				.withIgnoreQuotations(true)
 				.build();
 				 
-			CSVReader csvReader = new CSVReaderBuilder(new FileReader("./resource/masterdata/testCSV.csv"))
+			CSVReader csvReader = new CSVReaderBuilder(new FileReader("./resource/masterdata/card.csv"))
 			    .withSkipLines(1) //first line is header line, do not import
 			    .withCSVParser(parser)
 			    .build();
@@ -113,15 +116,9 @@ public class CardLoader {
 			List<String[]> myEntries = csvReader.readAll();
 
 			//i is the row
-			for(int i = 0; i < myEntries.size(); i++) {
-				//j is the column				
-				for(int j = 0; j < myEntries.get(i).length; j++) {
-					System.out.println(field_mapping.get(j) + ": " + myEntries.get(i)[j]);
-					
-					//TODO Card objects have to be created here
-				}
-				
+			for(int i = 0; i < myEntries.size(); i++) {				
 				Card c = new Card(myEntries.get(i));
+				m.addCardToMap(c);
 				
 			}
 
@@ -144,11 +141,6 @@ public class CardLoader {
 	 */
 	public static Map<Integer, String> getFieldMapping(){
 		return CardLoader.field_mapping;
-	}
-	
-	//this is just temporary, will be deleted upon implementing server logic
-	public static void main(String[] args) {
-		CardLoader.importCards();
 	}
 
 }
