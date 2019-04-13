@@ -21,8 +21,8 @@ public class Player {
 	private Logger logger = ServiceLocator.getLogger();
 	
 	//resources
-	private Map<ResourceType, Integer> resources;
-	private ArrayList<HashMap<ResourceType, Integer>> alternateResources;
+	private Map<ResourceType, Integer> resources; //only resources with single resource type
+	private ArrayList<HashMap<ResourceType, Integer>> alternateResources; //only resources with alternating resource types
 	private List<Card> cards;
 	
 	//TODO: Handle name

@@ -66,7 +66,14 @@ public class Translator {
 		
 		
 		String currentDir = System.getProperty("user.dir");
-		File file = new File(currentDir + "\\resource");
+		File file = null;
+		if(currentDir.startsWith("/")) {
+			//mac and linux format
+			file = new File(currentDir + "/resource");
+		}else {
+			//windows format
+			file = new File(currentDir + "\\resource");
+		}
 		URL[] urls = new URL[1];
 		try {
 			urls[0] = file.toURI().toURL();
