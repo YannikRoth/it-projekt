@@ -32,7 +32,8 @@ public class Player {
 	//game handling
 	private Socket socket;
 	
-	public Player() {
+	public Player(String name) {
+		setPlayerName(name);
 		this.resources = new ResourceMap(ResourceMapType.PRODUCE);
 		this.alternateResources = new ArrayList<>();
 		this.cards = new ArrayList<>();
@@ -125,7 +126,14 @@ public class Player {
 		return playerName;
 	}
 
-	public void setPlayerName(String playerName) {
+	/**
+	 * Player name should only be set by constructor
+	 * Player name is the identifier of this class
+	 * @param playerName
+	 * @author david
+	 */
+	private void setPlayerName(String playerName) {
+		//TODO: Check if other players has the same name - name has to be unique
 		this.playerName = playerName;
 	}
 	
@@ -141,5 +149,11 @@ public class Player {
 		
 		logger.warning("Called player method with no \"Player\" object: " + o.getClass().getName());
 		return false;
+	}
+	
+	@Override
+	public String toString() {
+		return this.playerName + ", wp=" + cards.stream().mapToInt(c -> c.getWinningPoints()).sum() +
+				", mp=" + cards.stream().mapToInt(c -> c.getMilitaryPoints()).sum();
 	}
 }

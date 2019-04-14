@@ -21,7 +21,8 @@ public class ServerClientThread extends Thread{
 	
 	
 	public ServerClientThread(Socket socket) {
-		player = new Player();
+		//TODO: Add player name in constructor
+		player = new Player("");
 		this.socket = socket;
 	}
 	@Override
