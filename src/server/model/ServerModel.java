@@ -9,6 +9,8 @@ import server.ServiceLocator;
 import server.model.clienthandling.ServerClientThread;
 import server.model.gameplay.Board;
 import server.model.gameplay.Card;
+import server.model.gameplay.ObservablePlayerList;
+import server.model.gameplay.Player;
 import server.model.init.BoardLoader;
 import server.model.init.CardLoader;
 
@@ -17,6 +19,7 @@ public class ServerModel {
 	private Logger logger = ServiceLocator.getLogger();
 	
 	private ArrayList<ServerClientThread> Clients = new ArrayList<ServerClientThread>();
+	private ObservablePlayerList<Player> otherPlayers = new ObservablePlayerList<>();
 	
 	//cards and boards are imported when class is initialized
 	//KEY = Item ID
@@ -43,6 +46,10 @@ public class ServerModel {
 		this.boards.put(b.getId(), b);
 	}
 
+	public Map<Integer, Card> getCards() {
+		return cards;
+	}
+	
 	public void addClient(ServerClientThread Client) {
 		// TODO Bedingungen wenn neuer Client erlaubt ist und wann nicht
 		if(true) {
@@ -52,5 +59,13 @@ public class ServerModel {
 		}else {
 			logger.info("Client konnte nicht hinzugefügt werden");
 		}
+	}
+
+	public ObservablePlayerList<Player> getOtherPlayers() {
+		return otherPlayers;
+	}
+
+	public void refreshOtherPlayer(Player p) {
+		this.otherPlayers.refreshPlayer(p);
 	}
 }
