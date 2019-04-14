@@ -13,6 +13,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
@@ -21,6 +22,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import server.model.gameplay.Player;
+import server.model.gameplay.ServerAction;
 
 /**
  * 
@@ -34,7 +37,7 @@ public class ClientView {
 	private Translator translator = Translator.getTranslator();
 	Menu menuLanguage, menuHelp, menuGame;
 	
-	TableColumn ColPlayer, ColStone, ColOre, ColWood, ColGlass, ColClay, ColLoom, ColPaper, ColCoin, ColGeom, ColWrit, ColEng, ColShield, ColMilitary, ColWinning, ColType, ColAmount;
+	TableColumn<Player, String> ColPlayer, ColStone, ColOre, ColWood, ColGlass, ColClay, ColLoom, ColPaper, ColCoin, ColGeom, ColWrit, ColEng, ColShield, ColMilitary, ColWinning, ColType, ColAmount;
 	
 	MenuItem itemM1, itemM2, itemM3, itemM4, itemM5, itemM6, itemM7, itemM8, itemM9, itemM10, itemM11, itemM12, itemM13;
 	
@@ -60,10 +63,12 @@ public class ClientView {
 		//Table View opponents
 		TableView tableOpponents = new TableView();
 		tableOpponents.setEditable(false);
+		tableOpponents.setItems(model.getOtherPlayers());
 		borderPaneMain.setCenter(tableOpponents);
 		
-		ColPlayer = new TableColumn("Player");
+		ColPlayer = new TableColumn<Player, String>("Player");
 		ColPlayer.setMinWidth(100);
+		ColPlayer.setCellValueFactory(new PropertyValueFactory<Player, String>("playerName"));
 		ColStone = new TableColumn("Stone");
 		ColStone.setMinWidth(100);
 		ColOre = new TableColumn("Ore");

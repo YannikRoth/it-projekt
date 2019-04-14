@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import globals.ResourceMapType;
 import globals.ResourceType;
+import javafx.beans.property.SimpleStringProperty;
 import server.ServiceLocator;
 
 /**
@@ -27,7 +28,8 @@ public class Player {
 	
 	//TODO: Handle name
 	//Player name has to be unique!!
-	private String playerName;
+	private SimpleStringProperty playerName = new SimpleStringProperty();
+	//TODO: Implement every viewColumn as SimpleXXXProperty --> Every of them needs a getter-Method
 	
 	//game handling
 	private Socket socket;
@@ -121,9 +123,9 @@ public class Player {
 		this.socket = s;
 		logger.info("Assigned socket to player: " + this.playerName);
 	}
-
+	
 	public String getPlayerName() {
-		return playerName;
+		return playerName.get();
 	}
 
 	/**
@@ -134,7 +136,7 @@ public class Player {
 	 */
 	private void setPlayerName(String playerName) {
 		//TODO: Check if other players has the same name - name has to be unique
-		this.playerName = playerName;
+		this.playerName.set(playerName);
 	}
 	
 	/**
@@ -156,4 +158,5 @@ public class Player {
 		return this.playerName + ", wp=" + cards.stream().mapToInt(c -> c.getWinningPoints()).sum() +
 				", mp=" + cards.stream().mapToInt(c -> c.getMilitaryPoints()).sum();
 	}
+	
 }
