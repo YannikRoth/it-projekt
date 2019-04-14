@@ -30,6 +30,7 @@ public class Card implements Serializable{
 	
 	//special card information
 	private int winningPoints = 0;
+
 	private int militaryPoints = 0;
 	
 	//further attributes concerning gameplay
@@ -404,4 +405,11 @@ public class Card implements Serializable{
 		return "SCN_" + f.format(this.id) + ".jpg";
 	}
 
+	public int getWinningPoints() {
+		return winningPoints;
+	}
+	
+	public int getMilitaryPoints() {
+		return militaryPoints;
+	}
 }
