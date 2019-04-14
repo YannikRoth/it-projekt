@@ -26,6 +26,7 @@ public class Player {
 	private List<Card> cards;
 	
 	//TODO: Handle name
+	//Player name has to be unique!!
 	private String playerName;
 	
 	//game handling
@@ -126,5 +127,19 @@ public class Player {
 
 	public void setPlayerName(String playerName) {
 		this.playerName = playerName;
+	}
+	
+	/**
+	 * Compare two player objects, player name has to be unique
+	 * @return true or false
+	 * @author david
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if(o instanceof Player)
+			return this.playerName.equals(((Player)o).getPlayerName());
+		
+		logger.warning("Called player method with no \"Player\" object: " + o.getClass().getName());
+		return false;
 	}
 }
