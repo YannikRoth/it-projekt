@@ -26,7 +26,7 @@ class GameplayTest {
 	 */
 	private ServerModel model;
 	private Player player;
-	private Card[] testCardSet = new Card[4];
+	private Card[] testCardSet = new Card[5];
 	
 	
 	public GameplayTest() {
@@ -34,9 +34,10 @@ class GameplayTest {
 		CardLoader.importCards(model);
 		player = new Player("Yannik");
 		this.testCardSet[0] = model.getCard(1); //brick OR stone OR ore OR wood
-		this.testCardSet[1] = model.getCard(2); // fabric
+		this.testCardSet[1] = model.getCard(2); // 1fabric
 		this.testCardSet[2] = model.getCard(3); // brick OR ore
-		this.testCardSet[3] = model.getCard(16); //1 glas
+		this.testCardSet[3] = model.getCard(10); //1 brick
+		this.testCardSet[4] = model.getCard(16); //1 glas
 		
 	}
 	
@@ -63,7 +64,7 @@ class GameplayTest {
 	void checkAlternateEnoughResources1() {
 		addResourcesToPlayer();
 		Card c = addFakeCardToPlayer();
-		assertFalse(player.isAbleToAffordCard(c));
+		assertTrue(player.isAbleToAffordCard(c));
 		
 	}
 	
@@ -112,7 +113,8 @@ class GameplayTest {
 		Card fc = model.getCard(102);
 		ResourceMap cost = new ResourceMap(ResourceMapType.COST);
 		cost.put(ResourceType.FABRIC, 1);
-		cost.put(ResourceType.BRICK, 1);
+		cost.put(ResourceType.BRICK, 2);
+		cost.put(ResourceType.WOOD, 1);
 		fc.setCost(cost);
 		return fc;
 	}

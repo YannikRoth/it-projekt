@@ -18,7 +18,7 @@ import server.ServiceLocator;
 
 /**
  * This class represents a player object. It will be created when a client connects to the server
- * @author rothy
+ * @author yannik roth
  *
  */
 public class Player implements Serializable{
@@ -57,7 +57,10 @@ public class Player implements Serializable{
 		
 		//if the paramter map is a cost map, all entries must be negated
 		if(rm.getResourceMapType().equals(ResourceMapType.COST)) {
-			clearedResources.stream().map(e -> e.getValue()*(-1)).collect(Collectors.toSet());
+			//clearedResources = clearedResources.stream().map(e -> e.getValue()*(-1)).collect(Collectors.toSet());
+			for(Entry<ResourceType,Integer> e : clearedResources) {
+				e.setValue(e.getValue()*(-1));
+			}
 		}
 		
 		//non alternating card
@@ -154,12 +157,18 @@ public class Player implements Serializable{
 			
 			for(int i = 0; i<alternateResourceCopy.size(); i++) {
 				HashMap<ResourceType, Integer> aR = alternateResourceCopy.get(i);
-				if(aR != null && amountRequired > 0) {
+				if (aR != null && amountRequired > 0) {
 					Integer amount = aR.get(searchResourceType) == null ? 0 : aR.get(searchResourceType);
-					//the addition here is to check if the resource is enough when added to the other resource list.
-					if(amount + this.resources.get(searchResourceType) > 0) {
+					// the addition here is to check if the resource is enough when added to the
+					// other resource list.
+					// if(amount + this.resources.get(searchResourceType) > 0) {
+					if (amount > 0) {
 						amountRequired--;
-						// alternateResourceCopy.remove(aR);
+						if (amountRequired - this.resources.get(searchResourceType) <= 0) {
+							// iteration can finish because with non-alternating resources the card can be
+							// played
+							amountRequired = 0;
+						}
 						alternateResourceCopy.set(i, null);
 					}
 				}
