@@ -362,16 +362,16 @@ public class Card implements Serializable{
 	 * This method provides cost information about this specific card
 	 * @return the cost of this card as a ResourceMap
 	 */
-	public Map<ResourceType, Integer> getCost(){
-		return this.cost;
+	public ResourceMap getCost(){
+		return (ResourceMap) this.cost;
 	}
 	
 	/**
 	 * This method provides production information about this specific card
 	 * @return the production map  of this card as a ResouceMap
 	 */
-	public Map<ResourceType, Integer> getProduction(){
-		return this.produce;
+	public ResourceMap getProduction(){
+		return (ResourceMap) this.produce;
 	}
 	
 	/**

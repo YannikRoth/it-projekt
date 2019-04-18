@@ -13,35 +13,26 @@ import globals.exception.IllegalParameterException;
  *
  */
 public class ResourceMap extends HashMap<ResourceType, Integer>{
-
-	/**
-	 * ResourceMap constructor will generate a HashMap where each amount of resource can be obtained over the enum ResourceType
-	 * If a resource is not required for a specific card or board, the amount of it should be zero (0)
-	 * @param amountCoins
-	 * @param amountWood
-	 * @param amountStone
-	 * @throws IllegalParameterException 
-	 */
 	
 	private ResourceMapType type;
-	
-	@Deprecated
-	public ResourceMap(ResourceMapType type, int amountCoins, int amountWood, int amountStone, int amountBrick, int amountOre, int amountPapyrus, int amountFabric, int amountGlas) throws IllegalParameterException {
-		super();
-		this.type = type;
-		
-		if(amountCoins < 0 || amountWood < 0 || amountStone < 0 || amountBrick < 0 || amountOre < 0 || amountPapyrus < 0 || amountFabric < 0 || amountGlas < 0) {
-			throw new IllegalParameterException("Value can not be below zero");
-		}
-		this.put(ResourceType.COIN, amountCoins);
-		this.put(ResourceType.WOOD, amountWood);
-		
-	}
 	
 	public ResourceMap(ResourceMapType type) {
 		this.type = type;
 	}
 	
+	/**
+	 * Override get method. If a value is not found, it returns zero
+	 * @author yannik roth
+	 */
+	@Override
+	public Integer get(Object o) {
+		Integer i = (super.get(o) == null ? 0 : super.get(o));
+		return i;
+	}
+	
+	public ResourceMapType getResourceMapType() {
+		return this.type;
+	}
 	
 	
 }

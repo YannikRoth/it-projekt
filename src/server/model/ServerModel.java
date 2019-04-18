@@ -43,6 +43,10 @@ public class ServerModel {
 	public void addBoardToMap(Board b) {
 		this.boards.put(b.getId(), b);
 	}
+	
+	public Card getCard(int cardId) {
+		return this.cards.get(cardId);
+	}
 
 	public Map<Integer, Card> getCards() {
 		return cards;

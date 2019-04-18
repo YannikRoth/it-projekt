@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -42,6 +44,65 @@ public class Player implements Serializable{
 		this.cards = new ArrayList<>();
 	}
 	
+	/**
+	 * This method updates the resource "account" of the player
+	 * if the value is positive, it will be added. if the value is negative, it will be subtracted
+	 * @author yannik roth
+	 * @param rm
+	 * @throws Exception 
+	 */
+	private void updateResource(ResourceMap rm) {
+		//delete all unused resources, paramter is value cnodition
+		Set<Entry<ResourceType, Integer>> clearedResources = clearMap(rm, 0);
+		
+		//if the paramter map is a cost map, all entries must be negated
+		if(rm.getResourceMapType().equals(ResourceMapType.COST)) {
+			clearedResources.stream().map(e -> e.getValue()*(-1)).collect(Collectors.toSet());
+		}
+		
+		//non alternating card
+		if(clearedResources.size() == 1) {
+			logger.info("adding resources to regular resource map");
+			for(Entry<ResourceType, Integer> entry: clearedResources) {
+				Integer currentAmount = this.resources.get(entry.getKey());
+				//add amount to existing amount
+				this.resources.put(entry.getKey(), currentAmount+entry.getValue());
+			}
+		}
+		//alternating cards
+		else if(clearedResources.size() >= 2){
+			logger.info("adding resource to alternate resource map");
+			for(Entry<ResourceType, Integer> entry: clearedResources) {
+				HashMap<ResourceType, Integer> temp = new HashMap<>();
+				temp.put(entry.getKey(), entry.getValue());
+				this.alternateResources.add(temp);
+			}
+		}
+	}
+	
+	/**
+	 * This method plays a card. Player must be able to afford card to do so
+	 * @param c
+	 * @author yannik roth
+	 */
+	public void playCard(Card c) {
+		//TODO execute method is able to afford card as a precondition of this method
+		this.updateResource(c.getCost());
+		this.updateResource(c.getProduction());
+		this.cards.add(c);
+		//TODO further attributes
+	}
+	
+	/**
+	 * this private method is used to remove any not required items from a value map.
+	 * @param rm A ResourceMap
+	 * @param i Value condition to be excluded (normally zero)
+	 * @return a <code>Set</code> of entries in the format [ResourceType, Integer]
+	 */
+	private Set<Entry<ResourceType, Integer>> clearMap(ResourceMap rm, int i) {
+		return rm.entrySet().stream().filter(e -> e.getValue() > i).collect(Collectors.toSet());
+	}
+
 	/**
 	 * This method provides evaluation if a card can be played or not. Check if player has enough resources
 	 * @param Card c
