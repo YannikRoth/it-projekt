@@ -10,7 +10,14 @@ import server.ServiceLocator;
 public class Globals {
 	
 	private static int portNr = 8080;
+	private static String defaultIPAddr = "127.0.0.1";
 	
+	public static String getDefaultIPAddr() {
+		return defaultIPAddr;
+	}
+	public static void setDefaultIPAddr(String defaultIPAddr) {
+		Globals.defaultIPAddr = defaultIPAddr;
+	}
 	public static void setPortNr(int portNumb) {
 		portNr = portNumb > 0 ? portNumb : 8080;
 		ServiceLocator.getLogger().info("Set port to: " + portNr);

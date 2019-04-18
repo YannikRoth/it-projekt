@@ -1,5 +1,6 @@
 package server.model.gameplay;
 
+import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +19,7 @@ import server.ServiceLocator;
  * @author rothy
  *
  */
-public class Player {
+public class Player implements Serializable{
 	private Logger logger = ServiceLocator.getLogger();
 	
 	//resources

@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Logger;
 
+import globals.Globals;
 import server.ServiceLocator;
 import server.model.ServerModel;
 
@@ -28,15 +29,16 @@ public class ServerRequestHandler extends Thread {
 	public void run() {
 		logger.info("Start server");
 		try {
-			listener = new ServerSocket(8080, 10, null);
+			listener = new ServerSocket(Globals.getPortNr(), 10, null);
 			ServerClientThread client;
 			while(!stop) {
 				try {
 					Socket socket = listener.accept();
 					client = new ServerClientThread(socket);
-					logger.info("Neuer Client hat den Server angefragt");
+					logger.info("New client request received");
 					synchronized(servermodel){
 						servermodel.addClient(client);
+						logger.info("Added new client to server");
 					}
 				} catch (Exception e) {
 					
