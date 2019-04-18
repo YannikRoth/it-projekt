@@ -72,11 +72,11 @@ public class Player implements Serializable{
 		//alternating cards
 		else if(clearedResources.size() >= 2){
 			logger.info("adding resource to alternate resource map");
+			HashMap<ResourceType, Integer> temp = new HashMap<>();
 			for(Entry<ResourceType, Integer> entry: clearedResources) {
-				HashMap<ResourceType, Integer> temp = new HashMap<>();
 				temp.put(entry.getKey(), entry.getValue());
-				this.alternateResources.add(temp);
 			}
+			this.alternateResources.add(temp);
 		}
 	}
 	
@@ -148,10 +148,16 @@ public class Player implements Serializable{
 			
 			int amountRequired = c.getCost().get(searchResourceType);
 			
-			for(HashMap<ResourceType, Integer> aR : alternateResourceCopy) {
-				if(aR.get(searchResourceType) + this.resources.get(searchResourceType)> 0) {
-					amountRequired--;
-					alternateResourceCopy.remove(aR);
+			for(int i = 0; i<alternateResourceCopy.size(); i++) {
+				HashMap<ResourceType, Integer> aR = alternateResourceCopy.get(i);
+				if(aR != null && amountRequired > 0) {
+					Integer amount = aR.get(searchResourceType) == null ? 0 : aR.get(searchResourceType);
+					//the addition here is to check if the resource is enough when added to the other resource list.
+					if(amount + this.resources.get(searchResourceType) > 0) {
+						amountRequired--;
+						// alternateResourceCopy.remove(aR);
+						alternateResourceCopy.set(i, null);
+					}
 				}
 			}
 			

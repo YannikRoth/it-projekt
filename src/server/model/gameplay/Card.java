@@ -412,4 +412,23 @@ public class Card implements Serializable{
 	public int getMilitaryPoints() {
 		return militaryPoints;
 	}
+	
+	/**
+	 * This method is only to be used by the importer and for test pruposes.
+	 * It should never make sense to change these values!
+	 * @param rm
+	 * @author yannik roth
+	 */
+	public void setCost(ResourceMap rm) {
+		this.cost = rm;
+	}
+	/**
+	 * This method is only to be used by the importer and for test pruposes.
+	 * It should never make sense to change these values!
+	 * @param rm
+	 * @author yannik roth
+	 */
+	public void setProduction(ResourceMap rm) {
+		this.produce = rm;
+	}
 }
