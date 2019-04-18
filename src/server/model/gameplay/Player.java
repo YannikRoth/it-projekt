@@ -117,6 +117,10 @@ public class Player implements Serializable{
 		//make a copy because elements will be deleted
 		ArrayList<HashMap<ResourceType, Integer>> alternateResourceCopy = (ArrayList<HashMap<ResourceType, Integer>>) alternateResources.clone();
 		
+		//sorting the alternate list so that the evaluation will not use a multi card if not required.
+		alternateResourceCopy = (ArrayList<HashMap<ResourceType, Integer>>) 
+				alternateResourceCopy.stream().sorted((e, d) -> e.size() - d.size()).collect(Collectors.toList());
+		
 		//evaluate the easy ones : one card produces one or more resources at the same time
 		for (Map.Entry<ResourceType, Integer> entry : c.getCost()
 				.entrySet()
