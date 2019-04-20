@@ -3,11 +3,13 @@ package server.model.gameplay;
 import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -57,10 +59,14 @@ public class Player implements Serializable{
 		
 		//if the paramter map is a cost map, all entries must be negated
 		if(rm.getResourceMapType().equals(ResourceMapType.COST)) {
-			//clearedResources = clearedResources.stream().map(e -> e.getValue()*(-1)).collect(Collectors.toSet());
 			for(Entry<ResourceType,Integer> e : clearedResources) {
-				e.setValue(e.getValue()*(-1));
+				//e.setValue(e.getValue()*(-1));
+				if(e.getKey().equals(ResourceType.COIN)) {
+					int newCoinAmount = this.resources.get(ResourceType.COIN) - rm.get(ResourceType.COIN);
+					this.resources.put(ResourceType.COIN, newCoinAmount);
+				}
 			}
+			return;
 		}
 		
 		//non alternating card
@@ -87,12 +93,19 @@ public class Player implements Serializable{
 	 * This method plays a card. Player must be able to afford card to do so
 	 * @param c
 	 * @author yannik roth
+	 * @return <code>true</code> if card can be afforded and was successfully added.
 	 */
-	public void playCard(Card c) {
+	public boolean playCard(Card c) {
 		//TODO execute method is able to afford card as a precondition of this method
-		this.updateResource(c.getCost());
-		this.updateResource(c.getProduction());
-		this.cards.add(c);
+		if(isAbleToAffordCard(c)) {
+			this.updateResource(c.getCost());
+			this.updateResource(c.getProduction());
+			this.cards.add(c);
+			return true;
+		}else {
+			logger.info("Can not afford card");
+			return false;
+		}
 		//TODO further attributes
 	}
 	
@@ -145,28 +158,46 @@ public class Player implements Serializable{
 		}
 		
 		//evaluate the difficult ones : one card produces alternating products
-		for (Map.Entry<ResourceType, Boolean> entry : checkedResources
-				.entrySet()
-				.stream()
-				.filter(v -> v.getValue() == false)
-				.collect(Collectors.toSet())
-				) {
-			ResourceType searchResourceType = entry.getKey();
+		Map<ResourceType, Integer> tempReqResources = new HashMap<>();
+		ArrayList<String> sortedReqResources = new ArrayList<>();
+		for(ResourceType t : checkedResources.keySet()) {
+			if(checkedResources.get(t) == false) {
+				tempReqResources.put(t, c.getCostValue(t));
+				sortedReqResources.add(tempReqResources.get(t) + "_"+t.toString());
+			}
+		}
+		//now sort the array
+		sortedReqResources.sort(new Comparator<String>() {
+
+			@Override
+			public int compare(String o1, String o2) {
+				return o1.compareTo(o2);
+			}
+			
+		});
+		
+		ArrayList<ResourceType> requiredResources = new ArrayList<>();
+		for(String s : sortedReqResources) {
+			String[] temp = s.split("_");
+			requiredResources.add(ResourceType.valueOf(temp[1]));
+		}
+		
+		for(ResourceType t : requiredResources) {	
+			//ResourceType searchResourceType = entry.getKey();
+			ResourceType searchResourceType = t;
 			
 			int amountRequired = c.getCost().get(searchResourceType);
 			
 			for(int i = 0; i<alternateResourceCopy.size(); i++) {
 				HashMap<ResourceType, Integer> aR = alternateResourceCopy.get(i);
 				if (aR != null && amountRequired > 0) {
+					//map return null if value is not present, therefore convert to zero
 					Integer amount = aR.get(searchResourceType) == null ? 0 : aR.get(searchResourceType);
-					// the addition here is to check if the resource is enough when added to the
-					// other resource list.
-					// if(amount + this.resources.get(searchResourceType) > 0) {
 					if (amount > 0) {
 						amountRequired--;
 						if (amountRequired - this.resources.get(searchResourceType) <= 0) {
 							// iteration can finish because with non-alternating resources the card can be
-							// played
+							// afforded
 							amountRequired = 0;
 						}
 						alternateResourceCopy.set(i, null);
@@ -203,6 +234,15 @@ public class Player implements Serializable{
 	public void assignSocket(Socket s) {
 		this.socket = s;
 		logger.info("Assigned socket to player: " + this.playerName);
+	}
+	
+	/**
+	 * Adds coins to the player.
+	 * Used initially of the game of when player sells card
+	 * @param i
+	 */
+	public void addCoins(int i) {
+		this.resources.put(ResourceType.COIN, i);
 	}
 	
 	public String getPlayerName() {

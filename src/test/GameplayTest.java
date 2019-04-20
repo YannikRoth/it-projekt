@@ -26,7 +26,7 @@ class GameplayTest {
 	 */
 	private ServerModel model;
 	private Player player;
-	private Card[] testCardSet = new Card[5];
+	private Card[] testCardSet = new Card[7];
 	
 	
 	public GameplayTest() {
@@ -38,15 +38,19 @@ class GameplayTest {
 		this.testCardSet[2] = model.getCard(3); // brick OR ore
 		this.testCardSet[3] = model.getCard(10); //1 brick
 		this.testCardSet[4] = model.getCard(16); //1 glas
-		
+		this.testCardSet[5] = model.getCard(32); //1 wood or ore
+		this.testCardSet[6] = model.getCard(58); //1 glas or fabric or paper
+		ResourceMap rm = new ResourceMap(ResourceMapType.COST);
+		rm.put(ResourceType.BRICK, 0);
+		this.testCardSet[6].setCost(rm);
 	}
 	
-	@Test
-	void printAllCards() {
-		for(Entry<Integer, Card> c : model.getCards().entrySet()) {
-			System.out.println(c.getKey() + " -> " + c.getValue().getCardName());
-		}
-	}
+//	@Test
+//	void printAllCards() {
+//		for(Entry<Integer, Card> c : model.getCards().entrySet()) {
+//			System.out.println(c.getKey() + " -> " + c.getValue().getCardName());
+//		}
+//	}
 	
 	@Test
 	void checkNotEnoughResources() {
@@ -58,6 +62,13 @@ class GameplayTest {
 	void checkEnoughResources() {
 		addResourcesToPlayer();
 		assertTrue(player.isAbleToAffordCard(model.getCards().get(4)));
+	}
+	
+	@Test
+	void checkCoins() {
+		addResourcesToPlayer();
+		assertFalse(player.isAbleToAffordCard(model.getCards().get(3)));
+		
 	}
 	
 	@Test
@@ -80,6 +91,14 @@ class GameplayTest {
 	void checkAlternateEnoughResources3() {
 		addResourcesToPlayer();
 		Card c = addFakeCardToPlayer3();
+		assertTrue(player.isAbleToAffordCard(c));
+		
+	}
+	
+	@Test
+	void checkAlternateEnoughResources4() {
+		addResourcesToPlayer();
+		Card c = addFakeCardToPlayer4();
 		assertTrue(player.isAbleToAffordCard(c));
 		
 	}
@@ -119,5 +138,14 @@ class GameplayTest {
 		return fc;
 	}
 	
+	private Card addFakeCardToPlayer4() {
+		Card fc = model.getCard(103);
+		ResourceMap cost = new ResourceMap(ResourceMapType.COST);
+		cost.put(ResourceType.FABRIC, 1);
+		cost.put(ResourceType.BRICK, 2);
+		cost.put(ResourceType.WOOD, 2);
+		fc.setCost(cost);
+		return fc;
+	}
 
 }
