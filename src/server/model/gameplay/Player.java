@@ -203,6 +203,11 @@ public class Player implements Serializable{
 
 	}
 
+	/**
+	 * This method counts all alternating resources. This is never used for gameplay logig as this would make no sense. However, this method
+	 * is required to complete the vard play evaluation with our implemented logic.
+	 * @return a Map containing all resources with their absolute (summarized) amount.
+	 */
 	private Map<ResourceType, Integer> getAbsoluteAlternateResourceAmount() {
 		Map<ResourceType, Integer> result = new HashMap<>();
 		for(Map<ResourceType, Integer> map : alternateResources) {
