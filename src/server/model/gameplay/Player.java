@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import globals.Globals;
 import globals.ResourceMapType;
 import globals.ResourceType;
 import javafx.beans.property.SimpleStringProperty;
@@ -155,32 +156,13 @@ public class Player implements Serializable{
 			
 		}
 		
-		//evaluate the difficult ones : one card produces alternating products
-		Map<ResourceType, Integer> tempReqResources = new HashMap<>();
-		ArrayList<String> sortedReqResources = new ArrayList<>();
-		for(ResourceType t : checkedResources.keySet()) {
-			if(checkedResources.get(t) == false) {
-				tempReqResources.put(t, c.getCostValue(t));
-				sortedReqResources.add(tempReqResources.get(t) + "_"+t.toString());
-			}
-		}
-		//now sort the array
-		sortedReqResources.sort(new Comparator<String>() {
-
-			@Override
-			public int compare(String o1, String o2) {
-				return o1.compareTo(o2);
-			}
-			
-		});
+		//evaluate the difficult ones : one card produces alternating products		
+		Map<ResourceType, Integer> absoluteAmountAlternatingResources = getAbsoluteAlternateResourceAmount();
+		ArrayList<ResourceType> sortedRequiredResources = Globals.sortMapByValue(absoluteAmountAlternatingResources);
+		sortedRequiredResources = (ArrayList<ResourceType>) sortedRequiredResources.stream()
+				.filter(f -> checkedResources.get(f) != null).collect(Collectors.toList());
 		
-		ArrayList<ResourceType> requiredResources = new ArrayList<>();
-		for(String s : sortedReqResources) {
-			String[] temp = s.split("_");
-			requiredResources.add(ResourceType.valueOf(temp[1]));
-		}
-		
-		for(ResourceType t : requiredResources) {	
+		for(ResourceType t : sortedRequiredResources) {	
 			//ResourceType searchResourceType = entry.getKey();
 			ResourceType searchResourceType = t;
 			
@@ -219,6 +201,19 @@ public class Player implements Serializable{
 			return false;
 		}
 
+	}
+
+	private Map<ResourceType, Integer> getAbsoluteAlternateResourceAmount() {
+		Map<ResourceType, Integer> result = new HashMap<>();
+		for(Map<ResourceType, Integer> map : alternateResources) {
+			Set<Entry<ResourceType, Integer>> mapentry = map.entrySet();
+			for(Entry<ResourceType, Integer> setEntry : mapentry) {
+				int currentAmount = result.get(setEntry.getKey()) == null ? 0 : result.get(setEntry.getKey());
+				currentAmount += setEntry.getValue() == null ? 0 : setEntry.getValue();
+				result.put(setEntry.getKey(), currentAmount);
+			}
+		}
+		return result;
 	}
 
 	public Socket getSocket() {
