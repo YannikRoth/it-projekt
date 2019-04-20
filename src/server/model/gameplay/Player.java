@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -96,17 +95,16 @@ public class Player implements Serializable{
 	 * @return <code>true</code> if card can be afforded and was successfully added.
 	 */
 	public boolean playCard(Card c) {
-		//TODO execute method is able to afford card as a precondition of this method
 		if(isAbleToAffordCard(c)) {
 			this.updateResource(c.getCost());
 			this.updateResource(c.getProduction());
 			this.cards.add(c);
+			//TODO any further requiremts that a card can be played?
 			return true;
 		}else {
 			logger.info("Can not afford card");
 			return false;
 		}
-		//TODO further attributes
 	}
 	
 	/**
