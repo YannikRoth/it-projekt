@@ -100,7 +100,8 @@ public class Player implements Serializable{
 			this.updateResource(c.getCost());
 			this.updateResource(c.getProduction());
 			this.cards.add(c);
-			//TODO any further requiremts that a card can be played?
+			//TODO any further requiremets that a card can be played?
+			//TODO any further updates of the player object
 			return true;
 		}else {
 			logger.info("Can not afford card");

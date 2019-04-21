@@ -81,20 +81,8 @@ public class Card implements Serializable{
 	private int pointsForNeigbourGreenCards;
 	private int pointsForNeigbourRedCards;
 	private int pointsforNeigbourDefeattoken;
-
-
 	
 	private int tradeCostafter;
-
-	
-	@Deprecated
-	public Card(ResourceMap cost, ResourceMap produce, CardAge age, int minPlayer) {
-		this.cost = cost;
-		this.produce = produce;
-		this.cardAge = age;
-		this.minPlayer = minPlayer;
-		
-	}
 
 	/**
 	 * Constructor of card. Will iterate through all fieldMappings.

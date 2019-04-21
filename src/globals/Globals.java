@@ -35,6 +35,7 @@ public class Globals {
 	 * Helper method to sort a map by value (must be integer)
 	 * @param absoluteAmountAlternatingResources
 	 * @return an ArrayList with Resourcetypes sorted by value ASC
+	 * Info: The way this calculation is performed is not very 'nice' but it works!
 	 * @author yannik roth
 	 */
 	public static ArrayList<ResourceType> sortMapByValue(Map<ResourceType, ? extends Integer> absoluteAmountAlternatingResources) {
