@@ -18,7 +18,7 @@ public class ServerModel {
 	private Logger logger = ServiceLocator.getLogger();
 	
 	private ArrayList<ServerClientThread> clients = new ArrayList<ServerClientThread>();
-	private Map<Player, ServerClientThread> openConnections = new HashMap<>();
+	private ServerRequestHandler requesthandler;
 
 	//cards and boards are imported when class is initialized
 	//KEY = Item ID

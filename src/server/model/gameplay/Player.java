@@ -17,6 +17,7 @@ import globals.ResourceMapType;
 import globals.ResourceType;
 import javafx.beans.property.SimpleStringProperty;
 import server.ServiceLocator;
+import server.model.ServerModel;
 
 /**
  * This class represents a player object. It will be created when a client connects to the server
@@ -25,6 +26,13 @@ import server.ServiceLocator;
  */
 public class Player implements Serializable{
 	private Logger logger = ServiceLocator.getLogger();
+	private ServerModel model = ServiceLocator.getServerModel();
+	
+	//currentPlayerCard (which are shown in GUI)
+	private ArrayList<Card> currentPlayableCards = new ArrayList<>();
+	
+	//TODO add board to player
+	private Board playerBoard;
 	
 	//resources
 	private Map<ResourceType, Integer> resources; //only resources with single resource type
@@ -44,6 +52,8 @@ public class Player implements Serializable{
 		this.resources = new ResourceMap(ResourceMapType.PRODUCE);
 		this.alternateResources = new ArrayList<>();
 		this.cards = new ArrayList<>();
+		
+		this.playerBoard = model.getBoard(7);
 	}
 	
 	/**
@@ -60,7 +70,6 @@ public class Player implements Serializable{
 		//if the paramter map is a cost map, all entries must be negated
 		if(rm.getResourceMapType().equals(ResourceMapType.COST)) {
 			for(Entry<ResourceType,Integer> e : clearedResources) {
-				//e.setValue(e.getValue()*(-1));
 				if(e.getKey().equals(ResourceType.COIN)) {
 					int newCoinAmount = this.resources.get(ResourceType.COIN) - rm.get(ResourceType.COIN);
 					this.resources.put(ResourceType.COIN, newCoinAmount);
