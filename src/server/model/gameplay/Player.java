@@ -53,7 +53,7 @@ public class Player implements Serializable{
 		this.alternateResources = new ArrayList<>();
 		this.cards = new ArrayList<>();
 		
-		this.playerBoard = model.getBoard(7);
+		//this.playerBoard = model.getBoard(7);
 	}
 	
 	/**
@@ -286,6 +286,10 @@ public class Player implements Serializable{
 	public String toString() {
 		return this.playerName + ", wp=" + cards.stream().mapToInt(c -> c.getWinningPoints()).sum() +
 				", mp=" + cards.stream().mapToInt(c -> c.getMilitaryPoints()).sum();
+	}
+	
+	public void setBoard(Board b) {
+		this.playerBoard = b;
 	}
 	
 }

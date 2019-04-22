@@ -66,6 +66,7 @@ public class ServerModel {
 			client.start();
 			players.put(client.getPlayer(), client);
 			logger.info("successfully added client");
+			client.getPlayer().setBoard(boards.get(7));
 		}else {
 			logger.info("client could not be added");
 		}
