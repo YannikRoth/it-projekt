@@ -47,15 +47,19 @@ public class ClientModel extends Thread {
 	 * @autor yannik roth
 	 */
 	private void connectToServer() {
-		logger.info("Trying to connect to server");
-		try(Socket socket = new Socket(Globals.getDefaultIPAddr(), Globals.getPortNr())){
-			this.clientConnection = socket;
-			this.objInputStream = new ObjectInputStream(socket.getInputStream());
-			this.objOutputStream = new ObjectOutputStream(socket.getOutputStream());
-			
-		}catch(Exception e) {
-			logger.info("An error occured while connecting to the server" + e.getStackTrace());
-		}
+		connect();
+		return;
+//		
+//		logger.info("Trying to connect to server");
+//		try(Socket socket = new Socket(Globals.getDefaultIPAddr(), Globals.getPortNr())){
+//			this.clientConnection = socket;
+//			//code hangs here
+//			this.objInputStream = new ObjectInputStream(socket.getInputStream());
+//			this.objOutputStream = new ObjectOutputStream(socket.getOutputStream());
+//			
+//		}catch(Exception e) {
+//			logger.info("An error occured while connecting to the server" + e.getStackTrace());
+//		}
 		
 	}
 
