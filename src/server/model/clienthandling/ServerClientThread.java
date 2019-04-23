@@ -19,6 +19,7 @@ public class ServerClientThread extends Thread{
 	private Player player;
 	private final Logger logger = ServiceLocator.getLogger();
 	
+	//TODO ObjectInput/Output reader instead of inputstreamreader
 	
 	public ServerClientThread(Socket socket) {
 		//TODO: Add player name in constructor
