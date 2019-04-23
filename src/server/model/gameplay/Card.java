@@ -419,4 +419,8 @@ public class Card implements Serializable{
 	public void setProduction(ResourceMap rm) {
 		this.produce = rm;
 	}
+	
+	public int getCardMinPlayer() {
+		return this.minPlayer;
+	}
 }

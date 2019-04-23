@@ -2,8 +2,12 @@ package server.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import server.ServiceLocator;
 import server.model.clienthandling.ServerClientThread;
@@ -26,6 +30,11 @@ public class ServerModel {
 	// Value = Card or Board Object
 	private Map<Integer, Card> cards;
 	private Map<Integer, Board> boards;
+	
+	//gameplay specific variables
+	//index0 = age 1; index2 = age 3
+	private List<Set<Entry<Integer, Card>>> activeCards = new ArrayList<>();
+	//end of gameplay specific varibales
 	
 	public ServerModel() {
 		//load masterdata and store them into class maps
@@ -89,6 +98,68 @@ public class ServerModel {
 		 * back to the client
 		 */
 		
+		//load cards to play into ArrayList
+		loadGameCards();
+		assignPlayerNeighbors();
+
+		
+	}
+
+	
+	/**
+	 * Assign neighbors to players
+	 * @author yannik roth
+	 */
+	private void assignPlayerNeighbors() {
+		List<Player> activePlayers = new ArrayList<>(this.players.keySet());
+		int amountPlayer = activePlayers.size();
+		
+		//setting left players
+		for(int i=0; i<=activePlayers.size(); i++) {
+			//check if end of list, then add left neighbor as the first player
+			if(i+1 > activePlayers.size()) {
+				activePlayers.get(0).setLeftPlayer(activePlayers.get(i));
+			}else {
+				activePlayers.get(i).setLeftPlayer(activePlayers.get(i+1));
+			}
+		}
+		
+		//setting right players
+		for(int i = 0; i>=activePlayers.size(); i--){
+			//check if end of list, then add right neighbor as the last player
+			if(i-1 < 0) {
+				activePlayers.get(activePlayers.size()).setRightPlayer(activePlayers.get(0));
+			}else {
+				activePlayers.get(i).setRightPlayer(activePlayers.get(i-1));
+			}
+		}
+		
+	}
+
+	/**
+	 * This method initially loads all the effectiv required cards into the active cards array
+	 * index0: Age 1
+	 * index1: Age 2
+	 * index2: Age 3
+	 * @author yannik roth
+	 */
+	private void loadGameCards() {
+		this.activeCards.clear();
+		//age1
+		this.activeCards.set(0, this.cards.entrySet().stream()
+				.filter(c -> c.getValue().getCardAgeValue() == 1)
+				.filter(c -> c.getValue().getCardMinPlayer() <= this.cards.size())
+				.collect(Collectors.toSet()));
+		//age2
+		this.activeCards.set(1, this.cards.entrySet().stream()
+				.filter(c -> c.getValue().getCardAgeValue() == 2)
+				.filter(c -> c.getValue().getCardMinPlayer() <= this.cards.size())
+				.collect(Collectors.toSet()));
+		//age3
+		this.activeCards.set(2, this.cards.entrySet().stream()
+				.filter(c -> c.getValue().getCardAgeValue() == 3)
+				.filter(c -> c.getValue().getCardMinPlayer() <= this.cards.size())
+				.collect(Collectors.toSet()));
 		
 	}
 

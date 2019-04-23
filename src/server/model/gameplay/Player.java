@@ -28,6 +28,11 @@ public class Player implements Serializable{
 	private Logger logger = ServiceLocator.getLogger();
 	private ServerModel model = ServiceLocator.getServerModel();
 	
+	//environment of the player
+	private int playerID;
+	private Player leftPlayer;
+	private Player rightPlayer;
+	
 	//currentPlayerCard (which are shown in GUI)
 	private ArrayList<Card> currentPlayableCards = new ArrayList<>();
 	
@@ -49,11 +54,11 @@ public class Player implements Serializable{
 	
 	public Player(String name) {
 		setPlayerName(name);
+		this.playerID = ServiceLocator.getNewPlayerId();
 		this.resources = new ResourceMap(ResourceMapType.PRODUCE);
 		this.alternateResources = new ArrayList<>();
 		this.cards = new ArrayList<>();
 		
-		//this.playerBoard = model.getBoard(7);
 	}
 	
 	/**
@@ -290,6 +295,13 @@ public class Player implements Serializable{
 	
 	public void setBoard(Board b) {
 		this.playerBoard = b;
+	}
+	
+	public void setRightPlayer(Player p) {
+		this.rightPlayer = p;
+	}
+	public void setLeftPlayer(Player p) {
+		this.leftPlayer = p;
 	}
 	
 }

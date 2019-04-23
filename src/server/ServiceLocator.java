@@ -15,6 +15,9 @@ public class ServiceLocator {
 	private static Logger logger;
 	private static ServerModel serverModelInstance = null;
 	
+	//hold playerId
+	private static int playerCounter = 0;
+	
 	/**
 	 * Class initialization
 	 * @author yannik roth
@@ -92,5 +95,14 @@ public class ServiceLocator {
 	 */
 	public static ServerModel getServerModel() {
 		return ServiceLocator.serverModelInstance; 
+	}
+	
+	/**
+	 * Return a unique value on which a player can be identified
+	 * @return
+	 */
+	public static int getNewPlayerId() {
+		playerCounter++;
+		return playerCounter;
 	}
 }
