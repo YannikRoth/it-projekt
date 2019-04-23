@@ -1,15 +1,11 @@
 package client.model;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Scanner;
 import java.util.logging.Logger;
 
 import globals.Globals;
@@ -17,7 +13,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import server.ServiceLocator;
 import server.model.gameplay.Player;
-import server.model.gameplay.ServerAction;
 /**
  * 
  * @author Phillip
@@ -26,12 +21,9 @@ import server.model.gameplay.ServerAction;
 
 public class ClientModel extends Thread {
 
-	private BufferedReader socketIn;
-	private OutputStreamWriter socketOut;
+	private Player player;
 	private ObservableList<Player> otherPlayers = FXCollections.observableArrayList();
 	
-	//object streams are requried to communicate with the server
-	private Socket clientConnection;
 	private ObjectInputStream objInputStream;
 	private ObjectOutputStream objOutputStream;
 	
@@ -40,81 +32,39 @@ public class ClientModel extends Thread {
 	public ClientModel() {
 		//TODO: for example, to be remove
 		refreshOtherPlayer(new Player("David"));
-		//connectToServer();
-		this.start();
-	}
-	
-	/**
-	 * @autor yannik roth
-	 */
-	private void connectToServer() {
-//		connect();
-//		return;
-		
-//		logger.info("Trying to connect to server");
-//		try(Socket socket = new Socket(Globals.getDefaultIPAddr(), Globals.getPortNr())){
-//			this.clientConnection = socket;
-//			//code hangs here
-//			this.objOutputStream = new ObjectOutputStream(socket.getOutputStream());
-//			this.objOutputStream.flush();
-//			this.objInputStream = new ObjectInputStream(socket.getInputStream());
-//			
-//		}catch(Exception e) {
-//			logger.info("An error occured while connecting to the server" + e.getStackTrace());
-//		}
 		
 	}
-
-//	public static void main(String[] args) {
-//		ClientModel client = new ClientModel();
-//		client.connect();
-//	}
 	
-	private void connect() {
+	
+	public void connect(String ipadress, String name) {
 		// TODO Kommunikation mit dem Server hier abhandeln
-		Scanner in = new Scanner(System.in);
-		System.out.println("Enter IP address of server");
-		String msg = in.nextLine();
 	
-		try (Socket socket = new Socket(msg, Globals.getPortNr())) {
-			socketOut = new OutputStreamWriter(socket.getOutputStream());
-			socketIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		try (Socket socket = new Socket(ipadress, Globals.getPortNr())) {
+			this.objOutputStream = new ObjectOutputStream(socket.getOutputStream());
+			this.objOutputStream.flush();
+			this.objInputStream = new ObjectInputStream(socket.getInputStream());
 			this.start();
-			System.out.println("Enter a chat message, or 'stop' to quit");
-			while (!msg.equals("stop")) {
-				msg = in.nextLine();
-				socketOut.write(msg + "\n");
-				socketOut.flush();
+			//TODO nachrichten zum server senden
+			while (true) {
+				objOutputStream.writeObject(player.getPlayableCards().get(0));
+				objOutputStream.flush();
 			}
-		} catch (Exception e) {
-			
+		}catch(Exception e) {
+			logger.info("An error occured while connecting to the server" + e.getStackTrace());
 		}
-		in.close();
 	}
 	
 	@Override
 	public void run() {
-//		try {
-//			String message = "";
-//			while (message != null) {
-//				message = socketIn.readLine();
-//				System.out.println(message);
-//			}
-//		} catch (IOException e) {
-//		}
-		
-		logger.info("Trying to connect to server");
-		try(Socket socket = new Socket(Globals.getDefaultIPAddr(), Globals.getPortNr())){
-			this.clientConnection = socket;
-			//code hangs here
-			this.objOutputStream = new ObjectOutputStream(socket.getOutputStream());
-			this.objOutputStream.flush();
-			this.objInputStream = new ObjectInputStream(socket.getInputStream());
+		try {
+				//TODO nachrichten vom server empfangen
+				while (true) {
+					player = (Player) objInputStream.readObject();
+					
+				}
 			
-		}catch(Exception e) {
-			logger.info("An error occured while connecting to the server" + e.getStackTrace());
+			} catch (IOException | ClassNotFoundException e) {
 		}
-
 	}
 	
 	public ObservableList<Player> getOtherPlayers() {

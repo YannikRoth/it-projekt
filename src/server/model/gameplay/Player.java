@@ -303,5 +303,7 @@ public class Player implements Serializable{
 	public void setLeftPlayer(Player p) {
 		this.leftPlayer = p;
 	}
-	
+	public ArrayList<Card> getPlayableCards(){ 
+		return currentPlayableCards; 
+	}
 }
