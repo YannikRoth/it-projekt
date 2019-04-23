@@ -40,22 +40,24 @@ public class ClientModel extends Thread {
 	public ClientModel() {
 		//TODO: for example, to be remove
 		refreshOtherPlayer(new Player("David"));
-		connectToServer();
+		//connectToServer();
+		this.start();
 	}
 	
 	/**
 	 * @autor yannik roth
 	 */
 	private void connectToServer() {
-		connect();
-		return;
-//		
+//		connect();
+//		return;
+		
 //		logger.info("Trying to connect to server");
 //		try(Socket socket = new Socket(Globals.getDefaultIPAddr(), Globals.getPortNr())){
 //			this.clientConnection = socket;
 //			//code hangs here
-//			this.objInputStream = new ObjectInputStream(socket.getInputStream());
 //			this.objOutputStream = new ObjectOutputStream(socket.getOutputStream());
+//			this.objOutputStream.flush();
+//			this.objInputStream = new ObjectInputStream(socket.getInputStream());
 //			
 //		}catch(Exception e) {
 //			logger.info("An error occured while connecting to the server" + e.getStackTrace());
@@ -92,14 +94,27 @@ public class ClientModel extends Thread {
 	
 	@Override
 	public void run() {
-		try {
-			String message = "";
-			while (message != null) {
-				message = socketIn.readLine();
-				System.out.println(message);
-			}
-		} catch (IOException e) {
+//		try {
+//			String message = "";
+//			while (message != null) {
+//				message = socketIn.readLine();
+//				System.out.println(message);
+//			}
+//		} catch (IOException e) {
+//		}
+		
+		logger.info("Trying to connect to server");
+		try(Socket socket = new Socket(Globals.getDefaultIPAddr(), Globals.getPortNr())){
+			this.clientConnection = socket;
+			//code hangs here
+			this.objOutputStream = new ObjectOutputStream(socket.getOutputStream());
+			this.objOutputStream.flush();
+			this.objInputStream = new ObjectInputStream(socket.getInputStream());
+			
+		}catch(Exception e) {
+			logger.info("An error occured while connecting to the server" + e.getStackTrace());
 		}
+
 	}
 	
 	public ObservableList<Player> getOtherPlayers() {
