@@ -101,7 +101,6 @@ public class ServerModel {
 		//load cards to play into ArrayList
 		loadGameCards();
 		assignPlayerNeighbors();
-
 		
 	}
 
@@ -165,6 +164,30 @@ public class ServerModel {
 
 	public Board getBoard(int i) {
 		return this.boards.get(i);
+	}
+	
+	/**
+	 * This method evaluates the winner with the given game rules.
+	 * @param n amount of players. Normally these players will be a KeySet of the <code>Map<Player, []Thread> </code>
+	 * which are active in this game session
+	 * @return a list of players sorted by winning points. Winner is in index 0 and looser in last index.
+	 * 
+	 */
+	public List<Player> evaluateWinner(Player...players ){
+		//add players to this list. Sort by winner -> Index 0 = winner; index max = looser.
+		List<Player> scoreList = new ArrayList<>();
+		
+		for(Player p : players) {
+			//check player performace
+			//on the player-object there is a list called "cards" which contains all cards
+			//that the player has played thorughout the game.
+			//To get the amount of coins, you can use the method player.getCoins;
+			p.getCoins(); //get amount of coins
+			p.getPlayedCards(); //get a list of all played cards
+		}
+		
+		return scoreList;
+		
 	}
 	
 }

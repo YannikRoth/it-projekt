@@ -42,7 +42,7 @@ public class Player implements Serializable{
 	//resources
 	private Map<ResourceType, Integer> resources; //only resources with single resource type
 	private ArrayList<HashMap<ResourceType, Integer>> alternateResources; //only resources with alternating resource types
-	private List<Card> cards;
+	private List<Card> cards; //the cards that have been played by this player
 	
 	//TODO: Handle name
 	//Player name has to be unique!!
@@ -258,6 +258,14 @@ public class Player implements Serializable{
 		this.resources.put(ResourceType.COIN, i);
 	}
 	
+	/**
+	 * Get coins from player
+	 * @return
+	 */
+	public int getCoins() {
+		return this.resources.get(ResourceType.COIN);
+	}
+	
 	public String getPlayerName() {
 		return playerName.get();
 	}
@@ -305,5 +313,9 @@ public class Player implements Serializable{
 	}
 	public ArrayList<Card> getPlayableCards(){ 
 		return currentPlayableCards; 
+	}
+	
+	public List<Card> getPlayedCards(){
+		return this.cards;
 	}
 }
