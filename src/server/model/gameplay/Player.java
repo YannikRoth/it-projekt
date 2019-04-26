@@ -44,6 +44,12 @@ public class Player implements Serializable{
 	private ArrayList<HashMap<ResourceType, Integer>> alternateResources; //only resources with alternating resource types
 	private List<Card> cards; //the cards that have been played by this player
 	
+	//military and winning points
+	private int militaryPlusPoints = 0; //military plus points of player (sum)
+	private int militaryMinusPoints = 0; //military minus points of player(sum) -> to be used after conflict evaluation
+	private int winningPoints = 0; //winning points of the player (sum)
+	private int sciencePoints = 0; //these values are calculated after the game has ended
+	
 	//TODO: Handle name
 	//Player name has to be unique!!
 	private SimpleStringProperty playerName = new SimpleStringProperty();
@@ -66,7 +72,6 @@ public class Player implements Serializable{
 	 * if the value is positive, it will be added. if the value is negative, it will be subtracted
 	 * @author yannik roth
 	 * @param rm
-	 * @throws Exception 
 	 */
 	private void updateResource(ResourceMap rm) {
 		//delete all unused resources, paramter is value cnodition
@@ -116,6 +121,9 @@ public class Player implements Serializable{
 			this.cards.add(c);
 			//TODO any further requiremets that a card can be played?
 			//TODO any further updates of the player object
+			this.militaryPlusPoints += c.getMilitaryPoints();
+			this.winningPoints += c.getWinningPoints();
+			
 			return true;
 		}else {
 			logger.info("Can not afford card");
@@ -303,6 +311,9 @@ public class Player implements Serializable{
 	
 	public void setBoard(Board b) {
 		this.playerBoard = b;
+		//update the player resource map
+		int currentAmount = this.resources.get(b.getProducingResource());
+		this.resources.put(b.getProducingResource(), currentAmount + 1);
 	}
 	
 	public void setRightPlayer(Player p) {
@@ -317,5 +328,14 @@ public class Player implements Serializable{
 	
 	public List<Card> getPlayedCards(){
 		return this.cards;
+	}
+	public int getMilitaryPlusPoints() {
+		return this.militaryPlusPoints;
+	}
+	public int getMilitaryMinusPoints() {
+		return this.militaryMinusPoints;
+	}
+	public int getWinningPoints() {
+		return this.winningPoints;
 	}
 }

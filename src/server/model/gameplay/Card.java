@@ -30,7 +30,6 @@ public class Card implements Serializable{
 	
 	//special card information
 	private int winningPoints = 0;
-
 	private int militaryPoints = 0;
 	
 	//further attributes concerning gameplay

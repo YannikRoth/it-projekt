@@ -26,16 +26,6 @@ public class Board {
 	private String boardName;
 	private ResourceType producingResource;
 	
-	/**
-	 * 
-	 * @param w
-	 * @throws IllegalParameterException this is a test
-	 */
-	@Deprecated
-	public Board(WorldWonder[] w) throws IllegalParameterException {
-		worldWonders = w;
-	}
-	
 	public Board(String[] values) {
 		Map<Integer, String> mapping = BoardLoader.getFieldMapping();
 		
@@ -216,6 +206,10 @@ public class Board {
 	
 	public int getId() {
 		return this.boardID;
+	}
+	
+	public ResourceType getProducingResource() {
+		return this.producingResource;
 	}
 
 }

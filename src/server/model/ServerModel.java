@@ -184,6 +184,22 @@ public class ServerModel {
 			//To get the amount of coins, you can use the method player.getCoins;
 			p.getCoins(); //get amount of coins
 			p.getPlayedCards(); //get a list of all played cards
+			
+			/*
+			 * @Roman: Diesen Kommentar kannst du anschliessend entfernen. Wie wird ein Gewinner eruiert?
+			 * 1. Summe von MilitaryPlusPoints  - MilitaryMinusPoints
+			 * 2. Anzahl Coints Ganzzahldivison durch 3 --> e.g. 5 Coints = 1 Winning Point; 6 Coins = 2 Winning Poins
+			 * 3. Winning Points durch WorldWonder, wobei wir diese bei uns direkt beim Player Obj. in Punkt 4 bereits einrechnen
+			 * 4. Anzahl Winning Points
+			 * 5. Trade Karten
+			 * 6. Gilden Karten (Zeitalter 3)
+			 * 7. Science Points (2 Karten vom gleichen Typ = 4 Points; 3 Karten vom gleichen Typ = 9 Point
+			 * 
+			 * --> Summe aller Punkte von 1-7; der höchste gewinnt
+			 * 
+			 * 
+			 */
+			
 		}
 		
 		return scoreList;
