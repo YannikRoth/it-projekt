@@ -25,7 +25,7 @@ public class ClientController {
 	public ClientController(ClientModel model, ClientView view) {
 		this.model = model;
 		this.view = view;
-		
+		model.connect();
 		processRulesItem();
 		processHintItem();
 		processAboutItem();

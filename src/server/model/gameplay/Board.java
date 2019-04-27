@@ -1,5 +1,6 @@
 package server.model.gameplay;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -13,7 +14,7 @@ import server.model.init.BoardLoader;
  * @author rothy
  *
  */
-public class Board {
+public class Board implements Serializable {
 	private Logger logger = ServiceLocator.getLogger();
 	/**
 	 * Stores world wonder whereas index 0 is world wonder 1

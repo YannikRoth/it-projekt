@@ -3,6 +3,7 @@ package client.view;
 import java.util.Optional;
 
 import client.model.LobbyModel;
+import globals.Globals;
 import globals.Translator;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -66,6 +67,7 @@ public class LobbyView {
 		Optional<String> result = dialog.showAndWait();
 		result.ifPresent(name -> {
 			//TODO: Set Server IP in model
+			Globals.setDefaultIPAddr(name);
 			System.out.println(name);
 		});
 		

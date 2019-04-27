@@ -19,6 +19,7 @@ import server.model.gameplay.Player;
  */
 public class ServerClientThread extends Thread{
 	private Socket socket;
+	private boolean stop;
 	private Player player;
 	private final Logger logger = ServiceLocator.getLogger();
 	private ObjectInputStream objInputStream;
@@ -31,9 +32,9 @@ public class ServerClientThread extends Thread{
 		player = new Player("");
 		this.socket = socket;
 		try {
-			this.objOutputStream = new ObjectOutputStream(socket.getOutputStream());
+			this.objOutputStream = new ObjectOutputStream(this.socket.getOutputStream());
 			this.objOutputStream.flush();
-			this.objInputStream = new ObjectInputStream(socket.getInputStream()); 
+			this.objInputStream = new ObjectInputStream(this.socket.getInputStream()); 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -43,14 +44,19 @@ public class ServerClientThread extends Thread{
 	public void run() {
 		Card cardplayed;
 		// TODO Kommunikation zwischen Clientgerät, Clientthread und Gamehandling
-		while(true) {
+		stop = false;
+		while(!stop) {
 			try {
 				objOutputStream.writeObject(player);
 				objOutputStream.flush();
+				logger.info("Players sent to Client");
 				cardplayed = (Card) objInputStream.readObject();
+				logger.info("Cards received from Client");
 			} catch (IOException | ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				logger.info("Error occured durring communication with client");
+				stop = true;
 			}
 
 		}

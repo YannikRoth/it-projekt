@@ -12,6 +12,7 @@ import globals.Globals;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import server.ServiceLocator;
+import server.model.gameplay.Card;
 import server.model.gameplay.Player;
 
 /**
@@ -32,26 +33,35 @@ public class ClientModel extends Thread {
 	
 	public ClientModel() {
 		//TODO: for example, to be remove
+		connect();
 		refreshOtherPlayer(new Player("David"));
 		
 	}
 	
 	
-	public void connect(String ipadress, String name) {
+	public void connect() {
 		// TODO Kommunikation mit dem Server hier abhandeln
 	
-		try (Socket socket = new Socket(ipadress, Globals.getPortNr())) {
+		try (Socket socket = new Socket(Globals.getDefaultIPAddr(), Globals.getPortNr())) {
 			this.objOutputStream = new ObjectOutputStream(socket.getOutputStream());
 			this.objOutputStream.flush();
 			this.objInputStream = new ObjectInputStream(socket.getInputStream());
 			this.start();
-			//TODO nachrichten zum server senden
-			while (true) {
-				objOutputStream.writeObject(player.getPlayableCards().get(0));
-				objOutputStream.flush();
-			}
+			logger.info("Connection to Server opened");
 		}catch(Exception e) {
 			logger.info("An error occured while connecting to the server" + e.getStackTrace());
+		}
+	}
+	
+	public void playCard(Card playedcard) {
+		try {
+			objOutputStream.writeObject(playedcard);
+			objOutputStream.flush();
+			logger.info("Card Sent to Server");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			logger.info("Error occured while sending card");
 		}
 	}
 	
@@ -61,10 +71,12 @@ public class ClientModel extends Thread {
 				//TODO nachrichten vom server empfangen
 				while (true) {
 					player = (Player) objInputStream.readObject();
-					
+					playCard( player.getPlayableCards().get(0));
+					logger.info("Player Objects received from Server");
 				}
 			
 			} catch (IOException | ClassNotFoundException e) {
+				logger.info("Error occured while receiving Player objects from Server");
 		}
 	}
 	
