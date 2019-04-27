@@ -13,9 +13,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import server.ServiceLocator;
 import server.model.gameplay.Player;
+
 /**
  * 
- * @author Phillip
+ * @author philipp
  *
  */
 
