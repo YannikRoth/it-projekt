@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import server.ServiceLocator;
 import server.model.gameplay.Card;
 import server.model.gameplay.Player;
+import test.testclassserializable;
 
 /**
  * 
@@ -22,7 +23,7 @@ import server.model.gameplay.Player;
  */
 
 public class ClientModel extends Thread {
-
+	
 	private Player player;
 	private ObservableList<Player> otherPlayers = FXCollections.observableArrayList();
 	
@@ -44,8 +45,8 @@ public class ClientModel extends Thread {
 	
 		try (Socket socket = new Socket(Globals.getDefaultIPAddr(), Globals.getPortNr())) {
 			this.objOutputStream = new ObjectOutputStream(socket.getOutputStream());
-			this.objOutputStream.flush();
 			this.objInputStream = new ObjectInputStream(socket.getInputStream());
+			logger.info(socket.toString());
 			this.start();
 			logger.info("Connection to Server opened");
 		}catch(Exception e) {
@@ -70,14 +71,20 @@ public class ClientModel extends Thread {
 		try {
 				//TODO nachrichten vom server empfangen
 				while (true) {
-					player = (Player) objInputStream.readObject();
-					playCard( player.getPlayableCards().get(0));
-					logger.info("Player Objects received from Server");
+					testclassserializable test = new testclassserializable();
+					objOutputStream.writeObject(test);
+					objOutputStream.flush();
+				//			test = (testclassserializable) (objInputStream.readObject());
+					
+			//		playCard( player.getPlayableCards().get(0));
+					logger.info("Player Objects received from Server" + test);
 				}
 			
-			} catch (IOException | ClassNotFoundException e) {
-				logger.info("Error occured while receiving Player objects from Server");
-		}
+			} catch (IOException e) {
+				logger.info("Error occured while receiving Player objects from Server 1");
+			}/*catch (ClassNotFoundException e) {
+				logger.info("Error occured while receiving Player objects from Server 2");
+		}*/
 	}
 	
 	public ObservableList<Player> getOtherPlayers() {

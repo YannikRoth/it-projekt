@@ -303,6 +303,10 @@ public class Player implements Serializable{
 		return false;
 	}
 	
+	public void updateCardset(ArrayList<Card> Cards) {
+		currentPlayableCards = Cards;
+	}
+	
 	@Override
 	public String toString() {
 		return this.playerName + ", wp=" + cards.stream().mapToInt(c -> c.getWinningPoints()).sum() +
