@@ -5,11 +5,15 @@ import java.io.File;
 import java.io.IOException;
 
 import client.ClientMVC;
+import client.model.ClientModel;
 import client.model.LobbyModel;
+import client.view.ClientView;
 import client.view.LobbyView;
 import globals.Translator;
 import javafx.application.Platform;
 import javafx.scene.control.MenuItem;
+import javafx.stage.Stage;
+
 
 /**
  * 
@@ -26,7 +30,7 @@ public class LobbyController {
 		this.model = model;
 		this.view = view;
 		
-		processNewGameButton();
+//		processNewGameButton();
 		processRulesButton();
 		processQuitButton();
 		processGermanMenuItem();
@@ -57,13 +61,16 @@ public class LobbyController {
 	}
 
 
-	private void processNewGameButton() {
-		view.getNewGameButton().setOnAction((e) -> {
-			ClientMVC newGame = new ClientMVC();
-//			this.view.stop();
-		});
-	}
-	
+//	private void processNewGameButton() {
+//		view.getNewGameButton().setOnAction((e) -> {
+//			Stage secondStage = new Stage();
+//	    	ClientModel model = new ClientModel();
+//	    	ClientView view = new ClientView(secondStage, model);
+//	    	ClientController controller = new ClientController(model, view);
+//	    	this.view.hide();
+//		});
+//	}
+//	
 	private void processRulesButton() {
 		view.getRulesButton().setOnAction((e) -> {
 			if (Desktop.isDesktopSupported()) {
