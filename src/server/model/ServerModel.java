@@ -1,5 +1,6 @@
 package server.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +19,7 @@ import server.model.gameplay.Player;
 import server.model.init.BoardLoader;
 import server.model.init.CardLoader;
 
-public class ServerModel {
+public class ServerModel implements Serializable{
 	
 	private Logger logger = ServiceLocator.getLogger();
 	
@@ -67,7 +68,11 @@ public class ServerModel {
 	public Map<Integer, Card> getCards() {
 		return cards;
 	}
-	
+	/**
+	 * 
+	 * @author martin
+	 *
+	 */
 	public void addClient(ServerClientThread client) {
 		// TODO Bedingungen wenn neuer Client erlaubt ist und wann nicht
 		if(true) {
