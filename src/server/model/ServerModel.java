@@ -2,6 +2,7 @@ package server.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +12,9 @@ import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import globals.CardAge;
 import globals.CardType;
+import globals.CardType.CardColor;
 import server.ServiceLocator;
 import server.model.clienthandling.ServerClientThread;
 import server.model.clienthandling.ServerRequestHandler;
@@ -37,6 +40,7 @@ public class ServerModel implements Serializable{
 	//gameplay specific variables
 	//index0 = age 1; index2 = age 3
 	private List<Set<Entry<Integer, Card>>> activeCards = new ArrayList<>();
+	private CardAge cardAge;
 	//end of gameplay specific varibales
 	
 	public ServerModel() {
@@ -108,7 +112,7 @@ public class ServerModel implements Serializable{
 		//load cards to play into ArrayList
 		loadGameCards();
 		assignPlayerNeighbors();
-		
+		this.cardAge = CardAge.ONE;
 	}
 
 	
@@ -178,7 +182,7 @@ public class ServerModel implements Serializable{
 	 * @param n amount of players. Normally these players will be a KeySet of the <code>Map<Player, []Thread> </code>
 	 * which are active in this game session
 	 * @return a list of players sorted by winning points. Winner is in index 0 and looser in last index.
-	 *
+	 * @author Roman Leuenberger
 	 */
 	
 	public List<Player> evaluateWinner(Player...players ){
@@ -195,7 +199,6 @@ public class ServerModel implements Serializable{
 			dealMilitaryPoints(p);
 			p.addWinningPoints(p.getMilitaryPlusPoints() - p.getMilitaryMinusPoints());
 			p.addWinningPoints(p.getCoins()/3); //get amount of coins
-			p.addWinningPoints(p.getWinningPoints());
 			ArrayList<Card> cardsPlayedByPlayer = (ArrayList<Card>) p.getPlayedCards(); //get a list of all played cards
 			
 			//evaluate and add points for green cards
@@ -214,45 +217,22 @@ public class ServerModel implements Serializable{
 				}
 			}
 			//add winning points based on count of symbol ^2
-			p.addCoins(countOfSchriften^2);
-			p.addWinningPoints(countOfKompass^2);
-			p.addWinningPoints(countOfMeter^2);
+			Map<String, Integer> sciencePoints = new HashMap<>();
+			sciencePoints.put("schrift", countOfSchriften);
+			sciencePoints.put("kompass", countOfKompass);
+			sciencePoints.put("meter", countOfMeter);
+			p.addWinningPoints((int)Math.pow(sciencePoints.get("schrift"), 2));
+			p.addWinningPoints((int)Math.pow(sciencePoints.get("kompass"), 2));
+			p.addWinningPoints((int)Math.pow(sciencePoints.get("meter"), 2));
 			
-			//add winning points for sets of green cards
-			//evaluate smallest number as this has to be the number of sets
-			int smallestCountOfResearchSymbols = 0;
-			if (countOfSchriften < countOfKompass) {
-				if (countOfSchriften < countOfMeter) {
-					smallestCountOfResearchSymbols = countOfSchriften;
-				} else {
-					smallestCountOfResearchSymbols = countOfMeter;
-					}
-				} else {
-					if (countOfKompass < countOfMeter) {
-						smallestCountOfResearchSymbols = countOfKompass;
-					} else {
-						smallestCountOfResearchSymbols = countOfMeter;
-					}
-			}
+			List<Integer> newName = (ArrayList<Integer>)sciencePoints.values();
+			newName.sort(Comparator.comparing(e -> e));
 			
-			p.addWinningPoints(smallestCountOfResearchSymbols * 7);
+			p.addWinningPoints(newName.get(0) == null ? 0 : newName.get(0) * 7);
 			scoreList.add(p);
-					
-			/*
-			 * @Roman: Diesen Kommentar kannst du anschliessend entfernen. Wie wird ein Gewinner eruiert?
-			 * 1. Summe von MilitaryPlusPoints  - MilitaryMinusPoints
-			 * 2. Anzahl Coints Ganzzahldivison durch 3 --> e.g. 5 Coints = 1 Winning Point; 6 Coins = 2 Winning Poins
-			 * 3. Winning Points durch WorldWonder, wobei wir diese bei uns direkt beim Player Obj. in Punkt 4 bereits einrechnen
-			 *    Wo ist das ersichtlich im Code?
-			 * 4. Anzahl Winning Points
-			 * 5. Trade Karten
-			 * 6. Gilden Karten (Zeitalter 3)
-			 * 7. Science Points (2 Karten vom gleichen Typ = 4 Points; 3 Karten vom gleichen Typ = 9 Point
-			 * 
-			 * --> Summe aller Punkte von 1-7; der h�chste gewinnt
-			 * 
-			 * 
-			 */
+			
+			//long a = p.getPlayedCards().stream().filter(c -> c.getCardType().getColor() == CardColor.BROWN).count();
+			//long b = p.getPlayedCards().stream().filter(c -> c.getCardType().getColor() == CardColor.GREY).count();
 			
 		}
 		scoreList.sort(Comparator.comparing(p -> p.getWinningPoints()));
@@ -264,17 +244,19 @@ public class ServerModel implements Serializable{
 			int strengthOfLeftPlayer = p.getLeftPlayer().getMilitaryStrength();
 			int strengthOfRightPlayer = p.getRightPlayer().getMilitaryStrength();
 			
+			int milPoints = this.cardAge == CardAge.ONE ? 1 : this.cardAge == CardAge.TWO ? 3 : 5;
+			
 			if(strengthOfPlayer < strengthOfLeftPlayer) {
 				p.updateMilitaryMinusPoints(-1);
 			}
 			if(strengthOfPlayer > strengthOfLeftPlayer) {
-				p.updateMilitaryPlusPoints(3);
+				p.updateMilitaryPlusPoints(milPoints);
 			}
 			if(strengthOfPlayer < strengthOfRightPlayer) {
 				p.updateMilitaryMinusPoints(-1);
 			}
 			if(strengthOfPlayer > strengthOfRightPlayer) {
-				p.updateMilitaryPlusPoints(3);
+				p.updateMilitaryPlusPoints(milPoints);
 			}
 	}
 	

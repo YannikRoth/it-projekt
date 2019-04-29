@@ -122,6 +122,7 @@ public class Player implements Serializable{
 			this.cards.add(c);
 			//TODO any further requiremets that a card can be played?
 			//TODO any further updates of the player object
+			//TODO update coins for brown or grey cards (applies for yellow cards only)
 			this.militaryStrength += c.getMilitaryPoints();
 			this.winningPoints += c.getWinningPoints();
 			
@@ -150,6 +151,8 @@ public class Player implements Serializable{
 	 * @author yannik roth
 	 */
 	public boolean isAbleToAffordCard(Card c) {
+		//@Yannik implement freeCard logic
+		
 		//every resource that can be afforded with non-alternating cards will be TRUE
 		Map<ResourceType, Boolean> checkedResources = new HashMap<>();
 		
