@@ -18,6 +18,9 @@ public class ServiceLocator {
 	//hold playerId
 	private static int playerCounter = 0;
 	
+	//card id for manual card creation
+	private static int manualCardId = 1000;
+	
 	/**
 	 * Class initialization
 	 * @author yannik roth
@@ -104,5 +107,13 @@ public class ServiceLocator {
 	public static int getNewPlayerId() {
 		playerCounter++;
 		return playerCounter;
+	}
+	
+	public static void updateManualCardId() {
+		manualCardId++;
+	}
+	public static int getmanualCardId() {
+		updateManualCardId();
+		return manualCardId;
 	}
 }

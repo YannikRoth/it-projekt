@@ -4,6 +4,7 @@ import java.util.Map;
 
 import globals.ResourceMapType;
 import globals.ResourceType;
+import server.ServiceLocator;
 
 /**
  * World wonders can be attached to a Board
@@ -14,6 +15,7 @@ public class WorldWonder {
 	//resource maps for cost and production
 	protected Map<ResourceType, Integer> cost = new ResourceMap(ResourceMapType.COST);;
 	protected Map<ResourceType, Integer> produce = new ResourceMap(ResourceMapType.PRODUCE);
+	private Card worldWonderCard;
 	
 	//further attributes for this stage
 	protected Integer rewardinPoints;
@@ -30,5 +32,9 @@ public class WorldWonder {
 	
 	//is either 1,2,3,4
 	private int worldWonderCount;
+	
+	public WorldWonder() {
+		this.worldWonderCard = new Card(cost, produce);
+	}
 
 }

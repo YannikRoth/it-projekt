@@ -338,6 +338,18 @@ public class Card implements Serializable{
 	}
 	
 	/**
+	 * Constructor to create a manual card (used in board)
+	 * @param cost
+	 * @param produce
+	 * @author Roman Leuenberger
+	 */
+	public Card(Map<ResourceType, Integer> cost, Map<ResourceType, Integer> produce) {
+		this.cost = cost;
+		this.produce = produce;
+		this.id = ServiceLocator.getmanualCardId();
+	}
+	
+	/**
 	 * Required for import --> select correct Array-Index
 	 * @return int value of CardAge
 	 */
