@@ -45,6 +45,7 @@ public class Player implements Serializable{
 	private List<Card> cards; //the cards that have been played by this player
 	
 	//military and winning points
+	private int militaryStrength = 0; //military strength of player (sum)
 	private int militaryPlusPoints = 0; //military plus points of player (sum)
 	private int militaryMinusPoints = 0; //military minus points of player(sum) -> to be used after conflict evaluation
 	private int winningPoints = 0; //winning points of the player (sum)
@@ -121,7 +122,7 @@ public class Player implements Serializable{
 			this.cards.add(c);
 			//TODO any further requiremets that a card can be played?
 			//TODO any further updates of the player object
-			this.militaryPlusPoints += c.getMilitaryPoints();
+			this.militaryStrength += c.getMilitaryPoints();
 			this.winningPoints += c.getWinningPoints();
 			
 			return true;
@@ -342,11 +343,20 @@ public class Player implements Serializable{
 	public List<Card> getPlayedCards(){
 		return this.cards;
 	}
+	public int getMilitaryStrength() {
+		return this.militaryStrength;
+	}
 	public int getMilitaryPlusPoints() {
 		return this.militaryPlusPoints;
 	}
+	public void updateMilitaryPlusPoints(int points) {
+		this.militaryPlusPoints += points;
+	}
 	public int getMilitaryMinusPoints() {
 		return this.militaryMinusPoints;
+	}
+	public void updateMilitaryMinusPoints(int points) {
+		this.militaryMinusPoints =+ points;
 	}
 	public int getWinningPoints() {
 		return this.winningPoints;

@@ -192,6 +192,7 @@ public class ServerModel implements Serializable{
 			//on the player-object there is a list called "cards" which contains all cards
 			//that the player has played thorughout the game.
 			//To get the amount of coins, you can use the method player.getCoins;
+			dealMilitaryPoints(p);
 			p.addWinningPoints(p.getMilitaryPlusPoints() - p.getMilitaryMinusPoints());
 			p.addWinningPoints(p.getCoins()/3); //get amount of coins
 			p.addWinningPoints(p.getWinningPoints());
@@ -256,6 +257,25 @@ public class ServerModel implements Serializable{
 		}
 		scoreList.sort(Comparator.comparing(p -> p.getWinningPoints()));
 		return scoreList;
+	}
+	//method for comparing all the military strength and deal military points
+	public void dealMilitaryPoints (Player p) {
+			int strengthOfPlayer = p.getMilitaryStrength();
+			int strengthOfLeftPlayer = p.getLeftPlayer().getMilitaryStrength();
+			int strengthOfRightPlayer = p.getRightPlayer().getMilitaryStrength();
+			
+			if(strengthOfPlayer < strengthOfLeftPlayer) {
+				p.updateMilitaryMinusPoints(-1);
+			}
+			if(strengthOfPlayer > strengthOfLeftPlayer) {
+				p.updateMilitaryPlusPoints(3);
+			}
+			if(strengthOfPlayer < strengthOfRightPlayer) {
+				p.updateMilitaryMinusPoints(-1);
+			}
+			if(strengthOfPlayer > strengthOfRightPlayer) {
+				p.updateMilitaryPlusPoints(3);
+			}
 	}
 	
 }
