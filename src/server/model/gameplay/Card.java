@@ -442,6 +442,34 @@ public class Card implements Serializable{
 	public int getCoinsForGreyNeigbourCards() {
 		return coinsForGreyNeigbourCards;
 	}
+
+	public int getPointsForBrownCards() {
+		return pointsForBrownCards;
+	}
+
+	public int getPointsForGreyCards() {
+		return pointsForGreyCards;
+	}
+
+	public int getPointsForYellowCards() {
+		return pointsForYellowCards;
+	}
+
+	public int getPointsForPurpleCards() {
+		return pointsForPurpleCards;
+	}
+
+	public boolean isSciencePointsSchriften() {
+		return sciencePointsSchriften;
+	}
+
+	public boolean isSciencePointsKompass() {
+		return sciencePointsKompass;
+	}
+
+	public boolean isSciencePointsMeter() {
+		return sciencePointsMeter;
+	}
 	
 	
 }
