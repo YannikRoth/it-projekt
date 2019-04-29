@@ -422,4 +422,8 @@ public class Card implements Serializable{
 	public int getCardMinPlayer() {
 		return this.minPlayer;
 	}
+	
+	public CardType getCardType() {
+		return this.cardType;
+	}
 }

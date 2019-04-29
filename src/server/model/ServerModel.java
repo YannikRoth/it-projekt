@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import globals.CardType;
 import server.ServiceLocator;
 import server.model.clienthandling.ServerClientThread;
 import server.model.clienthandling.ServerRequestHandler;
@@ -187,20 +188,34 @@ public class ServerModel implements Serializable{
 			//on the player-object there is a list called "cards" which contains all cards
 			//that the player has played thorughout the game.
 			//To get the amount of coins, you can use the method player.getCoins;
-			p.getCoins(); //get amount of coins
-			p.getPlayedCards(); //get a list of all played cards
+			int totalWinningPoints = 0;
+			totalWinningPoints += p.getMilitaryPlusPoints() - p.getMilitaryMinusPoints();
+			totalWinningPoints += p.getCoins()/3; //get amount of coins
+			totalWinningPoints += p.getWinningPoints();
+			List<Card> cardsPlayed = p.getPlayedCards(); //get a list of all played cards
+			
+			for (Card c: cardsPlayed) {
+				if (c.getCardType() == CardType.TRADE) {
+					//TODO 
+				}
+				
+				if (c.getCardType() == CardType.RESEARCH) {
+					//TODO Maybe create a separate method for this task
+				}
+			}
 			
 			/*
 			 * @Roman: Diesen Kommentar kannst du anschliessend entfernen. Wie wird ein Gewinner eruiert?
 			 * 1. Summe von MilitaryPlusPoints  - MilitaryMinusPoints
 			 * 2. Anzahl Coints Ganzzahldivison durch 3 --> e.g. 5 Coints = 1 Winning Point; 6 Coins = 2 Winning Poins
 			 * 3. Winning Points durch WorldWonder, wobei wir diese bei uns direkt beim Player Obj. in Punkt 4 bereits einrechnen
+			 *    Wo ist das ersichtlich im Code?
 			 * 4. Anzahl Winning Points
 			 * 5. Trade Karten
-			 * 6. Gilden Karten (Zeitalter 3)
+			 * 6. Gilden Karten (Zeitalter 3) --> soweit ich weiss haben wir die Gilden-Karten gar nicht in den Basisdaten?
 			 * 7. Science Points (2 Karten vom gleichen Typ = 4 Points; 3 Karten vom gleichen Typ = 9 Point
 			 * 
-			 * --> Summe aller Punkte von 1-7; der höchste gewinnt
+			 * --> Summe aller Punkte von 1-7; der hï¿½chste gewinnt
 			 * 
 			 * 
 			 */
