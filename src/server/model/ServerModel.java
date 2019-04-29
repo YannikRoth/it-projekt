@@ -2,6 +2,7 @@ package server.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -188,10 +189,9 @@ public class ServerModel implements Serializable{
 			//on the player-object there is a list called "cards" which contains all cards
 			//that the player has played thorughout the game.
 			//To get the amount of coins, you can use the method player.getCoins;
-			int totalWinningPoints = 0;
-			totalWinningPoints += p.getMilitaryPlusPoints() - p.getMilitaryMinusPoints();
-			totalWinningPoints += p.getCoins()/3; //get amount of coins
-			totalWinningPoints += p.getWinningPoints();
+			p.addWinningPoints(p.getMilitaryPlusPoints() - p.getMilitaryMinusPoints());
+			p.addWinningPoints(p.getCoins()/3); //get amount of coins
+			p.addWinningPoints(p.getWinningPoints());
 			ArrayList<Card> cardsPlayedByPlayer = (ArrayList<Card>) p.getPlayedCards(); //get a list of all played cards
 			
 			//evaluate points for green cards
@@ -211,9 +211,9 @@ public class ServerModel implements Serializable{
 				}
 			}
 			//add winning points based on count of symbol
-			totalWinningPoints += countOfSchriften^2;
-			totalWinningPoints += countOfKompass^2;
-			totalWinningPoints += countOfMeter^2;
+			p.addCoins(countOfSchriften^2);
+			p.addWinningPoints(countOfKompass^2);
+			p.addWinningPoints(countOfMeter^2);
 			
 			//add winning points for sets of green cards
 			//evaluate smallest number
@@ -232,8 +232,9 @@ public class ServerModel implements Serializable{
 					}
 			}
 			
-			totalWinningPoints += smallestCountOfResearchSymbols * 7;
-			
+			p.addWinningPoints(smallestCountOfResearchSymbols * 7);
+			scoreList.add(p);
+					
 			/*
 			 * @Roman: Diesen Kommentar kannst du anschliessend entfernen. Wie wird ein Gewinner eruiert?
 			 * 1. Summe von MilitaryPlusPoints  - MilitaryMinusPoints
@@ -251,9 +252,8 @@ public class ServerModel implements Serializable{
 			 */
 			
 		}
-		
+		scoreList.sort(Comparator.comparing(p -> p.getWinningPoints()));
 		return scoreList;
-		
 	}
 	
 }

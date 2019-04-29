@@ -351,4 +351,8 @@ public class Player implements Serializable{
 	public int getWinningPoints() {
 		return this.winningPoints;
 	}
+	
+	public void addWinningPoints (int points) {
+		this.winningPoints += points;
+	}
 }
