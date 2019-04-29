@@ -323,8 +323,17 @@ public class Player implements Serializable{
 	public void setRightPlayer(Player p) {
 		this.rightPlayer = p;
 	}
+	
+	public Player getRightPlayer() {
+		return this.rightPlayer;
+	}
+	
 	public void setLeftPlayer(Player p) {
 		this.leftPlayer = p;
+	}
+	
+	public Player getLeftPlayer() {
+		return this.leftPlayer;
 	}
 	public ArrayList<Card> getPlayableCards(){ 
 		return currentPlayableCards; 
