@@ -178,9 +178,12 @@ public class ServerModel implements Serializable{
 	 * @param n amount of players. Normally these players will be a KeySet of the <code>Map<Player, []Thread> </code>
 	 * which are active in this game session
 	 * @return a list of players sorted by winning points. Winner is in index 0 and looser in last index.
-	 * 
+	 *
 	 */
+	
 	public List<Player> evaluateWinner(Player...players ){
+		
+		//TODO count points for cards of 3. age
 		//add players to this list. Sort by winner -> Index 0 = winner; index max = looser.
 		List<Player> scoreList = new ArrayList<>();
 		
@@ -194,8 +197,7 @@ public class ServerModel implements Serializable{
 			p.addWinningPoints(p.getWinningPoints());
 			ArrayList<Card> cardsPlayedByPlayer = (ArrayList<Card>) p.getPlayedCards(); //get a list of all played cards
 			
-			//evaluate points for green cards
-			//create lists for every symbol
+			//evaluate and add points for green cards
 			int countOfSchriften = 0;
 			int countOfKompass = 0;
 			int countOfMeter = 0;
@@ -210,13 +212,13 @@ public class ServerModel implements Serializable{
 					countOfMeter =+ 1;
 				}
 			}
-			//add winning points based on count of symbol
+			//add winning points based on count of symbol ^2
 			p.addCoins(countOfSchriften^2);
 			p.addWinningPoints(countOfKompass^2);
 			p.addWinningPoints(countOfMeter^2);
 			
 			//add winning points for sets of green cards
-			//evaluate smallest number
+			//evaluate smallest number as this has to be the number of sets
 			int smallestCountOfResearchSymbols = 0;
 			if (countOfSchriften < countOfKompass) {
 				if (countOfSchriften < countOfMeter) {
