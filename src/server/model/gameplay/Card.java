@@ -426,4 +426,22 @@ public class Card implements Serializable{
 	public CardType getCardType() {
 		return this.cardType;
 	}
+
+	public int getCoinsForBrownCards() {
+		return coinsForBrownCards;
+	}
+
+	public int getCoinsForBrownNeigbourCards() {
+		return coinsForBrownNeigbourCards;
+	}
+
+	public int getCoinsForGreyCards() {
+		return coinsForGreyCards;
+	}
+
+	public int getCoinsForGreyNeigbourCards() {
+		return coinsForGreyNeigbourCards;
+	}
+	
+	
 }
