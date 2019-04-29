@@ -192,17 +192,47 @@ public class ServerModel implements Serializable{
 			totalWinningPoints += p.getMilitaryPlusPoints() - p.getMilitaryMinusPoints();
 			totalWinningPoints += p.getCoins()/3; //get amount of coins
 			totalWinningPoints += p.getWinningPoints();
-			List<Card> cardsPlayed = p.getPlayedCards(); //get a list of all played cards
+			ArrayList<Card> cardsPlayedByPlayer = (ArrayList<Card>) p.getPlayedCards(); //get a list of all played cards
 			
-			for (Card c: cardsPlayed) {
-				if (c.getCardType() == CardType.TRADE) {
-					//TODO 
+			//evaluate points for green cards
+			//create lists for every symbol
+			int countOfSchriften = 0;
+			int countOfKompass = 0;
+			int countOfMeter = 0;
+			for (Card c : cardsPlayedByPlayer) {
+				if (c.isSciencePointsSchriften()) {
+					countOfSchriften =+ 1;
 				}
-				
-				if (c.getCardType() == CardType.RESEARCH) {
-					//TODO Maybe create a separate method for this task
+				if (c.isSciencePointsKompass()) {
+					countOfKompass += 1;
+				}
+				if (c.isSciencePointsMeter()) {
+					countOfMeter =+ 1;
 				}
 			}
+			//add winning points based on count of symbol
+			totalWinningPoints += countOfSchriften^2;
+			totalWinningPoints += countOfKompass^2;
+			totalWinningPoints += countOfMeter^2;
+			
+			//add winning points for sets of green cards
+			//evaluate smallest number
+			int smallestCountOfResearchSymbols = 0;
+			if (countOfSchriften < countOfKompass) {
+				if (countOfSchriften < countOfMeter) {
+					smallestCountOfResearchSymbols = countOfSchriften;
+				} else {
+					smallestCountOfResearchSymbols = countOfMeter;
+					}
+				} else {
+					if (countOfKompass < countOfMeter) {
+						smallestCountOfResearchSymbols = countOfKompass;
+					} else {
+						smallestCountOfResearchSymbols = countOfMeter;
+					}
+			}
+			
+			totalWinningPoints += smallestCountOfResearchSymbols * 7;
 			
 			/*
 			 * @Roman: Diesen Kommentar kannst du anschliessend entfernen. Wie wird ein Gewinner eruiert?
@@ -212,7 +242,7 @@ public class ServerModel implements Serializable{
 			 *    Wo ist das ersichtlich im Code?
 			 * 4. Anzahl Winning Points
 			 * 5. Trade Karten
-			 * 6. Gilden Karten (Zeitalter 3) --> soweit ich weiss haben wir die Gilden-Karten gar nicht in den Basisdaten?
+			 * 6. Gilden Karten (Zeitalter 3)
 			 * 7. Science Points (2 Karten vom gleichen Typ = 4 Points; 3 Karten vom gleichen Typ = 9 Point
 			 * 
 			 * --> Summe aller Punkte von 1-7; der h�chste gewinnt
