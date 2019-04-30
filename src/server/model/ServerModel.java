@@ -37,6 +37,8 @@ public class ServerModel implements Serializable{
 	private Map<Integer, Card> cards;
 	private Map<Integer, Board> boards;
 	
+	private int NUMBEROFPLAYERS = 3;
+	
 	//gameplay specific variables
 	//index0 = age 1; index2 = age 3
 	private List<Set<Entry<Integer, Card>>> activeCards = new ArrayList<>();
@@ -81,19 +83,20 @@ public class ServerModel implements Serializable{
 	 */
 	public void addClient(ServerClientThread client) {
 		// TODO Bedingungen wenn neuer Client erlaubt ist und wann nicht
-		if(true) {
-			//clients.add(client);
-			client.start();
+		if(players.size() < NUMBEROFPLAYERS) {
 			players.put(client.getPlayer(), client);
 			logger.info("successfully added client");
 			client.getPlayer().setBoard(boards.get(7));
+			client.start();
+			if(players.size() >= 3) {
+				logger.info("game Startet");
+				this.startGame();
+			}
 		}else {
 			logger.info("client could not be added");
 		}
 		
-		if(players.size() >= 3) {
-			startGame();
-		}
+
 	}
 
 	private void startGame() {
@@ -108,11 +111,19 @@ public class ServerModel implements Serializable{
 		 * Back to server, only the cardId is sent and the server updates the effectiv player-obj. The new player-onj is then sent 
 		 * back to the client
 		 */
+		List<ServerClientThread> clients =
+			    new ArrayList<ServerClientThread>(players.values());
+		for (ServerClientThread serverClientThread : clients) {
+			serverClientThread.startgame();
+		}
 		
 		//load cards to play into ArrayList
+		logger.info("game Startet");
 		loadGameCards();
 		assignPlayerNeighbors();
 		this.cardAge = CardAge.ONE;
+		
+
 	}
 
 	
@@ -125,7 +136,7 @@ public class ServerModel implements Serializable{
 		int amountPlayer = activePlayers.size();
 		
 		//setting left players
-		for(int i=0; i<=activePlayers.size(); i++) {
+		for(int i=0; i<activePlayers.size(); i++) {
 			//check if end of list, then add left neighbor as the first player
 			if(i+1 > activePlayers.size()) {
 				activePlayers.get(0).setLeftPlayer(activePlayers.get(i));

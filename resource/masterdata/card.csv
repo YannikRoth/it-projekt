@@ -16,7 +16,7 @@ id;cardAge;cardName;cardType;minPlayer;costInCoins;costInZiegel;costInErz;costIn
 15;1;APOTHEKE;RESEARCH;3;0;0;0;0;0;0;1;0;null;null;0;0;0;False;False;0;False;False;False;False;False;False;False;0;0;0;0;0;0;0;False;False;False;True;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
 16;1;GLASHUETTE;MANUFACTURING;3;0;0;0;0;0;0;0;0;null;null;0;0;0;False;False;0;False;False;False;False;False;False;False;0;0;0;0;1;0;0;False;False;False;False;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
 17;1;KASERNE;MILITARY;3;0;0;1;0;0;0;0;0;null;null;0;1;0;False;False;0;False;False;False;False;False;False;False;0;0;0;0;0;0;0;False;False;False;False;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
-18;1;THEATER;PROFAN;3;0;0;0;0;0;0;0;0;null;null;2;0;0;False;False;0;False;False;False;False;False;False;False;0;0;0;0;0;0;0;False;False;False;False;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
+18;1;THEATER;PROFAN;3;0;0;0;0;0;0;0;0;STATUE;null;2;0;0;False;False;0;False;False;False;False;False;False;False;0;0;0;0;0;0;0;False;False;False;False;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
 19;1;PRESSE;MANUFACTURING;3;0;0;0;0;0;0;0;0;null;null;0;0;0;False;False;0;False;False;False;False;False;False;False;0;0;0;0;0;0;1;False;False;False;False;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
 20;1;ALTAR;PROFAN;3;0;0;0;0;0;0;0;0;null;null;2;0;0;False;False;0;False;False;False;False;False;False;False;0;0;0;0;0;0;0;False;False;False;False;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
 21;1;BAEDER;PROFAN;3;0;0;0;0;1;0;0;0;null;null;3;0;0;False;False;0;False;False;False;False;False;False;False;0;0;0;0;0;0;0;False;False;False;False;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0

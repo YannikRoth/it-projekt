@@ -1,18 +1,11 @@
 package client.view;
 
-import java.util.Map;
-
 import client.model.ClientModel;
 import globals.ResourceType;
 import globals.Translator;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -31,13 +24,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javafx.util.Callback;
-import server.ServiceLocator;
-import server.model.ServerModel;
-import server.model.gameplay.Card;
 import server.model.gameplay.Player;
-import server.model.gameplay.ServerAction;
-import server.model.init.CardLoader;
+import server.model.gameplay.ResourceMap;
 
 /**
  * 
@@ -61,6 +49,7 @@ public class ClientView {
 	public ClientView(Stage primaryStage, ClientModel model) {
 		this.stage = primaryStage;
 		this.model = model;
+		model.start();
 		buildView();
 		setTexts();
 	}	
@@ -77,7 +66,7 @@ public class ClientView {
 		BorderPane borderPaneMain = new BorderPane();
 		
 		//Table View opponents
-		TableView tableOpponents = new TableView();
+		TableView<Player> tableOpponents = new TableView();
 		tableOpponents.setEditable(false);
 		tableOpponents.setItems(model.getOtherPlayers());
 		borderPaneMain.setCenter(tableOpponents);
@@ -187,7 +176,7 @@ public class ClientView {
 		/**
 		 * @author david
 		 */
-		TableView<ResourceType> tablePoints = new TableView<>(this.model.getMyPlayer().getResourcesListObservable());
+		TableView<ResourceType> tablePoints = new TableView<>(this.model.getMyPlayer().getResources().getResourcesListObservable());
 		
 		tablePoints.setEditable(false);
 		hBoxPlayer.getChildren().addAll(tablePoints);
@@ -197,14 +186,14 @@ public class ClientView {
 		/**
 		 * @author david
 		 */
-		ColType.setCellValueFactory(cd -> Bindings.createObjectBinding(() -> translator.getString("column." + cd.getValue().name().toLowerCase()) ));
-		
+		ColType.setCellValueFactory(cd -> Bindings.createStringBinding(() -> cd.getValue().toStringTranslate() ));
+
 		ColAmount	= new TableColumn();
 		ColAmount.setMinWidth(100);
 		/**
 		 * @author david
 		 */
-		ColAmount.setCellValueFactory(cd -> Bindings.valueAt(this.model.getMyPlayer().getResourcesObservable(), cd.getValue()));
+		ColAmount.setCellValueFactory(cd -> Bindings.valueAt(this.model.getMyPlayer().getResources().getResourcesObservable(), cd.getValue()));
 		
 		tablePoints.getColumns().addAll(ColType, ColAmount);
 		
@@ -222,16 +211,6 @@ public class ClientView {
 		
 		//Menu "Game"
 		itemM1 = new MenuItem();
-		itemM1.setOnAction((e) -> {
-			//TEsts @autor; david
-//			ServerModel m = new ServerModel();
-//			CardLoader.importCards(m);
-//			Card c = m.getCards().get(8);
-//			this.model.getMyPlayer().playCard(c);
-//			ServiceLocator.getLogger().info("Card played: " + c.getCardName());
-//			if(	this.model.getMyPlayer().getResourcesListObservable().size() > 0)
-//				System.out.println(this.model.getMyPlayer().getResourcesListObservable().get(0));
-		});
 		itemM2 = new MenuItem();
 		itemM3 = new MenuItem();
 		itemM4 = new MenuItem();
@@ -287,14 +266,14 @@ public class ClientView {
 		ColStone.setText(translator.getString("column.stone"));
 		ColOre.setText(translator.getString("column.ore"));
 		ColWood.setText(translator.getString("column.wood"));
-		ColGlass.setText(translator.getString("column.glass"));
+		ColGlass.setText(translator.getString("column.glas"));
 		ColClay.setText(translator.getString("column.brick"));
 		ColLoom.setText(translator.getString("column.loom"));
-		ColPaper.setText(translator.getString("column.paper"));
+		ColPaper.setText(translator.getString("column.papyrus"));
 		ColCoin.setText(translator.getString("column.coin"));
 		ColGeom.setText(translator.getString("column.geom"));
 		ColWrit.setText(translator.getString("column.writ"));
-		ColEng.setText(translator.getString("column.eng"));
+		ColEng.setText(translator.getString("column.fabric"));
 		ColShield.setText(translator.getString("column.shield"));
 		ColMilitary.setText(translator.getString("column.military"));
 		ColWinning.setText(translator.getString("column.winning"));
@@ -321,9 +300,17 @@ public class ClientView {
 		menuLanguage.setText(translator.getString("menu.language"));
 		
 		stage.setTitle(translator.getString("clientGame.name"));
-		
-//		ColType.getTableView().getItems().stream().forEach((o)
-//	            ->  System.err.println(ColType.getCellData(o)));
+
+//		ColType.getTableView().getItems().stream().forEach((o) ->  {
+//			System.out.println(ColType.getCellData(o));	
+//			if(o instanceof ResourceType) {
+//				ObservableMap<ResourceType, Integer> map = this.model.getMyPlayer().getResources().getResourcesObservable();
+//				int i = map.get(o);
+//				map.put(o, -1);
+//				map.put(o, i);
+//			}
+//	    });
+//		ColType.getTableView().setItems(this.model.getMyPlayer().getResources().getResourcesListObservable());
 	}
 
 	public void start() {

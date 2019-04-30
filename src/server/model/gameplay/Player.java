@@ -3,8 +3,8 @@ package server.model.gameplay;
 import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -12,16 +12,10 @@ import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import globals.CardType;
 import globals.CardType.CardColor;
 import globals.Globals;
 import globals.ResourceMapType;
 import globals.ResourceType;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.MapChangeListener;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import server.ServiceLocator;
 import server.model.ServerModel;
 
@@ -46,16 +40,13 @@ public class Player implements Serializable{
 	private Board playerBoard;
 	
 	//resources
-	private Map<ResourceType, Integer> resources; //only resources with single resource type
+	private ResourceMap resources; //only resources with single resource type
 	private ArrayList<HashMap<ResourceType, Integer>> alternateResources; //only resources with alternating resource types
 	private List<Card> cards; //the cards that have been played by this player
 	private List<Card> worldWonderCards; //the cards/stages of world wonder which been played by this player, needed for a special Gilde-card
 	
-	/**
-	 * @author david
-	 */
-	private transient ObservableMap<ResourceType, Integer> resourcesObservable = FXCollections.observableHashMap(); //makes resources observable for view
-	private transient ObservableList<ResourceType> resourcesListObservable = FXCollections.observableArrayList();
+	//free cards (building chains) -> saved in lower case!
+	private Set<String> freePlayableCards = new HashSet<>();
 	
 	//military and winning points
 	private int militaryStrength = 0; //military strength of player (sum)
@@ -78,25 +69,6 @@ public class Player implements Serializable{
 		this.resources = new ResourceMap(ResourceMapType.PRODUCE);
 		this.alternateResources = new ArrayList<>();
 		this.cards = new ArrayList<>();
-		
-		/**
-		 * Handle map entrys in list
-		 * @author david
-		 */
-		resourcesObservable.addListener((MapChangeListener.Change<? extends ResourceType, ? extends Integer> change) -> {
-    	    boolean removed = change.wasRemoved();
-    	    if (removed != change.wasAdded()) {
-    	        // no put for existing key
-    	        if (removed) {
-    	        	resourcesListObservable.remove(change.getKey());
-    	        } else {
-    	        	resourcesListObservable.add(change.getKey());
-    	        }
-    	    }
-    	});
-		for (ResourceType r : ResourceType.values()) {
-			this.resourcesObservable.put(r, 0);
-		}
 	}
 	
 	/**
@@ -115,7 +87,6 @@ public class Player implements Serializable{
 				if(e.getKey().equals(ResourceType.COIN)) {
 					int newCoinAmount = this.resources.get(ResourceType.COIN) - rm.get(ResourceType.COIN);
 					this.resources.put(ResourceType.COIN, newCoinAmount);
-					this.resourcesObservable.put(ResourceType.COIN, newCoinAmount);
 				}
 			}
 			return;
@@ -128,7 +99,6 @@ public class Player implements Serializable{
 				Integer currentAmount = this.resources.get(entry.getKey());
 				//add amount to existing amount
 				this.resources.put(entry.getKey(), currentAmount+entry.getValue());
-				this.resourcesObservable.put(entry.getKey(), currentAmount+entry.getValue());
 			}
 		}
 		//alternating cards
@@ -153,6 +123,9 @@ public class Player implements Serializable{
 		if(isAbleToAffordCard(c)) {
 			this.updateResource(c.getCost());
 			this.updateResource(c.getProduction());
+			//add building chain if card provides free card
+			c.getFreeCards().forEach(cardname -> this.freePlayableCards.add(cardname.toLowerCase()));
+			
 			this.cards.add(c);
 			//TODO any further requiremets that a card can be played?
 			//TODO any further updates of the player object
@@ -220,7 +193,10 @@ public class Player implements Serializable{
 	 * @author yannik roth
 	 */
 	public boolean isAbleToAffordCard(Card c) {
-		//@Yannik implement freeCard logic
+		//if card can be played for free because of an earlier played card, instantly return true
+		if(this.freePlayableCards.contains(c.getCardName().toLowerCase())) {
+			return true;
+		};
 		
 		//every resource that can be afforded with non-alternating cards will be TRUE
 		Map<ResourceType, Boolean> checkedResources = new HashMap<>();
@@ -301,8 +277,9 @@ public class Player implements Serializable{
 
 	/**
 	 * This method counts all alternating resources. This is never used for gameplay logig as this would make no sense. However, this method
-	 * is required to complete the vard play evaluation with our implemented logic.
+	 * is required to complete the card play evaluation with our implemented logic.
 	 * @return a Map containing all resources with their absolute (summarized) amount.
+	 * @author yannik roth
 	 */
 	private Map<ResourceType, Integer> getAbsoluteAlternateResourceAmount() {
 		Map<ResourceType, Integer> result = new HashMap<>();
@@ -337,7 +314,7 @@ public class Player implements Serializable{
 	 */
 	public void addCoins(int i) {
 		this.resources.put(ResourceType.COIN, i);
-		this.resourcesObservable.put(ResourceType.COIN, i);
+//		this.resourcesObservable.put(ResourceType.COIN, i);
 	}
 	
 	/**
@@ -392,7 +369,6 @@ public class Player implements Serializable{
 		//update the player resource map
 		int currentAmount = this.resources.get(b.getProducingResource());
 		this.resources.put(b.getProducingResource(), currentAmount + 1);
-		this.resourcesObservable.put(b.getProducingResource(), currentAmount + 1);
 	}
 	
 	public void setRightPlayer(Player p) {
@@ -440,14 +416,7 @@ public class Player implements Serializable{
 		this.winningPoints += points;
 	}
 	
-	public Map<ResourceType, Integer> getResources() {
+	public ResourceMap getResources() {
 		return this.resources;
-	}
-	
-	public ObservableList<ResourceType> getResourcesListObservable() {
-		return this.resourcesListObservable;
-	}
-	public ObservableMap<ResourceType, Integer> getResourcesObservable() {
-		return this.resourcesObservable;
 	}
 }
