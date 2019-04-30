@@ -1,60 +1,75 @@
 package client.view;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import globals.ResourceType;
 import javafx.application.Application;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.scene.Scene;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 public class TestView extends Application {
 
     @Override
     public void start(Stage stage) {
 
-        // sample data
-        Map<ResourceType, Integer> map = new HashMap<>();
-        map.put(ResourceType.BRICK, 1);
-        map.put(ResourceType.FABRIC, 2);
-        map.put(ResourceType.ORE, 3);
+    	ObservableMap<ResourceType, Integer> map = FXCollections.observableHashMap();
 
+    	ObservableList<ResourceType> keys = FXCollections.observableArrayList();
 
-        // use fully detailed type for Map.Entry<String, String> 
-        TableColumn<Map.Entry<ResourceType, Integer>, String> column1 = new TableColumn<>("Key");
-        column1.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<ResourceType, Integer>, String>, ObservableValue<String>>() {
+    	map.addListener((MapChangeListener.Change<? extends ResourceType, ? extends Integer> change) -> {
+    	    boolean removed = change.wasRemoved();
+    	    if (removed != change.wasAdded()) {
+    	        // no put for existing key
+    	        if (removed) {
+    	            keys.remove(change.getKey());
+    	        } else {
+    	            keys.add(change.getKey());
+    	        }
+    	    }
+    	});
 
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Map.Entry<ResourceType, Integer>, String> p) {
-                // this callback returns property for just one cell, you can't use a loop here
-                // for first column we use key
-                return new SimpleStringProperty(p.getValue().getKey().name());
-            }
+    	map.put(ResourceType.BRICK, 1);
+    	map.put(ResourceType.COIN, 2);
+    	map.put(ResourceType.FABRIC, 3);
+
+    	final TableView<ResourceType> table = new TableView<>(keys);
+
+    	TableColumn<ResourceType, ResourceType> column1 = new TableColumn<>("Key");
+    	// display item value (= constant)
+    	column1.setCellValueFactory(cd -> Bindings.createObjectBinding(() -> cd.getValue()));
+
+    	TableColumn<ResourceType, Integer> column2 = new TableColumn<>("Value");
+    	column2.setCellValueFactory(cd -> Bindings.valueAt(map, cd.getValue()));
+
+    	table.getColumns().setAll(column1, column2);
+
+        MenuItem mi = new MenuItem("Wert hinzufügen");
+        mi.setOnAction(e -> {
+        	int i = 0;
+        	if(map.containsKey(ResourceType.WOOD))
+        		i = map.get(ResourceType.WOOD);
+        	i += 33;
+        	map.put(ResourceType.WOOD, i);
         });
-
-        TableColumn<Map.Entry<ResourceType, Integer>, String> column2 = new TableColumn<>("Value");
-        column2.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<ResourceType, Integer>, String>, ObservableValue<String>>() {
-
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Map.Entry<ResourceType, Integer>, String> p) {
-                // for second column we use value
-                return new SimpleStringProperty(p.getValue().getValue().toString());
-            }
-        });
-
-        ObservableList<Map.Entry<ResourceType, Integer>> items = FXCollections.observableArrayList(map.entrySet());
-        final TableView<Map.Entry<ResourceType, Integer>> table = new TableView<>(items);
-
-        table.getColumns().setAll(column1, column2);
-
-        Scene scene = new Scene(table, 400, 400);
+        Menu m = new Menu("Beispiel");
+        m.getItems().add(mi);
+        MenuBar mb = new MenuBar();
+        mb.getMenus().add(m);
+        
+        BorderPane bp = new BorderPane();
+        bp.setTop(mb);
+        bp.setCenter(table);
+        
+        Scene scene = new Scene(bp);
         stage.setScene(scene);
         stage.show();
     }

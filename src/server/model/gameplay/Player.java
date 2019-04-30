@@ -18,6 +18,10 @@ import globals.Globals;
 import globals.ResourceMapType;
 import globals.ResourceType;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import server.ServiceLocator;
 import server.model.ServerModel;
 
@@ -47,6 +51,12 @@ public class Player implements Serializable{
 	private List<Card> cards; //the cards that have been played by this player
 	private List<Card> worldWonderCards; //the cards/stages of world wonder which been played by this player, needed for a special Gilde-card
 	
+	/**
+	 * @author david
+	 */
+	private ObservableMap<ResourceType, Integer> resourcesObservable = FXCollections.observableHashMap(); //makes resources observable for view
+	private ObservableList<ResourceType> resourcesListObservable = FXCollections.observableArrayList();
+	
 	//military and winning points
 	private int militaryStrength = 0; //military strength of player (sum)
 	private int militaryPlusPoints = 0; //military plus points of player (sum)
@@ -69,6 +79,21 @@ public class Player implements Serializable{
 		this.alternateResources = new ArrayList<>();
 		this.cards = new ArrayList<>();
 		
+		/**
+		 * Handle map entrys in list
+		 * @author david
+		 */
+		resourcesObservable.addListener((MapChangeListener.Change<? extends ResourceType, ? extends Integer> change) -> {
+    	    boolean removed = change.wasRemoved();
+    	    if (removed != change.wasAdded()) {
+    	        // no put for existing key
+    	        if (removed) {
+    	        	resourcesListObservable.remove(change.getKey());
+    	        } else {
+    	        	resourcesListObservable.add(change.getKey());
+    	        }
+    	    }
+    	});
 	}
 	
 	/**
@@ -87,6 +112,7 @@ public class Player implements Serializable{
 				if(e.getKey().equals(ResourceType.COIN)) {
 					int newCoinAmount = this.resources.get(ResourceType.COIN) - rm.get(ResourceType.COIN);
 					this.resources.put(ResourceType.COIN, newCoinAmount);
+					this.resourcesObservable.put(ResourceType.COIN, newCoinAmount);
 				}
 			}
 			return;
@@ -99,6 +125,7 @@ public class Player implements Serializable{
 				Integer currentAmount = this.resources.get(entry.getKey());
 				//add amount to existing amount
 				this.resources.put(entry.getKey(), currentAmount+entry.getValue());
+				this.resourcesObservable.put(entry.getKey(), currentAmount+entry.getValue());
 			}
 		}
 		//alternating cards
@@ -107,6 +134,7 @@ public class Player implements Serializable{
 			HashMap<ResourceType, Integer> temp = new HashMap<>();
 			for(Entry<ResourceType, Integer> entry: clearedResources) {
 				temp.put(entry.getKey(), entry.getValue());
+				//TODO: Show in View, maybe observable??
 			}
 			this.alternateResources.add(temp);
 		}
@@ -409,5 +437,12 @@ public class Player implements Serializable{
 	
 	public Map<ResourceType, Integer> getResources() {
 		return this.resources;
+	}
+	
+	public ObservableList<ResourceType> getResourcesListObservable() {
+		return this.resourcesListObservable;
+	}
+	public ObservableMap<ResourceType, Integer> getResourcesObservable() {
+		return this.resourcesObservable;
 	}
 }

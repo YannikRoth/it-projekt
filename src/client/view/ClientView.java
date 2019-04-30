@@ -6,6 +6,7 @@ import client.model.ClientModel;
 import globals.ResourceType;
 import globals.Translator;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -31,8 +32,11 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import server.ServiceLocator;
+import server.model.ServerModel;
+import server.model.gameplay.Card;
 import server.model.gameplay.Player;
 import server.model.gameplay.ServerAction;
+import server.model.init.CardLoader;
 
 /**
  * 
@@ -47,7 +51,8 @@ public class ClientView {
 	Menu menuLanguage, menuHelp, menuGame;
 	
 	TableColumn<Player, String> ColPlayer, ColStone, ColOre, ColWood, ColGlass, ColClay, ColLoom, ColPaper, ColCoin, ColGeom, ColWrit, ColEng, ColShield, ColMilitary, ColWinning;
-	TableColumn<Map.Entry<ResourceType, Integer>, String> ColType, ColAmount;
+	TableColumn<ResourceType, ResourceType> ColType;
+	TableColumn<ResourceType, Integer> ColAmount;
 	
 	MenuItem itemM1, itemM2, itemM3, itemM4, itemM5, itemM6, itemM7, itemM8, itemM9, itemM10, itemM11, itemM12, itemM13;
 	
@@ -181,8 +186,7 @@ public class ClientView {
 		/**
 		 * @author david
 		 */
-		ObservableList<Map.Entry<ResourceType, Integer>> items = FXCollections.observableArrayList(this.model.getMyPlayer().getResources().entrySet());
-		TableView<Map.Entry<ResourceType, Integer>> tablePoints = new TableView<>(items);
+		TableView<ResourceType> tablePoints = new TableView<>(this.model.getMyPlayer().getResourcesListObservable());
 		
 		tablePoints.setEditable(false);
 		hBoxPlayer.getChildren().addAll(tablePoints);
@@ -192,29 +196,14 @@ public class ClientView {
 		/**
 		 * @author david
 		 */
-		ColType.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<ResourceType, Integer>, String>, ObservableValue<String>>() {
-
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Map.Entry<ResourceType, Integer>, String> p) {
-                // this callback returns property for just one cell, you can't use a loop here
-                // for first column we use key
-                return new SimpleStringProperty(translator.getString("column." + p.getValue().getKey().name().toLowerCase()));
-            }
-        });
+		ColType.setCellValueFactory(cd -> Bindings.createObjectBinding(() -> cd.getValue()));
 		
 		ColAmount	= new TableColumn();
 		ColAmount.setMinWidth(100);
 		/**
 		 * @author david
 		 */
-		ColAmount.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<ResourceType, Integer>, String>, ObservableValue<String>>() {
-
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Map.Entry<ResourceType, Integer>, String> p) {
-                // for second column we use value
-                return new SimpleStringProperty(p.getValue().getValue().toString());
-            }
-        });
+		ColAmount.setCellValueFactory(cd -> Bindings.valueAt(this.model.getMyPlayer().getResourcesObservable(), cd.getValue()));
 		
 		tablePoints.getColumns().addAll(ColType, ColAmount);
 		
@@ -233,8 +222,13 @@ public class ClientView {
 		//Menu "Game"
 		itemM1 = new MenuItem();
 		itemM1.setOnAction((e) -> {
-			this.model.getMyPlayer().getResources().put(ResourceType.COIN, 2);
-			ServiceLocator.getLogger().info("Set coin 2");
+			ServerModel m = new ServerModel();
+			CardLoader.importCards(m);
+			Card c = m.getCards().get(8);
+			this.model.getMyPlayer().playCard(c);
+			ServiceLocator.getLogger().info("Card played: " + c.getCardName());
+			if(	this.model.getMyPlayer().getResourcesListObservable().size() > 0)
+				System.out.println(this.model.getMyPlayer().getResourcesListObservable().get(0));
 		});
 		itemM2 = new MenuItem();
 		itemM3 = new MenuItem();
