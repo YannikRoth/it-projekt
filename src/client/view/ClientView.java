@@ -1,18 +1,10 @@
 package client.view;
 
-import java.util.Map;
-
 import client.model.ClientModel;
 import globals.ResourceType;
 import globals.Translator;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -31,13 +23,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javafx.util.Callback;
-import server.ServiceLocator;
-import server.model.ServerModel;
-import server.model.gameplay.Card;
 import server.model.gameplay.Player;
-import server.model.gameplay.ServerAction;
-import server.model.init.CardLoader;
+import server.model.gameplay.ResourceMap;
 
 /**
  * 
@@ -77,7 +64,7 @@ public class ClientView {
 		BorderPane borderPaneMain = new BorderPane();
 		
 		//Table View opponents
-		TableView tableOpponents = new TableView();
+		TableView<Player> tableOpponents = new TableView();
 		tableOpponents.setEditable(false);
 		tableOpponents.setItems(model.getOtherPlayers());
 		borderPaneMain.setCenter(tableOpponents);
@@ -187,7 +174,7 @@ public class ClientView {
 		/**
 		 * @author david
 		 */
-		TableView<ResourceType> tablePoints = new TableView<>(this.model.getMyPlayer().getResourcesListObservable());
+		TableView<ResourceType> tablePoints = new TableView<>(((ResourceMap)this.model.getMyPlayer().getResources()).getResourcesListObservable());
 		
 		tablePoints.setEditable(false);
 		hBoxPlayer.getChildren().addAll(tablePoints);
@@ -204,7 +191,7 @@ public class ClientView {
 		/**
 		 * @author david
 		 */
-		ColAmount.setCellValueFactory(cd -> Bindings.valueAt(this.model.getMyPlayer().getResourcesObservable(), cd.getValue()));
+		ColAmount.setCellValueFactory(cd -> Bindings.valueAt(((ResourceMap)this.model.getMyPlayer().getResources()).getResourcesObservable(), cd.getValue()));
 		
 		tablePoints.getColumns().addAll(ColType, ColAmount);
 		
@@ -322,8 +309,14 @@ public class ClientView {
 		
 		stage.setTitle(translator.getString("clientGame.name"));
 		
-//		ColType.getTableView().getItems().stream().forEach((o)
-//	            ->  System.err.println(ColType.getCellData(o)));
+//		ColType.getTableView().getItems().stream().forEach((o) ->  {
+//			System.out.println(ColType.getCellData(o));	
+//			if(o instanceof ResourceType) {
+//				ObservableMap<ResourceType, Integer> map = this.model.getMyPlayer().getResourcesObservable();
+//				int i = map.get(o);
+//				map.put(o, -1);
+//			}
+//	    });
 	}
 
 	public void start() {
