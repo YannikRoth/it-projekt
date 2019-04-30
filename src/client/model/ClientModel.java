@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.logging.Logger;
 
 import globals.Globals;
+import globals.ResourceType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import server.ServiceLocator;
@@ -39,7 +40,8 @@ public class ClientModel extends Thread {
 		// TODO: for example, to be remove
 		connect();
 		refreshOtherPlayer(new Player("David"));
-
+		player = new Player("Mein Spieler");
+		player.getResources().put(ResourceType.BRICK, 20);
 	}
 
 	public void connect() {
@@ -124,5 +126,13 @@ public class ClientModel extends Thread {
 				}
 			});
 		}
+	}
+
+	public Player getMyPlayer() {
+		return player;
+	}
+
+	public void setMyPlayer(Player player) {
+		this.player = player;
 	}
 }

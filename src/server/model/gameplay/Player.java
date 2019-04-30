@@ -368,4 +368,8 @@ public class Player implements Serializable{
 	public void addWinningPoints (int points) {
 		this.winningPoints += points;
 	}
+	
+	public Map<ResourceType, Integer> getResources() {
+		return this.resources;
+	}
 }
