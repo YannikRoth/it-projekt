@@ -56,5 +56,13 @@ class RealGamePlayTest {
 		c.setCost(rm);
 		assertTrue(player.playCard(c));
 	}
+	
+	@Test
+	void checkBuildingChain() {
+		player.addCoins(3);
+		player.playCard(model.getCard(18)); //free card -> building chain to play card 51 for free
+		assertTrue(player.isAbleToAffordCard(model.getCard(51)));
+		assertFalse(player.isAbleToAffordCard(model.getCard(53)));
+	}
 
 }
