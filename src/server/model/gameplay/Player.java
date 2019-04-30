@@ -39,7 +39,7 @@ public class Player implements Serializable{
 	private Board playerBoard;
 	
 	//resources
-	private Map<ResourceType, Integer> resources; //only resources with single resource type
+	private ResourceMap resources; //only resources with single resource type
 	private ArrayList<HashMap<ResourceType, Integer>> alternateResources; //only resources with alternating resource types
 	private List<Card> cards; //the cards that have been played by this player
 	private List<Card> worldWonderCards; //the cards/stages of world wonder which been played by this player, needed for a special Gilde-card

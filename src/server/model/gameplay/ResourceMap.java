@@ -60,14 +60,34 @@ public class ResourceMap extends HashMap<ResourceType, Integer>{
 		return i;
 	}
 	
-	public ResourceMapType getResourceMapType() {
-		return this.type;
+	/**
+	 * Override put-Method to synchronize observable list
+	 * @author david
+	 */
+	@Override
+	public Integer put(ResourceType key, Integer value) {
+		resourcesObservable.put(key, value);
+		return super.put(key, value);
 	}
 	
-	public Integer put(ResourceType key, Integer value) {
-		super.put(key, value);
-		resourcesObservable.put(key, value);
-		return value;
+	/**
+	 * Override remove-Method to synchronize observable list
+	 * @author david
+	 */
+	@Override
+	public Integer remove(Object key) {
+		resourcesObservable.remove(key);
+		return super.remove(key);
+	}
+	
+	/**
+	 * Override clear-Method to synchronize observable list
+	 * @author david
+	 */
+	@Override
+	public void clear() {
+		resourcesObservable.clear();
+		super.clear();
 	}
 	
 	public ObservableMap<ResourceType, Integer> getResourcesObservable() {
@@ -76,5 +96,9 @@ public class ResourceMap extends HashMap<ResourceType, Integer>{
 	
 	public ObservableList<ResourceType> getResourcesListObservable() {
 		return this.resourcesListObservable;
+	}
+	
+	public ResourceMapType getResourceMapType() {
+		return this.type;
 	}
 }

@@ -274,14 +274,14 @@ public class ClientView {
 		ColStone.setText(translator.getString("column.stone"));
 		ColOre.setText(translator.getString("column.ore"));
 		ColWood.setText(translator.getString("column.wood"));
-		ColGlass.setText(translator.getString("column.glass"));
+		ColGlass.setText(translator.getString("column.glas"));
 		ColClay.setText(translator.getString("column.brick"));
 		ColLoom.setText(translator.getString("column.loom"));
-		ColPaper.setText(translator.getString("column.paper"));
+		ColPaper.setText(translator.getString("column.papyrus"));
 		ColCoin.setText(translator.getString("column.coin"));
 		ColGeom.setText(translator.getString("column.geom"));
 		ColWrit.setText(translator.getString("column.writ"));
-		ColEng.setText(translator.getString("column.eng"));
+		ColEng.setText(translator.getString("column.fabric"));
 		ColShield.setText(translator.getString("column.shield"));
 		ColMilitary.setText(translator.getString("column.military"));
 		ColWinning.setText(translator.getString("column.winning"));
