@@ -416,7 +416,7 @@ public class Player implements Serializable{
 		this.winningPoints += points;
 	}
 	
-	public Map<ResourceType, Integer> getResources() {
+	public ResourceMap getResources() {
 		return this.resources;
 	}
 }

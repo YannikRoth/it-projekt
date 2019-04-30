@@ -5,6 +5,7 @@ import globals.ResourceType;
 import globals.Translator;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.collections.ObservableMap;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -175,7 +176,7 @@ public class ClientView {
 		/**
 		 * @author david
 		 */
-		TableView<ResourceType> tablePoints = new TableView<>(((ResourceMap)this.model.getMyPlayer().getResources()).getResourcesListObservable());
+		TableView<ResourceType> tablePoints = new TableView<>(this.model.getMyPlayer().getResources().getResourcesListObservable());
 		
 		tablePoints.setEditable(false);
 		hBoxPlayer.getChildren().addAll(tablePoints);
@@ -185,14 +186,15 @@ public class ClientView {
 		/**
 		 * @author david
 		 */
-		ColType.setCellValueFactory(cd -> Bindings.createObjectBinding(() -> translator.getString("column." + cd.getValue().name().toLowerCase()) ));
-		
+//		ColType.setCellValueFactory(cd -> Bindings.createObjectBinding(() -> translator.getString("column." + cd.getValue().name().toLowerCase()) ));
+		ColType.setCellValueFactory(cd -> Bindings.createStringBinding(() -> cd.getValue().toString() ));
+
 		ColAmount	= new TableColumn();
 		ColAmount.setMinWidth(100);
 		/**
 		 * @author david
 		 */
-		ColAmount.setCellValueFactory(cd -> Bindings.valueAt(((ResourceMap)this.model.getMyPlayer().getResources()).getResourcesObservable(), cd.getValue()));
+		ColAmount.setCellValueFactory(cd -> Bindings.valueAt(this.model.getMyPlayer().getResources().getResourcesObservable(), cd.getValue()));
 		
 		tablePoints.getColumns().addAll(ColType, ColAmount);
 		
@@ -309,15 +311,17 @@ public class ClientView {
 		menuLanguage.setText(translator.getString("menu.language"));
 		
 		stage.setTitle(translator.getString("clientGame.name"));
-		
+
 //		ColType.getTableView().getItems().stream().forEach((o) ->  {
 //			System.out.println(ColType.getCellData(o));	
 //			if(o instanceof ResourceType) {
-//				ObservableMap<ResourceType, Integer> map = this.model.getMyPlayer().getResourcesObservable();
+//				ObservableMap<ResourceType, Integer> map = this.model.getMyPlayer().getResources().getResourcesObservable();
 //				int i = map.get(o);
 //				map.put(o, -1);
+//				map.put(o, i);
 //			}
 //	    });
+//		ColType.getTableView().setItems(this.model.getMyPlayer().getResources().getResourcesListObservable());
 	}
 
 	public void start() {

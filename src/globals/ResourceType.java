@@ -6,4 +6,9 @@ import java.util.List;
 public enum ResourceType implements Serializable {
 	WOOD, STONE, BRICK, ORE, PAPYRUS, FABRIC, GLAS, COIN;
 
+	@Override
+	public String toString() {
+		Translator t = Translator.getTranslator();
+		return t.getString("column." + this.name().toLowerCase());
+	}
 }
