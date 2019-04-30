@@ -94,6 +94,9 @@ public class Player implements Serializable{
     	        }
     	    }
     	});
+		for (ResourceType r : ResourceType.values()) {
+			this.resourcesObservable.put(r, 0);
+		}
 	}
 	
 	/**
@@ -334,6 +337,7 @@ public class Player implements Serializable{
 	 */
 	public void addCoins(int i) {
 		this.resources.put(ResourceType.COIN, i);
+		this.resourcesObservable.put(ResourceType.COIN, i);
 	}
 	
 	/**
@@ -388,6 +392,7 @@ public class Player implements Serializable{
 		//update the player resource map
 		int currentAmount = this.resources.get(b.getProducingResource());
 		this.resources.put(b.getProducingResource(), currentAmount + 1);
+		this.resourcesObservable.put(b.getProducingResource(), currentAmount + 1);
 	}
 	
 	public void setRightPlayer(Player p) {

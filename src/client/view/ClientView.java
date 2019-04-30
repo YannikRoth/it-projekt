@@ -11,6 +11,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -51,7 +52,7 @@ public class ClientView {
 	Menu menuLanguage, menuHelp, menuGame;
 	
 	TableColumn<Player, String> ColPlayer, ColStone, ColOre, ColWood, ColGlass, ColClay, ColLoom, ColPaper, ColCoin, ColGeom, ColWrit, ColEng, ColShield, ColMilitary, ColWinning;
-	TableColumn<ResourceType, ResourceType> ColType;
+	TableColumn<ResourceType, String> ColType;
 	TableColumn<ResourceType, Integer> ColAmount;
 	
 	MenuItem itemM1, itemM2, itemM3, itemM4, itemM5, itemM6, itemM7, itemM8, itemM9, itemM10, itemM11, itemM12, itemM13;
@@ -196,7 +197,7 @@ public class ClientView {
 		/**
 		 * @author david
 		 */
-		ColType.setCellValueFactory(cd -> Bindings.createObjectBinding(() -> cd.getValue()));
+		ColType.setCellValueFactory(cd -> Bindings.createObjectBinding(() -> translator.getString("column." + cd.getValue().name().toLowerCase()) ));
 		
 		ColAmount	= new TableColumn();
 		ColAmount.setMinWidth(100);
@@ -297,6 +298,7 @@ public class ClientView {
 		ColShield.setText(translator.getString("column.shield"));
 		ColMilitary.setText(translator.getString("column.military"));
 		ColWinning.setText(translator.getString("column.winning"));
+		
 		ColType.setText(translator.getString("column.type"));
 		ColAmount.setText(translator.getString("column.amount"));
 		
@@ -320,6 +322,8 @@ public class ClientView {
 		
 		stage.setTitle(translator.getString("clientGame.name"));
 		
+//		ColType.getTableView().getItems().stream().forEach((o)
+//	            ->  System.err.println(ColType.getCellData(o)));
 	}
 
 	public void start() {
