@@ -186,8 +186,7 @@ public class ClientView {
 		/**
 		 * @author david
 		 */
-//		ColType.setCellValueFactory(cd -> Bindings.createObjectBinding(() -> translator.getString("column." + cd.getValue().name().toLowerCase()) ));
-		ColType.setCellValueFactory(cd -> Bindings.createStringBinding(() -> cd.getValue().toString() ));
+		ColType.setCellValueFactory(cd -> Bindings.createStringBinding(() -> cd.getValue().toStringTranslate() ));
 
 		ColAmount	= new TableColumn();
 		ColAmount.setMinWidth(100);
@@ -212,16 +211,6 @@ public class ClientView {
 		
 		//Menu "Game"
 		itemM1 = new MenuItem();
-		itemM1.setOnAction((e) -> {
-			//TEsts @autor; david
-//			ServerModel m = new ServerModel();
-//			CardLoader.importCards(m);
-//			Card c = m.getCards().get(8);
-//			this.model.getMyPlayer().playCard(c);
-//			ServiceLocator.getLogger().info("Card played: " + c.getCardName());
-//			if(	this.model.getMyPlayer().getResourcesListObservable().size() > 0)
-//				System.out.println(this.model.getMyPlayer().getResourcesListObservable().get(0));
-		});
 		itemM2 = new MenuItem();
 		itemM3 = new MenuItem();
 		itemM4 = new MenuItem();
