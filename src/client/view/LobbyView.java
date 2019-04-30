@@ -58,7 +58,7 @@ public class LobbyView {
 		this.stage = primaryStage;
 		this.model = model;
 		
-		TextInputDialog dialog = new TextInputDialog("192.168.1.");
+		TextInputDialog dialog = new TextInputDialog("127.0.0.1");
 		dialog.setTitle(translator.getString("title.ip"));
 		dialog.setHeaderText(translator.getString("header.opponents"));
 		dialog.setContentText(translator.getString("content.ip"));
