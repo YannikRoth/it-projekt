@@ -43,6 +43,7 @@ public class Player implements Serializable{
 	private Map<ResourceType, Integer> resources; //only resources with single resource type
 	private ArrayList<HashMap<ResourceType, Integer>> alternateResources; //only resources with alternating resource types
 	private List<Card> cards; //the cards that have been played by this player
+	private List<Card> worldWonderCards; //the cards/stages of world wonder which been played by this player, needed for a special Gilde-card
 	
 	//military and winning points
 	private int militaryStrength = 0; //military strength of player (sum)
@@ -128,6 +129,27 @@ public class Player implements Serializable{
 			
 			return true;
 		}else {
+			logger.info("Can not afford card");
+			return false;
+		}
+	}
+	/**
+	 * This method plays a world wonder stage, which basically is a normal Card
+	 * @param ww
+	 * @return
+	 * @author Roman Leuenberger
+	 */
+	public boolean playWorldWonder(WorldWonder ww) {
+		Card wwCard = ww.getWorldWonderCard();
+		if(isAbleToAffordCard(wwCard)) {
+			this.updateResource(wwCard.getCost());
+			this.updateResource(wwCard.getProduction());
+			//Karte wird in die Liste worldWonderCards eingefügt. Dies würde dann gebraucht, wenn wir die Gilden vom 3. Zeitalter noch implementieren
+			this.worldWonderCards.add(wwCard);
+			this.militaryStrength += wwCard.getMilitaryPoints();
+			this.winningPoints += wwCard.getWinningPoints();
+			return true;
+		} else {
 			logger.info("Can not afford card");
 			return false;
 		}

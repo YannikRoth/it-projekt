@@ -36,5 +36,9 @@ public class WorldWonder {
 	public WorldWonder() {
 		this.worldWonderCard = new Card(cost, produce);
 	}
+	
+	public Card getWorldWonderCard () {
+		return this.worldWonderCard;
+	}
 
 }
