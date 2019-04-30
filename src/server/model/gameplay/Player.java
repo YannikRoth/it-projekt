@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -43,6 +44,9 @@ public class Player implements Serializable{
 	private ArrayList<HashMap<ResourceType, Integer>> alternateResources; //only resources with alternating resource types
 	private List<Card> cards; //the cards that have been played by this player
 	private List<Card> worldWonderCards; //the cards/stages of world wonder which been played by this player, needed for a special Gilde-card
+	
+	//free cards (building chains) -> saved in lower case!
+	private Set<String> freePlayableCards = new HashSet<>();
 	
 	//military and winning points
 	private int militaryStrength = 0; //military strength of player (sum)
@@ -119,6 +123,9 @@ public class Player implements Serializable{
 		if(isAbleToAffordCard(c)) {
 			this.updateResource(c.getCost());
 			this.updateResource(c.getProduction());
+			//add building chain if card provides free card
+			c.getFreeCards().forEach(cardname -> this.freePlayableCards.add(cardname.toLowerCase()));
+			
 			this.cards.add(c);
 			//TODO any further requiremets that a card can be played?
 			//TODO any further updates of the player object
@@ -186,7 +193,10 @@ public class Player implements Serializable{
 	 * @author yannik roth
 	 */
 	public boolean isAbleToAffordCard(Card c) {
-		//@Yannik implement freeCard logic
+		//if card can be played for free because of an earlier played card, instantly return true
+		if(this.freePlayableCards.contains(c.getCardName().toLowerCase())) {
+			return true;
+		};
 		
 		//every resource that can be afforded with non-alternating cards will be TRUE
 		Map<ResourceType, Boolean> checkedResources = new HashMap<>();
@@ -267,8 +277,9 @@ public class Player implements Serializable{
 
 	/**
 	 * This method counts all alternating resources. This is never used for gameplay logig as this would make no sense. However, this method
-	 * is required to complete the vard play evaluation with our implemented logic.
+	 * is required to complete the card play evaluation with our implemented logic.
 	 * @return a Map containing all resources with their absolute (summarized) amount.
+	 * @author yannik roth
 	 */
 	private Map<ResourceType, Integer> getAbsoluteAlternateResourceAmount() {
 		Map<ResourceType, Integer> result = new HashMap<>();

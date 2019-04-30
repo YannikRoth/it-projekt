@@ -483,5 +483,8 @@ public class Card implements Serializable{
 		return sciencePointsMeter;
 	}
 	
+	public List<String> getFreeCards(){
+		return this.freeCards;
+	}
 	
 }
