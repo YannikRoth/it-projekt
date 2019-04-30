@@ -48,6 +48,7 @@ public class ClientView {
 	public ClientView(Stage primaryStage, ClientModel model) {
 		this.stage = primaryStage;
 		this.model = model;
+		model.start();
 		buildView();
 		setTexts();
 	}	
