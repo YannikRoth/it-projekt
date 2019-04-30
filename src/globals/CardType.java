@@ -1,11 +1,13 @@
 package globals;
 
+import java.io.Serializable;
+
 /**
  * This enum holds all card types.
  * @author rothy
  *
  */
-public enum CardType {
+public enum CardType implements Serializable {
 	
 	RAWMATERIAL(CardColor.BROWN), MANUFACTURING(CardColor.GREY), PROFAN(CardColor.BLUE), 
 	RESEARCH(CardColor.GREEN), TRADE(CardColor.YELLOW), MILITARY(CardColor.RED), GILDEN(CardColor.VIOLET);

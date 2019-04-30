@@ -31,8 +31,8 @@ import server.model.ServerModel;
  *
  */
 public class Player implements Serializable{
-	private Logger logger = ServiceLocator.getLogger();
-	private ServerModel model = ServiceLocator.getServerModel();
+	private transient Logger logger = ServiceLocator.getLogger();
+	private transient ServerModel model = ServiceLocator.getServerModel();
 	
 	//environment of the player
 	private int playerID;
@@ -54,8 +54,8 @@ public class Player implements Serializable{
 	/**
 	 * @author david
 	 */
-	private ObservableMap<ResourceType, Integer> resourcesObservable = FXCollections.observableHashMap(); //makes resources observable for view
-	private ObservableList<ResourceType> resourcesListObservable = FXCollections.observableArrayList();
+	private transient ObservableMap<ResourceType, Integer> resourcesObservable = FXCollections.observableHashMap(); //makes resources observable for view
+	private transient ObservableList<ResourceType> resourcesListObservable = FXCollections.observableArrayList();
 	
 	//military and winning points
 	private int militaryStrength = 0; //military strength of player (sum)
@@ -66,11 +66,11 @@ public class Player implements Serializable{
 	
 	//TODO: Handle name
 	//Player name has to be unique!!
-	private SimpleStringProperty playerName = new SimpleStringProperty();
+	private String playerName = new String();
 	//TODO: Implement every viewColumn as SimpleXXXProperty --> Every of them needs a getter-Method
 	
 	//game handling
-	private Socket socket;
+	private transient Socket socket;
 	
 	public Player(String name) {
 		setPlayerName(name);
@@ -349,7 +349,7 @@ public class Player implements Serializable{
 	}
 	
 	public String getPlayerName() {
-		return playerName.get();
+		return playerName;
 	}
 
 	/**
@@ -358,9 +358,9 @@ public class Player implements Serializable{
 	 * @param playerName
 	 * @author david
 	 */
-	private void setPlayerName(String playerName) {
+	public void setPlayerName(String playerName) {
 		//TODO: Check if other players has the same name - name has to be unique
-		this.playerName.set(playerName);
+		this.playerName = playerName;
 	}
 	
 	/**

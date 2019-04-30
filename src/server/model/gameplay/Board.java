@@ -15,7 +15,7 @@ import server.model.init.BoardLoader;
  *
  */
 public class Board implements Serializable {
-	private Logger logger = ServiceLocator.getLogger();
+	private transient Logger logger = ServiceLocator.getLogger();
 	/**
 	 * Stores world wonder whereas index 0 is world wonder 1
 	 * If null, no world wonder available

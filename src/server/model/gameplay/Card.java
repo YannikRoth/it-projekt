@@ -22,7 +22,7 @@ import server.model.init.CardLoader;
 
 public class Card implements Serializable{
 	
-	private Logger logger = ServiceLocator.getLogger();
+	private transient Logger logger = ServiceLocator.getLogger();
 	
 	//resource maps for cost and production
 	private Map<ResourceType, Integer> cost = new ResourceMap(ResourceMapType.COST);;

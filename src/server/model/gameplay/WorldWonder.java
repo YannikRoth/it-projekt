@@ -1,5 +1,6 @@
 package server.model.gameplay;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import globals.ResourceMapType;
@@ -11,7 +12,7 @@ import server.ServiceLocator;
  * @author yannik roth
  */
 
-public class WorldWonder {
+public class WorldWonder implements Serializable {
 	//resource maps for cost and production
 	protected Map<ResourceType, Integer> cost = new ResourceMap(ResourceMapType.COST);;
 	protected Map<ResourceType, Integer> produce = new ResourceMap(ResourceMapType.PRODUCE);

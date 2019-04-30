@@ -68,16 +68,19 @@ public class ClientModel extends Thread {
 	 */
 	@Override
 	public void run() {
+		int i = 0;
 		try (Socket socket = new Socket(Globals.getDefaultIPAddr(), Globals.getPortNr())) {
 			this.objOutputStream = new ObjectOutputStream(socket.getOutputStream());
 			this.objInputStream = new ObjectInputStream(socket.getInputStream());
 			// TODO nachrichten vom server empfangen
 			while (true) {
+				i++;
 				Player test;
 				test = (Player) objInputStream.readObject();
-
+				logger.info("Player "+test.getPlayerName()+" received from Server --- attempt " + i);
+				
 				playCard(test.getPlayableCards().get(0));
-				logger.info("Player Objects received from Server" + test);
+				logger.info("Card "+test.getPlayableCards().get(0).getCardName()+" sent to Server --- attempt " + i);
 			}
 
 		} catch (IOException e) {

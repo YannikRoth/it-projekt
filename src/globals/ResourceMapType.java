@@ -1,6 +1,8 @@
 package globals;
 
-public enum ResourceMapType {
+import java.io.Serializable;
+
+public enum ResourceMapType implements Serializable {
 	COST, PRODUCE
 
 }

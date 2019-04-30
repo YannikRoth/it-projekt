@@ -40,12 +40,13 @@ public class ServerClientThread extends Thread implements Serializable {
 		player = new Player("");
 		servermodel = model;
 		ArrayList<Card> Cards = new ArrayList<>();
-		Cards.add(model.getCard(3));
+		Cards.add(model.getCard(1));
 		Cards.add(model.getCard(5));
 		Cards.add(model.getCard(10));
 		Cards.add(model.getCard(11));
 		Cards.add(model.getCard(16));
 		Cards.add(model.getCard(19));
+		player.setPlayerName("Martin");
 		logger.info(model.getCard(19) + " Card  added to player");
 		player.updateCardset(Cards);
 		this.socket = socket;
@@ -57,7 +58,7 @@ public class ServerClientThread extends Thread implements Serializable {
 		Card cardplayed;
 		// TODO Kommunikation zwischen Clientgerät, Clientthread und Gamehandling
 		stop = false;
-		int b = 0;
+		int i = 0;
 		testclassserializable testt;
 		logger.info(socket.toString());
 		try {
@@ -71,19 +72,13 @@ public class ServerClientThread extends Thread implements Serializable {
 		}
 		while (true) {
 			try {
-				/*
-				 * testt = (testclassserializable) objInputStream.readObject();
-				 * logger.info(testt.getTest()+"nummer"); testclassserializable test = new
-				 * testclassserializable(); test.setTest(10); objOutputStream.writeObject(test);
-				 * objOutputStream.flush(); } catch (IOException | ClassNotFoundException e) {
-				 * // TODO Auto-generated catch block e.printStackTrace(); }
-				 */
-
+				i++;
 				objOutputStream.writeObject(player);
 				objOutputStream.flush();
-				logger.info("Players sent to Client");
+				logger.info("Player "+player.getPlayerName()+" sent to Client --- attempt " + i);
+				
 				cardplayed = (Card) objInputStream.readObject();
-				logger.info(cardplayed + "Cards received from Client");
+				logger.info(cardplayed.getCardName() + "Cards received from Client --- attempt"+ i);
 			} catch (IOException e) {
 				logger.info( e.getLocalizedMessage());
 			} catch (ClassNotFoundException e) {

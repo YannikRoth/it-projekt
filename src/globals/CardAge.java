@@ -1,6 +1,8 @@
 package globals;
 
-public enum CardAge {
+import java.io.Serializable;
+
+public enum CardAge implements Serializable {
 	ONE(1, "LEFT"), TWO(2, "RIGHT"), THREE(2, "LEFT");
 	
 	private int ageValue = 0;
