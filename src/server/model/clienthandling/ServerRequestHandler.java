@@ -40,9 +40,7 @@ public class ServerRequestHandler extends Thread implements Serializable{
 
 			while(!stop) {
 				try {
-					logger.info(listener.toString());
 					socket = listener.accept();
-					logger.info(socket.toString());
 					client = new ServerClientThread(socket, servermodel);
 					logger.info("New client request received");
 					if (socket.isConnected()) {
@@ -52,7 +50,7 @@ public class ServerRequestHandler extends Thread implements Serializable{
 						}
 					}
 				} catch (Exception e) {
-					logger.info("Error occured during Request processing");
+					logger.info("Error occured during Request processing" + e.getLocalizedMessage());
 				}
 	
 			}
