@@ -225,15 +225,11 @@ public class ServerModel implements Serializable{
 			p.addWinningPoints((int)Math.pow(sciencePoints.get("kompass"), 2));
 			p.addWinningPoints((int)Math.pow(sciencePoints.get("meter"), 2));
 			
-			List<Integer> newName = (ArrayList<Integer>)sciencePoints.values();
-			newName.sort(Comparator.comparing(e -> e));
+			List<Integer> setsScienceCards = (ArrayList<Integer>)sciencePoints.values();
+			setsScienceCards.sort(Comparator.comparing(e -> e));
 			
-			p.addWinningPoints(newName.get(0) == null ? 0 : newName.get(0) * 7);
+			p.addWinningPoints(setsScienceCards.get(0) == null ? 0 : setsScienceCards.get(0) * 7);
 			scoreList.add(p);
-			
-			//long a = p.getPlayedCards().stream().filter(c -> c.getCardType().getColor() == CardColor.BROWN).count();
-			//long b = p.getPlayedCards().stream().filter(c -> c.getCardType().getColor() == CardColor.GREY).count();
-			
 		}
 		scoreList.sort(Comparator.comparing(p -> p.getWinningPoints()));
 		return scoreList;

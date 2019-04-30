@@ -12,6 +12,8 @@ import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import globals.CardType;
+import globals.CardType.CardColor;
 import globals.Globals;
 import globals.ResourceMapType;
 import globals.ResourceType;
@@ -113,7 +115,7 @@ public class Player implements Serializable{
 	/**
 	 * This method plays a card. Player must be able to afford card to do so
 	 * @param c
-	 * @author yannik roth
+	 * @author yannik roth, Roman Leuenberger
 	 * @return <code>true</code> if card can be afforded and was successfully added.
 	 */
 	public boolean playCard(Card c) {
@@ -123,7 +125,21 @@ public class Player implements Serializable{
 			this.cards.add(c);
 			//TODO any further requiremets that a card can be played?
 			//TODO any further updates of the player object
-			//TODO update coins for brown or grey cards (applies for yellow cards only)
+			//update coins for brown or grey cards (applies for 4 yellow cards only)
+			if(c.getId() == 60 || c.getId() == 90) {
+				long countOfOwnBrownCards = this.cards.stream().filter(d -> d.getCardType().getColor() == CardColor.BROWN).count();
+				long countOfBrownCardsLeftPlayer = this.getLeftPlayer().getPlayedCards().stream().filter(e -> e.getCardType().getColor() == CardColor.BROWN).count();
+				long countOfBrownCardsRightPlayer = this.getRightPlayer().getPlayedCards().stream().filter(f -> f.getCardType().getColor() == CardColor.BROWN).count();
+				this.addCoins((int)countOfOwnBrownCards + (int)countOfBrownCardsLeftPlayer + (int)countOfBrownCardsRightPlayer);
+			}
+			if(c.getId() == 76 || c.getId() == 96) {
+				long countOfOwnGreyCards = this.cards.stream().filter(d -> d.getCardType().getColor() == CardColor.GREY).count();
+				long countOfGreyCardsLeftPlayer = this.getLeftPlayer().getPlayedCards().stream().filter(e -> e.getCardType().getColor() == CardColor.GREY).count();
+				long countOfGreyCardsRightPlayer = this.getRightPlayer().getPlayedCards().stream().filter(f -> f.getCardType().getColor() == CardColor.GREY).count();
+				this.addCoins((int)countOfOwnGreyCards + (int)countOfGreyCardsLeftPlayer + (int)countOfGreyCardsRightPlayer);
+			}
+			
+			
 			this.militaryStrength += c.getMilitaryPoints();
 			this.winningPoints += c.getWinningPoints();
 			
