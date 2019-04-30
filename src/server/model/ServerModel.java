@@ -218,13 +218,13 @@ public class ServerModel implements Serializable{
 			int countOfMeter = 0;
 			for (Card c : cardsPlayedByPlayer) {
 				if (c.isSciencePointsSchriften()) {
-					countOfSchriften =+ 1;
+					countOfSchriften += 1;
 				}
 				if (c.isSciencePointsKompass()) {
 					countOfKompass += 1;
 				}
 				if (c.isSciencePointsMeter()) {
-					countOfMeter =+ 1;
+					countOfMeter += 1;
 				}
 			}
 			//add winning points based on count of symbol ^2
@@ -236,7 +236,10 @@ public class ServerModel implements Serializable{
 			p.addWinningPoints((int)Math.pow(sciencePoints.get("kompass"), 2));
 			p.addWinningPoints((int)Math.pow(sciencePoints.get("meter"), 2));
 			
-			List<Integer> setsScienceCards = (ArrayList<Integer>)sciencePoints.values();
+			List<Integer> setsScienceCards = new ArrayList<Integer>();
+			for (int i : sciencePoints.values()) {
+				setsScienceCards.add(i);
+			}
 			setsScienceCards.sort(Comparator.comparing(e -> e));
 			
 			p.addWinningPoints(setsScienceCards.get(0) == null ? 0 : setsScienceCards.get(0) * 7);

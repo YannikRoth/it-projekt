@@ -8,7 +8,11 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import com.sun.media.jfxmedia.logging.Logger;
+
 import globals.ResourceMapType;
+import globals.ResourceType;
+import server.ServiceLocator;
 import server.model.ServerModel;
 import server.model.gameplay.Card;
 import server.model.gameplay.Player;
@@ -34,6 +38,22 @@ class WinnerEvaluationTest {
 		leftPlayer.setRightPlayer(rightPlayer);
 		rightPlayer.setLeftPlayer(leftPlayer);
 		rightPlayer.setRightPlayer(player);
+		//create freeCost Resourcemap
+		ResourceMap freeResourceMap = new ResourceMap(ResourceMapType.COST);
+		freeResourceMap.put(ResourceType.BRICK, 0);
+		freeResourceMap.put(ResourceType.COIN, 0);
+		freeResourceMap.put(ResourceType.FABRIC, 0);
+		freeResourceMap.put(ResourceType.GLAS, 0);
+		freeResourceMap.put(ResourceType.ORE, 0);
+		freeResourceMap.put(ResourceType.PAPYRUS, 0);
+		freeResourceMap.put(ResourceType.STONE, 0);
+		freeResourceMap.put(ResourceType.WOOD, 0);
+		//make every Card free of costs
+		for(int i = 0; i < model.getCards().size()-1;i++) {
+			if(model.getCard(i) != null) {
+				model.getCard(i).setCost(freeResourceMap);
+			}
+		}
 		//assign cards to cardSet of player
 		cardSetPlayer.add(model.getCard(4));
 		cardSetPlayer.add(model.getCard(5));
@@ -52,13 +72,22 @@ class WinnerEvaluationTest {
 		cardSetRightPlayer.add(model.getCard(29));
 		cardSetRightPlayer.add(model.getCard(33));
 		cardSetRightPlayer.add(model.getCard(50));
-		
-		
+		//play cards
+		for (Card c : cardSetPlayer) {
+			player.playCard(c);
+		}
+		for (Card c : cardSetLeftPlayer) {
+			leftPlayer.playCard(c);
+		}
+		for (Card c : cardSetRightPlayer) {
+			rightPlayer.playCard(c);
+		}
 	}
 
 	@Test
 	void evaluateWinnerTest() {
-		model.evaluateWinner(player, leftPlayer, rightPlayer);
+		List<Player> winnerList = model.evaluateWinner(player, leftPlayer, rightPlayer);
+		assertEquals(winnerList.get(2).getPlayerName(), "David");
 	}
 
 }
