@@ -43,6 +43,8 @@ public class ClientModel extends Thread {
 		refreshOtherPlayer(new Player("David"));
 		player = new Player("Mein Spieler");
 		player.getResources().put(ResourceType.BRICK, 20);
+		player.getResources().put(ResourceType.FABRIC, 15);
+		player.getResources().put(ResourceType.ORE, 230);
 	}
 	
 	

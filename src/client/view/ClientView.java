@@ -1,5 +1,8 @@
 package client.view;
 
+import java.util.ArrayList;
+import java.util.Map.Entry;
+
 import client.model.ClientModel;
 import globals.ResourceType;
 import globals.Translator;
@@ -301,16 +304,13 @@ public class ClientView {
 		
 		stage.setTitle(translator.getString("clientGame.name"));
 
-//		ColType.getTableView().getItems().stream().forEach((o) ->  {
-//			System.out.println(ColType.getCellData(o));	
-//			if(o instanceof ResourceType) {
-//				ObservableMap<ResourceType, Integer> map = this.model.getMyPlayer().getResources().getResourcesObservable();
-//				int i = map.get(o);
-//				map.put(o, -1);
-//				map.put(o, i);
-//			}
-//	    });
-//		ColType.getTableView().setItems(this.model.getMyPlayer().getResources().getResourcesListObservable());
+		//TODO fix translations
+		this.model.getMyPlayer().getResources().getResourcesObservable().clear();
+		for(Entry<ResourceType, Integer> entry : this.model.getMyPlayer().getResources().entrySet()) {
+			ResourceType t = entry.getKey();
+			Integer v = entry.getValue();
+			this.model.getMyPlayer().getResources().getResourcesObservable().put(t, v);
+		}
 	}
 
 	public void start() {

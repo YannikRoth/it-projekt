@@ -45,9 +45,6 @@ public class ResourceMap extends HashMap<ResourceType, Integer>{
 				}
 			}
 		});
-		for (ResourceType r : ResourceType.values()) {
-			this.resourcesObservable.put(r, 0);
-		}
 	}
 	
 	/**
