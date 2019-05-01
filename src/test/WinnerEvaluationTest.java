@@ -76,12 +76,18 @@ class WinnerEvaluationTest {
 		for (Card c : cardSetPlayer) {
 			player.playCard(c);
 		}
+		System.out.println(player.getResources());
+		System.out.println(player.getAlternateResources());
 		for (Card c : cardSetLeftPlayer) {
 			leftPlayer.playCard(c);
 		}
+		System.out.println(leftPlayer.getResources());
+		System.out.println(leftPlayer.getAlternateResources());
 		for (Card c : cardSetRightPlayer) {
 			rightPlayer.playCard(c);
 		}
+		System.out.println(rightPlayer.getResources());
+		System.out.println(rightPlayer.getAlternateResources());
 	}
 
 	@Test

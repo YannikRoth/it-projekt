@@ -419,4 +419,7 @@ public class Player implements Serializable{
 	public ResourceMap getResources() {
 		return this.resources;
 	}
+	public ArrayList<HashMap<ResourceType, Integer>> getAlternateResources(){
+		return this.alternateResources;
+	}
 }

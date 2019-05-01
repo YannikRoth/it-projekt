@@ -3,7 +3,7 @@ id;cardAge;cardName;cardType;minPlayer;costInCoins;costInZiegel;costInErz;costIn
 2;1;WEBSTUHL;MANUFACTURING;3;0;0;0;0;0;0;0;0;null;null;0;0;0;False;False;0;False;False;False;False;False;False;False;0;0;0;0;0;1;0;False;False;False;False;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
 3;1;TONGRUBE;RAWMATERIAL;3;1;0;0;0;0;0;0;0;null;null;0;0;0;False;False;0;False;False;False;False;False;False;False;1;1;0;0;0;0;0;True;False;False;False;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
 4;1;WERKSTATT;RESEARCH;3;0;0;0;0;0;1;0;0;null;null;0;0;0;False;False;0;False;False;False;False;False;False;False;0;0;0;0;0;0;0;False;False;True;False;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
-5;1;SKRIPTORIUM;RESEARCH;3;0;0;0;0;0;0;0;1;null;null;0;0;0;False;False;0;False;False;False;False;False;False;False;1;0;0;1;0;0;0;True;True;False;False;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
+5;1;SKRIPTORIUM;RESEARCH;3;0;0;0;0;0;0;0;1;null;null;0;0;0;False;False;0;False;False;False;False;False;False;False;0;0;0;0;0;0;0;True;True;False;False;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
 6;1;ERZBERGWERK;RAWMATERIAL;3;0;0;0;0;0;0;0;0;null;null;0;0;0;False;False;0;False;False;False;False;False;False;False;0;1;0;0;0;0;0;False;False;False;False;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
 7;1;WACHTURM;MILITARY;3;0;1;0;0;0;0;0;0;null;null;0;1;0;False;False;0;False;False;False;False;False;False;False;0;0;0;0;0;0;0;False;False;False;False;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
 8;1;FORSTWIRTSCHAFT;RAWMATERIAL;3;1;0;0;0;0;0;0;0;null;null;0;0;0;False;False;0;False;False;False;False;False;False;False;0;0;1;1;0;0;0;True;False;False;False;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
