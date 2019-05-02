@@ -95,6 +95,7 @@ public class ClientModel extends Thread {
 						logger.info("Opponent player "+tempplayer.getPlayerName()+" received from Server");						
 						//refreshOtherPlayer(tempplayer);
 					}
+					setneigbours();
 					playCard(player.getPlayableCards().get(0), "playcard");
 					break;
 					
@@ -113,6 +114,29 @@ public class ClientModel extends Thread {
 			logger.info(e.getLocalizedMessage());
 		}
 	}
+
+	private void setneigbours() {
+		//iterrate through all players
+			player.setRightPlayer(otherPlayers.get(0));
+			player.setLeftPlayer(otherPlayers.get(otherPlayers.size()-1));
+			
+			for (int p = 0; p < otherPlayers.size(); p++) {
+				if(p==0) {
+					otherPlayers.get(0).setLeftPlayer(player);
+					otherPlayers.get(p).setRightPlayer(otherPlayers.get(p+1));	
+				}else if (p==otherPlayers.size()-1) {
+					otherPlayers.get(otherPlayers.size()-1).setRightPlayer(player);	
+					otherPlayers.get(p).setLeftPlayer(otherPlayers.get(p-1));
+				}else {
+					otherPlayers.get(p).setLeftPlayer(otherPlayers.get(p-1));
+					otherPlayers.get(p).setRightPlayer(otherPlayers.get(p+1));	
+				}
+			}
+			
+			
+		
+	}
+
 
 	public ObservableList<Player> getOtherPlayers() {
 		return otherPlayers;

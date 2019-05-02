@@ -43,12 +43,10 @@ public class ServerRequestHandler extends Thread implements Serializable{
 					socket = listener.accept();
 					client = new ServerClientThread(socket, servermodel);
 					logger.info("New client request received");
-					if (socket.isConnected()) {
-						synchronized(servermodel){
+						
 							servermodel.addClient(client);
 							logger.info("Added new client to server");
-						}
-					}
+						
 				} catch (Exception e) {
 					logger.info("Error occured during Request processing" + e.getLocalizedMessage());
 				}

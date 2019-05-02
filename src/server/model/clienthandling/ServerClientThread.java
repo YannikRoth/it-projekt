@@ -34,7 +34,7 @@ public class ServerClientThread extends Thread implements Serializable {
 	private ObjectOutputStream objOutputStream;
 	private BufferedReader inputmessage;
 	private PrintWriter outputmessage;
-	private volatile boolean start;
+	private boolean start;
 
 	// TODO ObjectInput/Output reader instead of inputstreamreader
 
@@ -79,6 +79,7 @@ public class ServerClientThread extends Thread implements Serializable {
 		Card cardplayed;
 		stop = false;
 		while (!stop) {
+			
 			if(start) {
 			try {
 				logger.info("test2");
@@ -118,7 +119,9 @@ public class ServerClientThread extends Thread implements Serializable {
 		logger.info("Player "+curplayer.getPlayerName()+" sent to Client");	
 		//iterrate through all players
 		if (curplayer.getRightPlayer() != player) {
+			logger.info("Player "+player.getRightPlayer().getPlayerName()+" test");
 			OutputAllplayers(player.getRightPlayer());
+				
 		}
 	}
 
