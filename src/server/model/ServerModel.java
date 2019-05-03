@@ -148,29 +148,7 @@ public class ServerModel implements Serializable{
 				activePlayers.get(i).setLeftPlayer(activePlayers.get(i-1));
 				activePlayers.get(i).setRightPlayer(activePlayers.get(i+1));
 			}
-		}
-		
-		
-//		//setting left players
-//		for(int i=0; i<activePlayers.size(); i++) {
-//			//check if end of list, then add left neighbor as the first player
-//			if(i+1 >= activePlayers.size()) {
-//				activePlayers.get(0).setLeftPlayer(activePlayers.get(i));
-//			}else {
-//				activePlayers.get(i).setLeftPlayer(activePlayers.get(i+1));
-//			}
-//		}
-//		
-//		//setting right players
-//		for(int i = amountPlayer-1; i>=1; i--){
-//			//check if end of list, then add right neighbor as the last player
-//			if(i-1 < 0) {
-//				activePlayers.get(activePlayers.size()).setRightPlayer(activePlayers.get(0));
-//			}else {
-//				activePlayers.get(i).setRightPlayer(activePlayers.get(i-1));
-//			}
-//		}
-		
+		}		
 	}
 
 	/**
