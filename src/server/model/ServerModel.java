@@ -84,6 +84,7 @@ public class ServerModel implements Serializable{
 	public void addClient(ServerClientThread client) {
 		// TODO Bedingungen wenn neuer Client erlaubt ist und wann nicht
 		if(players.size() < NUMBEROFPLAYERS) {
+			//add player to active player list
 			players.put(client.getPlayer(), client);
 			logger.info("successfully added client");
 			client.getPlayer().setBoard(boards.get(7));
