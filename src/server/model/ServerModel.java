@@ -41,7 +41,8 @@ public class ServerModel implements Serializable{
 	
 	//gameplay specific variables
 	//index0 = age 1; index2 = age 3
-	private List<Set<Entry<Integer, Card>>> activeCards = new ArrayList<>();
+	//private List<Set<Entry<Integer, Card>>> activeCards = new ArrayList<>();
+	private List<Map<Integer, Card>> activeCards = new ArrayList<>();
 	private CardAge cardAge;
 	//end of gameplay specific varibales
 	
@@ -53,6 +54,8 @@ public class ServerModel implements Serializable{
 		this.boards = new HashMap<>();
 		BoardLoader.importBoards(this);
 		logger.info(this.boards.size() + " boards have been sucessfully imported");
+		
+		//loadGameCards();
 		
 		//open server request handler
 		this.requesthandler = new ServerRequestHandler(this);
@@ -114,7 +117,7 @@ public class ServerModel implements Serializable{
 		
 		//load cards to play into ArrayList
 		logger.info("game Startet");
-		//loadGameCards();
+		loadGameCards();
 		assignPlayerNeighbors();
 		
 		for(Entry<Player, ServerClientThread> serverClientThread : players.entrySet()) {
@@ -160,22 +163,30 @@ public class ServerModel implements Serializable{
 	 */
 	private void loadGameCards() {
 		this.activeCards.clear();
-		//age1
-		this.activeCards.set(0, this.cards.entrySet().stream()
-				.filter(c -> c.getValue().getCardAgeValue() == 1)
-				.filter(c -> c.getValue().getCardMinPlayer() <= this.cards.size())
-				//here the application throws an error
-				.collect(Collectors.toSet()));
-		//age2
-		this.activeCards.set(1, this.cards.entrySet().stream()
-				.filter(c -> c.getValue().getCardAgeValue() == 2)
-				.filter(c -> c.getValue().getCardMinPlayer() <= this.cards.size())
-				.collect(Collectors.toSet()));
-		//age3
-		this.activeCards.set(2, this.cards.entrySet().stream()
-				.filter(c -> c.getValue().getCardAgeValue() == 3)
-				.filter(c -> c.getValue().getCardMinPlayer() <= this.cards.size())
-				.collect(Collectors.toSet()));
+		
+		Map<Integer, Card> ageOne = new HashMap<>();
+		Map<Integer, Card> ageTwo = new HashMap<>();
+		Map<Integer, Card> ageThree = new HashMap<>();
+		
+		cards.entrySet().stream()
+		//filter by min amount of players
+		.filter(entry -> entry.getValue().getCardMinPlayer() <= players.size())
+		.forEach(entry -> {
+			//age1
+			if(entry.getValue().getCardAgeValue() ==1) {
+				ageOne.put(entry.getKey(), entry.getValue());
+			//age2
+			}else if(entry.getValue().getCardAgeValue() == 2) {
+				ageTwo.put(entry.getKey(), entry.getValue());
+			//age3
+			}else if(entry.getValue().getCardAgeValue() == 3) {
+				ageThree.put(entry.getKey(), entry.getValue());
+			}
+		});
+		
+		activeCards.add(0, ageOne);
+		activeCards.add(1, ageTwo);
+		activeCards.add(2, ageThree);
 		
 	}
 

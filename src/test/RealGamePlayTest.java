@@ -3,6 +3,14 @@ package test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
@@ -20,11 +28,39 @@ class RealGamePlayTest {
 	private ServerModel model = new ServerModel();
 	private Player player = new Player("Yannik");
 	
+	//this list contains filtered lists of card per age
+	private List<Set<Entry<Integer, Card>>> activeCards = new ArrayList<>();
+	
 	public RealGamePlayTest() {
-		CardLoader.importCards(model);
 		cardSet.add(model.getCard(2)); //free card produces fabric
+		filterCards();
 	}
 	
+	private void filterCards() {
+		Map<Integer, Card> myCards = model.getCards();
+		List<Map<Integer, Card>> yearCards = new ArrayList<>();
+		Map<Integer, Card> ageOne = new HashMap<>();
+		Map<Integer, Card> ageTwo = new HashMap<>();
+		Map<Integer, Card> ageThree = new HashMap<>();
+		
+		myCards.entrySet().stream()
+		.filter(entry -> entry.getValue().getCardMinPlayer() <= 3)
+		.forEach(entry -> {
+			if(entry.getValue().getCardAgeValue() ==1) {
+				ageOne.put(entry.getKey(), entry.getValue());
+			}else if(entry.getValue().getCardAgeValue() == 2) {
+				ageTwo.put(entry.getKey(), entry.getValue());
+			}else if(entry.getValue().getCardAgeValue() == 3) {
+				ageThree.put(entry.getKey(), entry.getValue());
+			}
+		});
+		
+		yearCards.add(0, ageOne);
+		yearCards.add(1, ageTwo);
+		yearCards.add(2, ageThree);
+		
+	}
+
 	@Test
 	void playFreeCard() {
 		assertTrue(player.playCard(model.getCard(2)));
