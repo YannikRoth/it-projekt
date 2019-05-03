@@ -88,7 +88,6 @@ public class ServerModel implements Serializable{
 			players.put(client.getPlayer(), client);
 			logger.info("successfully added client");
 			client.getPlayer().setBoard(boards.get(7));
-			client.start();
 			if(players.size() >= 3) {
 				logger.info("game Startet");
 				this.startGame();
@@ -112,16 +111,16 @@ public class ServerModel implements Serializable{
 		 * Back to server, only the cardId is sent and the server updates the effectiv player-obj. The new player-onj is then sent 
 		 * back to the client
 		 */
-		List<ServerClientThread> clients =
-			    new ArrayList<ServerClientThread>(players.values());
-		for (ServerClientThread serverClientThread : clients) {
-			serverClientThread.startgame();
-		}
 		
 		//load cards to play into ArrayList
 		logger.info("game Startet");
-		loadGameCards();
+		//loadGameCards();
 		assignPlayerNeighbors();
+		
+		for(Entry<Player, ServerClientThread> serverClientThread : players.entrySet()) {
+			serverClientThread.getValue().start();
+		}
+		
 		this.cardAge = CardAge.ONE;
 		
 
@@ -136,25 +135,41 @@ public class ServerModel implements Serializable{
 		List<Player> activePlayers = new ArrayList<>(this.players.keySet());
 		int amountPlayer = activePlayers.size();
 		
-		//setting left players
-		for(int i=0; i<activePlayers.size(); i++) {
-			//check if end of list, then add left neighbor as the first player
-			if(i+1 > activePlayers.size()) {
-				activePlayers.get(0).setLeftPlayer(activePlayers.get(i));
+		for(int i = 0; i < amountPlayer; i++) {
+			if(i == 0) {
+				//this is the first player
+				activePlayers.get(i).setLeftPlayer(activePlayers.get(amountPlayer-1));
+				activePlayers.get(i).setRightPlayer(activePlayers.get(i+1));
+			}else if(i == amountPlayer -1) {
+				//this is the last player
+				activePlayers.get(i).setLeftPlayer(activePlayers.get(i-1));
+				activePlayers.get(i).setRightPlayer(activePlayers.get(0));
 			}else {
-				activePlayers.get(i).setLeftPlayer(activePlayers.get(i+1));
+				activePlayers.get(i).setLeftPlayer(activePlayers.get(i-1));
+				activePlayers.get(i).setRightPlayer(activePlayers.get(i+1));
 			}
 		}
 		
-		//setting right players
-		for(int i = 0; i>=activePlayers.size(); i--){
-			//check if end of list, then add right neighbor as the last player
-			if(i-1 < 0) {
-				activePlayers.get(activePlayers.size()).setRightPlayer(activePlayers.get(0));
-			}else {
-				activePlayers.get(i).setRightPlayer(activePlayers.get(i-1));
-			}
-		}
+		
+//		//setting left players
+//		for(int i=0; i<activePlayers.size(); i++) {
+//			//check if end of list, then add left neighbor as the first player
+//			if(i+1 >= activePlayers.size()) {
+//				activePlayers.get(0).setLeftPlayer(activePlayers.get(i));
+//			}else {
+//				activePlayers.get(i).setLeftPlayer(activePlayers.get(i+1));
+//			}
+//		}
+//		
+//		//setting right players
+//		for(int i = amountPlayer-1; i>=1; i--){
+//			//check if end of list, then add right neighbor as the last player
+//			if(i-1 < 0) {
+//				activePlayers.get(activePlayers.size()).setRightPlayer(activePlayers.get(0));
+//			}else {
+//				activePlayers.get(i).setRightPlayer(activePlayers.get(i-1));
+//			}
+//		}
 		
 	}
 
@@ -171,6 +186,7 @@ public class ServerModel implements Serializable{
 		this.activeCards.set(0, this.cards.entrySet().stream()
 				.filter(c -> c.getValue().getCardAgeValue() == 1)
 				.filter(c -> c.getValue().getCardMinPlayer() <= this.cards.size())
+				//here the application throws an error
 				.collect(Collectors.toSet()));
 		//age2
 		this.activeCards.set(1, this.cards.entrySet().stream()

@@ -91,6 +91,7 @@ public class ClientModel extends Thread {
 					otherPlayers.clear();
 					for (int i = 1; i < numberofPlayers; i++) {
 						tempplayer = (Player) objInputStream.readObject();
+						System.out.println(tempplayer == null ? "Fuck" : "OK");
 						otherPlayers.add(tempplayer);
 						logger.info("Opponent player "+tempplayer.getPlayerName()+" received from Server");						
 						//refreshOtherPlayer(tempplayer);

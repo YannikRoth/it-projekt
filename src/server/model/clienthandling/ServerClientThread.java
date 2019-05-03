@@ -50,7 +50,7 @@ public class ServerClientThread extends Thread implements Serializable {
 		Cards.add(model.getCard(11));
 		Cards.add(model.getCard(16));
 		Cards.add(model.getCard(19));
-		player.setPlayerName("Martin");
+		player.setPlayerName("Martin_" + ServiceLocator.getmanualCardId());
 		player.updateCardset(Cards);
 		this.socket = socket;
 		try {
@@ -79,8 +79,6 @@ public class ServerClientThread extends Thread implements Serializable {
 		Card cardplayed;
 		stop = false;
 		while (!stop) {
-			
-			if(start) {
 			try {
 				logger.info("test2");
 				outputmessage.println("updateview");
@@ -91,22 +89,23 @@ public class ServerClientThread extends Thread implements Serializable {
 				switch (action) {
 				case "playcard":
 					cardplayed = (Card) objInputStream.readObject();
-					logger.info(cardplayed.getCardName() + "Cards received from Client with following Action: "+ action);
+					logger.info(
+							cardplayed.getCardName() + "Cards received from Client with following Action: " + action);
 					break;
-					
+
 				case "discard":
 					cardplayed = (Card) objInputStream.readObject();
-					logger.info(cardplayed.getCardName() + "Cards received from Client with following Action: "+ action);
-					break;					
+					logger.info(
+							cardplayed.getCardName() + "Cards received from Client with following Action: " + action);
+					break;
 				default:
 					logger.info("An error occured during the Communication - invalid input from the Client");
 					break;
 				}
 			} catch (IOException e) {
-				logger.info( e.getLocalizedMessage());
+				logger.info(e.getLocalizedMessage());
 			} catch (ClassNotFoundException e) {
 				logger.info(e.getLocalizedMessage());
-			}
 			}
 		}
 
@@ -129,9 +128,5 @@ public class ServerClientThread extends Thread implements Serializable {
 		return player;
 	}
 
-	public void startgame() {
-		// TODO Auto-generated method stub
-		start = true;
-	}
 
 }

@@ -116,4 +116,5 @@ public class ServiceLocator {
 		updateManualCardId();
 		return manualCardId;
 	}
+	
 }
