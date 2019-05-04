@@ -158,12 +158,12 @@ public class Card implements Serializable{
 				continue;
 			}
 			if(fieldName.equals("victoryPoints")) {
-				this.winningPoints = Integer.parseInt(values[i]);
+				//this.winningPoints = Integer.parseInt(values[i]);
 				this.produce.put(ResourceType.WINNINPOINTS, Integer.parseInt(values[i]));
 				continue;
 			}
 			if(fieldName.equals("militaryPoints")) {
-				this.militaryPoints = Integer.parseInt(values[i]);
+				//this.militaryPoints = Integer.parseInt(values[i]);
 				this.produce.put(ResourceType.MILITARYPLUSPOINTS, Integer.parseInt(values[i]));
 				continue;
 			}
