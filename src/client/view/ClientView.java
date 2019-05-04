@@ -305,12 +305,13 @@ public class ClientView {
 		stage.setTitle(translator.getString("clientGame.name"));
 
 		//TODO fix translations
+		/*
 		this.model.getMyPlayer().getResources().getResourcesObservable().clear();
 		for(Entry<ResourceType, Integer> entry : this.model.getMyPlayer().getResources().entrySet()) {
 			ResourceType t = entry.getKey();
 			Integer v = entry.getValue();
 			this.model.getMyPlayer().getResources().getResourcesObservable().put(t, v);
-		}
+		}*/
 	}
 
 	public void start() {

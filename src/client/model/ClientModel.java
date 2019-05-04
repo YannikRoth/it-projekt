@@ -39,12 +39,7 @@ public class ClientModel extends Thread {
 	private static final Logger logger = ServiceLocator.getLogger();
 
 	public ClientModel() {
-		// TODO: for example, to be remove
-		refreshOtherPlayer(new Player("David"));
-		player = new Player("Mein Spieler");
-		player.getResources().put(ResourceType.BRICK, 20);
-		player.getResources().put(ResourceType.FABRIC, 15);
-		player.getResources().put(ResourceType.ORE, 230);
+
 	}
 	
 	
@@ -76,25 +71,28 @@ public class ClientModel extends Thread {
 				switch (action) {
 				case ESTABLISED:
 					numberofPlayers = (Integer) objInputStream.readObject();
+					synchronized(objInputStream) {
+						player = (Player) objInputStream.readObject();
+					}
 					logger.info("Connection and Game opened with "+numberofPlayers+" Players");
 					break;
 					
 				case UPDATEVIEW:
 					Player tempplayer = null;
-					synchronized(player) {
+					synchronized(objInputStream) {
 						player = (Player) objInputStream.readObject();
 					}
 					logger.info("Own Player Object "+player.getPlayerName()+" received from Server");
 					otherPlayers.clear();
 					synchronized(otherPlayers) {
-						for (int i = 1; i < numberofPlayers; i++) {
+						for (int i = 0; i < numberofPlayers - 1; i++) {
 							tempplayer = (Player) objInputStream.readObject();
 							otherPlayers.add(tempplayer);
 							logger.info("Opponent player "+tempplayer.getPlayerName()+" received from Server");						
-							refreshOtherPlayer(tempplayer);
 						}
 					}
 					setneigbours();
+					//refreshOtherPlayer();
 					break;
 
 				case INFORMATION:				

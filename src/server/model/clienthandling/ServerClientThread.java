@@ -59,7 +59,8 @@ public class ServerClientThread extends Thread implements Serializable {
 
 			synchronized(objOutputStream) {
 				objOutputStream.writeObject(ServerAction.ESTABLISED);
-				objOutputStream.writeObject(new Integer(3));
+				objOutputStream.writeObject(new Integer(model.getNumberOfPlayers()));
+				objOutputStream.writeObject(player);
 				objOutputStream.flush();
 			}		
 			
