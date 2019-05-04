@@ -52,6 +52,7 @@ public class ServerClientThread extends Thread implements Serializable {
 		player.setPlayerName("Martin_" + ServiceLocator.getmanualCardId());
 		player.updateCardset(Cards);
 		this.socket = socket;
+		//When the game starts the player object and numbers of players will be sent to the client
 		try {
 
 			objOutputStream = new ObjectOutputStream(this.socket.getOutputStream());
@@ -73,6 +74,7 @@ public class ServerClientThread extends Thread implements Serializable {
 	@Override
 	public void run() {
 		ClientAction action;
+		boolean legalaction = true;
 		Card cardplayed = null;
 		stop = false;
 		while (!stop) {
@@ -82,6 +84,7 @@ public class ServerClientThread extends Thread implements Serializable {
 					objOutputStream.flush();
 				}
 				OutputAllplayers(player);
+				do {
 				action = (ClientAction) objInputStream.readObject();
 				switch (action) {
 				case PLAYCARD:
@@ -105,11 +108,17 @@ public class ServerClientThread extends Thread implements Serializable {
 					}
 					logger.info(cardplayed.getCardName() + "Cards received from "
 								+ player.getPlayerName() + " with following Action: " + action);
+					//TODO function in Servermodel
 					break;				
 				default:
-					logger.info("An error occured during the Communication - invalid input from " + player.getPlayerName());
+					logger.info("An error occured during the Communication - invalid input from " + player.getPlayerName()+ " ----retry");
+					legalaction = false;
 					break;
 				}
+				}while(!legalaction);
+				
+				
+				//TODO wait for Servermodel to notify the updated cardset and other players
 			} catch (IOException e) {
 				logger.info(e.getLocalizedMessage());
 			} catch (ClassNotFoundException e) {
@@ -125,7 +134,6 @@ public class ServerClientThread extends Thread implements Serializable {
 			objOutputStream.flush();
 		}
 		logger.info("Player "+curplayer.getPlayerName()+" sent to "+player.getPlayerName());	
-		//iterrate through all players
 		if (curplayer.getRightPlayer() != player) {
 			OutputAllplayers(curplayer.getRightPlayer());
 		}

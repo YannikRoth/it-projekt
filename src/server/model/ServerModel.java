@@ -37,7 +37,7 @@ public class ServerModel implements Serializable{
 	private Map<Integer, Card> cards;
 	private Map<Integer, Board> boards;
 	
-	private int NUMBEROFPLAYERS = 2;
+	private int NUMBEROFPLAYERS = 3;
 	
 	//gameplay specific variables
 	//index0 = age 1; index2 = age 3
