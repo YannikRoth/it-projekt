@@ -13,6 +13,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import globals.*;
 import server.ServiceLocator;
 import server.model.ServerModel;
 import server.model.gameplay.Card;
@@ -32,8 +33,6 @@ public class ServerClientThread extends Thread implements Serializable {
 	private final Logger logger = ServiceLocator.getLogger();
 	private ObjectInputStream objInputStream;
 	private ObjectOutputStream objOutputStream;
-	private BufferedReader inputmessage;
-	private PrintWriter outputmessage;
 	private boolean start;
 
 	// TODO ObjectInput/Output reader instead of inputstreamreader
@@ -57,14 +56,12 @@ public class ServerClientThread extends Thread implements Serializable {
 
 			objOutputStream = new ObjectOutputStream(this.socket.getOutputStream());
 			objInputStream = new ObjectInputStream(this.socket.getInputStream());
-			//used to know what the server wants
-			this.inputmessage = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			//used to inform the server what we wanna do
-			this.outputmessage = new PrintWriter(socket.getOutputStream()); 
-			outputmessage.println("connectionestablished");
-			outputmessage.flush();
-			outputmessage.println("3");
-			outputmessage.flush();			
+
+			synchronized(objOutputStream) {
+				objOutputStream.writeObject(ServerAction.ESTABLISED);
+				objOutputStream.writeObject(new Integer(3));
+				objOutputStream.flush();
+			}		
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -74,17 +71,19 @@ public class ServerClientThread extends Thread implements Serializable {
 
 	@Override
 	public void run() {
-		String action;
+		ClientAction action;
 		Card cardplayed = null;
 		stop = false;
 		while (!stop) {
 			try {
-				outputmessage.println("updateview");
-				outputmessage.flush();
+				synchronized(objOutputStream) {
+					objOutputStream.writeObject(ServerAction.UPDATEVIEW);
+					objOutputStream.flush();
+				}
 				OutputAllplayers(player);
-				action = inputmessage.readLine();
+				action = (ClientAction) objInputStream.readObject();
 				switch (action) {
-				case "playcard":
+				case PLAYCARD:
 					synchronized(objInputStream) {
 						cardplayed = (Card) objInputStream.readObject();
 					}
@@ -92,14 +91,14 @@ public class ServerClientThread extends Thread implements Serializable {
 								+ player.getPlayerName() + " with following Action: " + action);
 					break;
 
-				case "discard":
+				case DISCARD:
 					synchronized(objInputStream) {
 						cardplayed = (Card) objInputStream.readObject();
 					}
 					logger.info(cardplayed.getCardName() + "Cards received from "
 								+ player.getPlayerName() + " with following Action: " + action);
 					break;
-				case "buildwonder":
+				case BUILDWONDER:
 					synchronized(objInputStream) {
 						cardplayed = (Card) objInputStream.readObject();
 					}
@@ -120,7 +119,7 @@ public class ServerClientThread extends Thread implements Serializable {
 	}
 	
 	public void OutputAllplayers(Player curplayer) throws IOException {
-		synchronized(curplayer) {
+		synchronized(objOutputStream) {
 			objOutputStream.writeObject(curplayer);
 			objOutputStream.flush();
 		}

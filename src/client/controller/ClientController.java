@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import client.model.ClientModel;
 import client.view.ClientView;
+import globals.ClientAction;
 import globals.Translator;
 import javafx.application.Platform;
 import javafx.scene.control.MenuItem;
@@ -40,7 +41,7 @@ public class ClientController {
 			String newLanguage = i.getText().toLowerCase().substring(0, 2);
 			if(!Translator.getTranslator().getLocale().getLanguage().equalsIgnoreCase(newLanguage)) {
 				Translator.getTranslator().setLanguage(newLanguage);
-				model.playCard(model.getMyPlayer().getPlayableCards().get(0), "playcard");
+				model.playCard(model.getMyPlayer().getPlayableCards().get(0), ClientAction.PLAYCARD);
 				view.setTexts();
 			}
 		});

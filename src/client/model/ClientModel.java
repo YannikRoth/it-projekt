@@ -11,8 +11,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.logging.Logger;
 
+import globals.ClientAction;
 import globals.Globals;
 import globals.ResourceType;
+import globals.ServerAction;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import server.ServiceLocator;
@@ -33,8 +35,6 @@ public class ClientModel extends Thread {
 	private int numberofPlayers;
 	private ObjectInputStream objInputStream;
 	private ObjectOutputStream objOutputStream;
-	private BufferedReader inputmessage;
-	private PrintWriter outputmessage;
 
 	private static final Logger logger = ServiceLocator.getLogger();
 
@@ -48,11 +48,10 @@ public class ClientModel extends Thread {
 	}
 	
 	
-	public void playCard(Card playedcard, String action) {
+	public void playCard(Card playedcard, ClientAction action) {
 		try {
 			
-			outputmessage.println(action);
-			outputmessage.flush();
+			objOutputStream.writeObject(action);
 			objOutputStream.writeObject(playedcard);
 			objOutputStream.flush();
 			logger.info("Card "+playedcard.getCardName()+" sent to Server - with following Action: " + action);
@@ -67,24 +66,20 @@ public class ClientModel extends Thread {
 	@Override
 	public void run() {
 		//Join Game
-		String message;
+		ServerAction action;
 
 		try (Socket socket = new Socket(Globals.getDefaultIPAddr(), Globals.getPortNr())) {
 			this.objOutputStream = new ObjectOutputStream(socket.getOutputStream());
 			this.objInputStream = new ObjectInputStream(socket.getInputStream());
-			//used to know what the server wants
-			this.inputmessage = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			//used to inform the server what we wanna do
-			this.outputmessage = new PrintWriter(socket.getOutputStream()); 
 			
-			while ((message = inputmessage.readLine()) != null) {
-				switch (message) {
-				case "connectionestablished":
-					numberofPlayers = Integer.parseInt(inputmessage.readLine());
+			while (((action = (ServerAction) objInputStream.readObject()) != null)) {
+				switch (action) {
+				case ESTABLISED:
+					numberofPlayers = (Integer) objInputStream.readObject();
 					logger.info("Connection and Game opened with "+numberofPlayers+" Players");
 					break;
 					
-				case "updateview":
+				case UPDATEVIEW:
 					Player tempplayer = null;
 					synchronized(player) {
 						player = (Player) objInputStream.readObject();
@@ -101,8 +96,10 @@ public class ClientModel extends Thread {
 					}
 					setneigbours();
 					break;
-					
-				case "gameend":				
+
+				case INFORMATION:				
+					break;
+				case ENDGAME:				
 					break;
 
 				default:
