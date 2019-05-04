@@ -74,32 +74,40 @@ public class ServerClientThread extends Thread implements Serializable {
 
 	@Override
 	public void run() {
-		logger.info("test1");
 		String action;
-		Card cardplayed;
+		Card cardplayed = null;
 		stop = false;
 		while (!stop) {
 			try {
-				logger.info("test2");
 				outputmessage.println("updateview");
 				outputmessage.flush();
 				OutputAllplayers(player);
-				logger.info("test3");
 				action = inputmessage.readLine();
 				switch (action) {
 				case "playcard":
-					cardplayed = (Card) objInputStream.readObject();
-					logger.info(
-							cardplayed.getCardName() + "Cards received from Client with following Action: " + action);
+					synchronized(objInputStream) {
+						cardplayed = (Card) objInputStream.readObject();
+					}
+					logger.info(cardplayed.getCardName() + "Cards received from "
+								+ player.getPlayerName() + " with following Action: " + action);
 					break;
 
 				case "discard":
-					cardplayed = (Card) objInputStream.readObject();
-					logger.info(
-							cardplayed.getCardName() + "Cards received from Client with following Action: " + action);
+					synchronized(objInputStream) {
+						cardplayed = (Card) objInputStream.readObject();
+					}
+					logger.info(cardplayed.getCardName() + "Cards received from "
+								+ player.getPlayerName() + " with following Action: " + action);
 					break;
+				case "buildwonder":
+					synchronized(objInputStream) {
+						cardplayed = (Card) objInputStream.readObject();
+					}
+					logger.info(cardplayed.getCardName() + "Cards received from "
+								+ player.getPlayerName() + " with following Action: " + action);
+					break;				
 				default:
-					logger.info("An error occured during the Communication - invalid input from the Client");
+					logger.info("An error occured during the Communication - invalid input from " + player.getPlayerName());
 					break;
 				}
 			} catch (IOException e) {
@@ -112,15 +120,14 @@ public class ServerClientThread extends Thread implements Serializable {
 	}
 	
 	public void OutputAllplayers(Player curplayer) throws IOException {
-		
-		objOutputStream.writeObject(curplayer);
-		objOutputStream.flush();
-		logger.info("Player "+curplayer.getPlayerName()+" sent to Client");	
+		synchronized(curplayer) {
+			objOutputStream.writeObject(curplayer);
+			objOutputStream.flush();
+		}
+		logger.info("Player "+curplayer.getPlayerName()+" sent to "+player.getPlayerName());	
 		//iterrate through all players
 		if (curplayer.getRightPlayer() != player) {
-			logger.info("Player "+player.getRightPlayer().getPlayerName()+" test");
-			OutputAllplayers(player.getRightPlayer());
-				
+			OutputAllplayers(curplayer.getRightPlayer());
 		}
 	}
 

@@ -89,9 +89,9 @@ public class ServerModel implements Serializable{
 		if(players.size() < NUMBEROFPLAYERS) {
 			//add player to active player list
 			players.put(client.getPlayer(), client);
-			logger.info("successfully added client");
 			client.getPlayer().setBoard(boards.get(7));
-			if(players.size() >= 3) {
+			logger.info("successfully added client");
+			if(players.size() >= NUMBEROFPLAYERS) {
 				logger.info("game Startet");
 				this.startGame();
 			}
@@ -116,19 +116,14 @@ public class ServerModel implements Serializable{
 		 */
 		
 		//load cards to play into ArrayList
-		logger.info("game Startet");
 		loadGameCards();
 		assignPlayerNeighbors();
+		this.cardAge = CardAge.ONE;
 		
 		for(Entry<Player, ServerClientThread> serverClientThread : players.entrySet()) {
 			serverClientThread.getValue().start();
 		}
-		
-		this.cardAge = CardAge.ONE;
-		
-
-	}
-
+	}		
 	
 	/**
 	 * Assign neighbors to players
