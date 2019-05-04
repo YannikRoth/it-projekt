@@ -49,9 +49,9 @@ public class Player implements Serializable{
 	private Set<String> freePlayableCards = new HashSet<>();
 	
 	//military and winning points
-	private int militaryStrength = 0; //military strength of player (sum)
-	private int militaryPlusPoints = 0; //military plus points of player (sum)
-	private int militaryMinusPoints = 0; //military minus points of player(sum) -> to be used after conflict evaluation
+//	private int militaryStrength = 0; //military strength of player (sum)
+//	private int militaryPlusPoints = 0; //military plus points of player (sum)
+//	private int militaryMinusPoints = 0; //military minus points of player(sum) -> to be used after conflict evaluation
 	private int winningPoints = 0; //winning points of the player (sum)
 	private int sciencePoints = 0; //these values are calculated after the game has ended
 	
@@ -143,9 +143,12 @@ public class Player implements Serializable{
 				this.addCoins((int)countOfOwnGreyCards + (int)countOfGreyCardsLeftPlayer + (int)countOfGreyCardsRightPlayer);
 			}
 			
-			
-			this.militaryStrength += c.getMilitaryPoints();
-			this.winningPoints += c.getWinningPoints();
+			int currentMilPoints = this.resources.get(ResourceType.MILITARYPLUSPOINTS);
+			this.resources.put(ResourceType.MILITARYPLUSPOINTS, currentMilPoints + c.getMilitaryPoints());
+			//this.militaryStrength += c.getMilitaryPoints();
+			int currentWinningPoints = this.resources.get(ResourceType.WINNINPOINTS);
+			this.resources.put(ResourceType.WINNINPOINTS, currentWinningPoints + c.getWinningPoints());
+			//this.winningPoints += c.getWinningPoints();
 			
 			return true;
 		}else {
@@ -164,9 +167,11 @@ public class Player implements Serializable{
 		if(isAbleToAffordCard(wwCard)) {
 			this.updateResource(wwCard.getCost());
 			this.updateResource(wwCard.getProduction());
+			
 			//Karte wird in die Liste worldWonderCards eingefügt. Dies würde dann gebraucht, wenn wir die Gilden vom 3. Zeitalter noch implementieren
 			this.worldWonderCards.add(wwCard);
-			this.militaryStrength += wwCard.getMilitaryPoints();
+			this.updateMilitaryPlusPoints(wwCard.getMilitaryPoints());
+			//this.militaryStrength += wwCard.getMilitaryPoints();
 			this.winningPoints += wwCard.getWinningPoints();
 			return true;
 		} else {
@@ -393,27 +398,64 @@ public class Player implements Serializable{
 	public List<Card> getPlayedCards(){
 		return this.cards;
 	}
+	/**
+	 * This method return the difference between MilPLUSpointsand MilMINUSpoints
+	 * @author Yannik Roth, Roman Leuenberger
+	 * @return
+	 */
 	public int getMilitaryStrength() {
-		return this.militaryStrength;
+		return this.getMilitaryPlusPoints() - this.getMilitaryMinusPoints();
+		//return this.militaryStrength;
 	}
+	
+	/**
+	 * This method returns the absolute amount of militaryPlusPoints
+	 * @return
+	 */
 	public int getMilitaryPlusPoints() {
-		return this.militaryPlusPoints;
+		return this.resources.get(ResourceType.MILITARYPLUSPOINTS);
+		//return this.militaryPlusPoints;
 	}
+
+	/**
+	 * The method updates the militaryPlusPoints with the given amount by parameter
+	 * @author Yannik Roth
+	 * @param points
+	 */
 	public void updateMilitaryPlusPoints(int points) {
-		this.militaryPlusPoints += points;
+		int currentMilPoints = this.resources.get(ResourceType.MILITARYPLUSPOINTS);
+		this.resources.put(ResourceType.MILITARYPLUSPOINTS, currentMilPoints + points);
+		//this.militaryPlusPoints += points;
 	}
+	
+	/**
+	 * This method return the absolute amount of militaryMinusPoints
+	 * @param points
+	 */
 	public int getMilitaryMinusPoints() {
-		return this.militaryMinusPoints;
+		return this.resources.get(ResourceType.MILITARYMINUSPOINTS);
+		//return this.militaryMinusPoints;
 	}
+	
+	/**
+	 * The method updates the militaryMinusPoints with the given amount by parameter
+	 * @author Yannik Roth
+	 * @param points
+	 */
 	public void updateMilitaryMinusPoints(int points) {
-		this.militaryMinusPoints =+ points;
+		int currentMilPoints = this.resources.get(ResourceType.MILITARYMINUSPOINTS);
+		this.resources.put(ResourceType.MILITARYMINUSPOINTS, currentMilPoints + points);
+		//this.militaryMinusPoints =+ points;
 	}
 	public int getWinningPoints() {
-		return this.winningPoints;
+		return this.resources.get(ResourceType.WINNINPOINTS);
+		//return this.winningPoints;
 	}
 	
 	public void addWinningPoints (int points) {
-		this.winningPoints += points;
+		int currentWinPoints = this.resources.get(ResourceType.WINNINPOINTS);
+		this.resources.put(ResourceType.WINNINPOINTS, currentWinPoints + points);
+		//this.winningPoints += points;
 	}
 	
 	public ResourceMap getResources() {
