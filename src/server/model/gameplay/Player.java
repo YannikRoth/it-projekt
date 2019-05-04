@@ -398,23 +398,50 @@ public class Player implements Serializable{
 	public List<Card> getPlayedCards(){
 		return this.cards;
 	}
+	/**
+	 * This method return the difference between MilPLUSpointsand MilMINUSpoints
+	 * @author Yannik Roth, Roman Leuenberger
+	 * @return
+	 */
 	public int getMilitaryStrength() {
 		return this.getMilitaryPlusPoints() - this.getMilitaryMinusPoints();
 		//return this.militaryStrength;
 	}
+	
+	/**
+	 * This method returns the absolute amount of militaryPlusPoints
+	 * @return
+	 */
 	public int getMilitaryPlusPoints() {
 		return this.resources.get(ResourceType.MILITARYPLUSPOINTS);
 		//return this.militaryPlusPoints;
 	}
+
+	/**
+	 * The method updates the militaryPlusPoints with the given amount by parameter
+	 * @author Yannik Roth
+	 * @param points
+	 */
 	public void updateMilitaryPlusPoints(int points) {
 		int currentMilPoints = this.resources.get(ResourceType.MILITARYPLUSPOINTS);
 		this.resources.put(ResourceType.MILITARYPLUSPOINTS, currentMilPoints + points);
 		//this.militaryPlusPoints += points;
 	}
+	
+	/**
+	 * This method return the absolute amount of militaryMinusPoints
+	 * @param points
+	 */
 	public int getMilitaryMinusPoints() {
 		return this.resources.get(ResourceType.MILITARYMINUSPOINTS);
 		//return this.militaryMinusPoints;
 	}
+	
+	/**
+	 * The method updates the militaryMinusPoints with the given amount by parameter
+	 * @author Yannik Roth
+	 * @param points
+	 */
 	public void updateMilitaryMinusPoints(int points) {
 		int currentMilPoints = this.resources.get(ResourceType.MILITARYMINUSPOINTS);
 		this.resources.put(ResourceType.MILITARYMINUSPOINTS, currentMilPoints + points);
