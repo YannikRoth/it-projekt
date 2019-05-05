@@ -13,13 +13,17 @@ import java.util.logging.Logger;
 
 import globals.ClientAction;
 import globals.Globals;
+import globals.ResourceMapType;
 import globals.ResourceType;
 import globals.ServerAction;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import server.ServiceLocator;
+import server.model.ServerModel;
 import server.model.gameplay.Card;
 import server.model.gameplay.Player;
+import server.model.gameplay.ResourceMap;
+import server.model.init.CardLoader;
 import test.testclassserializable;
 
 /**
@@ -35,11 +39,20 @@ public class ClientModel extends Thread {
 	private int numberofPlayers;
 	private ObjectInputStream objInputStream;
 	private ObjectOutputStream objOutputStream;
+	private ServerModel model;
 
 	private static final Logger logger = ServiceLocator.getLogger();
 
 	public ClientModel() {
-
+		refreshOtherPlayer(new Player("David"));
+		player = new Player("Mein Spieler");
+		player.getResources().put(ResourceType.BRICK, 20);
+		player.getResources().put(ResourceType.FABRIC, 25);
+		player.getResources().put(ResourceType.ORE, 230);
+//
+//		Card c1 = model.getCard(1); //brick OR stone OR ore OR wood
+//		player.playCard(c1);
+//		System.out.println(model.getCard(1));
 	}
 	
 	

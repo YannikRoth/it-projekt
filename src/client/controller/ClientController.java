@@ -41,7 +41,6 @@ public class ClientController {
 			String newLanguage = i.getText().toLowerCase().substring(0, 2);
 			if(!Translator.getTranslator().getLocale().getLanguage().equalsIgnoreCase(newLanguage)) {
 				Translator.getTranslator().setLanguage(newLanguage);
-				model.playCard(model.getMyPlayer().getPlayableCards().get(0), ClientAction.PLAYCARD);
 				view.setTexts();
 			}
 		});

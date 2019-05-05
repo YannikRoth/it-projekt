@@ -64,13 +64,17 @@ public class LobbyController {
 //	private void processNewGameButton() {
 //		view.getNewGameButton().setOnAction((e) -> {
 //			Stage secondStage = new Stage();
-//	    	ClientModel model = new ClientModel();
-//	    	ClientView view = new ClientView(secondStage, model);
-//	    	ClientController controller = new ClientController(model, view);
-//	    	this.view.hide();
+//			ClientMVC clientMVC = new ClientMVC();
+//			try {
+//				clientMVC.start(secondStage);
+//			} catch (Exception e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//			view.getStage().hide();
 //		});
 //	}
-//	
+	
 	private void processRulesButton() {
 		view.getRulesButton().setOnAction((e) -> {
 			if (Desktop.isDesktopSupported()) {

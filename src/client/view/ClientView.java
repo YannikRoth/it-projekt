@@ -116,63 +116,100 @@ public class ClientView {
 		hBoxPlayer.getChildren().addAll(borderPanePlayer);
 		
 		HBox hBoxCards = new HBox();
-		hBoxCards.setSpacing(15);
-		hBoxCards.setPadding(new Insets(15,12,15,200));
+		hBoxCards.setSpacing(10);
+		hBoxCards.setPadding(new Insets(15,12,15,50));
 		borderPanePlayer.setTop(hBoxCards);
 		hBoxPlayer.setHgrow(borderPanePlayer, Priority.ALWAYS);
 		
 		//Cards
 		Image image = new Image("file:./resource/images/cards/SCN_0150.jpg");
+		Image image2 = new Image("file:./resource/images/cards/SCN_0151.jpg");
+		
 		ImageView card1 = new ImageView(image);
-		card1.setFitHeight(150);
-		card1.setFitWidth(100);
+		card1.setFitHeight(130);
+		card1.setFitWidth(86);
 		card1.setOnMouseClicked((e) -> {
 			System.out.println("Karte 1");
 		});
 		
 		ImageView card2 = new ImageView(image);
-		card2.setFitHeight(150);
-		card2.setFitWidth(100);
+		card2.setFitHeight(130);
+		card2.setFitWidth(86);
 		card2.setOnMouseClicked((e) -> {
 			System.out.println("Karte 2");
 		});
 		
 		ImageView card3 = new ImageView(image);
-		card3.setFitHeight(150);
-		card3.setFitWidth(100);
+		card3.setFitHeight(130);
+		card3.setFitWidth(86);
 		card3.setOnMouseClicked((e) -> {
 			System.out.println("Karte 3");
 		});
 		
 		ImageView card4 = new ImageView(image);
-		card4.setFitHeight(150);
-		card4.setFitWidth(100);
+		card4.setFitHeight(130);
+		card4.setFitWidth(86);
 		card4.setOnMouseClicked((e) -> {
 			System.out.println("Karte 4");
 		});
 		
 		ImageView card5 = new ImageView(image);
-		card5.setFitHeight(150);
-		card5.setFitWidth(100);
+		card5.setFitHeight(130);
+		card5.setFitWidth(86);
 		card5.setOnMouseClicked((e) -> {
 			System.out.println("Karte 5");
 		});
 		
 		ImageView card6 = new ImageView(image);
-		card6.setFitHeight(150);
-		card6.setFitWidth(100);
+		card6.setFitHeight(130);
+		card6.setFitWidth(86);
 		card6.setOnMouseClicked((e) -> {
 			System.out.println("Karte 6");
 		});
 		
-		ImageView card7 = new ImageView(image);
-		card7.setFitHeight(150);
-		card7.setFitWidth(100);
+		ImageView card7 = new ImageView(image2);
+		card7.setFitHeight(130);
+		card7.setFitWidth(86);
 		card7.setOnMouseClicked((e) -> {
 			System.out.println("Karte 7");
 		});
 		
-		hBoxCards.getChildren().addAll(card1, card2, card3, card4, card5, card6, card7);
+		ImageView card8 = new ImageView(image2);
+		card8.setFitHeight(130);
+		card8.setFitWidth(86);
+		card8.setOnMouseClicked((e) -> {
+			System.out.println("Karte 8");
+		});
+		
+		ImageView card9 = new ImageView(image2);
+		card9.setFitHeight(130);
+		card9.setFitWidth(86);
+		card9.setOnMouseClicked((e) -> {
+			System.out.println("Karte 9");
+		});
+		
+		ImageView card10 = new ImageView(image2);
+		card10.setFitHeight(130);
+		card10.setFitWidth(86);
+		card10.setOnMouseClicked((e) -> {
+			System.out.println("Karte 10");
+		});
+		
+		ImageView card11 = new ImageView(image2);
+		card11.setFitHeight(130);
+		card11.setFitWidth(86);
+		card11.setOnMouseClicked((e) -> {
+			System.out.println("Karte 11");
+		});
+		
+		ImageView card12 = new ImageView(image2);
+		card12.setFitHeight(130);
+		card12.setFitWidth(86);
+		card12.setOnMouseClicked((e) -> {
+			System.out.println("Karte 12");
+		});
+		
+		hBoxCards.getChildren().addAll(card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12);
 		
 		
 		//Points
@@ -202,9 +239,38 @@ public class ClientView {
 		
 		//Deck
 		HBox hBoxDeck = new HBox();
-		hBoxDeck.setPadding(new Insets(15,12,15,270));
+		hBoxDeck.setPadding(new Insets(15,12,15,390));
 		//hBoxDeck.setSpacing(10);
-		borderPanePlayer.setBottom(hBoxDeck);
+		borderPanePlayer.setCenter(hBoxDeck);
+		
+		ImageView card13 = new ImageView(image2);
+		card13.setFitHeight(100);
+		card13.setFitWidth(66);
+		card13.setOnMouseClicked((e) -> {
+			System.out.println("Karte 13");
+		});
+		
+		ImageView card14 = new ImageView(image2);
+		card14.setFitHeight(100);
+		card14.setFitWidth(66);
+		card14.setOnMouseClicked((e) -> {
+			System.out.println("Karte 14");
+		});
+		
+		ImageView card15 = new ImageView(image2);
+		card15.setFitHeight(100);
+		card15.setFitWidth(66);
+		card15.setOnMouseClicked((e) -> {
+			System.out.println("Karte 15");
+		});
+		
+		
+		HBox hBoxWorldWonderCards = new HBox();
+		hBoxWorldWonderCards.setSpacing(120);
+		hBoxWorldWonderCards.setPadding(new Insets(15,12,15,475));
+		hBoxWorldWonderCards.getChildren().addAll(card13, card14, card15);
+		borderPanePlayer.setBottom(hBoxWorldWonderCards);
+		
 		
 		ImageView deck = new ImageView(new Image("file:./resource/images/boards/Board_01_A.jpg"));
 		deck.setFitHeight(250);
