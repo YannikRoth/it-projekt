@@ -49,7 +49,12 @@ public class ClientModel extends Thread {
 		player.getResources().put(ResourceType.BRICK, 20);
 		player.getResources().put(ResourceType.FABRIC, 25);
 		player.getResources().put(ResourceType.ORE, 230);
-//
+		player.getResources().put(ResourceType.GLAS, 230);
+		player.getResources().put(ResourceType.PAPYRUS, 230);
+		player.getResources().put(ResourceType.STONE, 230);
+		player.getResources().put(ResourceType.WOOD, 230);
+
+//		this.playCard(this.getMyPlayer().getPlayableCards().get(0), ClientAction.PLAYCARD);
 //		Card c1 = model.getCard(1); //brick OR stone OR ore OR wood
 //		player.playCard(c1);
 //		System.out.println(model.getCard(1));

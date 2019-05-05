@@ -124,8 +124,9 @@ public class ClientView {
 		//Cards
 		Image image = new Image("file:./resource/images/cards/SCN_0150.jpg");
 		Image image2 = new Image("file:./resource/images/cards/SCN_0151.jpg");
+		Image image3 = new Image ("file:./resource/images/cards/"+model.getMyPlayer().getPlayableCards().get(0).getImageFileName());
 		
-		ImageView card1 = new ImageView(image);
+		ImageView card1 = new ImageView(image3);
 		card1.setFitHeight(130);
 		card1.setFitWidth(86);
 		card1.setOnMouseClicked((e) -> {
