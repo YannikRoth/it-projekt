@@ -404,17 +404,8 @@ public class Player implements Serializable{
 	 * @return
 	 */
 	public int getMilitaryStrength() {
-		return this.getMilitaryPlusPoints() - this.getMilitaryMinusPoints();
-		//return this.militaryStrength;
-	}
-	
-	/**
-	 * This method returns the absolute amount of militaryPlusPoints
-	 * @return
-	 */
-	public int getMilitaryPlusPoints() {
 		return this.resources.get(ResourceType.MILITARYPLUSPOINTS);
-		//return this.militaryPlusPoints;
+		//return this.militaryStrength;
 	}
 
 	/**
@@ -426,15 +417,6 @@ public class Player implements Serializable{
 		int currentMilPoints = this.resources.get(ResourceType.MILITARYPLUSPOINTS);
 		this.resources.put(ResourceType.MILITARYPLUSPOINTS, currentMilPoints + points);
 		//this.militaryPlusPoints += points;
-	}
-	
-	/**
-	 * This method return the absolute amount of militaryMinusPoints
-	 * @param points
-	 */
-	public int getMilitaryMinusPoints() {
-		return this.resources.get(ResourceType.MILITARYMINUSPOINTS);
-		//return this.militaryMinusPoints;
 	}
 	
 	/**
