@@ -172,11 +172,11 @@ public class Card implements Serializable{
 				continue;
 			}
 			if(fieldName.equals("canTradeLeft")){
-				this.canTradeLeft = values[i] == "true" ? true : false;
+				this.canTradeLeft = values[i] == "True" ? true : false;
 				continue;
 			}
 			if(fieldName.equals("canTradeRight")){
-				this.canTradeRight = values[i] == "true" ? true : false;
+				this.canTradeRight = values[i] == "True" ? true : false;
 				continue;
 			}
 			if(fieldName.equals("tradeCostafter")){
@@ -185,31 +185,31 @@ public class Card implements Serializable{
 				continue;
 			}
 			if(fieldName.equals("canTradeZiegel")){
-				this.canTradeZiegel = values[i] == "true" ? true : false;
+				this.canTradeZiegel = values[i] == "True" ? true : false;
 				continue;
 			}
 			if(fieldName.equals("canTradeErz")){
-				this.canTradeErz = values[i] == "true" ? true : false;
+				this.canTradeErz = values[i] == "True" ? true : false;
 				continue;
 			}
 			if(fieldName.equals("canTradeHolz")){
-				this.canTradeHolz = values[i] == "true" ? true : false;
+				this.canTradeHolz = values[i] == "True" ? true : false;
 				continue;
 			}
 			if(fieldName.equals("canTradeStein")){
-				this.canTradeStein = values[i] == "true" ? true : false;
+				this.canTradeStein = values[i] == "True" ? true : false;
 				continue;
 			}
 			if(fieldName.equals("canTradeGlas")){
-				this.canTradeGlas = values[i] == "true" ? true : false;
+				this.canTradeGlas = values[i] == "True" ? true : false;
 				continue;
 			}
 			if(fieldName.equals("canTradeStoff")){
-				this.canTradeStoff = values[i] == "true" ? true : false;
+				this.canTradeStoff = values[i] == "True" ? true : false;
 				continue;
 			}
 			if(fieldName.equals("canTradePapyrus")){
-				this.canTradePapyrus = values[i] == "true" ? true : false;
+				this.canTradePapyrus = values[i] == "True" ? true : false;
 				continue;
 			}
 			if(fieldName.equals("produceZiegel")){
@@ -241,19 +241,19 @@ public class Card implements Serializable{
 				continue;
 			}
 			if(fieldName.equals("produceAlternate")){
-				this.produceAlternate = values[i] == "true" ? true : false;
+				this.produceAlternate = values[i] == "True" ? true : false;
 				continue;
 			}
 			if(fieldName.equals("sciencePointsSchriften")){
-				this.sciencePointsSchriften = values[i].equals("true") ? true : false;
+				this.sciencePointsSchriften = values[i].equals("True") ? true : false;
 				continue;
 			}
 			if(fieldName.equals("sciencePointsKompass")){
-				this.sciencePointsKompass = values[i].equals("true") ? true : false;
+				this.sciencePointsKompass = values[i].equals("True") ? true : false;
 				continue;
 			}
 			if(fieldName.equals("sciencePointsMeter")){
-				this.sciencePointsMeter = values[i].equals("true") ? true : false;
+				this.sciencePointsMeter = values[i].equals("True") ? true : false;
 				continue;
 			}
 			if(fieldName.equals("coinsfromWonderStage")){
