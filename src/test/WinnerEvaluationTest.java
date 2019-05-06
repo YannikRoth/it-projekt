@@ -92,6 +92,7 @@ class WinnerEvaluationTest {
 
 	@Test
 	void evaluateWinnerTest() {
+		
 		System.out.println(player.getResources());
 		System.out.println(leftPlayer.getResources());
 		System.out.println(rightPlayer.getResources());
@@ -99,7 +100,7 @@ class WinnerEvaluationTest {
 		System.out.println(player.getResources());
 		System.out.println(leftPlayer.getResources());
 		System.out.println(rightPlayer.getResources());
-		assertEquals(winnerList.get(0).getPlayerName(), "David");
+		assertEquals(winnerList.get(0).getPlayerName(), "Yannik");
 	}
 
 }

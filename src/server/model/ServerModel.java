@@ -211,7 +211,7 @@ public class ServerModel implements Serializable{
 			//To get the amount of coins, you can use the method player.getCoins;
 			dealMilitaryPoints(p);
 			//p.addWinningPoints(p.getMilitaryPlusPoints() - p.getMilitaryMinusPoints());
-			p.addWinningPoints(p.getMilitaryStrength());
+			//p.addWinningPoints(p.getMilitaryStrength());
 			p.addWinningPoints(p.getCoins()/3); //get amount of coins
 			ArrayList<Card> cardsPlayedByPlayer = (ArrayList<Card>) p.getPlayedCards(); //get a list of all played cards
 			
