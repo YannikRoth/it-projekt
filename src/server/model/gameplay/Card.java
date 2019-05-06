@@ -22,7 +22,7 @@ import server.model.init.CardLoader;
 
 public class Card implements Serializable{
 	
-	private Logger logger = ServiceLocator.getLogger();
+	private transient Logger logger = ServiceLocator.getLogger();
 	
 	//resource maps for cost and production
 	private Map<ResourceType, Integer> cost = new ResourceMap(ResourceMapType.COST);;
@@ -80,20 +80,8 @@ public class Card implements Serializable{
 	private int pointsForNeigbourGreenCards;
 	private int pointsForNeigbourRedCards;
 	private int pointsforNeigbourDefeattoken;
-
-
 	
 	private int tradeCostafter;
-
-	
-	@Deprecated
-	public Card(ResourceMap cost, ResourceMap produce, CardAge age, int minPlayer) {
-		this.cost = cost;
-		this.produce = produce;
-		this.cardAge = age;
-		this.minPlayer = minPlayer;
-		
-	}
 
 	/**
 	 * Constructor of card. Will iterate through all fieldMappings.
@@ -169,8 +157,14 @@ public class Card implements Serializable{
 				this.freeCards.add(values[i]);
 				continue;
 			}
+			if(fieldName.equals("victoryPoints")) {
+				//this.winningPoints = Integer.parseInt(values[i]);
+				this.produce.put(ResourceType.WINNINGPOINTS, Integer.parseInt(values[i]));
+				continue;
+			}
 			if(fieldName.equals("militaryPoints")) {
-				this.militaryPoints = Integer.parseInt(values[i]);
+				//this.militaryPoints = Integer.parseInt(values[i]);
+				this.produce.put(ResourceType.MILITARYPLUSPOINTS, Integer.parseInt(values[i]));
 				continue;
 			}
 			if(fieldName.equals("coinsFromCard")) {
@@ -178,11 +172,11 @@ public class Card implements Serializable{
 				continue;
 			}
 			if(fieldName.equals("canTradeLeft")){
-				this.canTradeLeft = values[i] == "true" ? true : false;
+				this.canTradeLeft = values[i] == "True" ? true : false;
 				continue;
 			}
 			if(fieldName.equals("canTradeRight")){
-				this.canTradeRight = values[i] == "true" ? true : false;
+				this.canTradeRight = values[i] == "True" ? true : false;
 				continue;
 			}
 			if(fieldName.equals("tradeCostafter")){
@@ -191,31 +185,31 @@ public class Card implements Serializable{
 				continue;
 			}
 			if(fieldName.equals("canTradeZiegel")){
-				this.canTradeZiegel = values[i] == "true" ? true : false;
+				this.canTradeZiegel = values[i] == "True" ? true : false;
 				continue;
 			}
 			if(fieldName.equals("canTradeErz")){
-				this.canTradeErz = values[i] == "true" ? true : false;
+				this.canTradeErz = values[i] == "True" ? true : false;
 				continue;
 			}
 			if(fieldName.equals("canTradeHolz")){
-				this.canTradeHolz = values[i] == "true" ? true : false;
+				this.canTradeHolz = values[i] == "True" ? true : false;
 				continue;
 			}
 			if(fieldName.equals("canTradeStein")){
-				this.canTradeStein = values[i] == "true" ? true : false;
+				this.canTradeStein = values[i] == "True" ? true : false;
 				continue;
 			}
 			if(fieldName.equals("canTradeGlas")){
-				this.canTradeGlas = values[i] == "true" ? true : false;
+				this.canTradeGlas = values[i] == "True" ? true : false;
 				continue;
 			}
 			if(fieldName.equals("canTradeStoff")){
-				this.canTradeStoff = values[i] == "true" ? true : false;
+				this.canTradeStoff = values[i] == "True" ? true : false;
 				continue;
 			}
 			if(fieldName.equals("canTradePapyrus")){
-				this.canTradePapyrus = values[i] == "true" ? true : false;
+				this.canTradePapyrus = values[i] == "True" ? true : false;
 				continue;
 			}
 			if(fieldName.equals("produceZiegel")){
@@ -247,19 +241,19 @@ public class Card implements Serializable{
 				continue;
 			}
 			if(fieldName.equals("produceAlternate")){
-				this.produceAlternate = values[i] == "true" ? true : false;
+				this.produceAlternate = values[i] == "True" ? true : false;
 				continue;
 			}
 			if(fieldName.equals("sciencePointsSchriften")){
-				this.sciencePointsSchriften = values[i].equals("true") ? true : false;
+				this.sciencePointsSchriften = values[i].equals("True") ? true : false;
 				continue;
 			}
 			if(fieldName.equals("sciencePointsKompass")){
-				this.sciencePointsKompass = values[i].equals("true") ? true : false;
+				this.sciencePointsKompass = values[i].equals("True") ? true : false;
 				continue;
 			}
 			if(fieldName.equals("sciencePointsMeter")){
-				this.sciencePointsMeter = values[i].equals("true") ? true : false;
+				this.sciencePointsMeter = values[i].equals("True") ? true : false;
 				continue;
 			}
 			if(fieldName.equals("coinsfromWonderStage")){
@@ -350,6 +344,18 @@ public class Card implements Serializable{
 	}
 	
 	/**
+	 * Constructor to create a manual card (used in board)
+	 * @param cost
+	 * @param produce
+	 * @author Roman Leuenberger
+	 */
+	public Card(Map<ResourceType, Integer> cost, Map<ResourceType, Integer> produce) {
+		this.cost = cost;
+		this.produce = produce;
+		this.id = ServiceLocator.getmanualCardId();
+	}
+	
+	/**
 	 * Required for import --> select correct Array-Index
 	 * @return int value of CardAge
 	 */
@@ -361,16 +367,16 @@ public class Card implements Serializable{
 	 * This method provides cost information about this specific card
 	 * @return the cost of this card as a ResourceMap
 	 */
-	public Map<ResourceType, Integer> getCost(){
-		return this.cost;
+	public ResourceMap getCost(){
+		return (ResourceMap) this.cost;
 	}
 	
 	/**
 	 * This method provides production information about this specific card
 	 * @return the production map  of this card as a ResouceMap
 	 */
-	public Map<ResourceType, Integer> getProduction(){
-		return this.produce;
+	public ResourceMap getProduction(){
+		return (ResourceMap) this.produce;
 	}
 	
 	/**
@@ -404,4 +410,89 @@ public class Card implements Serializable{
 		return "SCN_" + f.format(this.id) + ".jpg";
 	}
 
+	public int getWinningPoints() {
+		return this.produce.get(ResourceType.WINNINGPOINTS);
+		//return winningPoints;
+	}
+	
+	public int getMilitaryPoints() {
+		return this.produce.get(ResourceType.MILITARYPLUSPOINTS);
+		//return militaryPoints;
+	}
+	
+	/**
+	 * This method is only to be used by the importer and for test pruposes.
+	 * It should never make sense to change these values!
+	 * @param rm
+	 * @author yannik roth
+	 */
+	public void setCost(ResourceMap rm) {
+		this.cost = rm;
+	}
+	/**
+	 * This method is only to be used by the importer and for test pruposes.
+	 * It should never make sense to change these values!
+	 * @param rm
+	 * @author yannik roth
+	 */
+	public void setProduction(ResourceMap rm) {
+		this.produce = rm;
+	}
+	
+	public int getCardMinPlayer() {
+		return this.minPlayer;
+	}
+	
+	public CardType getCardType() {
+		return this.cardType;
+	}
+
+	public int getCoinsForBrownCards() {
+		return coinsForBrownCards;
+	}
+
+	public int getCoinsForBrownNeigbourCards() {
+		return coinsForBrownNeigbourCards;
+	}
+
+	public int getCoinsForGreyCards() {
+		return coinsForGreyCards;
+	}
+
+	public int getCoinsForGreyNeigbourCards() {
+		return coinsForGreyNeigbourCards;
+	}
+
+	public int getPointsForBrownCards() {
+		return pointsForBrownCards;
+	}
+
+	public int getPointsForGreyCards() {
+		return pointsForGreyCards;
+	}
+
+	public int getPointsForYellowCards() {
+		return pointsForYellowCards;
+	}
+
+	public int getPointsForPurpleCards() {
+		return pointsForPurpleCards;
+	}
+
+	public boolean isSciencePointsSchriften() {
+		return sciencePointsSchriften;
+	}
+
+	public boolean isSciencePointsKompass() {
+		return sciencePointsKompass;
+	}
+
+	public boolean isSciencePointsMeter() {
+		return sciencePointsMeter;
+	}
+	
+	public List<String> getFreeCards(){
+		return this.freeCards;
+	}
+	
 }

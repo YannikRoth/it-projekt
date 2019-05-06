@@ -7,10 +7,19 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+import server.model.ServerModel;
+
 public class ServiceLocator {
 
 	private static ServiceLocator instance = null;
 	private static Logger logger;
+	private static ServerModel serverModelInstance = null;
+	
+	//hold playerId
+	private static int playerCounter = 0;
+	
+	//card id for manual card creation
+	private static int manualCardId = 1000;
 	
 	/**
 	 * Class initialization
@@ -62,9 +71,50 @@ public class ServiceLocator {
 	 * Log files are written to log directory within this project.
 	 * Log files are not transmitted to server, as all *.log files are excluded
 	 * from GIT
+	 * @author yannik roth
 	 * @return
 	 */
 	public static Logger getLogger() {
 		return logger;
 	}
+	
+	/**
+	 * This method sets the current game model into the service locator.
+	 * It can not be overrriden!
+	 * @param Server model m
+	 * @author yannik roth
+	 */
+	public static void setModel(ServerModel m) {
+		if(serverModelInstance == null) {
+			serverModelInstance = m;
+		}else {
+			//do not override model!
+		}
+	}
+	
+	/**
+	 * Returns the server model of this game instance.
+	 * @return ServerModel or <code>null </code> if instance is not set
+	 */
+	public static ServerModel getServerModel() {
+		return ServiceLocator.serverModelInstance; 
+	}
+	
+	/**
+	 * Return a unique value on which a player can be identified
+	 * @return
+	 */
+	public static int getNewPlayerId() {
+		playerCounter++;
+		return playerCounter;
+	}
+	
+	public static void updateManualCardId() {
+		manualCardId++;
+	}
+	public static int getmanualCardId() {
+		updateManualCardId();
+		return manualCardId;
+	}
+	
 }

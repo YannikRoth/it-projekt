@@ -1,5 +1,6 @@
 package server.model.gameplay;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -13,8 +14,8 @@ import server.model.init.BoardLoader;
  * @author rothy
  *
  */
-public class Board {
-	private Logger logger = ServiceLocator.getLogger();
+public class Board implements Serializable {
+	private transient Logger logger = ServiceLocator.getLogger();
 	/**
 	 * Stores world wonder whereas index 0 is world wonder 1
 	 * If null, no world wonder available
@@ -25,16 +26,6 @@ public class Board {
 	private String boardSide;
 	private String boardName;
 	private ResourceType producingResource;
-	
-	/**
-	 * 
-	 * @param w
-	 * @throws IllegalParameterException this is a test
-	 */
-	@Deprecated
-	public Board(WorldWonder[] w) throws IllegalParameterException {
-		worldWonders = w;
-	}
 	
 	public Board(String[] values) {
 		Map<Integer, String> mapping = BoardLoader.getFieldMapping();
@@ -216,6 +207,10 @@ public class Board {
 	
 	public int getId() {
 		return this.boardID;
+	}
+	
+	public ResourceType getProducingResource() {
+		return this.producingResource;
 	}
 
 }

@@ -18,7 +18,6 @@ public class ServerMVC extends Application {
 	private ServerModel model;
 	private ServerView view;
 	private ServerController control;
-	private ServerRequestHandler requesthandler;
 	private Logger logger = ServiceLocator.getLogger();
 
 	public static void main(String[] args) {
@@ -29,13 +28,14 @@ public class ServerMVC extends Application {
 	public void start(Stage primaryStage) {
 		this.model = new ServerModel();
 		
-		this.requesthandler = new ServerRequestHandler(model);
+		//save model to service locator for other classes
+		ServiceLocator.setModel(this.model);
+		
 		this.view = new ServerView(primaryStage, model);
 		this.control= new ServerController(model, view);
-		
-		requesthandler.start();
 		view.start();
 		
 		logger.info("Server MVC started");
+		
 	}
 }

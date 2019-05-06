@@ -2,7 +2,11 @@ package client.view;
 
 import java.util.Optional;
 
+import client.ClientMVC;
+import client.controller.ClientController;
+import client.model.ClientModel;
 import client.model.LobbyModel;
+import globals.Globals;
 import globals.Translator;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -54,7 +58,7 @@ public class LobbyView {
 		this.stage = primaryStage;
 		this.model = model;
 		
-		TextInputDialog dialog = new TextInputDialog("192.168.1.");
+		TextInputDialog dialog = new TextInputDialog("127.0.0.1");
 		dialog.setTitle(translator.getString("title.ip"));
 		dialog.setHeaderText(translator.getString("header.opponents"));
 		dialog.setContentText(translator.getString("content.ip"));
@@ -66,6 +70,7 @@ public class LobbyView {
 		Optional<String> result = dialog.showAndWait();
 		result.ifPresent(name -> {
 			//TODO: Set Server IP in model
+			Globals.setDefaultIPAddr(name);
 			System.out.println(name);
 		});
 		
@@ -94,6 +99,17 @@ public class LobbyView {
 		borderPaneMain.setBottom(hBoxPlayer);
 		
 		this.btnNewGame = new Button();
+		btnNewGame.setOnAction((e) -> {
+			Stage secondStage = new Stage();
+	    	ClientMVC clientMVC = new ClientMVC();
+	    	try {
+				clientMVC.start(secondStage);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+	    	this.stage.hide();
+		});
 		this.btnRules	= new Button();
 		this.btnQuit = new Button();
 

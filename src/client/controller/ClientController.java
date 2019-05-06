@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import client.model.ClientModel;
 import client.view.ClientView;
+import globals.ClientAction;
 import globals.Translator;
 import javafx.application.Platform;
 import javafx.scene.control.MenuItem;
@@ -25,7 +26,6 @@ public class ClientController {
 	public ClientController(ClientModel model, ClientView view) {
 		this.model = model;
 		this.view = view;
-		
 		processRulesItem();
 		processHintItem();
 		processAboutItem();

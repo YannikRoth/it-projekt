@@ -1,9 +1,14 @@
 package client.view;
 
+import java.util.ArrayList;
+import java.util.Map.Entry;
+
 import client.model.ClientModel;
+import globals.ResourceType;
 import globals.Translator;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
+import javafx.beans.binding.Bindings;
+import javafx.collections.ObservableMap;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -13,6 +18,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
@@ -21,6 +27,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import server.model.gameplay.Player;
+import server.model.gameplay.ResourceMap;
 
 /**
  * 
@@ -34,7 +42,11 @@ public class ClientView {
 	private Translator translator = Translator.getTranslator();
 	Menu menuLanguage, menuHelp, menuGame;
 	
-	TableColumn ColPlayer, ColStone, ColOre, ColWood, ColGlass, ColClay, ColLoom, ColPaper, ColCoin, ColGeom, ColWrit, ColEng, ColShield, ColMilitary, ColWinning, ColType, ColAmount;
+	protected ImageView card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12, card13, card14, card15, card16;
+	
+	TableColumn<Player, String> ColPlayer, ColStone, ColOre, ColWood, ColGlass, ColClay, ColLoom, ColPaper, ColCoin, ColGeom, ColWrit, ColEng, ColShield, ColMilitary, ColWinning;
+	TableColumn<ResourceType, String> ColType;
+	TableColumn<ResourceType, Integer> ColAmount;
 	
 	MenuItem itemM1, itemM2, itemM3, itemM4, itemM5, itemM6, itemM7, itemM8, itemM9, itemM10, itemM11, itemM12, itemM13;
 	
@@ -42,6 +54,7 @@ public class ClientView {
 	public ClientView(Stage primaryStage, ClientModel model) {
 		this.stage = primaryStage;
 		this.model = model;
+		model.start();
 		buildView();
 		setTexts();
 	}	
@@ -58,12 +71,14 @@ public class ClientView {
 		BorderPane borderPaneMain = new BorderPane();
 		
 		//Table View opponents
-		TableView tableOpponents = new TableView();
+		TableView<Player> tableOpponents = new TableView();
 		tableOpponents.setEditable(false);
+		tableOpponents.setItems(model.getOtherPlayers());
 		borderPaneMain.setCenter(tableOpponents);
 		
-		ColPlayer = new TableColumn("Player");
+		ColPlayer = new TableColumn<Player, String>("Player");
 		ColPlayer.setMinWidth(100);
+		ColPlayer.setCellValueFactory(new PropertyValueFactory<Player, String>("playerName"));
 		ColStone = new TableColumn("Stone");
 		ColStone.setMinWidth(100);
 		ColOre = new TableColumn("Ore");
@@ -103,61 +118,164 @@ public class ClientView {
 		hBoxPlayer.getChildren().addAll(borderPanePlayer);
 		
 		HBox hBoxCards = new HBox();
-		hBoxCards.setSpacing(15);
-		hBoxCards.setPadding(new Insets(15,12,15,200));
+		hBoxCards.setSpacing(10);
+		hBoxCards.setPadding(new Insets(15,12,15,50));
 		borderPanePlayer.setTop(hBoxCards);
 		hBoxPlayer.setHgrow(borderPanePlayer, Priority.ALWAYS);
 		
 		//Cards
 		Image image = new Image("file:./resource/images/cards/SCN_0150.jpg");
-		ImageView card1 = new ImageView(image);
-		card1.setFitHeight(150);
-		card1.setFitWidth(100);
+		Image image2 = new Image("file:./resource/images/cards/SCN_0151.jpg");
+//		Image image3 = new Image ("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(0).getImageFileName());
 		
-		ImageView card2 = new ImageView(image);
-		card2.setFitHeight(150);
-		card2.setFitWidth(100);
+		card1 = new ImageView(image);
+		card1.setFitHeight(130);
+		card1.setFitWidth(86);
+		card1.setOnMouseClicked((e) -> {
+			System.out.println("Karte 1");
+			updateCardView(card1, 0);
+		});
 		
-		ImageView card3 = new ImageView(image);
-		card3.setFitHeight(150);
-		card3.setFitWidth(100);
+		card2 = new ImageView(image);
+		card2.setFitHeight(130);
+		card2.setFitWidth(86);
+		card2.setOnMouseClicked((e) -> {
+			System.out.println("Karte 2");
+			updateCardView(card2, 1);
+		});
 		
-		ImageView card4 = new ImageView(image);
-		card4.setFitHeight(150);
-		card4.setFitWidth(100);
+		card3 = new ImageView(image);
+		card3.setFitHeight(130);
+		card3.setFitWidth(86);
+		card3.setOnMouseClicked((e) -> {
+			System.out.println("Karte 3");
+		});
 		
-		ImageView card5 = new ImageView(image);
-		card5.setFitHeight(150);
-		card5.setFitWidth(100);
+		card4 = new ImageView(image);
+		card4.setFitHeight(130);
+		card4.setFitWidth(86);
+		card4.setOnMouseClicked((e) -> {
+			System.out.println("Karte 4");
+		});
 		
-		ImageView card6 = new ImageView(image);
-		card6.setFitHeight(150);
-		card6.setFitWidth(100);
+		card5 = new ImageView(image);
+		card5.setFitHeight(130);
+		card5.setFitWidth(86);
+		card5.setOnMouseClicked((e) -> {
+			System.out.println("Karte 5");
+		});
 		
-		ImageView card7 = new ImageView(image);
-		card7.setFitHeight(150);
-		card7.setFitWidth(100);
+		card6 = new ImageView(image);
+		card6.setFitHeight(130);
+		card6.setFitWidth(86);
+		card6.setOnMouseClicked((e) -> {
+			System.out.println("Karte 6");
+		});
 		
-		hBoxCards.getChildren().addAll(card1, card2, card3, card4, card5, card6, card7);
+		card7 = new ImageView(image2);
+		card7.setFitHeight(130);
+		card7.setFitWidth(86);
+		card7.setOnMouseClicked((e) -> {
+			System.out.println("Karte 7");
+		});
+		
+		card8 = new ImageView(image2);
+		card8.setFitHeight(130);
+		card8.setFitWidth(86);
+		card8.setOnMouseClicked((e) -> {
+			System.out.println("Karte 8");
+		});
+		
+		card9 = new ImageView(image2);
+		card9.setFitHeight(130);
+		card9.setFitWidth(86);
+		card9.setOnMouseClicked((e) -> {
+			System.out.println("Karte 9");
+		});
+		
+		card10 = new ImageView(image2);
+		card10.setFitHeight(130);
+		card10.setFitWidth(86);
+		card10.setOnMouseClicked((e) -> {
+			System.out.println("Karte 10");
+		});
+		
+		card11 = new ImageView(image2);
+		card11.setFitHeight(130);
+		card11.setFitWidth(86);
+		card11.setOnMouseClicked((e) -> {
+			System.out.println("Karte 11");
+		});
+		
+		card12 = new ImageView(image2);
+		card12.setFitHeight(130);
+		card12.setFitWidth(86);
+		card12.setOnMouseClicked((e) -> {
+			System.out.println("Karte 12");
+		});
+		
+		hBoxCards.getChildren().addAll(card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12);
 		
 		
 		//Points
-		TableView tablePoints = new TableView();
+		/**
+		 * @author david
+		 */
+		TableView<ResourceType> tablePoints = new TableView<>(this.model.getMyPlayer().getResources().getResourcesListObservable());
+		
 		tablePoints.setEditable(false);
 		hBoxPlayer.getChildren().addAll(tablePoints);
 		
 		ColType		= new TableColumn();
 		ColType.setMinWidth(100);
+		/**
+		 * @author david
+		 */
+		ColType.setCellValueFactory(cd -> Bindings.createStringBinding(() -> cd.getValue().toStringTranslate() ));
+
 		ColAmount	= new TableColumn();
 		ColAmount.setMinWidth(100);
+		/**
+		 * @author david
+		 */
+		ColAmount.setCellValueFactory(cd -> Bindings.valueAt(this.model.getMyPlayer().getResources().getResourcesObservable(), cd.getValue()));
 		
 		tablePoints.getColumns().addAll(ColType, ColAmount);
 		
 		//Deck
 		HBox hBoxDeck = new HBox();
-		hBoxDeck.setPadding(new Insets(15,12,15,270));
+		hBoxDeck.setPadding(new Insets(15,12,15,390));
 		//hBoxDeck.setSpacing(10);
-		borderPanePlayer.setBottom(hBoxDeck);
+		borderPanePlayer.setCenter(hBoxDeck);
+		
+		card13 = new ImageView(image2);
+		card13.setFitHeight(100);
+		card13.setFitWidth(66);
+		card13.setOnMouseClicked((e) -> {
+			System.out.println("Karte 13");
+		});
+		
+		card14 = new ImageView(image2);
+		card14.setFitHeight(100);
+		card14.setFitWidth(66);
+		card14.setOnMouseClicked((e) -> {
+			System.out.println("Karte 14");
+		});
+		
+		card15 = new ImageView(image2);
+		card15.setFitHeight(100);
+		card15.setFitWidth(66);
+		card15.setOnMouseClicked((e) -> {
+			System.out.println("Karte 15");
+		});
+		
+		
+		HBox hBoxWorldWonderCards = new HBox();
+		hBoxWorldWonderCards.setSpacing(120);
+		hBoxWorldWonderCards.setPadding(new Insets(15,12,15,475));
+		hBoxWorldWonderCards.getChildren().addAll(card13, card14, card15);
+		borderPanePlayer.setBottom(hBoxWorldWonderCards);
+		
 		
 		ImageView deck = new ImageView(new Image("file:./resource/images/boards/Board_01_A.jpg"));
 		deck.setFitHeight(250);
@@ -211,6 +329,15 @@ public class ClientView {
 		this.stage.show();
 	}
 	
+	protected void updateCardView(ImageView v, int i) {
+		if(i >= model.getMyPlayer().getPlayedCards().size()) {
+			//do nothing
+		}else {
+			v.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(i).getImageFileName()));
+		}
+
+		
+	}
 	private String getLanguageDescription(String identifier) {
 		if(Translator.getDefaultLocale().getLanguage().substring(0, 2).equalsIgnoreCase(translator.getString(identifier).substring(0, 2)))
 			return translator.getString(identifier) + " " + translator.getString("language.default");
@@ -222,17 +349,18 @@ public class ClientView {
 		ColStone.setText(translator.getString("column.stone"));
 		ColOre.setText(translator.getString("column.ore"));
 		ColWood.setText(translator.getString("column.wood"));
-		ColGlass.setText(translator.getString("column.glass"));
-		ColClay.setText(translator.getString("column.clay"));
+		ColGlass.setText(translator.getString("column.glas"));
+		ColClay.setText(translator.getString("column.brick"));
 		ColLoom.setText(translator.getString("column.loom"));
-		ColPaper.setText(translator.getString("column.paper"));
+		ColPaper.setText(translator.getString("column.papyrus"));
 		ColCoin.setText(translator.getString("column.coin"));
 		ColGeom.setText(translator.getString("column.geom"));
 		ColWrit.setText(translator.getString("column.writ"));
-		ColEng.setText(translator.getString("column.eng"));
+		ColEng.setText(translator.getString("column.fabric"));
 		ColShield.setText(translator.getString("column.shield"));
 		ColMilitary.setText(translator.getString("column.military"));
 		ColWinning.setText(translator.getString("column.winning"));
+		
 		ColType.setText(translator.getString("column.type"));
 		ColAmount.setText(translator.getString("column.amount"));
 		
@@ -255,7 +383,15 @@ public class ClientView {
 		menuLanguage.setText(translator.getString("menu.language"));
 		
 		stage.setTitle(translator.getString("clientGame.name"));
-		
+
+		//TODO fix translations
+		/*
+		this.model.getMyPlayer().getResources().getResourcesObservable().clear();
+		for(Entry<ResourceType, Integer> entry : this.model.getMyPlayer().getResources().entrySet()) {
+			ResourceType t = entry.getKey();
+			Integer v = entry.getValue();
+			this.model.getMyPlayer().getResources().getResourcesObservable().put(t, v);
+		}*/
 	}
 
 	public void start() {
