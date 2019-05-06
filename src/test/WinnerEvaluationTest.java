@@ -92,8 +92,14 @@ class WinnerEvaluationTest {
 
 	@Test
 	void evaluateWinnerTest() {
+		System.out.println(player.getResources());
+		System.out.println(leftPlayer.getResources());
+		System.out.println(rightPlayer.getResources());
 		List<Player> winnerList = model.evaluateWinner(player, leftPlayer, rightPlayer);
-		assertEquals(winnerList.get(2).getPlayerName(), "David");
+		System.out.println(player.getResources());
+		System.out.println(leftPlayer.getResources());
+		System.out.println(rightPlayer.getResources());
+		assertEquals(winnerList.get(0).getPlayerName(), "David");
 	}
 
 }

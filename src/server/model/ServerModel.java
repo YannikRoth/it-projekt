@@ -3,6 +3,7 @@ package server.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -248,6 +249,7 @@ public class ServerModel implements Serializable{
 			scoreList.add(p);
 		}
 		scoreList.sort(Comparator.comparing(p -> p.getWinningPoints()));
+		Collections.reverse(scoreList);
 		return scoreList;
 	}
 	//method for comparing all the military strength and deal military points
@@ -259,16 +261,16 @@ public class ServerModel implements Serializable{
 			int milPoints = this.cardAge == CardAge.ONE ? 1 : this.cardAge == CardAge.TWO ? 3 : 5;
 			
 			if(strengthOfPlayer < strengthOfLeftPlayer) {
-				p.updateMilitaryMinusPoints(-1);
+				p.addWinningPoints(-1);
 			}
 			if(strengthOfPlayer > strengthOfLeftPlayer) {
-				p.updateMilitaryPlusPoints(milPoints);
+				p.addWinningPoints(milPoints);
 			}
 			if(strengthOfPlayer < strengthOfRightPlayer) {
-				p.updateMilitaryMinusPoints(-1);
+				p.addWinningPoints(-1);
 			}
 			if(strengthOfPlayer > strengthOfRightPlayer) {
-				p.updateMilitaryPlusPoints(milPoints);
+				p.addWinningPoints(milPoints);
 			}
 	}
 	

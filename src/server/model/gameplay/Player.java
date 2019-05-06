@@ -143,11 +143,11 @@ public class Player implements Serializable{
 				this.addCoins((int)countOfOwnGreyCards + (int)countOfGreyCardsLeftPlayer + (int)countOfGreyCardsRightPlayer);
 			}
 			
-			int currentMilPoints = this.resources.get(ResourceType.MILITARYPLUSPOINTS);
-			this.resources.put(ResourceType.MILITARYPLUSPOINTS, currentMilPoints + c.getMilitaryPoints());
+			//int currentMilPoints = this.resources.get(ResourceType.MILITARYPLUSPOINTS);
+			//this.resources.put(ResourceType.MILITARYPLUSPOINTS, currentMilPoints + c.getMilitaryPoints());
 			//this.militaryStrength += c.getMilitaryPoints();
-			int currentWinningPoints = this.resources.get(ResourceType.WINNINPOINTS);
-			this.resources.put(ResourceType.WINNINPOINTS, currentWinningPoints + c.getWinningPoints());
+			//int currentWinningPoints = this.resources.get(ResourceType.WINNINPOINTS);
+			//this.resources.put(ResourceType.WINNINPOINTS, currentWinningPoints + c.getWinningPoints());
 			//this.winningPoints += c.getWinningPoints();
 			
 			return true;
