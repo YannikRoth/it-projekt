@@ -131,8 +131,44 @@ public class CardLoader {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * This method imports the master data (card) from the CSV file
+	 */
+	public static Map<Integer, Card> importCards() {
+		Map<Integer, Card> cards = new HashMap<>();
+		try {
+			CSVParser parser = new CSVParserBuilder()
+				.withSeparator(';')
+				.withIgnoreQuotations(true)
+				.build();
+				 
+			CSVReader csvReader = new CSVReaderBuilder(new FileReader("./resource/masterdata/card.csv"))
+			    .withSkipLines(1) //first line is header line, do not import
+			    .withCSVParser(parser)
+			    .build();
+			
+			List<String[]> myEntries = csvReader.readAll();
+
+			//i is the row
+			for(int i = 0; i < myEntries.size(); i++) {				
+				Card c = new Card(myEntries.get(i));
+				cards.put(c.getId(), c);
+				
+			}
+
+			csvReader.close();
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		
+		return cards;
 	}
 	
 	/**
