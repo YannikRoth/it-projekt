@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import globals.ClientAction;
@@ -39,29 +40,43 @@ public class ClientModel extends Thread {
 	private int numberofPlayers;
 	private ObjectInputStream objInputStream;
 	private ObjectOutputStream objOutputStream;
-	private ServerModel model;
+	//private ServerModel model;
 
 	private static final Logger logger = ServiceLocator.getLogger();
 
 	public ClientModel() {
 		refreshOtherPlayer(new Player("David"));
 		player = new Player("Mein Spieler");
-		player.getResources().put(ResourceType.BRICK, 20);
-		player.getResources().put(ResourceType.FABRIC, 25);
-		player.getResources().put(ResourceType.ORE, 230);
-		player.getResources().put(ResourceType.GLAS, 230);
-		player.getResources().put(ResourceType.PAPYRUS, 230);
-		player.getResources().put(ResourceType.STONE, 230);
-		player.getResources().put(ResourceType.WOOD, 230);
+//		player.getResources().put(ResourceType.BRICK, 20);
+//		player.getResources().put(ResourceType.FABRIC, 25);
+//		player.getResources().put(ResourceType.ORE, 230);
+//		player.getResources().put(ResourceType.GLAS, 230);
+//		player.getResources().put(ResourceType.PAPYRUS, 230);
+//		player.getResources().put(ResourceType.STONE, 230);
+//		player.getResources().put(ResourceType.WOOD, 230);
 
 //		this.playCard(this.getMyPlayer().getPlayableCards().get(0), ClientAction.PLAYCARD);
 //		Card c1 = model.getCard(1); //brick OR stone OR ore OR wood
 //		player.playCard(c1);
 //		System.out.println(model.getCard(1));
+		
+		//ServerModel model = new ServerModel();
+		Map<Integer, Card> cards = CardLoader.importCards();
+		this.getMyPlayer().playCard(cards.get(19));
+		this.getMyPlayer().playCard(cards.get(18));
+		this.getMyPlayer().playCard(cards.get(1));
+		Boolean f  = this.getMyPlayer().playCard(cards.get(7));
+		System.out.println(f);
+		//this.sendPlayedCard(this.getMyPlayer().getPlayedCards().get(0), ClientAction.PLAYCARD);
 	}
 	
 	
-	public void playCard(Card playedcard, ClientAction action) {
+	/**
+	 * Sends the played card to the server. It DOES NOT effectively plax the card on the player obj. To do so, use <code>getMyPlayer().playCard(Card c)</code>
+	 * @param playedcard
+	 * @param action
+	 */
+	public void sendPlayedCard(Card playedcard, ClientAction action) {
 		try {
 			
 			objOutputStream.writeObject(action);

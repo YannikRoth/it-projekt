@@ -448,13 +448,13 @@ public class Player implements Serializable{
 		//this.militaryMinusPoints =+ points;
 	}
 	public int getWinningPoints() {
-		return this.resources.get(ResourceType.WINNINPOINTS);
+		return this.resources.get(ResourceType.WINNINGPOINTS);
 		//return this.winningPoints;
 	}
 	
 	public void addWinningPoints (int points) {
-		int currentWinPoints = this.resources.get(ResourceType.WINNINPOINTS);
-		this.resources.put(ResourceType.WINNINPOINTS, currentWinPoints + points);
+		int currentWinPoints = this.resources.get(ResourceType.WINNINGPOINTS);
+		this.resources.put(ResourceType.WINNINGPOINTS, currentWinPoints + points);
 		//this.winningPoints += points;
 	}
 	

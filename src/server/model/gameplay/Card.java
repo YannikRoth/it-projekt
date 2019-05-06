@@ -159,7 +159,7 @@ public class Card implements Serializable{
 			}
 			if(fieldName.equals("victoryPoints")) {
 				//this.winningPoints = Integer.parseInt(values[i]);
-				this.produce.put(ResourceType.WINNINPOINTS, Integer.parseInt(values[i]));
+				this.produce.put(ResourceType.WINNINGPOINTS, Integer.parseInt(values[i]));
 				continue;
 			}
 			if(fieldName.equals("militaryPoints")) {
@@ -411,7 +411,7 @@ public class Card implements Serializable{
 	}
 
 	public int getWinningPoints() {
-		return this.produce.get(ResourceType.WINNINPOINTS);
+		return this.produce.get(ResourceType.WINNINGPOINTS);
 		//return winningPoints;
 	}
 	
