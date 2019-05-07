@@ -20,15 +20,14 @@ import javafx.stage.Stage;
 public class CardOptionView {
 	
 	private Stage stage;
-	private CardOptionModel cardOptionModel;
 	private ClientModel clientModel;
 	
 	protected ImageView[] cards;
 	protected Button playCard, buildWorldWonder, discardCard;
 	
-	public CardOptionView (Stage primaryStage, CardOptionModel model) {
+	public CardOptionView (Stage primaryStage, ClientModel model) {
 		this.stage = primaryStage;
-		this.cardOptionModel = model;
+		this.clientModel = model;
 		
 		BorderPane borderPaneMain = new BorderPane();
 		HBox cardBox = new HBox();
@@ -45,6 +44,7 @@ public class CardOptionView {
 		this.playCard = new Button("Karte spielen");
 		this.buildWorldWonder = new Button("Weltwunder bauen");
 		this.discardCard = new Button("Karte ablegen");
+		playCard.autosize();
 		buttonBox.getChildren().addAll(playCard, buildWorldWonder, discardCard);
 		
 		borderPaneMain.setTop(cardBox);

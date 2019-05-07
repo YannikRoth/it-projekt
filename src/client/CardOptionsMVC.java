@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import client.controller.CardOptionController;
 import client.controller.LobbyController;
 import client.model.CardOptionModel;
+import client.model.ClientModel;
 import client.model.LobbyModel;
 import client.view.CardOptionView;
 import client.view.LobbyView;
@@ -20,7 +21,7 @@ import server.ServiceLocator;
 
 public class CardOptionsMVC extends Application{
 	
-	private CardOptionModel model;
+	private ClientModel model;
 	private CardOptionView view;
 	private CardOptionController control;
 	private Logger logger = ServiceLocator.getLogger();	
@@ -31,7 +32,7 @@ public class CardOptionsMVC extends Application{
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		this.model = new CardOptionModel();
+		this.model = ServicelocatorClient.getClientModel();
 		this.view = new CardOptionView(primaryStage, model);
 		this.control = new CardOptionController(model, view);
 		view.start();
