@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -193,6 +194,26 @@ public class ClientModel extends Thread {
 				}
 			});
 		}
+	}
+	/**
+	 * @author Roman Leuenberger
+	 * @return
+	 * This method returns a Map with all playable cards and possible play option for each card
+	 */
+	public Map<Card, Map<String, Boolean>> getPlayOptionsOfCards() {
+		Map<Card, Map<String,Boolean>> cardsWithOptions = new HashMap<Card, Map<String, Boolean>>();
+		for (Card c : player.getPlayableCards()) {
+			Map<String, Boolean> optionValues = new HashMap<String, Boolean>();
+			optionValues.put("canBuildCard", false);
+			optionValues.put("canBuildWorldWonder", false);
+			optionValues.put("canLayDownCard", true);
+			if (player.isAbleToAffordCard(c)) {
+				
+			}
+			cardsWithOptions.put(c, optionValues);
+			//TODO evaluate possible options and change booleans
+		}
+		return cardsWithOptions;
 	}
 
 	public Player getMyPlayer() {
