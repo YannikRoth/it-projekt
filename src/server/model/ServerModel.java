@@ -124,7 +124,7 @@ public class ServerModel implements Serializable{
 		
 		List<Card> ageOneCards = new ArrayList<>(this.activeCards.get(this.cardAge.getAgeValue()-1).values());
 		Collections.shuffle(ageOneCards);
-		
+		//TODO add cards to each player using the method updatePlayerCards
 		
 		for(Entry<Player, ServerClientThread> serverClientThread : players.entrySet()) {
 			serverClientThread.getValue().start();
@@ -193,6 +193,7 @@ public class ServerModel implements Serializable{
 		activeCards.add(2, ageThree);
 		
 		//performing consistency check (as for now only for age 1 and 2)
+		//TODO if implementing age 3, this needs to be checked here as well
 		if(activeCards.get(0).size() != players.size() * 7) {
 			try {
 				throw new DataConsistencyException("Consistency check failed while preparing cards for age 1. Take a look at masterdata?");
