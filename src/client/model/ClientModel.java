@@ -10,9 +10,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import client.ServicelocatorClient;
+import client.view.CardOptionView;
 import globals.ClientAction;
 import globals.Globals;
 import globals.ServerAction;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import server.ServiceLocator;
@@ -121,6 +124,13 @@ public class ClientModel extends Thread {
 					}
 					setneigbours();
 					Cards.setAll(player.getPlayableCards());
+					Platform.runLater(new Runnable () {
+						@Override
+						public void run() {
+							CardOptionView view = new CardOptionView(ServicelocatorClient.getClientModel());
+						}
+					});
+					
 					break;
 
 				case INFORMATION:				

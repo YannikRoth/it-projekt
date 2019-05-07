@@ -1,5 +1,8 @@
 package client.view;
 
+import java.util.logging.Logger;
+
+import client.controller.ClientController;
 import client.model.CardOptionModel;
 import client.model.ClientModel;
 import javafx.scene.Scene;
@@ -10,6 +13,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import server.ServiceLocator;
 
 /**
  * 
@@ -21,21 +25,23 @@ public class CardOptionView {
 	
 	private Stage stage;
 	private ClientModel clientModel;
+	private ClientController clientControl;
+	private Logger logger = ServiceLocator.getLogger();
 	
 	protected ImageView[] cards;
 	protected Button playCard, buildWorldWonder, discardCard;
 	
-	public CardOptionView (Stage primaryStage, ClientModel model) {
-		this.stage = primaryStage;
+	public CardOptionView (ClientModel model) {
+		this.stage = new Stage();
 		this.clientModel = model;
 		
 		BorderPane borderPaneMain = new BorderPane();
 		HBox cardBox = new HBox();
 		VBox buttonBox = new VBox();
-		
 		cards = new ImageView[clientModel.getMyPlayer().getPlayableCards().size()];
 		for (int i = 0; i < clientModel.getMyPlayer().getPlayableCards().size()-1; i++) {
-			cards[i] = new ImageView(new Image("file:./resource/images/cards/"+clientModel.getMyPlayer().getPlayableCards().get(i).getCardName()+".jpg"));
+			//System.out.println("file:./resource/images/cards/"+clientModel.getMyPlayer().getPlayableCards().get(i).getImageFileName());
+			cards[i] = new ImageView(new Image("file:./resource/images/cards/"+clientModel.getMyPlayer().getPlayableCards().get(i).getImageFileName()));
 			cards[i].setFitHeight(130);
 			cards[i].setFitWidth(86);
 			cardBox.getChildren().add(cards[i]);
@@ -52,6 +58,8 @@ public class CardOptionView {
 		
 		Scene scene = new Scene(borderPaneMain);
 		this.stage.setScene(scene);
+		
+		stage.show();
 		
 	}
 	

@@ -19,7 +19,7 @@ import server.ServiceLocator;
  *
  */
 
-public class CardOptionsMVC extends Application{
+/*public class CardOptionsMVC extends Application{
 	
 	private ClientModel model;
 	private CardOptionView view;
@@ -40,4 +40,4 @@ public class CardOptionsMVC extends Application{
 		logger.info("CardOption MVC started");
 	}
 
-}
+}*/
