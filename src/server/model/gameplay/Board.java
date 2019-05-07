@@ -26,6 +26,7 @@ public class Board implements Serializable {
 	private String boardSide;
 	private String boardName;
 	private ResourceType producingResource;
+	private int nextStageToBuild;
 	
 	public Board(String[] values) {
 		Map<Integer, String> mapping = BoardLoader.getFieldMapping();
@@ -35,6 +36,7 @@ public class Board implements Serializable {
 		this.worldWonders[1] = new WorldWonder();
 		this.worldWonders[2] = new WorldWonder();
 		this.worldWonders[3] = new WorldWonder();
+		this.nextStageToBuild = 0;
 		
 		for(int i = 0; i< values.length; i++) {
 			String fieldName = mapping.get(i);
@@ -211,6 +213,20 @@ public class Board implements Serializable {
 	
 	public ResourceType getProducingResource() {
 		return this.producingResource;
+	}
+	
+	public void updateIndexOfNextWorldWonderStage() {
+		this.nextStageToBuild++;
+	}
+	/**
+	 * @author Roman Leuenberger
+	 * @return
+	 */
+	public WorldWonder getNextWorldWonderStage () {
+		if (this.worldWonders[this.nextStageToBuild] != null) {
+			return this.worldWonders[this.nextStageToBuild];
+		}
+		return null;		
 	}
 
 }

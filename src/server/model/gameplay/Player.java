@@ -165,6 +165,7 @@ public class Player implements Serializable{
 	public boolean playWorldWonder(WorldWonder ww) {
 		Card wwCard = ww.getWorldWonderCard();
 		if(isAbleToAffordCard(wwCard)) {
+			this.playerBoard.updateIndexOfNextWorldWonderStage();
 			this.updateResource(wwCard.getCost());
 			this.updateResource(wwCard.getProduction());
 			
@@ -445,5 +446,9 @@ public class Player implements Serializable{
 	}
 	public ArrayList<HashMap<ResourceType, Integer>> getAlternateResources(){
 		return this.alternateResources;
+	}
+	
+	public Board getPlayerBoard() {
+		return this.playerBoard;
 	}
 }

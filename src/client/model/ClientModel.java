@@ -200,18 +200,22 @@ public class ClientModel extends Thread {
 	 * @return
 	 * This method returns a Map with all playable cards and possible play option for each card
 	 */
-	public Map<Card, Map<String, Boolean>> getPlayOptionsOfCards() {
-		Map<Card, Map<String,Boolean>> cardsWithOptions = new HashMap<Card, Map<String, Boolean>>();
+	public Map<Card, Map<ClientAction, Boolean>> getPlayOptionsOfCards() {
+		Map<Card, Map<ClientAction,Boolean>> cardsWithOptions = new HashMap<Card, Map<ClientAction, Boolean>>();
 		for (Card c : player.getPlayableCards()) {
-			Map<String, Boolean> optionValues = new HashMap<String, Boolean>();
-			optionValues.put("canBuildCard", false);
-			optionValues.put("canBuildWorldWonder", false);
-			optionValues.put("canLayDownCard", true);
+			Map<ClientAction, Boolean> optionValues = new HashMap<ClientAction, Boolean>();
+			optionValues.put(ClientAction.PLAYCARD, false);
+			optionValues.put(ClientAction.BUILDWONDER, false);
+			optionValues.put(ClientAction.DISCARD, true);
 			if (player.isAbleToAffordCard(c)) {
-				
+				optionValues.replace(ClientAction.PLAYCARD, false, true);
+			}
+			if (player.getPlayerBoard().getNextWorldWonderStage() != null) {
+				if (player.isAbleToAffordCard(player.getPlayerBoard().getNextWorldWonderStage().getWorldWonderCard())) {
+					optionValues.replace(ClientAction.BUILDWONDER, false, true);
+				}
 			}
 			cardsWithOptions.put(c, optionValues);
-			//TODO evaluate possible options and change booleans
 		}
 		return cardsWithOptions;
 	}
