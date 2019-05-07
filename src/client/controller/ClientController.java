@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 import client.model.ClientModel;
+import client.view.CardOptionView;
 import client.view.ClientView;
 import globals.ClientAction;
 import globals.Translator;

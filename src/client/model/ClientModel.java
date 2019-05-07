@@ -124,7 +124,7 @@ public class ClientModel extends Thread {
 					}
 					setneigbours();
 					Cards.setAll(player.getPlayableCards());
-					Platform.runLater(new Runnable () {
+					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
 							CardOptionView view = new CardOptionView(ServicelocatorClient.getClientModel());

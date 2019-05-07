@@ -2,6 +2,7 @@ package client.view;
 
 import java.util.logging.Logger;
 
+import client.controller.CardOptionController;
 import client.controller.ClientController;
 import client.model.CardOptionModel;
 import client.model.ClientModel;
@@ -25,7 +26,7 @@ public class CardOptionView {
 	
 	private Stage stage;
 	private ClientModel clientModel;
-	private ClientController clientControl;
+	private CardOptionController control;
 	private Logger logger = ServiceLocator.getLogger();
 	
 	protected ImageView[] cards;
@@ -40,7 +41,6 @@ public class CardOptionView {
 		VBox buttonBox = new VBox();
 		cards = new ImageView[clientModel.getMyPlayer().getPlayableCards().size()];
 		for (int i = 0; i < clientModel.getMyPlayer().getPlayableCards().size()-1; i++) {
-			//System.out.println("file:./resource/images/cards/"+clientModel.getMyPlayer().getPlayableCards().get(i).getImageFileName());
 			cards[i] = new ImageView(new Image("file:./resource/images/cards/"+clientModel.getMyPlayer().getPlayableCards().get(i).getImageFileName()));
 			cards[i].setFitHeight(130);
 			cards[i].setFitWidth(86);
@@ -61,10 +61,23 @@ public class CardOptionView {
 		
 		stage.show();
 		
+		this.control = new CardOptionController (model, this);
 	}
 	
-	public void start () {
-		stage.show();
+	public Button getPlayCardButton() {
+		return this.playCard;
 	}
-
+	
+	public Button getBuildWorldWonderButton() {
+		return this.buildWorldWonder;
+	}
+	
+	public Button getDiscardCardButton() {
+		return this.discardCard;
+	}
+	
+	public void stopView() {
+		this.stage.close();
+	}
+	
 }
