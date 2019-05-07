@@ -252,7 +252,12 @@ public class ServerModel implements Serializable{
 		Collections.reverse(scoreList);
 		return scoreList;
 	}
-	//method for comparing all the military strength and deal military points
+	
+	/**
+	 * Method for comparing all the military strength and deal military points
+	 * @param p
+	 * @author Roman Leuenberger
+	 */
 	public void dealMilitaryPoints (Player p) {
 			int strengthOfPlayer = p.getMilitaryStrength();
 			int strengthOfLeftPlayer = p.getLeftPlayer().getMilitaryStrength();
@@ -272,6 +277,68 @@ public class ServerModel implements Serializable{
 			if(strengthOfPlayer > strengthOfRightPlayer) {
 				p.addWinningPoints(milPoints);
 			}
+	}
+	
+	/**
+	 * This method passes the cards from one player to the other. Direction is defined within the CardAge.
+	 * Precondition: Left and Right player for each player must be set!
+	 * Active players are taken from the Player Map.
+	 * @return
+	 * @author Yannik Roth
+	 */
+	public void passCardsToNextPlayer(CardAge age) {
+		String direction = age.getTurnDirection().toLowerCase();
+		List<Player> players = new ArrayList<>(this.players.keySet());
+
+		for (int i = 0; i < players.size(); i++) {
+			// this is the first player
+			if (i == 0) {
+				Player current = players.get(0);
+				Player left = players.get(players.size() - 1);
+				Player right = players.get(1);
+
+				// take cards and give them to player on the left
+				if (direction.equals("left")) {
+					left.updateCardset(current.getPlayableCards());
+				}
+				// take cards and give them to player on the right
+				else if (direction.equals("right")) {
+					right.updateCardset(current.getPlayableCards());
+				}
+			}
+			// this is the last player
+			else if (i == players.size() - 1) {
+				Player current = players.get(players.size() - 1);
+				Player left = players.get(players.size() - 2);
+				Player right = players.get(0);
+
+				// take cards and give them to player on the left
+				if (direction.equals("left")) {
+					left.updateCardset(current.getPlayableCards());
+				}
+				// take cards and give them to player on the right
+				else if (direction.equals("right")) {
+					right.updateCardset(current.getPlayableCards());
+				}
+
+			}
+			// this is a middle player
+			else {
+				Player current = players.get(i);
+				Player left = players.get(i - 1);
+				Player right = players.get(i + 1);
+
+				// take cards and give them to player on the left
+				if (direction.equals("left")) {
+					left.updateCardset(current.getPlayableCards());
+				}
+				// take cards and give them to player on the right
+				else if (direction.equals("right")) {
+					right.updateCardset(current.getPlayableCards());
+				}
+			}
+		}
+
 	}
 	
 	public int getNumberOfPlayers() {
