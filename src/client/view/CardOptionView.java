@@ -21,9 +21,9 @@ public class CardOptionView {
 	
 	private Stage stage;
 	private CardOptionModel cardOptionModel;
-	private ClientModel clientmodel;
+	private ClientModel clientModel;
 	
-	protected ImageView card1, card2, card3, card4, card5, card6, card7;
+	protected ImageView[] cards;
 	protected Button playCard, buildWorldWonder, discardCard;
 	
 	public CardOptionView (Stage primaryStage, CardOptionModel model) {
@@ -34,37 +34,13 @@ public class CardOptionView {
 		HBox cardBox = new HBox();
 		VBox buttonBox = new VBox();
 		
-		Image image = new Image("file:./resource/images/cards/SCN_0150.jpg");
-		
-		card1 = new ImageView(image);
-		card1.setFitHeight(130);
-		card1.setFitWidth(86);
-		
-		card2 = new ImageView(image);
-		card2.setFitHeight(130);
-		card2.setFitWidth(86);
-		
-		card3 = new ImageView(image);
-		card3.setFitHeight(130);
-		card3.setFitWidth(86);
-		
-		card4 = new ImageView(image);
-		card4.setFitHeight(130);
-		card4.setFitWidth(86);
-		
-		card5 = new ImageView(image);
-		card5.setFitHeight(130);
-		card5.setFitWidth(86);
-		
-		card6 = new ImageView(image);
-		card6.setFitHeight(130);
-		card6.setFitWidth(86);
-		
-		card7 = new ImageView(image);
-		card7.setFitHeight(130);
-		card7.setFitWidth(86);
-		
-		cardBox.getChildren().addAll(card1, card2, card3, card4, card5, card6, card7);
+		cards = new ImageView[clientModel.getMyPlayer().getPlayableCards().size()];
+		for (int i = 0; i < clientModel.getMyPlayer().getPlayableCards().size()-1; i++) {
+			cards[i] = new ImageView(new Image("file:./resource/images/cards/SCN_0"+String.format("%03d", clientModel.getMyPlayer().getPlayableCards().get(i).getId()+".jpg")));
+			cards[i].setFitHeight(130);
+			cards[i].setFitWidth(86);
+			cardBox.getChildren().add(cards[i]);
+		}
 		
 		this.playCard = new Button("Karte spielen");
 		this.buildWorldWonder = new Button("Weltwunder bauen");

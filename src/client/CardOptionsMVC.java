@@ -36,7 +36,7 @@ public class CardOptionsMVC extends Application{
 		this.control = new CardOptionController(model, view);
 		view.start();
 		
-		logger.info("Lobby MVC started");
+		logger.info("CardOption MVC started");
 	}
 
 }
