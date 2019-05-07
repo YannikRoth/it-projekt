@@ -29,6 +29,7 @@ public class ClientMVC extends Application{
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		this.model = new ClientModel();
+		ServicelocatorClient.setClientModel(model);
 		this.view = new ClientView(primaryStage, model);
 		this.control = new ClientController(model, view);
 		view.start();
