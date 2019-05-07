@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import globals.CardAge;
 import globals.CardType;
 import globals.CardType.CardColor;
+import globals.exception.DataConsistencyException;
 import server.ServiceLocator;
 import server.model.clienthandling.ServerClientThread;
 import server.model.clienthandling.ServerRequestHandler;
@@ -121,11 +122,17 @@ public class ServerModel implements Serializable{
 		assignPlayerNeighbors();
 		this.cardAge = CardAge.ONE;
 		
+		List<Card> ageOneCards = new ArrayList<>(this.activeCards.get(this.cardAge.getAgeValue()-1).values());
+		Collections.shuffle(ageOneCards);
+		
+		
 		for(Entry<Player, ServerClientThread> serverClientThread : players.entrySet()) {
 			serverClientThread.getValue().start();
 		}
+		
 	}		
 	
+
 	/**
 	 * Assign neighbors to players
 	 * @author yannik roth
@@ -152,6 +159,7 @@ public class ServerModel implements Serializable{
 
 	/**
 	 * This method initially loads all the effectiv required cards into the active cards array
+	 * Performs a consistency check and fails of masterdata contains inconsistent data
 	 * index0: Age 1
 	 * index1: Age 2
 	 * index2: Age 3
@@ -184,6 +192,25 @@ public class ServerModel implements Serializable{
 		activeCards.add(1, ageTwo);
 		activeCards.add(2, ageThree);
 		
+		//performing consistency check (as for now only for age 1 and 2)
+		if(activeCards.get(0).size() != players.size() * 7) {
+			try {
+				throw new DataConsistencyException("Consistency check failed while preparing cards for age 1. Take a look at masterdata?");
+			} catch (DataConsistencyException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				logger.info("Consistency check failed while preparing cards for age 1. Take a look at masterdata");
+			}
+		}
+		if(activeCards.get(1).size() != players.size() * 7) {
+			try {
+				throw new DataConsistencyException("Consistency check failed while preparing cards for age 2. Take a look at masterdata");
+			} catch (DataConsistencyException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				logger.info("Consistency check failed while preparing cards for age 2. Take a look at masterdata");
+			}
+		}
 	}
 
 	public Board getBoard(int i) {
