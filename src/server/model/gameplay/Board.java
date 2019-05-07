@@ -214,13 +214,17 @@ public class Board implements Serializable {
 	public ResourceType getProducingResource() {
 		return this.producingResource;
 	}
-	
+	/**
+	 * @author Roman Leuenberger
+	 */
 	public void updateIndexOfNextWorldWonderStage() {
 		this.nextStageToBuild++;
 	}
 	/**
 	 * @author Roman Leuenberger
 	 * @return
+	 * This method returns the next WonderStage to build
+	 * returns null if last WonderStage was build
 	 */
 	public WorldWonder getNextWorldWonderStage () {
 		if (this.worldWonders[this.nextStageToBuild] != null) {
