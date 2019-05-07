@@ -1,11 +1,8 @@
 package client.model;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Collections;
 import java.util.Comparator;
@@ -15,18 +12,13 @@ import java.util.logging.Logger;
 
 import globals.ClientAction;
 import globals.Globals;
-import globals.ResourceMapType;
-import globals.ResourceType;
 import globals.ServerAction;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import server.ServiceLocator;
-import server.model.ServerModel;
 import server.model.gameplay.Card;
 import server.model.gameplay.Player;
-import server.model.gameplay.ResourceMap;
 import server.model.init.CardLoader;
-import test.testclassserializable;
 
 /**
  * 
@@ -37,6 +29,7 @@ import test.testclassserializable;
 public class ClientModel extends Thread {
 
 	private Player player;
+	private ObservableList<Card> Cards = FXCollections.observableArrayList();
 	private ObservableList<Player> otherPlayers = FXCollections.observableArrayList();
 	private int numberofPlayers;
 	private ObjectInputStream objInputStream;
@@ -100,17 +93,18 @@ public class ClientModel extends Thread {
 		try (Socket socket = new Socket(Globals.getDefaultIPAddr(), Globals.getPortNr())) {
 			this.objOutputStream = new ObjectOutputStream(socket.getOutputStream());
 			this.objInputStream = new ObjectInputStream(socket.getInputStream());
-			
+			//waiting for Server input
 			while (((action = (ServerAction) objInputStream.readObject()) != null)) {
 				switch (action) {
-				case ESTABLISED:
+				//server notifys client the connection is established and sends its own player object
+				case ESTABLISHED:
 					numberofPlayers = (Integer) objInputStream.readObject();
 					synchronized(objInputStream) {
 						player = (Player) objInputStream.readObject();
 					}
 					logger.info("Connection and Game opened with "+numberofPlayers+" Players");
 					break;
-					
+				//Server wants the client to update his views with the new player objects	
 				case UPDATEVIEW:
 					Player tempplayer = null;
 					synchronized(objInputStream) {
@@ -126,7 +120,7 @@ public class ClientModel extends Thread {
 						}
 					}
 					setneigbours();
-					//refreshOtherPlayer();
+					Cards.setAll(player.getPlayableCards());
 					break;
 
 				case INFORMATION:				

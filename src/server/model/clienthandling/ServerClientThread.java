@@ -79,42 +79,47 @@ public class ServerClientThread extends Thread implements Serializable {
 		stop = false;
 		while (!stop) {
 			try {
+				//notify the client that updated player objects will be sent
 				synchronized(objOutputStream) {
 					objOutputStream.writeObject(ServerAction.UPDATEVIEW);
 					objOutputStream.flush();
 				}
+				//send all playerobjects to client
 				OutputAllplayers(player);
+				
+				
 				do {
-				action = (ClientAction) objInputStream.readObject();
-				switch (action) {
-				case PLAYCARD:
-					synchronized(objInputStream) {
-						cardplayed = (Card) objInputStream.readObject();
+					//get the action the client wishes to do with the incoming card
+					action = (ClientAction) objInputStream.readObject();
+					switch (action) {
+					case PLAYCARD:
+						synchronized(objInputStream) {
+							cardplayed = (Card) objInputStream.readObject();
+						}
+						logger.info(cardplayed.getCardName() + "Cards received from "
+									+ player.getPlayerName() + " with following Action: " + action);
+						break;
+	
+					case DISCARD:
+						synchronized(objInputStream) {
+							cardplayed = (Card) objInputStream.readObject();
+						}
+						logger.info(cardplayed.getCardName() + "Cards received from "
+									+ player.getPlayerName() + " with following Action: " + action);
+						break;
+					case BUILDWONDER:
+						synchronized(objInputStream) {
+							cardplayed = (Card) objInputStream.readObject();
+						}
+						logger.info(cardplayed.getCardName() + "Cards received from "
+									+ player.getPlayerName() + " with following Action: " + action);
+						//TODO function in Servermodel
+						break;				
+					default:
+						logger.info("An error occured during the Communication - invalid input from " + player.getPlayerName()+ " ----retry");
+						legalaction = false;
+						break;
 					}
-					logger.info(cardplayed.getCardName() + "Cards received from "
-								+ player.getPlayerName() + " with following Action: " + action);
-					break;
-
-				case DISCARD:
-					synchronized(objInputStream) {
-						cardplayed = (Card) objInputStream.readObject();
-					}
-					logger.info(cardplayed.getCardName() + "Cards received from "
-								+ player.getPlayerName() + " with following Action: " + action);
-					break;
-				case BUILDWONDER:
-					synchronized(objInputStream) {
-						cardplayed = (Card) objInputStream.readObject();
-					}
-					logger.info(cardplayed.getCardName() + "Cards received from "
-								+ player.getPlayerName() + " with following Action: " + action);
-					//TODO function in Servermodel
-					break;				
-				default:
-					logger.info("An error occured during the Communication - invalid input from " + player.getPlayerName()+ " ----retry");
-					legalaction = false;
-					break;
-				}
 				}while(!legalaction);
 				
 				
