@@ -46,13 +46,12 @@ public class CardOptionView {
 			cards[i].setFitWidth(86);
 			cardBox.getChildren().add(cards[i]);
 		}
-		
+		//TODO implement translations
 		this.playCard = new Button("Karte spielen");
 		this.buildWorldWonder = new Button("Weltwunder bauen");
 		this.discardCard = new Button("Karte ablegen");
-		playCard.autosize();
 		buttonBox.getChildren().addAll(playCard, buildWorldWonder, discardCard);
-		
+	
 		borderPaneMain.setTop(cardBox);
 		borderPaneMain.setCenter(buttonBox);
 		
