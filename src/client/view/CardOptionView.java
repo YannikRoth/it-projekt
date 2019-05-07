@@ -35,7 +35,7 @@ public class CardOptionView {
 		
 		cards = new ImageView[clientModel.getMyPlayer().getPlayableCards().size()];
 		for (int i = 0; i < clientModel.getMyPlayer().getPlayableCards().size()-1; i++) {
-			cards[i] = new ImageView(new Image("file:./resource/images/cards/SCN_0"+String.format("%03d", clientModel.getMyPlayer().getPlayableCards().get(i).getId()+".jpg")));
+			cards[i] = new ImageView(new Image("file:./resource/images/cards/"+clientModel.getMyPlayer().getPlayableCards().get(i).getCardName()+".jpg"));
 			cards[i].setFitHeight(130);
 			cards[i].setFitWidth(86);
 			cardBox.getChildren().add(cards[i]);
