@@ -353,6 +353,7 @@ public class Card implements Serializable{
 		this.cost = cost;
 		this.produce = produce;
 		this.id = ServiceLocator.getmanualCardId();
+		this.cardName = "fake WW card";
 	}
 	
 	/**
