@@ -62,12 +62,9 @@ public class CardOptionController {
 						view.getImageView(j).setEffect(null);
 					}
 				}
-			if(model.getPlayOptionsOfCards().get(tempCard).get(ClientAction.PLAYCARD)) {
-				view.getPlayCardButton().setDisable(false);
-			}
-			if(model.getPlayOptionsOfCards().get(tempCard).get(ClientAction.BUILDWONDER)) {
-				view.getPlayCardButton().setDisable(false);
-			}
+			view.getPlayCardButton().setDisable(!model.getPlayOptionsOfCards().get(tempCard).get(ClientAction.PLAYCARD));
+			view.getBuildWorldWonderButton().setDisable(!model.getPlayOptionsOfCards().get(tempCard).get(ClientAction.BUILDWONDER));
+			view.getDiscardCardButton().setDisable(!model.getPlayOptionsOfCards().get(tempCard).get(ClientAction.DISCARD));
 			});
 		}
 	}

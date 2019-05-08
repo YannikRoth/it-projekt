@@ -68,6 +68,7 @@ public class CardOptionView {
 		//disable Buttons as they get only activated if action is possible
 		playCard.setDisable(true);
 		buildWorldWonder.setDisable(true);
+		discardCard.setDisable(true);
 
 		cardBox.setSpacing(10);
 		cardBox.setPadding(new Insets(10,10,10,10));
