@@ -51,6 +51,7 @@ public class ServerClientThread extends Thread implements Serializable {
 		Cards.add(model.getCard(19));
 		player.setPlayerName("Martin_" + ServiceLocator.getmanualCardId());
 		player.updateCardset(Cards);
+		player.setBoard(servermodel.getBoard(7));
 		this.socket = socket;
 		//When the game starts the player object and numbers of players will be sent to the client
 		try {

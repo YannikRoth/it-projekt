@@ -277,7 +277,7 @@ public class ClientView {
 		borderPanePlayer.setBottom(hBoxWorldWonderCards);
 		
 		
-		ImageView deck = new ImageView(new Image("file:./resource/images/boards/Board_01_A.jpg"));
+		ImageView deck = new ImageView(new Image("file:./resource/images/boards/Board_06_A.jpg"));
 		deck.setFitHeight(250);
 		deck.setFitWidth(600);
 		

@@ -91,7 +91,7 @@ public class ServerModel implements Serializable{
 		if(players.size() < NUMBEROFPLAYERS) {
 			//add player to active player list
 			players.put(client.getPlayer(), client);
-			client.getPlayer().setBoard(boards.get(7));
+			//client.getPlayer().setBoard(boards.get(7));
 			logger.info("successfully added client");
 			if(players.size() >= NUMBEROFPLAYERS) {
 				logger.info("game Startet");
