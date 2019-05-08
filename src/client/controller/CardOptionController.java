@@ -4,6 +4,9 @@ import client.model.CardOptionModel;
 import client.model.ClientModel;
 import client.view.CardOptionView;
 import javafx.application.Platform;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 
 /**
  * 
@@ -22,6 +25,7 @@ public class CardOptionController {
 		processPlayCardButton();
 		processBuildWorldWonderButton();
 		processDiscardCardButton();
+		processClickOnImage();
 	}
 	
 	private void processPlayCardButton() {
@@ -43,6 +47,20 @@ public class CardOptionController {
 			System.out.println("DiscardCard");
 			view.stopView();
 		});
+	}
+	
+	private void processClickOnImage() {
+		for (int i = 0; i<view.getShownCards().length;i++) {
+			ImageView tempImage = view.getImageView(i);
+			tempImage.setOnMouseClicked(e ->{
+				tempImage.setEffect(new DropShadow(5, Color.RED));
+				for (int j = 0;j<view.getShownCards().length;j++) {
+					if(view.getImageView(j) != tempImage) {
+						view.getImageView(j).setEffect(null);
+					}
+				}
+			});
+		}
 	}
 
 }
