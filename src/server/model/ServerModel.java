@@ -119,12 +119,31 @@ public class ServerModel implements Serializable{
 		
 		//load cards to play into ArrayList
 		loadGameCards();
+		//assing player neighbors
 		assignPlayerNeighbors();
+		//set age initially to one
 		this.cardAge = CardAge.ONE;
 		
+		//initially randomize 7 cards per player and assign them
 		List<Card> ageOneCards = new ArrayList<>(this.activeCards.get(this.cardAge.getAgeValue()-1).values());
 		Collections.shuffle(ageOneCards);
-		//TODO add cards to each player using the method updatePlayerCards
+		int cardIndex = 0;
+		int loopIndex = 0;
+		int playerIndex = 1;
+		for(Entry<Player, ServerClientThread> entry : this.players.entrySet()) {
+			Player p = entry.getKey();
+			int start = loopIndex * 7;
+			int end = playerIndex * 7;
+			ArrayList<Card> tempCardList = new ArrayList<>();
+			while(start < end) {
+				tempCardList.add(ageOneCards.get(cardIndex));
+				cardIndex++;
+				start++;
+			}
+			p.updateCardset(tempCardList);
+			loopIndex++;
+			playerIndex++;
+		}
 		
 		for(Entry<Player, ServerClientThread> serverClientThread : players.entrySet()) {
 			serverClientThread.getValue().start();
