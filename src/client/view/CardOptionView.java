@@ -82,7 +82,7 @@ public class CardOptionView {
 		
 		stage.show();
 		
-		this.control = new CardOptionController (model, this);
+		this.control = new CardOptionController (this.clientModel, this);
 	}
 	
 	public Button getPlayCardButton() {
