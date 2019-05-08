@@ -8,7 +8,9 @@ import javafx.application.Platform;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import server.ServiceLocator;
 import server.model.gameplay.Card;
+import java.util.logging.Logger;
 
 /**
  * 
@@ -20,6 +22,8 @@ public class CardOptionController {
 	
 	private ClientModel model;
 	private CardOptionView view;
+	private Card selectedCard;
+	private Logger logger = ServiceLocator.getLogger();
 	
 	public CardOptionController (ClientModel model, CardOptionView view) {
 		this.model = model;
@@ -32,28 +36,31 @@ public class CardOptionController {
 	
 	private void processPlayCardButton() {
 		view.getPlayCardButton().setOnAction(e -> {
-			System.out.println("PlayCard");
+			model.getMyPlayer().playCard(this.selectedCard);
+			logger.info("Played Card");
 			view.stopView();
 		});
 	}
 	
 	private void processBuildWorldWonderButton() {
 		view.getBuildWorldWonderButton().setOnAction(e -> {
-			System.out.println("BuildWorldWonder");
+			model.getMyPlayer().playCard(this.selectedCard);
+			logger.info("Build WorldWonder");
 			view.stopView();
 		});
 	}
 	
 	private void processDiscardCardButton() {
 		view.getDiscardCardButton().setOnAction(e -> {
-			System.out.println("DiscardCard");
+			//TODO Method for discard card
+			logger.info("DiscardCard");
 			view.stopView();
 		});
 	}
 	
 	private void processClickOnImage() {
 		for (int i = 0; i<view.getShownCards().length;i++) {
-			Card tempCard = view.getCardsWithImages().get(view.getImageView(i));
+			this.selectedCard = view.getCardsWithImages().get(view.getImageView(i));
 			ImageView tempImage = view.getImageView(i);
 			tempImage.setOnMouseClicked(e ->{
 				tempImage.setEffect(new DropShadow(5, Color.RED));
@@ -62,9 +69,9 @@ public class CardOptionController {
 						view.getImageView(j).setEffect(null);
 					}
 				}
-			view.getPlayCardButton().setDisable(!model.getPlayOptionsOfCards().get(tempCard).get(ClientAction.PLAYCARD));
-			view.getBuildWorldWonderButton().setDisable(!model.getPlayOptionsOfCards().get(tempCard).get(ClientAction.BUILDWONDER));
-			view.getDiscardCardButton().setDisable(!model.getPlayOptionsOfCards().get(tempCard).get(ClientAction.DISCARD));
+			view.getPlayCardButton().setDisable(!model.getPlayOptionsOfCards().get(this.selectedCard).get(ClientAction.PLAYCARD));
+			view.getBuildWorldWonderButton().setDisable(!model.getPlayOptionsOfCards().get(this.selectedCard).get(ClientAction.BUILDWONDER));
+			view.getDiscardCardButton().setDisable(!model.getPlayOptionsOfCards().get(this.selectedCard).get(ClientAction.DISCARD));
 			});
 		}
 	}
