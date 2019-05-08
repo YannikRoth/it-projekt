@@ -3,10 +3,12 @@ package client.controller;
 import client.model.CardOptionModel;
 import client.model.ClientModel;
 import client.view.CardOptionView;
+import globals.ClientAction;
 import javafx.application.Platform;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import server.model.gameplay.Card;
 
 /**
  * 
@@ -51,6 +53,7 @@ public class CardOptionController {
 	
 	private void processClickOnImage() {
 		for (int i = 0; i<view.getShownCards().length;i++) {
+			Card tempCard = view.getCardsWithImages().get(view.getImageView(i));
 			ImageView tempImage = view.getImageView(i);
 			tempImage.setOnMouseClicked(e ->{
 				tempImage.setEffect(new DropShadow(5, Color.RED));
@@ -59,6 +62,12 @@ public class CardOptionController {
 						view.getImageView(j).setEffect(null);
 					}
 				}
+			if(model.getPlayOptionsOfCards().get(tempCard).get(ClientAction.PLAYCARD)) {
+				view.getPlayCardButton().setDisable(false);
+			}
+			if(model.getPlayOptionsOfCards().get(tempCard).get(ClientAction.BUILDWONDER)) {
+				view.getPlayCardButton().setDisable(false);
+			}
 			});
 		}
 	}

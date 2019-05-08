@@ -1,5 +1,7 @@
 package client.view;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import client.controller.CardOptionController;
@@ -19,6 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import server.ServiceLocator;
+import server.model.gameplay.Card;
 
 /**
  * 
@@ -33,6 +36,7 @@ public class CardOptionView {
 	private CardOptionController control;
 	private Logger logger = ServiceLocator.getLogger();
 	
+	private Map<ImageView, Card> cardWithImages = new HashMap();
 	protected ImageView[] cards;
 	protected Button playCard, buildWorldWonder, discardCard;
 	
@@ -49,6 +53,7 @@ public class CardOptionView {
 			cards[i].setFitHeight(130);
 			cards[i].setFitWidth(86);
 			cardBox.getChildren().add(cards[i]);
+			cardWithImages.put(cards[i], clientModel.getMyPlayer().getPlayableCards().get(i));
 		}
 		//TODO implement translations
 		this.playCard = new Button("Karte spielen");
@@ -59,6 +64,10 @@ public class CardOptionView {
 		playCard.setMaxWidth(200);
 		buildWorldWonder.setMaxWidth(200);
 		discardCard.setMaxWidth(200);
+		
+		//disable Buttons as they get only activated if action is possible
+		playCard.setDisable(true);
+		buildWorldWonder.setDisable(true);
 
 		cardBox.setSpacing(10);
 		cardBox.setPadding(new Insets(10,10,10,10));
@@ -98,6 +107,10 @@ public class CardOptionView {
 	
 	public ImageView getImageView (int i) {
 		return cards[i];
+	}
+	
+	public Map<ImageView, Card> getCardsWithImages(){
+		return this.cardWithImages;
 	}
 	
 }
