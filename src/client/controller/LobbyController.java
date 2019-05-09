@@ -30,7 +30,7 @@ public class LobbyController {
 		this.model = model;
 		this.view = view;
 		
-//		processNewGameButton();
+		processNewGameButton();
 		processRulesButton();
 		processQuitButton();
 		processGermanMenuItem();
@@ -61,19 +61,19 @@ public class LobbyController {
 	}
 
 
-//	private void processNewGameButton() {
-//		view.getNewGameButton().setOnAction((e) -> {
-//			Stage secondStage = new Stage();
-//			ClientMVC clientMVC = new ClientMVC();
-//			try {
-//				clientMVC.start(secondStage);
-//			} catch (Exception e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
+	private void processNewGameButton() {
+		view.getNewGameButton().setOnAction((e) -> {
+			Stage secondStage = new Stage();
+			ClientMVC clientMVC = new ClientMVC();
+			try {
+				clientMVC.start(secondStage);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 //			view.getStage().hide();
-//		});
-//	}
+		});
+	}
 	
 	private void processRulesButton() {
 		view.getRulesButton().setOnAction((e) -> {

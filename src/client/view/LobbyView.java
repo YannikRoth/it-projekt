@@ -99,17 +99,17 @@ public class LobbyView {
 		borderPaneMain.setBottom(hBoxPlayer);
 		
 		this.btnNewGame = new Button();
-		btnNewGame.setOnAction((e) -> {
-			Stage secondStage = new Stage();
-	    	ClientMVC clientMVC = new ClientMVC();
-	    	try {
-				clientMVC.start(secondStage);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-	    	this.stage.hide();
-		});
+//		btnNewGame.setOnAction((e) -> {
+//			Stage secondStage = new Stage();
+//	    	ClientMVC clientMVC = new ClientMVC();
+//	    	try {
+//				clientMVC.start(secondStage);
+//			} catch (Exception e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//	    	this.stage.hide();
+//		});
 		this.btnRules	= new Button();
 		this.btnQuit = new Button();
 

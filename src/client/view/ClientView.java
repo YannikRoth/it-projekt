@@ -1,6 +1,8 @@
 package client.view;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import client.model.ClientModel;
@@ -19,14 +21,17 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import server.model.gameplay.Card;
 import server.model.gameplay.Player;
 import server.model.gameplay.ResourceMap;
 
@@ -40,9 +45,11 @@ public class ClientView {
 	private Stage stage;
 	private ClientModel model;
 	private Translator translator = Translator.getTranslator();
-	Menu menuLanguage, menuHelp, menuGame;
+	private Menu menuLanguage, menuHelp, menuGame;
+	protected ImageView[] cards = new ImageView[12];
+	private Map<ImageView, Card> cardWithImages = new HashMap<>();
 	
-	protected ImageView card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12, card13, card14, card15, card16;
+	protected ImageView card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12, card13, card14, card15, card16, cardTest, selectedCard = null;
 	
 	TableColumn<Player, String> ColPlayer, ColStone, ColOre, ColWood, ColGlass, ColClay, ColLoom, ColPaper, ColCoin, ColGeom, ColWrit, ColEng, ColShield, ColMilitary, ColWinning;
 	TableColumn<ResourceType, String> ColType;
@@ -127,91 +134,156 @@ public class ClientView {
 		Image image = new Image("file:./resource/images/cards/SCN_0150.jpg");
 		Image image2 = new Image("file:./resource/images/cards/SCN_0151.jpg");
 //		Image image3 = new Image ("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(0).getImageFileName());
+		Image tempImage = new Image("file:./resource/images/cards/SCN_0150.jpg");
+		
+		cardTest = new ImageView(tempImage);
+		cardTest.setFitHeight(230);
+		cardTest.setFitWidth(153);
+
 		
 		card1 = new ImageView(image);
 		card1.setFitHeight(130);
 		card1.setFitWidth(86);
+		cards[0] = card1;
 		card1.setOnMouseClicked((e) -> {
 			System.out.println("Karte 1");
 			updateCardView(card1, 0);
+
+			if(card1 != this.selectedCard) {
+				card1.setEffect(new DropShadow(5, Color.RED));
+				card2.setEffect(null);
+				selectedCard = card1;
+				}
+
+			
+			cardTest.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(0).getImageFileName()));
 		});
 		
 		card2 = new ImageView(image);
 		card2.setFitHeight(130);
 		card2.setFitWidth(86);
+		cards[1] = card2;
 		card2.setOnMouseClicked((e) -> {
 			System.out.println("Karte 2");
 			updateCardView(card2, 1);
+			
+			if(card2 != this.selectedCard) {
+				card2.setEffect(new DropShadow(5, Color.RED));
+				card1.setEffect(null);
+				selectedCard = card2;
+				}
+			
+			cardTest.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(1).getImageFileName()));
 		});
 		
 		card3 = new ImageView(image);
 		card3.setFitHeight(130);
 		card3.setFitWidth(86);
+		cards[2] = card3;
 		card3.setOnMouseClicked((e) -> {
 			System.out.println("Karte 3");
+			updateCardView(card3, 2);
+			
+			cardTest.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(2).getImageFileName()));
 		});
 		
 		card4 = new ImageView(image);
 		card4.setFitHeight(130);
 		card4.setFitWidth(86);
+		cards[3] = card4;
 		card4.setOnMouseClicked((e) -> {
 			System.out.println("Karte 4");
+			updateCardView(card4, 3);
+			
+			cardTest.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(3).getImageFileName()));
 		});
 		
 		card5 = new ImageView(image);
 		card5.setFitHeight(130);
 		card5.setFitWidth(86);
+		cards[4] = card5;
 		card5.setOnMouseClicked((e) -> {
 			System.out.println("Karte 5");
+			updateCardView(card5, 4);
+			
+			cardTest.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(4).getImageFileName()));
 		});
 		
 		card6 = new ImageView(image);
 		card6.setFitHeight(130);
 		card6.setFitWidth(86);
+		cards[5] = card6;
 		card6.setOnMouseClicked((e) -> {
 			System.out.println("Karte 6");
+			updateCardView(card6, 5);
+			
+			cardTest.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(5).getImageFileName()));
 		});
 		
 		card7 = new ImageView(image2);
 		card7.setFitHeight(130);
 		card7.setFitWidth(86);
+		cards[6] = card7;
 		card7.setOnMouseClicked((e) -> {
 			System.out.println("Karte 7");
+			updateCardView(card7, 6);
+			
+			cardTest.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(6).getImageFileName()));
 		});
 		
 		card8 = new ImageView(image2);
 		card8.setFitHeight(130);
 		card8.setFitWidth(86);
+		cards[7] = card8;
 		card8.setOnMouseClicked((e) -> {
 			System.out.println("Karte 8");
+			updateCardView(card8, 7);
+			
+			cardTest.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(7).getImageFileName()));
 		});
 		
 		card9 = new ImageView(image2);
 		card9.setFitHeight(130);
 		card9.setFitWidth(86);
+		cards[8] = card9;
 		card9.setOnMouseClicked((e) -> {
 			System.out.println("Karte 9");
+			updateCardView(card9, 8);
+			
+			cardTest.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(8).getImageFileName()));
 		});
 		
 		card10 = new ImageView(image2);
 		card10.setFitHeight(130);
 		card10.setFitWidth(86);
+		cards[9] = card10;
 		card10.setOnMouseClicked((e) -> {
 			System.out.println("Karte 10");
+			updateCardView(card10, 9);
+			
+			cardTest.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(9).getImageFileName()));
 		});
 		
 		card11 = new ImageView(image2);
 		card11.setFitHeight(130);
 		card11.setFitWidth(86);
+		cards[10] = card11;
 		card11.setOnMouseClicked((e) -> {
 			System.out.println("Karte 11");
+			updateCardView(card11, 10);
+			
+			cardTest.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(10).getImageFileName()));
 		});
 		
 		card12 = new ImageView(image2);
 		card12.setFitHeight(130);
 		card12.setFitWidth(86);
+		cards[11] = card12;
 		card12.setOnMouseClicked((e) -> {
 			System.out.println("Karte 12");
+			updateCardView(card12, 11);
+			
+			cardTest.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(11).getImageFileName()));
 		});
 		
 		hBoxCards.getChildren().addAll(card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12);
@@ -244,7 +316,7 @@ public class ClientView {
 		
 		//Deck
 		HBox hBoxDeck = new HBox();
-		hBoxDeck.setPadding(new Insets(15,12,15,390));
+		hBoxDeck.setPadding(new Insets(15,12,15,125));
 		//hBoxDeck.setSpacing(10);
 		borderPanePlayer.setCenter(hBoxDeck);
 		
@@ -280,8 +352,8 @@ public class ClientView {
 		ImageView deck = new ImageView(new Image("file:./resource/images/boards/Board_06_A.jpg"));
 		deck.setFitHeight(250);
 		deck.setFitWidth(600);
-		
-		hBoxDeck.getChildren().addAll(deck);
+		hBoxDeck.setSpacing(120);
+		hBoxDeck.getChildren().addAll(cardTest, deck);
 		
 		//Menu "Game"
 		itemM1 = new MenuItem();
@@ -335,7 +407,6 @@ public class ClientView {
 		}else {
 			v.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(i).getImageFileName()));
 		}
-
 		
 	}
 	private String getLanguageDescription(String identifier) {
@@ -431,4 +502,20 @@ public class ClientView {
 	public MenuItem getEnglishItem() {
 		return this.itemM13;
 	}
+	
+//	public int getImageView (ImageView v) {
+//		int image;
+//		for(int j = 0; j < cards.length; j++) {
+//			if(cards[j] == v);
+//			image = Integer.parseInt(v.toString().substring(4, 5));
+//			return image;
+//		}
+//		
+//		return image;
+//	}
+	
+	public ImageView[] getShownCards() {
+		return this.cards;
+	}
+	
 }
