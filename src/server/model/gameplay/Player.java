@@ -143,13 +143,6 @@ public class Player implements Serializable{
 				this.addCoins((int)countOfOwnGreyCards + (int)countOfGreyCardsLeftPlayer + (int)countOfGreyCardsRightPlayer);
 			}
 			
-			//int currentMilPoints = this.resources.get(ResourceType.MILITARYPLUSPOINTS);
-			//this.resources.put(ResourceType.MILITARYPLUSPOINTS, currentMilPoints + c.getMilitaryPoints());
-			//this.militaryStrength += c.getMilitaryPoints();
-			//int currentWinningPoints = this.resources.get(ResourceType.WINNINPOINTS);
-			//this.resources.put(ResourceType.WINNINPOINTS, currentWinningPoints + c.getWinningPoints());
-			//this.winningPoints += c.getWinningPoints();
-			
 			return true;
 		}else {
 			logger.info("Can not afford card");
@@ -450,5 +443,17 @@ public class Player implements Serializable{
 	
 	public Board getPlayerBoard() {
 		return this.playerBoard;
+	}
+	
+	/**
+	 * This method is used to sell the card to the bank.
+	 * The player will receive 3 coins
+	 * @param Card c to be discarded/sold to the bank
+	 * @return boolean if the operation was sucessful
+	 */
+	public boolean discardCard(Card c) {
+		this.addCoins(3);
+		this.cards.add(c);
+		return true;
 	}
 }
