@@ -42,30 +42,32 @@ public class ServerClientThread extends Thread implements Serializable {
 		player = new Player("");
 		servermodel = model;
 		start = false;
-		ArrayList<Card> Cards = new ArrayList<>();
-		Cards.add(model.getCard(1));
-		Cards.add(model.getCard(5));
-		Cards.add(model.getCard(10));
-		Cards.add(model.getCard(11));
-		Cards.add(model.getCard(16));
-		Cards.add(model.getCard(19));
+//		ArrayList<Card> Cards = new ArrayList<>();
+//		Cards.add(model.getCard(1));
+//		Cards.add(model.getCard(5));
+//		Cards.add(model.getCard(10));
+//		Cards.add(model.getCard(11));
+//		Cards.add(model.getCard(16));
+//		Cards.add(model.getCard(19));
 		player.setPlayerName("Martin_" + ServiceLocator.getmanualCardId());
-		player.updateCardset(Cards);
+//		player.updateCardset(Cards);
+//		int randomNr = ServiceLocator.getRandomNumberInRange(1, 8);
+//		player.setBoard(servermodel.getBoard(randomNr));
 		player.setBoard(servermodel.getBoard(7));
 		this.socket = socket;
 		//When the game starts the player object and numbers of players will be sent to the client
 		try {
-
+//
 			objOutputStream = new ObjectOutputStream(this.socket.getOutputStream());
 			objInputStream = new ObjectInputStream(this.socket.getInputStream());
-
-			synchronized(objOutputStream) {
-				objOutputStream.writeObject(ServerAction.ESTABLISHED);
-				objOutputStream.writeObject(new Integer(model.getNumberOfPlayers()));
-				objOutputStream.writeObject(player);
-				objOutputStream.flush();
-			}		
-			
+//
+//			synchronized(objOutputStream) {
+//				objOutputStream.writeObject(ServerAction.ESTABLISHED);
+//				objOutputStream.writeObject(new Integer(model.getNumberOfPlayers()));
+//				objOutputStream.writeObject(player);
+//				objOutputStream.flush();
+//			}		
+//			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			logger.info("Error occured durring communication with client");
@@ -75,6 +77,19 @@ public class ServerClientThread extends Thread implements Serializable {
 	@Override
 	public void run() {
 		ClientAction action;
+		
+		//this sends the own player obj to the server
+		try {
+			synchronized (objInputStream) {
+				objOutputStream.writeObject(ServerAction.ESTABLISHED);
+				objOutputStream.writeObject(new Integer(servermodel.getNumberOfPlayers()));
+				objOutputStream.writeObject(this.player);
+				objOutputStream.flush();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		boolean legalaction = true;
 		Card cardplayed = null;
 		stop = false;

@@ -36,7 +36,7 @@ public class CardOptionView {
 	private CardOptionController control;
 	private Logger logger = ServiceLocator.getLogger();
 	
-	private Map<ImageView, Card> cardWithImages = new HashMap();
+	private Map<ImageView, Card> cardWithImages = new HashMap<>();
 	protected ImageView[] cards;
 	protected Button playCard, buildWorldWonder, discardCard;
 	

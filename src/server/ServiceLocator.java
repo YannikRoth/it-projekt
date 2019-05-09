@@ -3,6 +3,7 @@ package server;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Random;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
@@ -115,6 +116,12 @@ public class ServiceLocator {
 	public static int getmanualCardId() {
 		updateManualCardId();
 		return manualCardId;
+	}
+	
+	public static int getRandomNumberInRange(int lowerBound, int upperBound) {
+		Random rnd = new Random();
+		int i = rnd.nextInt(upperBound-lowerBound)+ lowerBound;
+		return i;
 	}
 	
 }

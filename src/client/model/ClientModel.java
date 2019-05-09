@@ -112,6 +112,7 @@ public class ClientModel extends Thread {
 					Player tempplayer = null;
 					synchronized(objInputStream) {
 						player = (Player) objInputStream.readObject();
+						System.out.println("My player has: " + player.getResources());
 					}
 					logger.info("Own Player Object "+player.getPlayerName()+" received from Server");
 					otherPlayers.clear();
