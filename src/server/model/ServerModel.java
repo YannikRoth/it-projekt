@@ -157,7 +157,7 @@ public class ServerModel implements Serializable{
 	public boolean handoutCards(List<Card> cardsToHandOut) {
 		//consistency check
 		try {
-			if (cardsToHandOut.size() != (players.size() * 7) - 1) {
+			if (cardsToHandOut.size() != (players.size() * 7) - 0) {
 				throw new DataConsistencyException("The card set passed to this methoded is invalid in its size");
 			}
 		} catch (DataConsistencyException e) {
