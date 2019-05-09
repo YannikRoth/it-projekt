@@ -36,7 +36,8 @@ public class CardOptionController {
 	
 	private void processPlayCardButton() {
 		view.getPlayCardButton().setOnAction(e -> {
-			model.getMyPlayer().playCard(this.selectedCard);
+			//model.getMyPlayer().playCard(this.selectedCard);
+			model.sendPlayedCard(this.selectedCard, ClientAction.PLAYCARD);
 			logger.info("Played Card");
 			view.stopView();
 		});
@@ -44,7 +45,8 @@ public class CardOptionController {
 	
 	private void processBuildWorldWonderButton() {
 		view.getBuildWorldWonderButton().setOnAction(e -> {
-			model.getMyPlayer().playCard(this.selectedCard);
+			//model.getMyPlayer().playCard(this.selectedCard);
+			model.sendPlayedCard(this.selectedCard, ClientAction.BUILDWONDER);
 			logger.info("Build WorldWonder");
 			view.stopView();
 		});
@@ -53,6 +55,7 @@ public class CardOptionController {
 	private void processDiscardCardButton() {
 		view.getDiscardCardButton().setOnAction(e -> {
 			//TODO Method for discard card
+			model.sendPlayedCard(this.selectedCard, ClientAction.DISCARD);
 			logger.info("DiscardCard");
 			view.stopView();
 		});

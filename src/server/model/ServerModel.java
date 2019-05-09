@@ -43,7 +43,6 @@ public class ServerModel implements Serializable{
 	
 	//gameplay specific variables
 	//index0 = age 1; index2 = age 3
-	//private List<Set<Entry<Integer, Card>>> activeCards = new ArrayList<>();
 	private List<Map<Integer, Card>> activeCards = new ArrayList<>();
 	private CardAge cardAge;
 	//end of gameplay specific varibales
@@ -56,8 +55,6 @@ public class ServerModel implements Serializable{
 		this.boards = new HashMap<>();
 		BoardLoader.importBoards(this);
 		logger.info(this.boards.size() + " boards have been sucessfully imported");
-		
-		//loadGameCards();
 		
 		//open server request handler
 		this.requesthandler = new ServerRequestHandler(this);
@@ -126,7 +123,50 @@ public class ServerModel implements Serializable{
 		
 		//initially randomize 7 cards per player and assign them
 		List<Card> ageOneCards = new ArrayList<>(this.activeCards.get(this.cardAge.getAgeValue()-1).values());
-		Collections.shuffle(ageOneCards);
+		handoutCards(ageOneCards);
+//		Collections.shuffle(ageOneCards);
+//		int cardIndex = 0;
+//		int loopIndex = 0;
+//		int playerIndex = 1;
+//		for(Entry<Player, ServerClientThread> entry : this.players.entrySet()) {
+//			Player p = entry.getKey();
+//			int start = loopIndex * 7;
+//			int end = playerIndex * 7;
+//			ArrayList<Card> tempCardList = new ArrayList<>();
+//			while(start < end) {
+//				tempCardList.add(ageOneCards.get(cardIndex));
+//				cardIndex++;
+//				start++;
+//			}
+//			p.updateCardset(tempCardList);
+//			loopIndex++;
+//			playerIndex++;
+//		}
+		
+		for(Entry<Player, ServerClientThread> serverClientThread : players.entrySet()) {
+			serverClientThread.getValue().start();
+		}
+		
+	}
+	
+	/**
+	 * This method shuffles the card set and assigns each player 7 cards
+	 * @param cardsToHandOut
+	 * @return void (updates the {@link Player} object)
+	 */
+	public boolean handoutCards(List<Card> cardsToHandOut) {
+		//consistency check
+		try {
+			if (cardsToHandOut.size() != (players.size() * 7) - 1) {
+				throw new DataConsistencyException("The card set passed to this methoded is invalid in its size");
+			}
+		} catch (DataConsistencyException e) {
+			logger.info("The card set passed to this methoded is invalid in its size");
+			e.printStackTrace();
+			return false;
+		}
+		//shuffle the cardset
+		Collections.shuffle(cardsToHandOut);
 		int cardIndex = 0;
 		int loopIndex = 0;
 		int playerIndex = 1;
@@ -136,7 +176,7 @@ public class ServerModel implements Serializable{
 			int end = playerIndex * 7;
 			ArrayList<Card> tempCardList = new ArrayList<>();
 			while(start < end) {
-				tempCardList.add(ageOneCards.get(cardIndex));
+				tempCardList.add(cardsToHandOut.get(cardIndex));
 				cardIndex++;
 				start++;
 			}
@@ -144,12 +184,9 @@ public class ServerModel implements Serializable{
 			loopIndex++;
 			playerIndex++;
 		}
+		return true;
 		
-		for(Entry<Player, ServerClientThread> serverClientThread : players.entrySet()) {
-			serverClientThread.getValue().start();
-		}
-		
-	}		
+	}
 	
 
 	/**

@@ -96,14 +96,16 @@ public class ServerClientThread extends Thread implements Serializable {
 					case PLAYCARD:
 						synchronized(objInputStream) {
 							cardplayed = (Card) objInputStream.readObject();
+							this.player.playCard(cardplayed);
 						}
-						logger.info(cardplayed.getCardName() + "Cards received from "
+						logger.info(cardplayed.getCardName() + " Cards received from "
 									+ player.getPlayerName() + " with following Action: " + action);
 						break;
 	
 					case DISCARD:
 						synchronized(objInputStream) {
 							cardplayed = (Card) objInputStream.readObject();
+							this.player.discardCard(cardplayed);
 						}
 						logger.info(cardplayed.getCardName() + "Cards received from "
 									+ player.getPlayerName() + " with following Action: " + action);
