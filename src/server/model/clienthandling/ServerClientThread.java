@@ -121,6 +121,8 @@ public class ServerClientThread extends Thread implements Serializable {
 					case BUILDWONDER:
 						synchronized(objInputStream) {
 							cardplayed = (Card) objInputStream.readObject();
+							this.player.playWorldWonder(this.player.getBoard().getNextWorldWonderStage());
+							this.player.removeCardFromCurrentPlayabled(cardplayed);
 						}
 						logger.info(cardplayed.getCardName() + "Cards received from "
 									+ player.getPlayerName() + " with following Action: " + action);
@@ -149,6 +151,7 @@ public class ServerClientThread extends Thread implements Serializable {
 	public void OutputAllplayers(Player curplayer) throws IOException {
 		System.out.println("Sending players " + curplayer.getPlayerName() + " " + curplayer.getPlayableCards());
 		synchronized(objOutputStream) {
+			objOutputStream.reset();
 			objOutputStream.writeObject(curplayer);
 			objOutputStream.flush();
 		}

@@ -69,6 +69,7 @@ public class Player implements Serializable{
 		this.resources = new ResourceMap(ResourceMapType.PRODUCE);
 		this.alternateResources = new ArrayList<>();
 		this.cards = new ArrayList<>();
+		this.worldWonderCards = new ArrayList<>();
 	}
 	
 	/**
@@ -462,9 +463,13 @@ public class Player implements Serializable{
 		return true;
 	}
 	
-	private void removeCardFromCurrentPlayabled(Card c) {
+	public void removeCardFromCurrentPlayabled(Card c) {
 		Card cr = this.currentPlayableCards.remove(this.currentPlayableCards.indexOf(c));
 		System.out.println("removed card: " + cr);
 		System.out.println("now available cards: " + currentPlayableCards);
+	}
+	
+	public Board getBoard() {
+		return this.playerBoard;
 	}
 }
