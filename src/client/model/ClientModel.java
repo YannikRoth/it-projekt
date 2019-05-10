@@ -215,10 +215,12 @@ public class ClientModel extends Thread {
 			optionValues.put(ClientAction.DISCARD, true);
 			if (player.isAbleToAffordCard(c)) {
 				optionValues.replace(ClientAction.PLAYCARD, false, true);
+				//optionValues.put(ClientAction.PLAYCARD, true);
 			}
 			if (player.getPlayerBoard().getNextWorldWonderStage() != null) {
 				if (player.isAbleToAffordCard(player.getPlayerBoard().getNextWorldWonderStage().getWorldWonderCard())) {
 					optionValues.replace(ClientAction.BUILDWONDER, false, true);
+					//optionValues.put(ClientAction.BUILDWONDER, true);
 				}
 			}
 			cardsWithOptions.put(c, optionValues);

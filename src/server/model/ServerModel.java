@@ -17,6 +17,7 @@ import globals.CardAge;
 import globals.CardType;
 import globals.CardType.CardColor;
 import globals.exception.DataConsistencyException;
+import javafx.util.converter.NumberStringConverter;
 import server.ServiceLocator;
 import server.model.clienthandling.ServerClientThread;
 import server.model.clienthandling.ServerRequestHandler;
@@ -34,6 +35,7 @@ public class ServerModel implements Serializable{
 	private ServerRequestHandler requesthandler;
 	
 	public volatile int counter = 0;
+	private volatile int cardPlayCounter = 0;
 	
 	//cards and boards are imported when class is initialized
 	//KEY = Item ID
@@ -118,6 +120,7 @@ public class ServerModel implements Serializable{
 		
 		//load cards to play into ArrayList
 		loadGameCards();
+		
 		//assing player neighbors
 		assignPlayerNeighbors();
 		//set age initially to one
@@ -131,9 +134,6 @@ public class ServerModel implements Serializable{
 		for(Entry<Player, ServerClientThread> serverClientThread : players.entrySet()) {
 			serverClientThread.getValue().start();
 		}
-		
-		
-		
 	}
 	
 	/**
@@ -397,6 +397,32 @@ public class ServerModel implements Serializable{
 			System.out.println("passing cards to neighbors");
 			this.passCardsToNextPlayer(this.cardAge);
 			this.counter=0;
+		}
+		
+		//the code below could be transfered to another place, this is for quick and dirty testing
+		cardPlayCounter++;
+		if(this.cardPlayCounter == NUMBEROFPLAYERS * 5) {
+			System.out.println("Entering age 2");
+			for(Entry<Player, ServerClientThread> p : this.players.entrySet()) {
+				Player player = p.getKey();
+				this.dealMilitaryPoints(player);
+			}
+			//load second card age
+			this.cardAge = CardAge.TWO;
+			//initially randomize 7 cards per player and assign them
+			List<Card> ageTwoCards = new ArrayList<>(this.activeCards.get(this.cardAge.getAgeValue()-1).values());
+			handoutCards(ageTwoCards);
+			//cardPlayCounter = 0;
+		}
+		if(this.cardPlayCounter == NUMBEROFPLAYERS * 5 * 2) {
+			System.out.println("Entering age 3");
+			for(Entry<Player, ServerClientThread> p : this.players.entrySet()) {
+				Player player = p.getKey();
+				this.dealMilitaryPoints(player);
+			}
+			//this.cardAge = CardAge.THREE;
+			//List<Card> ageThreeCards = new ArrayList<>(this.activeCards.get(this.cardAge.getAgeValue()-1).values());
+			//handoutCards(ageThreeCards);
 		}
 		
 	}

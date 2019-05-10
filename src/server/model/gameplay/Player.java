@@ -70,6 +70,10 @@ public class Player implements Serializable{
 		this.alternateResources = new ArrayList<>();
 		this.cards = new ArrayList<>();
 		this.worldWonderCards = new ArrayList<>();
+		
+		//init player according to rules
+		this.addCoins(3);
+		//this.playerBoard = model.getBoard(7);
 	}
 	
 	/**
