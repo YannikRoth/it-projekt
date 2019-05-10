@@ -509,4 +509,9 @@ public class Card implements Serializable{
 		}
 	}
 	
+	@Override
+	public String toString() {
+		return "Cardname: " + this.cardName + "-> ID: " + this.id;
+	}
+	
 }
