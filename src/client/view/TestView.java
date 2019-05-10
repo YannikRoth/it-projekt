@@ -48,9 +48,9 @@ public class TestView extends Application {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Player, String> param) {
                 return param.getValue().getResources().containsKey(
-                        param.getTableColumn().getUserData())
-                        ? new SimpleStringProperty(String.format("%.1f",param.getValue().getResources().get(
-                        		param.getTableColumn().getUserData())))
+                        ResourceType.valueOf((String)param.getTableColumn().getUserData()))
+                        ? new SimpleStringProperty(Integer.toString(param.getValue().getResources().get(
+                        		ResourceType.valueOf((String)param.getTableColumn().getUserData()))))
                         :new SimpleStringProperty("");
             }
         };
@@ -66,7 +66,7 @@ public class TestView extends Application {
         playerTable.getColumns().addAll(cols);
 
         VBox root = new VBox(playerTable);
-        Scene scene = new Scene(root, 700, 250);
+        Scene scene = new Scene(root, 900, 250);
 
         primaryStage.setTitle("Table with map");
         primaryStage.setScene(scene);

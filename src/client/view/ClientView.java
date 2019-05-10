@@ -1,16 +1,17 @@
 package client.view;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import client.model.ClientModel;
 import globals.ResourceType;
 import globals.Translator;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.collections.ObservableMap;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -31,9 +32,9 @@ import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.util.Callback;
 import server.model.gameplay.Card;
 import server.model.gameplay.Player;
-import server.model.gameplay.ResourceMap;
 
 /**
  * 
@@ -51,7 +52,9 @@ public class ClientView {
 	
 	protected ImageView card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12, card13, card14, card15, card16, cardTest, selectedCard = null;
 	
-	TableColumn<Player, String> ColPlayer, ColStone, ColOre, ColWood, ColGlass, ColClay, ColLoom, ColPaper, ColCoin, ColGeom, ColWrit, ColEng, ColShield, ColMilitary, ColWinning;
+	TableColumn<Player, String> colPlayer;
+//	TableColumn<Player, String> ColStone, ColOre, ColWood, ColGlass, ColClay, ColLoom, ColPaper, ColCoin, ColGeom, ColWrit, ColEng, ColShield, ColMilitary, ColWinning;
+	
 	TableColumn<ResourceType, String> ColType;
 	TableColumn<ResourceType, Integer> ColAmount;
 	
@@ -78,44 +81,69 @@ public class ClientView {
 		BorderPane borderPaneMain = new BorderPane();
 		
 		//Table View opponents
-		TableView<Player> tableOpponents = new TableView();
+		TableView<Player> tableOpponents = new TableView<>();
 		tableOpponents.setEditable(false);
 		tableOpponents.setItems(model.getOtherPlayers());
 		borderPaneMain.setCenter(tableOpponents);
 		
-		ColPlayer = new TableColumn<Player, String>("Player");
-		ColPlayer.setMinWidth(100);
-		ColPlayer.setCellValueFactory(new PropertyValueFactory<Player, String>("playerName"));
-		ColStone = new TableColumn("Stone");
-		ColStone.setMinWidth(100);
-		ColOre = new TableColumn("Ore");
-		ColOre.setMinWidth(100);
-		ColWood = new TableColumn("Wood");
-		ColWood.setMinWidth(100);
-		ColGlass = new TableColumn("Glass");
-		ColGlass.setMinWidth(100);
-		ColClay = new TableColumn("Clay");
-		ColClay.setMinWidth(100);
-		ColLoom = new TableColumn("Loom");
-		ColLoom.setMinWidth(100);
-		ColPaper = new TableColumn("Paper");
-		ColPaper.setMinWidth(100);
-		ColCoin = new TableColumn("Coin");
-		ColCoin.setMinWidth(100);
-		ColGeom = new TableColumn("Geom");
-		ColGeom.setMinWidth(100);
-		ColWrit = new TableColumn("Writ");
-		ColWrit.setMinWidth(100);
-		ColEng = new TableColumn("Eng");
-		ColEng.setMinWidth(100);
-		ColShield = new TableColumn("Shield");
-		ColShield.setMinWidth(100);
-		ColMilitary = new TableColumn("Military");
-		ColMilitary.setMinWidth(100);
-		ColWinning = new TableColumn("Winning");
-		ColWinning.setMinWidth(100);
+		colPlayer = new TableColumn<Player, String>("Player");
+		colPlayer.setMinWidth(100);
+		colPlayer.setCellValueFactory(new PropertyValueFactory<Player, String>("playerName"));
+		tableOpponents.getColumns().add(colPlayer);
 		
-		tableOpponents.getColumns().addAll(ColPlayer, ColStone, ColOre, ColWood, ColGlass, ColClay, ColLoom, ColPaper, ColCoin, ColGeom, ColWrit, ColEng, ColShield, ColMilitary, ColWinning);
+		/**
+		 * Defines dynamic colums and fill values from player ressource map
+		 * @author david
+		 */
+        Callback<TableColumn.CellDataFeatures<Player, String>, ObservableValue<String>> callBack = 
+                new Callback<TableColumn.CellDataFeatures<Player, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Player, String> param) {
+                return param.getValue().getResources().containsKey(
+                        ResourceType.valueOf((String)param.getTableColumn().getUserData()))
+                        ? new SimpleStringProperty(Integer.toString(param.getValue().getResources().get(
+                        		ResourceType.valueOf((String)param.getTableColumn().getUserData()))))
+                        :new SimpleStringProperty("");
+            }
+        };
+        ObservableList<TableColumn<Player, String>> cols = FXCollections.observableArrayList();
+        for (ResourceType t : ResourceType.values()) {
+        	TableColumn<Player, String> tmpCol = new TableColumn<>(t.toStringTranslate());
+        	tmpCol.setUserData(t.name());
+        	tmpCol.setCellValueFactory(callBack);
+        	cols.add(tmpCol);
+		}
+        tableOpponents.getColumns().addAll(cols);
+		
+//		ColStone = new TableColumn("Stone");
+//		ColStone.setMinWidth(100);
+//		ColOre = new TableColumn("Ore");
+//		ColOre.setMinWidth(100);
+//		ColWood = new TableColumn("Wood");
+//		ColWood.setMinWidth(100);
+//		ColGlass = new TableColumn("Glass");
+//		ColGlass.setMinWidth(100);
+//		ColClay = new TableColumn("Clay");
+//		ColClay.setMinWidth(100);
+//		ColLoom = new TableColumn("Loom");
+//		ColLoom.setMinWidth(100);
+//		ColPaper = new TableColumn("Paper");
+//		ColPaper.setMinWidth(100);
+//		ColCoin = new TableColumn("Coin");
+//		ColCoin.setMinWidth(100);
+//		ColGeom = new TableColumn("Geom");
+//		ColGeom.setMinWidth(100);
+//		ColWrit = new TableColumn("Writ");
+//		ColWrit.setMinWidth(100);
+//		ColEng = new TableColumn("Eng");
+//		ColEng.setMinWidth(100);
+//		ColShield = new TableColumn("Shield");
+//		ColShield.setMinWidth(100);
+//		ColMilitary = new TableColumn("Military");
+//		ColMilitary.setMinWidth(100);
+//		ColWinning = new TableColumn("Winning");
+//		ColWinning.setMinWidth(100);
+//		tableOpponents.getColumns().addAll(ColPlayer, ColStone, ColOre, ColWood, ColGlass, ColClay, ColLoom, ColPaper, ColCoin, ColGeom, ColWrit, ColEng, ColShield, ColMilitary, ColWinning);
 		
 		//Player Deck
 		HBox hBoxPlayer = new HBox();
@@ -416,21 +444,21 @@ public class ClientView {
 	}
 	
 	public void setTexts() {
-		ColPlayer.setText(translator.getString("column.player"));
-		ColStone.setText(translator.getString("column.stone"));
-		ColOre.setText(translator.getString("column.ore"));
-		ColWood.setText(translator.getString("column.wood"));
-		ColGlass.setText(translator.getString("column.glas"));
-		ColClay.setText(translator.getString("column.brick"));
-		ColLoom.setText(translator.getString("column.loom"));
-		ColPaper.setText(translator.getString("column.papyrus"));
-		ColCoin.setText(translator.getString("column.coin"));
-		ColGeom.setText(translator.getString("column.geom"));
-		ColWrit.setText(translator.getString("column.writ"));
-		ColEng.setText(translator.getString("column.fabric"));
-		ColShield.setText(translator.getString("column.shield"));
-		ColMilitary.setText(translator.getString("column.military"));
-		ColWinning.setText(translator.getString("column.winning"));
+		colPlayer.setText(translator.getString("column.player"));
+//		ColStone.setText(translator.getString("column.stone"));
+//		ColOre.setText(translator.getString("column.ore"));
+//		ColWood.setText(translator.getString("column.wood"));
+//		ColGlass.setText(translator.getString("column.glas"));
+//		ColClay.setText(translator.getString("column.brick"));
+//		ColLoom.setText(translator.getString("column.loom"));
+//		ColPaper.setText(translator.getString("column.papyrus"));
+//		ColCoin.setText(translator.getString("column.coin"));
+//		ColGeom.setText(translator.getString("column.geom"));
+//		ColWrit.setText(translator.getString("column.writ"));
+//		ColEng.setText(translator.getString("column.fabric"));
+//		ColShield.setText(translator.getString("column.shield"));
+//		ColMilitary.setText(translator.getString("column.military"));
+//		ColWinning.setText(translator.getString("column.winning"));
 		
 		ColType.setText(translator.getString("column.type"));
 		ColAmount.setText(translator.getString("column.amount"));
