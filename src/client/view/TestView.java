@@ -48,9 +48,9 @@ public class TestView extends Application {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Player, String> param) {
                 return param.getValue().getResources().containsKey(
-                        ResourceType.valueOf((String)param.getTableColumn().getUserData()))
+                        param.getTableColumn().getUserData())
                         ? new SimpleStringProperty(Integer.toString(param.getValue().getResources().get(
-                        		ResourceType.valueOf((String)param.getTableColumn().getUserData()))))
+                        		param.getTableColumn().getUserData())))
                         :new SimpleStringProperty("");
             }
         };
@@ -58,7 +58,7 @@ public class TestView extends Application {
         ObservableList<TableColumn<Player, String>> cols = FXCollections.observableArrayList();
         for (ResourceType t : ResourceType.values()) {
         	TableColumn<Player, String> tmpCol = new TableColumn<>(t.toStringTranslate());
-        	tmpCol.setUserData(t.name());
+        	tmpCol.setUserData(t);
         	tmpCol.setCellValueFactory(callBack);
         	cols.add(tmpCol);
 			
