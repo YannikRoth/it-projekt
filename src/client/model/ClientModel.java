@@ -58,12 +58,12 @@ public class ClientModel extends Thread {
 //		System.out.println(model.getCard(1));
 		
 		//ServerModel model = new ServerModel();
-		Map<Integer, Card> cards = CardLoader.importCards();
-		this.getMyPlayer().playCard(cards.get(19));
-		this.getMyPlayer().playCard(cards.get(18));
-		this.getMyPlayer().playCard(cards.get(1));
-		Boolean f  = this.getMyPlayer().playCard(cards.get(7));
-		System.out.println(f);
+//		Map<Integer, Card> cards = CardLoader.importCards();
+//		this.getMyPlayer().playCard(cards.get(19));
+//		this.getMyPlayer().playCard(cards.get(18));
+//		this.getMyPlayer().playCard(cards.get(1));
+//		Boolean f  = this.getMyPlayer().playCard(cards.get(7));
+//		System.out.println(f);
 		//this.sendPlayedCard(this.getMyPlayer().getPlayedCards().get(0), ClientAction.PLAYCARD);
 	}
 	
