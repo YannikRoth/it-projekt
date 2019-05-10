@@ -1,13 +1,10 @@
 package client.view;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Random;
 
 import globals.ResourceType;
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -74,23 +71,5 @@ public class TestView extends Application {
         primaryStage.setTitle("Table with map");
         primaryStage.setScene(scene);
         primaryStage.show();
-    }
-
-    public class Student {
-
-        private final StringProperty firstName = new SimpleStringProperty();
-        public StringProperty firstNameProperty(){return firstName;}
-        public final HashMap<String, Double> map;
-
-        public Student(String fn) {
-            firstName.set(fn);
-            map = new LinkedHashMap<>();
-            for (int i = 1; i <= 10; i++) {
-                double grade = Math.random();
-                if (grade > .5) {
-                    map.put("ass" + Integer.toString(i), grade);
-                }
-            }
-        }
     }
 }
