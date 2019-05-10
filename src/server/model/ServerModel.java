@@ -33,6 +33,8 @@ public class ServerModel implements Serializable{
 	private Map<Player, ServerClientThread> players = new HashMap<>();
 	private ServerRequestHandler requesthandler;
 	
+	public volatile int counter = 0;
+	
 	//cards and boards are imported when class is initialized
 	//KEY = Item ID
 	// Value = Card or Board Object
@@ -124,28 +126,13 @@ public class ServerModel implements Serializable{
 		//initially randomize 7 cards per player and assign them
 		List<Card> ageOneCards = new ArrayList<>(this.activeCards.get(this.cardAge.getAgeValue()-1).values());
 		handoutCards(ageOneCards);
-//		Collections.shuffle(ageOneCards);
-//		int cardIndex = 0;
-//		int loopIndex = 0;
-//		int playerIndex = 1;
-//		for(Entry<Player, ServerClientThread> entry : this.players.entrySet()) {
-//			Player p = entry.getKey();
-//			int start = loopIndex * 7;
-//			int end = playerIndex * 7;
-//			ArrayList<Card> tempCardList = new ArrayList<>();
-//			while(start < end) {
-//				tempCardList.add(ageOneCards.get(cardIndex));
-//				cardIndex++;
-//				start++;
-//			}
-//			p.updateCardset(tempCardList);
-//			loopIndex++;
-//			playerIndex++;
-//		}
 		
+		//start all threads
 		for(Entry<Player, ServerClientThread> serverClientThread : players.entrySet()) {
 			serverClientThread.getValue().start();
 		}
+		
+		
 		
 	}
 	
@@ -430,6 +417,17 @@ public class ServerModel implements Serializable{
 	}
 	public void setNumberOfPlayers(int i) {
 		NUMBEROFPLAYERS = i;
+	}
+
+	public synchronized void updateGameStatus() {
+		counter++;
+		System.out.println("this is round: " + counter);
+		
+		if(counter >= NUMBEROFPLAYERS) {
+			//pass cards to other players
+			counter=0;
+		}
+		
 	}
 	
 }

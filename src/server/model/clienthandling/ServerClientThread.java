@@ -95,6 +95,18 @@ public class ServerClientThread extends Thread implements Serializable {
 		stop = false;
 		while (!stop) {
 			try {
+				
+				while(servermodel.counter != 0) {
+					//wait
+					logger.info("waiting...");
+					try {
+						this.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				
 				//notify the client that updated player objects will be sent
 				synchronized(objOutputStream) {
 					objOutputStream.writeObject(ServerAction.UPDATEVIEW);
@@ -140,6 +152,8 @@ public class ServerClientThread extends Thread implements Serializable {
 					}
 				}while(!legalaction);
 				
+				//this method is used to pass the card to the next player
+				servermodel.updateGameStatus();
 				
 				//TODO wait for Servermodel to notify the updated cardset and other players
 			} catch (IOException e) {
