@@ -48,6 +48,7 @@ public class CardOptionView {
 		HBox cardBox = new HBox();
 		VBox buttonBox = new VBox();
 		cards = new ImageView[clientModel.getMyPlayer().getPlayableCards().size()];
+		System.out.println(clientModel.getMyPlayer().getPlayableCards());
 		for (int i = 0; i < clientModel.getMyPlayer().getPlayableCards().size(); i++) {
 			cards[i] = new ImageView(new Image("file:./resource/images/cards/"+clientModel.getMyPlayer().getPlayableCards().get(i).getImageFileName()));
 			cards[i].setFitHeight(130);
@@ -81,6 +82,7 @@ public class CardOptionView {
 		Scene scene = new Scene(borderPaneMain);
 		this.stage.setScene(scene);
 		
+		stage.setTitle("Player: " + clientModel.getMyPlayer().getPlayerName());
 		stage.show();
 		
 		this.control = new CardOptionController (this.clientModel, this);

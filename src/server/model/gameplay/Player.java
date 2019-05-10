@@ -143,7 +143,10 @@ public class Player implements Serializable{
 				this.addCoins((int)countOfOwnGreyCards + (int)countOfGreyCardsLeftPlayer + (int)countOfGreyCardsRightPlayer);
 			}
 			
+			removeCardFromCurrentPlayabled(c);
+			
 			return true;
+			
 		}else {
 			logger.info("Can not afford card");
 			return false;
@@ -353,8 +356,9 @@ public class Player implements Serializable{
 		return false;
 	}
 	
-	public void updateCardset(ArrayList<Card> Cards) {
-		currentPlayableCards = Cards;
+	public void updateCardset(ArrayList<Card> cards) {
+		//currentPlayableCards.clear();
+		currentPlayableCards = cards;
 	}
 	
 	@Override
@@ -449,11 +453,18 @@ public class Player implements Serializable{
 	 * This method is used to sell the card to the bank.
 	 * The player will receive 3 coins
 	 * @param Card c to be discarded/sold to the bank
-	 * @return boolean if the operation was sucessful
+	 * @return boolean if the operation was successful
 	 */
 	public boolean discardCard(Card c) {
 		this.addCoins(3);
-		this.cards.add(c);
+		//this.cards.add(c);
+		removeCardFromCurrentPlayabled(c);
 		return true;
+	}
+	
+	private void removeCardFromCurrentPlayabled(Card c) {
+		Card cr = this.currentPlayableCards.remove(this.currentPlayableCards.indexOf(c));
+		System.out.println("removed card: " + cr);
+		System.out.println("now available cards: " + currentPlayableCards);
 	}
 }

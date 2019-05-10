@@ -111,8 +111,10 @@ public class ClientModel extends Thread {
 				case UPDATEVIEW:
 					Player tempplayer = null;
 					synchronized(objInputStream) {
-						player = (Player) objInputStream.readObject();
+						this.player = null; //explict delete own old player
+						this.player = (Player) objInputStream.readObject();
 						System.out.println("My player has: " + player.getResources());
+						System.out.println(player.getPlayerName() + "_My playable cards are: " + player.getPlayableCards());
 					}
 					logger.info("Own Player Object "+player.getPlayerName()+" received from Server");
 					otherPlayers.clear();

@@ -360,54 +360,23 @@ public class ServerModel implements Serializable{
 	public void passCardsToNextPlayer(CardAge age) {
 		String direction = age.getTurnDirection().toLowerCase();
 		List<Player> players = new ArrayList<>(this.players.keySet());
-
-		for (int i = 0; i < players.size(); i++) {
-			// this is the first player
-			if (i == 0) {
-				Player current = players.get(0);
-				Player left = players.get(players.size() - 1);
-				Player right = players.get(1);
-
-				// take cards and give them to player on the left
-				if (direction.equals("left")) {
-					left.updateCardset(current.getPlayableCards());
-				}
-				// take cards and give them to player on the right
-				else if (direction.equals("right")) {
-					right.updateCardset(current.getPlayableCards());
-				}
-			}
-			// this is the last player
-			else if (i == players.size() - 1) {
-				Player current = players.get(players.size() - 1);
-				Player left = players.get(players.size() - 2);
-				Player right = players.get(0);
-
-				// take cards and give them to player on the left
-				if (direction.equals("left")) {
-					left.updateCardset(current.getPlayableCards());
-				}
-				// take cards and give them to player on the right
-				else if (direction.equals("right")) {
-					right.updateCardset(current.getPlayableCards());
-				}
-
-			}
-			// this is a middle player
-			else {
-				Player current = players.get(i);
-				Player left = players.get(i - 1);
-				Player right = players.get(i + 1);
-
-				// take cards and give them to player on the left
-				if (direction.equals("left")) {
-					left.updateCardset(current.getPlayableCards());
-				}
-				// take cards and give them to player on the right
-				else if (direction.equals("right")) {
-					right.updateCardset(current.getPlayableCards());
-				}
-			}
+		
+		List<ArrayList<Card>> playerCards = new ArrayList<>();
+		for(int i = 0; i< players.size(); i++) {
+			playerCards.add(players.get(i).getPlayableCards());
+		}
+		
+		if(direction.equals("left")) {
+			playerCards.add(0, null);
+			playerCards.set(0, playerCards.get(playerCards.size()-1));
+			playerCards.remove(playerCards.size()-1);
+		}else {
+			playerCards.add(players.get(0).getPlayableCards());
+			playerCards.remove(0);
+		}
+		
+		for(int i = 0; i< players.size(); i++) {
+			players.get(i).updateCardset(playerCards.get(i));
 		}
 
 	}
@@ -420,12 +389,14 @@ public class ServerModel implements Serializable{
 	}
 
 	public synchronized void updateGameStatus() {
-		counter++;
+		this.counter++;
 		System.out.println("this is round: " + counter);
 		
 		if(counter >= NUMBEROFPLAYERS) {
 			//pass cards to other players
-			counter=0;
+			System.out.println("passing cards to neighbors");
+			this.passCardsToNextPlayer(this.cardAge);
+			this.counter=0;
 		}
 		
 	}
