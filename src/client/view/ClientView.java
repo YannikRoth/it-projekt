@@ -419,8 +419,8 @@ public class ClientView {
 	}
 	
 	public void setTexts() {
+		//Table opponents translations
 		colPlayer.setText(translator.getString("column.player"));
-		dynamicCols.forEach(c -> System.out.println(((ResourceType)c.getUserData()).toStringTranslate()));
 		dynamicCols.forEach(c -> c.setText(((ResourceType)c.getUserData()).toStringTranslate()));
 		
 		ColType.setText(translator.getString("column.type"));
