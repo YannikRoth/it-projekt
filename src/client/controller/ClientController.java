@@ -4,6 +4,7 @@ package client.controller;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import client.model.ClientModel;
 import client.view.CardOptionView;
@@ -12,6 +13,11 @@ import globals.ClientAction;
 import globals.Translator;
 import javafx.application.Platform;
 import javafx.scene.control.MenuItem;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+import server.ServiceLocator;
+import server.model.gameplay.Card;
 
 /**
  * 
@@ -23,6 +29,8 @@ public class ClientController {
 
 	private ClientModel model;
 	private ClientView view;
+	private Card selectedCard;
+	private Logger logger = ServiceLocator.getLogger();
 	
 	public ClientController(ClientModel model, ClientView view) {
 		this.model = model;
@@ -33,6 +41,10 @@ public class ClientController {
 		processQuitItem();
 		processGermanItem();
 		processEnglishItem();
+		processPlayCardButton();
+		processBuildWorldWonderButton();
+		processDiscardCardButton();
+//		processClickOnImage();
 		
 	}
 	
@@ -99,4 +111,50 @@ public class ClientController {
 		});
 	}
 
+	private void processPlayCardButton() {
+		view.getPlayCardButton().setOnAction(e -> {
+			//model.getMyPlayer().playCard(this.selectedCard);
+			model.sendPlayedCard(this.selectedCard, ClientAction.PLAYCARD);
+			logger.info("Played Card");
+
+		});
+	}
+	
+	private void processBuildWorldWonderButton() {
+		view.getBuildWorldWonderButton().setOnAction(e -> {
+			//model.getMyPlayer().playCard(this.selectedCard);
+			model.sendPlayedCard(this.selectedCard, ClientAction.BUILDWONDER);
+			logger.info("Build WorldWonder");
+
+		});
+	}
+	
+	private void processDiscardCardButton() {
+		view.getDiscardCardButton().setOnAction(e -> {
+			//TODO Method for discard card
+			model.sendPlayedCard(this.selectedCard, ClientAction.DISCARD);
+			logger.info("DiscardCard");
+
+		});
+	}
+	
+//	private void processClickOnImage() {
+//		for (int i = 0; i<view.getShownCards().length;i++) {
+//			this.selectedCard = view.getCardsWithImages().get(view.getImageView(i));
+//			ImageView tempImage = view.getImageView(i);
+//			tempImage.setOnMouseClicked(e ->{
+//				tempImage.setEffect(new DropShadow(5, Color.RED));
+//				for (int j = 0;j<view.getShownCards().length;j++) {
+//					if(view.getImageView(j) != tempImage) {
+//						view.getImageView(j).setEffect(null);
+//					}
+//				}
+//			view.getPlayCardButton().setDisable(!model.getPlayOptionsOfCards().get(this.selectedCard).get(ClientAction.PLAYCARD));
+//			view.getBuildWorldWonderButton().setDisable(!model.getPlayOptionsOfCards().get(this.selectedCard).get(ClientAction.BUILDWONDER));
+//			view.getDiscardCardButton().setDisable(!model.getPlayOptionsOfCards().get(this.selectedCard).get(ClientAction.DISCARD));
+//			});
+//		}
+//	}
+
 }
+

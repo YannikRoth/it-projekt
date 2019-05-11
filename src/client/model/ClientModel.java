@@ -32,7 +32,7 @@ import server.model.init.CardLoader;
 public class ClientModel extends Thread {
 
 	private Player player;
-	private ObservableList<Card> Cards = FXCollections.observableArrayList();
+	public ObservableList<Card> Cards = FXCollections.observableArrayList();
 	private ObservableList<Player> otherPlayers = FXCollections.observableArrayList();
 	private int numberofPlayers;
 	private ObjectInputStream objInputStream;
