@@ -117,6 +117,13 @@ public class ServerView {
 		this.btnChangePort		= new Button();
 		this.btnRestartServer	= new Button("Restart Server");
 		
+		/**
+		 * disabled till the functionality can be implemented
+		 * @author david
+		 */
+		this.btnChangePort.setDisable(true);
+		this.btnRestartServer.setDisable(true);
+		
 		hBox.getChildren().addAll(fieldDomain, fieldIpAdress, fieldPort, btnChangePort, btnRestartServer);
 		
 		//TableView Bottom
