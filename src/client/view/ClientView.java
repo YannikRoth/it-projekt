@@ -58,20 +58,19 @@ public class ClientView {
 	
 	protected ImageView card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12, card13, card14, card15, card16, cardPlayable1, cardPlayable2, cardPlayable3, cardPlayable4, cardPlayable5, cardPlayable6, cardPlayable7, selectedCard = null;
 	
-	TableView<Player> tableOpponents = new TableView<>();
-	TableColumn<Player, String> colPlayer;
-	ObservableList<TableColumn<Player, String>> dynamicCols = FXCollections.observableArrayList();
+	private TableView<Player> tableOpponents = new TableView<>();
+	private TableColumn<Player, String> colPlayer;
+	private ObservableList<TableColumn<Player, String>> dynamicCols = FXCollections.observableArrayList();
 	
-	TableView<ResourceType> tablePoints = new TableView<>();
-	TableColumn<ResourceType, String> ColType;
-	TableColumn<ResourceType, Integer> ColAmount;
+	private TableView<ResourceType> tablePoints = new TableView<>();
+	private TableColumn<ResourceType, String> ColType;
+	private TableColumn<ResourceType, Integer> ColAmount;
 	
 	MenuItem itemM1, itemM2, itemM3, itemM4, itemM5, itemM6, itemM7, itemM8, itemM9, itemM10, itemM11, itemM12, itemM13;
 	private Button playCard;
 	private Button buildWorldWonder;
 	private Button discardCard;
 	
-
 	public ClientView(Stage primaryStage, ClientModel model) {
 		this.stage = primaryStage;
 		this.model = model;
@@ -556,4 +555,11 @@ public class ClientView {
 		return this.cardWithImages;
 	}
 	
+	public TableView<Player> getTableOpponents() {
+		return tableOpponents;
+	}
+	
+	public TableView<ResourceType> getTablePoints() {
+		return tablePoints;
+	}
 }

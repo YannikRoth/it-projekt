@@ -16,6 +16,7 @@ import globals.ClientAction;
 import globals.Globals;
 import globals.ServerAction;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import server.ServiceLocator;
@@ -32,6 +33,7 @@ import server.model.init.CardLoader;
 public class ClientModel extends Thread {
 
 	private Player player;
+//	SimpleObjectProperty<Player> player;
 	public ObservableList<Card> Cards = FXCollections.observableArrayList();
 	private ObservableList<Player> otherPlayers = FXCollections.observableArrayList();
 	private int numberofPlayers;
@@ -103,8 +105,7 @@ public class ClientModel extends Thread {
 				case ESTABLISHED:
 					numberofPlayers = (Integer) objInputStream.readObject();
 					synchronized(objInputStream) {
-						player = (Player) objInputStream.readObject();
-						//todo: david
+						setMyPlayer((Player) objInputStream.readObject());
 					}
 					logger.info("Connection and Game opened with "+numberofPlayers+" Players");
 					break;
@@ -112,11 +113,11 @@ public class ClientModel extends Thread {
 				case UPDATEVIEW:
 					Player tempplayer = null;
 					synchronized(objInputStream) {
-						this.player = (Player) objInputStream.readObject();
-						System.out.println("My player has: " + player.getResources());
-						System.out.println(player.getPlayerName() + "_My playable cards are: " + player.getPlayableCards());
+						setMyPlayer((Player) objInputStream.readObject());
+						System.out.println("My player has: " + getMyPlayer().getResources());
+						System.out.println(getMyPlayer().getPlayerName() + "_My playable cards are: " + getMyPlayer().getPlayableCards());
 					}
-					logger.info("Own Player Object "+player.getPlayerName()+" received from Server");
+					logger.info("Own Player Object "+getMyPlayer().getPlayerName()+" received from Server");
 					otherPlayers.clear();
 					synchronized(otherPlayers) {
 						for (int i = 0; i < numberofPlayers - 1; i++) {
@@ -126,7 +127,7 @@ public class ClientModel extends Thread {
 						}
 					}
 					setneigbours();
-					Cards.setAll(player.getPlayableCards());
+					Cards.setAll(getMyPlayer().getPlayableCards());
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
@@ -153,29 +154,29 @@ public class ClientModel extends Thread {
 			logger.info(e.getLocalizedMessage());
 		} catch (ClassNotFoundException e) {
 			logger.info(e.getLocalizedMessage());
-		}
+		} 
+//		catch (InterruptedException e) {
+//			logger.info(e.getLocalizedMessage());
+//		}
 	}
 
 	private void setneigbours() {
 		//iterrate through all players
-			player.setRightPlayer(otherPlayers.get(0));
-			player.setLeftPlayer(otherPlayers.get(otherPlayers.size()-1));
+		getMyPlayer().setRightPlayer(otherPlayers.get(0));
+		getMyPlayer().setLeftPlayer(otherPlayers.get(otherPlayers.size()-1));
 			
-			for (int p = 0; p < otherPlayers.size(); p++) {
-				if(p==0) {
-					otherPlayers.get(0).setLeftPlayer(player);
-					otherPlayers.get(p).setRightPlayer(otherPlayers.get(p+1));	
-				}else if (p==otherPlayers.size()-1) {
-					otherPlayers.get(otherPlayers.size()-1).setRightPlayer(player);	
-					otherPlayers.get(p).setLeftPlayer(otherPlayers.get(p-1));
-				}else {
-					otherPlayers.get(p).setLeftPlayer(otherPlayers.get(p-1));
-					otherPlayers.get(p).setRightPlayer(otherPlayers.get(p+1));	
-				}
+		for (int p = 0; p < otherPlayers.size(); p++) {
+			if(p==0) {
+				otherPlayers.get(0).setLeftPlayer(getMyPlayer());
+				otherPlayers.get(p).setRightPlayer(otherPlayers.get(p+1));	
+			}else if (p==otherPlayers.size()-1) {
+				otherPlayers.get(otherPlayers.size()-1).setRightPlayer(getMyPlayer());	
+				otherPlayers.get(p).setLeftPlayer(otherPlayers.get(p-1));
+			}else {
+				otherPlayers.get(p).setLeftPlayer(otherPlayers.get(p-1));
+				otherPlayers.get(p).setRightPlayer(otherPlayers.get(p+1));	
 			}
-			
-			
-		
+		}
 	}
 
 
@@ -211,17 +212,17 @@ public class ClientModel extends Thread {
 	 */
 	public Map<Card, Map<ClientAction, Boolean>> getPlayOptionsOfCards() {
 		Map<Card, Map<ClientAction,Boolean>> cardsWithOptions = new HashMap<Card, Map<ClientAction, Boolean>>();
-		for (Card c : player.getPlayableCards()) {
+		for (Card c : getMyPlayer().getPlayableCards()) {
 			Map<ClientAction, Boolean> optionValues = new HashMap<ClientAction, Boolean>();
 			optionValues.put(ClientAction.PLAYCARD, false);
 			optionValues.put(ClientAction.BUILDWONDER, false);
 			optionValues.put(ClientAction.DISCARD, true);
-			if (player.isAbleToAffordCard(c)) {
+			if (getMyPlayer().isAbleToAffordCard(c)) {
 				optionValues.replace(ClientAction.PLAYCARD, false, true);
 				//optionValues.put(ClientAction.PLAYCARD, true);
 			}
-			if (player.getPlayerBoard().getNextWorldWonderStage() != null) {
-				if (player.isAbleToAffordCard(player.getPlayerBoard().getNextWorldWonderStage().getWorldWonderCard())) {
+			if (getMyPlayer().getPlayerBoard().getNextWorldWonderStage() != null) {
+				if (getMyPlayer().isAbleToAffordCard(getMyPlayer().getPlayerBoard().getNextWorldWonderStage().getWorldWonderCard())) {
 					optionValues.replace(ClientAction.BUILDWONDER, false, true);
 					//optionValues.put(ClientAction.BUILDWONDER, true);
 				}
@@ -233,9 +234,13 @@ public class ClientModel extends Thread {
 
 	public Player getMyPlayer() {
 		return player;
+//		return player.get();
 	}
 
 	public void setMyPlayer(Player player) {
 		this.player = player;
+//		this.player.set(player);
+//		ServicelocatorClient.getClientView().getTablePoints().setItems(
+//				player.getResources().getResourcesListObservable());
 	}
 }

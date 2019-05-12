@@ -7,6 +7,7 @@ import java.net.UnknownHostException;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import globals.Globals;
 import globals.Translator;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -109,6 +110,7 @@ public class ServerView {
 		}
 		fieldPort		= new TextField();
 		fieldPort.setEditable(false);
+		fieldPort.setText(Integer.toString(Globals.getPortNr()));
 		
 		this.btnChangePort		= new Button();
 		this.btnRestartServer	= new Button("Restart Server");
