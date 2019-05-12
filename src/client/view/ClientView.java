@@ -93,6 +93,9 @@ public class ClientView {
 		colPlayer.setCellValueFactory(new PropertyValueFactory<Player, String>("playerName"));
 		tableOpponents.getColumns().add(colPlayer);
 		
+		/**
+		 * Idea from https://stackoverflow.com/questions/21639108/javafx-tableview-objects-with-maps
+		 */
         Callback<TableColumn.CellDataFeatures<Player, String>, ObservableValue<String>> callBack = 
                 new Callback<TableColumn.CellDataFeatures<Player, String>, ObservableValue<String>>() {
             @Override
@@ -101,7 +104,7 @@ public class ClientView {
                         param.getTableColumn().getUserData())
                         ? new SimpleStringProperty(Integer.toString(param.getValue().getResources().get(
                         		param.getTableColumn().getUserData())))
-                        :new SimpleStringProperty("");
+                        :new SimpleStringProperty("-");
             }
         };
         for (ResourceType t : ResourceType.values()) {

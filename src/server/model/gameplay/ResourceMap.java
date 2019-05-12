@@ -87,6 +87,27 @@ public class ResourceMap extends HashMap<ResourceType, Integer>{
 		super.clear();
 	}
 	
+	/**
+	 * Function to refresh observable map after refresh player from server
+	 * Observable maps and lists are not synchronizable
+	 * @author david & yannik
+	 */
+	public void refreshObservableMap() {
+		if(this.resourcesObservable != null) {
+			this.resourcesObservable.clear();
+		}else {
+			resourcesObservable = FXCollections.observableHashMap();
+			resourcesListObservable = FXCollections.observableArrayList();
+			handleObservable();
+		}
+		
+		for(Entry<ResourceType, Integer> entry : this.entrySet()) {
+			ResourceType t = entry.getKey();
+			Integer v = entry.getValue();
+			resourcesObservable.put(t, v);
+		}
+	}
+	
 	public ObservableMap<ResourceType, Integer> getResourcesObservable() {
 		return this.resourcesObservable;
 	}
