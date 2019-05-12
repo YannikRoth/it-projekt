@@ -15,10 +15,8 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -28,7 +26,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -217,12 +214,6 @@ public class ClientView {
 		vBoxDeck.setSpacing(10);
 		borderPanePlayer.setCenter(vBoxDeck);
 		
-		borderPanePlayer.setStyle("-fx-background-image: url(file:./resource/images/boards/Board_06_A.jpg) \n" +
-		"-fx-background-repeat: stretch \n" +  
-		"-fx-background-size: cover, auto \n" +
-		"-fx-background-position: bottom left \n" +
-		"-fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);");
-		
 		//buttons for client action
 		this.playCard = new Button();
 		this.buildWorldWonder = new Button();
@@ -252,15 +243,15 @@ public class ClientView {
 		hBoxWorldWonderCards.setSpacing(250);
 		hBoxWorldWonderCards.setPadding(new Insets(0,0,0,250));
 		hBoxWorldWonderCards.setPrefHeight(110);
-//		hBoxWorldWonderCards.getChildren().addAll(card13, card14, card15);
 		borderPanePlayer.setBottom(hBoxWorldWonderCards);
-
+		
 		//hbox for player's playable card
 		playableCards = new HBox();
 		playableCards.getChildren().addAll(cardPlayable1, cardPlayable2, cardPlayable3, cardPlayable4, cardPlayable5, cardPlayable6, cardPlayable7);
 				
 		vBoxDeck.getChildren().addAll(playableCards, buttonBox);
 		playableCards.setAlignment(Pos.BASELINE_CENTER);
+		playableCards.setSpacing(2);
 		playableCards.setPadding(new Insets(30, 0, 0, 0));
 		playableCards.setPrefHeight(230);
 		playableCards.setPrefWidth(985);
@@ -306,7 +297,7 @@ public class ClientView {
 		this.hBoxCards.getChildren().add(v);
 		v.setFitHeight(130);
 		v.setFitWidth(86);
-		v.setEffect(new DropShadow(5, Color.RED));
+		v.setEffect(new DropShadow(5, Color.GOLD));
 	}
 	
 	public void addImageViewWorldWonder() {
@@ -314,7 +305,7 @@ public class ClientView {
 		this.hBoxWorldWonderCards.getChildren().add(v);
 		v.setFitHeight(110);
 		v.setFitWidth(73);
-		v.setEffect(new DropShadow(5, Color.RED));
+		v.setEffect(new DropShadow(5, Color.GOLD));
 	}
 	
 //	public void updatePlayedCardView() {

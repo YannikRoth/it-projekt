@@ -31,7 +31,7 @@
 	-fx-font-weight: bold;
  	-fx-min-width: 110;
 	-fx-min-height: 20;
-	-fx-background-color: grey;
+	-fx-background-color: white;
 }
 
 .button:hover {
