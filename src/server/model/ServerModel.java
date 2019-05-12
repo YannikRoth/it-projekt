@@ -401,7 +401,7 @@ public class ServerModel implements Serializable{
 		
 		//the code below could be transfered to another place, this is for quick and dirty testing
 		cardPlayCounter++;
-		if(this.cardPlayCounter == NUMBEROFPLAYERS * 5) {
+		if(this.cardPlayCounter == NUMBEROFPLAYERS * 6) {
 			System.out.println("Entering age 2");
 			for(Entry<Player, ServerClientThread> p : this.players.entrySet()) {
 				Player player = p.getKey();
@@ -414,7 +414,7 @@ public class ServerModel implements Serializable{
 			handoutCards(ageTwoCards);
 			//cardPlayCounter = 0;
 		}
-		if(this.cardPlayCounter == NUMBEROFPLAYERS * 5 * 2) {
+		if(this.cardPlayCounter == NUMBEROFPLAYERS * 6 * 2) {
 			System.out.println("Entering age 3");
 			for(Entry<Player, ServerClientThread> p : this.players.entrySet()) {
 				Player player = p.getKey();

@@ -130,6 +130,7 @@ public class ClientController {
 				if(c.equals(this.selectedCard)) {
 					correct = v;
 					view.addImageView(correct);
+					return;
 				}
 			}
 			

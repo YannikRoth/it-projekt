@@ -160,7 +160,7 @@ public class ClientView {
 		
 		hBoxCards = new HBox();
 		hBoxCards.setSpacing(10);
-		hBoxCards.setPadding(new Insets(0,0,0,0));
+		hBoxCards.setPadding(new Insets(0,50,0,0));
 		hBoxCards.setPrefHeight(130);
 		borderPanePlayer.setTop(hBoxCards);
 		hBoxPlayer.setHgrow(borderPanePlayer, Priority.ALWAYS);
@@ -416,6 +416,7 @@ public class ClientView {
 		this.hBoxCards.getChildren().add(v);
 		v.setFitHeight(130);
 		v.setFitWidth(86);
+		v.setEffect(new DropShadow(5, Color.RED));
 	}
 	
 //	public void updatePlayedCardView() {
