@@ -42,8 +42,8 @@ public class ClientModel extends Thread {
 	private static final Logger logger = ServiceLocator.getLogger();
 
 	public ClientModel() {
-		refreshOtherPlayer(new Player("David"));
-		player = new Player("Mein Spieler");
+//		refreshOtherPlayer(new Player("David"));
+//		player = new Player("Mein Spieler");
 //		player.getResources().put(ResourceType.BRICK, 20);
 //		player.getResources().put(ResourceType.FABRIC, 25);
 //		player.getResources().put(ResourceType.ORE, 230);

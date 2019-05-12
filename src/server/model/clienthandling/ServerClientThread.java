@@ -39,7 +39,7 @@ public class ServerClientThread extends Thread implements Serializable {
 
 	public ServerClientThread(Socket socket, ServerModel model) {
 		// TODO: Add player name in constructor
-		player = new Player("Martin_" + ServiceLocator.getmanualCardId());
+		player = new Player("Player " + ServiceLocator.getmanualCardId());
 		servermodel = model;
 		start = false;
 		player.setBoard(servermodel.getBoard(7));
