@@ -11,18 +11,15 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import client.ServicelocatorClient;
-import client.view.CardOptionView;
 import globals.ClientAction;
 import globals.Globals;
 import globals.ServerAction;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import server.ServiceLocator;
 import server.model.gameplay.Card;
 import server.model.gameplay.Player;
-import server.model.init.CardLoader;
 
 /**
  * 
@@ -33,7 +30,6 @@ import server.model.init.CardLoader;
 public class ClientModel extends Thread {
 
 	private Player player;
-//	SimpleObjectProperty<Player> player;
 	public ObservableList<Card> Cards = FXCollections.observableArrayList();
 	private ObservableList<Player> otherPlayers = FXCollections.observableArrayList();
 	private int numberofPlayers;
@@ -44,29 +40,7 @@ public class ClientModel extends Thread {
 	private static final Logger logger = ServiceLocator.getLogger();
 
 	public ClientModel() {
-//		refreshOtherPlayer(new Player("David"));
-//		player = new Player("Mein Spieler");
-//		player.getResources().put(ResourceType.BRICK, 20);
-//		player.getResources().put(ResourceType.FABRIC, 25);
-//		player.getResources().put(ResourceType.ORE, 230);
-//		player.getResources().put(ResourceType.GLAS, 230);
-//		player.getResources().put(ResourceType.PAPYRUS, 230);
-//		player.getResources().put(ResourceType.STONE, 230);
-//		player.getResources().put(ResourceType.WOOD, 230);
-
-//		this.playCard(this.getMyPlayer().getPlayableCards().get(0), ClientAction.PLAYCARD);
-//		Card c1 = model.getCard(1); //brick OR stone OR ore OR wood
-//		player.playCard(c1);
-//		System.out.println(model.getCard(1));
-		
-		//ServerModel model = new ServerModel();
-//		Map<Integer, Card> cards = CardLoader.importCards();
-//		this.getMyPlayer().playCard(cards.get(19));
-//		this.getMyPlayer().playCard(cards.get(18));
-//		this.getMyPlayer().playCard(cards.get(1));
-//		Boolean f  = this.getMyPlayer().playCard(cards.get(7));
-//		System.out.println(f);
-		//this.sendPlayedCard(this.getMyPlayer().getPlayedCards().get(0), ClientAction.PLAYCARD);
+		super();
 	}
 	
 	
@@ -234,12 +208,16 @@ public class ClientModel extends Thread {
 
 	public Player getMyPlayer() {
 		return player;
-//		return player.get();
 	}
 
+	/**
+	 * Set player and refresh observable maps from resources
+	 * refresh tableview to show myPlayers resources
+	 * @param player
+	 * @author david
+	 */
 	public void setMyPlayer(Player player) {
 		this.player = player;
-//		this.player.set(player);
 		player.getResources().refreshObservableMap();
 		if(ServicelocatorClient.getClientView() != null) {
 			ServicelocatorClient.getClientView().getTablePoints().setItems(
