@@ -65,7 +65,7 @@ public class LobbyView {
 		this.stage = primaryStage;
 		this.model = model;
 		
-		TextInputDialog dialog = new TextInputDialog("127.0.0.1");
+		TextInputDialog dialog = new TextInputDialog("127.0.0.1:8080");
 		dialog.setTitle(translator.getString("title.ip"));
 		dialog.setHeaderText(translator.getString("header.opponents"));
 		dialog.setContentText(translator.getString("content.ip"));
@@ -76,9 +76,10 @@ public class LobbyView {
 		
 		Optional<String> result = dialog.showAndWait();
 		result.ifPresent(name -> {
-			//TODO: Set Server IP in model
-			Globals.setDefaultIPAddr(name);
-			System.out.println(name);
+			String ip = name.substring(0, name.indexOf(":"));
+			String port = name.substring(name.indexOf(":") + 1);
+			Globals.setDefaultIPAddr(ip);
+			Globals.setPortNr(Integer.parseInt(port));;
 		});
 		
 		
