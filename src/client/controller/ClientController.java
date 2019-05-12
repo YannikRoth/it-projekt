@@ -143,7 +143,7 @@ public class ClientController {
 			model.sendPlayedCard(this.selectedCard, ClientAction.BUILDWONDER);
 			logger.info("Build WorldWonder");
 			view.disableCards();
-			//view.updatePlayedCardView();
+			view.addImageViewWorldWonder();
 		});
 	}
 	

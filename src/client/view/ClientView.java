@@ -54,7 +54,7 @@ public class ClientView {
 	protected ImageView[] cards = new ImageView[7];
 	protected ImageView[] cards2 = new ImageView[12];
 	private Map<ImageView, Card> cardWithImages = new HashMap<>();
-	private HBox playableCards, hBoxCards;
+	private HBox playableCards, hBoxCards, hBoxWorldWonderCards;
 	
 	protected ImageView card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12, card13, card14, card15, card16, cardPlayable1, cardPlayable2, cardPlayable3, cardPlayable4, cardPlayable5, cardPlayable6, cardPlayable7, selectedCard = null;
 	
@@ -89,7 +89,7 @@ public class ClientView {
 		tableOpponents.setItems(model.getOtherPlayers());
 		
 		colPlayer = new TableColumn<Player, String>();
-		colPlayer.setMinWidth(100);
+		colPlayer.setMinWidth(365);
 		colPlayer.setCellValueFactory(new PropertyValueFactory<Player, String>("playerName"));
 		tableOpponents.getColumns().add(colPlayer);
 		
@@ -127,11 +127,11 @@ public class ClientView {
 		tablePoints.setEditable(false);
 		
 		ColType		= new TableColumn<>();
-		ColType.setMinWidth(100);
+		ColType.setMinWidth(130);
 		ColType.setCellValueFactory(cd -> Bindings.createStringBinding(() -> cd.getValue().toStringTranslate() ));
 
 		ColAmount	= new TableColumn<>();
-		ColAmount.setMinWidth(100);
+		ColAmount.setMinWidth(130);
 		ColAmount.setCellValueFactory(cd -> Bindings.valueAt(this.model.getMyPlayer().getResources().getResourcesObservable(), cd.getValue()));
 		
 		tablePoints.getColumns().addAll(ColType, ColAmount);
@@ -160,60 +160,53 @@ public class ClientView {
 		BorderPane borderPanePlayer = new BorderPane();
 		hBoxPlayer.getChildren().addAll(borderPanePlayer);
 		
-		hBoxCards = new HBox();
+		this.hBoxCards = new HBox();
 		hBoxCards.setPadding(new Insets(0,50,0,0));
 		hBoxCards.setPrefHeight(130);
-		hBoxCards.setStyle("-fx-background-color: #ffdead");
+		hBoxCards.setStyle("-fx-background-color: #daa520");
 		borderPanePlayer.setTop(hBoxCards);
+		borderPanePlayer.setPrefWidth(985);
 		hBoxPlayer.setHgrow(borderPanePlayer, Priority.ALWAYS);
 		
 		//Cards
-		Image image = new Image("file:./resource/images/cards/SCN_0150.jpg");
 		Image image2 = new Image("file:./resource/images/cards/SCN_0151.jpg");
-//		Image image3 = new Image ("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(0).getImageFileName());
 		Image tempImage = new Image("file:./resource/images/cards/SCN_0150.jpg");
 		
+		//initiates back of the cards as default
 		cardPlayable1 = new ImageView(tempImage);
 		cardPlayable1.setFitHeight(200);
 		cardPlayable1.setFitWidth(133);
 		cards[0] = cardPlayable1;
-		//cardWithImages.put(cards[0], model.getMyPlayer().getPlayableCards().get(0));
 		
 		cardPlayable2 = new ImageView(tempImage);
 		cardPlayable2.setFitHeight(200);
 		cardPlayable2.setFitWidth(133);
 		cards[1] = cardPlayable2;
-		//cardWithImages.put(cards[1], model.getMyPlayer().getPlayableCards().get(1));
 		
 		cardPlayable3 = new ImageView(tempImage);
 		cardPlayable3.setFitHeight(200);
 		cardPlayable3.setFitWidth(133);
 		cards[2] = cardPlayable3;
-		//cardWithImages.put(cards[2], model.getMyPlayer().getPlayableCards().get(2));
 		
 		cardPlayable4 = new ImageView(tempImage);
 		cardPlayable4.setFitHeight(200);
 		cardPlayable4.setFitWidth(133);
 		cards[3] = cardPlayable4;
-		//cardWithImages.put(cards[3], model.getMyPlayer().getPlayableCards().get(3));
 		
 		cardPlayable5 = new ImageView(tempImage);
 		cardPlayable5.setFitHeight(200);
 		cardPlayable5.setFitWidth(133);
 		cards[4] = cardPlayable5;
-		//cardWithImages.put(cards[4], model.getMyPlayer().getPlayableCards().get(4));
 		
 		cardPlayable6 = new ImageView(tempImage);
 		cardPlayable6.setFitHeight(200);
 		cardPlayable6.setFitWidth(133);
 		cards[5] = cardPlayable6;
-		//cardWithImages.put(cards[5], model.getMyPlayer().getPlayableCards().get(5));
 		
 		cardPlayable7 = new ImageView(tempImage);
 		cardPlayable7.setFitHeight(200);
 		cardPlayable7.setFitWidth(133);
 		cards[6] = cardPlayable7;
-		//cardWithImages.put(cards[6], model.getMyPlayer().getPlayableCards().get(6));
 		
 		
 		//Points
@@ -222,13 +215,14 @@ public class ClientView {
 		
 		//Deck
 		VBox hBoxDeck = new VBox();
-		hBoxDeck.setPadding(new Insets(55,0,15, 55));
+		hBoxDeck.setPadding(new Insets(55,0,15, 0));
 		hBoxDeck.setSpacing(10);
 		borderPanePlayer.setCenter(hBoxDeck);
 		
-		this.playCard = new Button("Karte spielen");
-		this.buildWorldWonder = new Button("Weltwunder bauen");
-		this.discardCard = new Button("Karte ablegen");
+		//buttons for client action
+		this.playCard = new Button();
+		this.buildWorldWonder = new Button();
+		this.discardCard = new Button();
 		HBox buttonBox = new HBox();
 		buttonBox.getChildren().addAll(playCard, buildWorldWonder, discardCard);
 
@@ -249,54 +243,23 @@ public class ClientView {
 		buttonBox.setAlignment(Pos.CENTER);
 		buttonBox.setPadding(new Insets(0,0,10,0));
 		
-		card13 = new ImageView(image2);
-		card13.setFitHeight(100);
-		card13.setFitWidth(66);
-		card13.setOnMouseClicked((e) -> {
-			System.out.println("Karte 13");
-		});
-		
-		card14 = new ImageView(image2);
-		card14.setFitHeight(100);
-		card14.setFitWidth(66);
-		card14.setOnMouseClicked((e) -> {
-			System.out.println("Karte 14");
-		});
-		
-		card15 = new ImageView(image2);
-		card15.setFitHeight(100);
-		card15.setFitWidth(66);
-		card15.setOnMouseClicked((e) -> {
-			System.out.println("Karte 15");
-		});
-		
-		
-		HBox hBoxWorldWonderCards = new HBox();
-		hBoxWorldWonderCards.setSpacing(120);
-		hBoxWorldWonderCards.setPadding(new Insets(0,0,0,500));
-		hBoxWorldWonderCards.getChildren().addAll(card13, card14, card15);
+		//hbox for world wonder (back of the card)
+		this.hBoxWorldWonderCards = new HBox();
+		hBoxWorldWonderCards.setSpacing(250);
+		hBoxWorldWonderCards.setPadding(new Insets(0,0,0,250));
+		hBoxWorldWonderCards.setPrefHeight(110);
+//		hBoxWorldWonderCards.getChildren().addAll(card13, card14, card15);
 		borderPanePlayer.setBottom(hBoxWorldWonderCards);
-		
-		
-//		ImageView deck = new ImageView(new Image("file:./resource/images/boards/Board_06_A.jpg"));
-//		deck.setFitHeight(250);
-//		deck.setFitWidth(600);
 
+		//hbox for player's playable card
 		playableCards = new HBox();
 		playableCards.getChildren().addAll(cardPlayable1, cardPlayable2, cardPlayable3, cardPlayable4, cardPlayable5, cardPlayable6, cardPlayable7);
 				
 		hBoxDeck.getChildren().addAll(playableCards, buttonBox);
 		playableCards.setAlignment(Pos.BASELINE_CENTER);
 		playableCards.setPadding(new Insets(30, 0, 0, 0));
-		playableCards.setSpacing(10);
 		playableCards.setPrefHeight(230);
-		
-		cardPlayable1.setOnMouseClicked((e) -> {
-			System.out.println("Karte kann gespielt werden");
-			updatePlayableCardView();
-			
-//			cardPlayable1.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(0).getImageFileName()));
-		});
+		playableCards.setPrefWidth(985);
 		
 		//Menu "Game"
 		itemM1 = new MenuItem();
@@ -327,15 +290,6 @@ public class ClientView {
 		MenuBar menuBar = new MenuBar(menuHelp, menuLanguage);
 		borderPaneMain.setTop(menuBar);
 		
-		//DropDown Menu
-		ContextMenu contextMenu = new ContextMenu(menuGame);
-		borderPaneMain.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
-            @Override
-            public void handle(ContextMenuEvent event) {
-                contextMenu.show(borderPaneMain, event.getScreenX(), event.getScreenY());
-            }
-        });
-		
 		this.stage.setResizable(false);
 		Scene scene = new Scene(borderPaneMain);
 		scene.getStylesheets().add(getClass().getResource("ClientStyle.css").toExternalForm());
@@ -348,6 +302,14 @@ public class ClientView {
 		this.hBoxCards.getChildren().add(v);
 		v.setFitHeight(130);
 		v.setFitWidth(86);
+		v.setEffect(new DropShadow(5, Color.RED));
+	}
+	
+	public void addImageViewWorldWonder() {
+		ImageView v = new ImageView(new Image("file:./resource/images/cards/SCN_0150.jpg"));
+		this.hBoxWorldWonderCards.getChildren().add(v);
+		v.setFitHeight(110);
+		v.setFitWidth(73);
 		v.setEffect(new DropShadow(5, Color.RED));
 	}
 	
@@ -414,6 +376,10 @@ public class ClientView {
 		menuHelp.setText(translator.getString("menu.help"));
 		menuGame.setText(translator.getString("menu.game"));
 		menuLanguage.setText(translator.getString("menu.language"));
+		
+		playCard.setText(translator.getString("button.playCard"));
+		buildWorldWonder.setText(translator.getString("button.buildWorldWonder"));
+		discardCard.setText(translator.getString("button.discardCard"));
 		
 		stage.setTitle(translator.getString("clientGame.name"));
 
