@@ -67,6 +67,9 @@ public class Player implements Serializable{
 		setPlayerName(name);
 		this.playerID = ServiceLocator.getNewPlayerId();
 		this.resources = new ResourceMap(ResourceMapType.PRODUCE);
+		for (ResourceType r : ResourceType.values()) {
+			this.resources.put(r, 0);
+		}
 		this.alternateResources = new ArrayList<>();
 		this.cards = new ArrayList<>();
 		this.worldWonderCards = new ArrayList<>();
