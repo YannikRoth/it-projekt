@@ -1,5 +1,7 @@
 package client.view;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Optional;
 
 import client.ClientMVC;
@@ -12,6 +14,8 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -24,8 +28,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import server.model.gameplay.ServerAction;
@@ -91,38 +98,68 @@ public class LobbyView {
 		//Erstellt die Grundmaske der Lobby
 		BorderPane borderPaneMain = new BorderPane();
 		
+		VBox buttonAndPlayer = new VBox();
 		HBox hBoxButton = new HBox();
 		HBox hBoxPlayer = new HBox();
 
+		borderPaneMain.setCenter(buttonAndPlayer);
 		
-		borderPaneMain.setCenter(hBoxButton);
-		borderPaneMain.setBottom(hBoxPlayer);
+		FileInputStream input = null;
+		try {
+			input = new FileInputStream("resource/images/playlogo.jpg");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        Image image = new Image(input);
+        ImageView imageViewStart = new ImageView(image);
+        imageViewStart.setFitHeight(30);
+		imageViewStart.setFitWidth(30);
+        this.btnNewGame = new Button("Play", imageViewStart);
+        
+        FileInputStream input2 = null;
+		try {
+			input2 = new FileInputStream("resource/images/regelnlogo.jpg");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        Image image2 = new Image(input2);
+        ImageView imageViewRules = new ImageView(image2);
+        imageViewRules.setFitHeight(30);
+		imageViewRules.setFitWidth(30);
+		this.btnRules	= new Button("Regeln", imageViewRules);
 		
-		this.btnNewGame = new Button();
-//		btnNewGame.setOnAction((e) -> {
-//			Stage secondStage = new Stage();
-//	    	ClientMVC clientMVC = new ClientMVC();
-//	    	try {
-//				clientMVC.start(secondStage);
-//			} catch (Exception e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-//	    	this.stage.hide();
-//		});
-		this.btnRules	= new Button();
-		this.btnQuit = new Button();
+		FileInputStream input3 = null;
+		try {
+			input3 = new FileInputStream("resource/images/beendenlogo.jpg");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        Image image3 = new Image(input3);
+        ImageView imageViewQuit = new ImageView(image3);
+        imageViewQuit.setFitHeight(30);
+		imageViewQuit.setFitWidth(30);
+		this.btnQuit = new Button("Quit", imageViewQuit);
 
+		hBoxButton.setPadding(new Insets(0, 0, 5, 0));
 		
 		hBoxButton.getChildren().addAll(btnNewGame, btnRules, btnQuit);
 		
 		this.player = new Label();
 		this.playerName = new TextField();
+
 		
 		hBoxPlayer.getChildren().addAll(player, playerName);
 		
+		buttonAndPlayer.getChildren().addAll(hBoxButton, hBoxPlayer);
+		hBoxButton.setAlignment(Pos.CENTER);
+		hBoxPlayer.setAlignment(Pos.CENTER);
+		
 		//TODO: Wartende Personen anzeigen
 		TableView<ServerAction> tableView = new TableView<ServerAction>();
+		tableView.setPrefHeight(290);
 		tableView.setItems(serverActionData);
 		
 		tblcolNr	= new TableColumn<ServerAction,String>();
@@ -148,7 +185,7 @@ public class LobbyView {
 		
 		this.stage.setResizable(false);
 		Scene scene = new Scene(borderPaneMain);
-		scene.getStylesheets().add(getClass().getResource("ClientStyle.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("LobbyStyle.css").toExternalForm());
 		this.stage.sizeToScene();
 		this.stage.setScene(scene);
 		this.stage.show();

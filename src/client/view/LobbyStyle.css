@@ -1,0 +1,121 @@
+.gamebackground {
+	-fx-background-color: black;
+}
+
+.menu-bar{
+  -fx-background-color: #daa520;
+  -fx-border-color:  white;
+ 	-fx-border-width: 2
+
+}
+
+.menu-bar .label {
+    -fx-font-size: 12 pt;
+    -fx-font-family: "Broadway";
+    -fx-text-fill: black;
+
+}
+
+
+.menu:hover {
+    -fx-background-color: white;
+}
+
+.menu-item .label{
+    -fx-font-size: 12 pt;
+}
+
+.button {
+	-fx-font-family: "Broadway";
+	-fx-font-size: 12px;
+	-fx-font-weight: bold;
+ 	-fx-min-width: 110;
+	-fx-min-height: 20;
+	-fx-background-color: white;
+}
+
+.button:hover {
+	-fx-font-family: "Broadway";
+	-fx-font-size: 12px;
+	-fx-font-weight: bold;
+ 	-fx-min-width: 110;
+	-fx-min-height: 20;
+	-fx-background-color: #daa520;
+}
+
+.label{
+	-fx-font-family: "Broadway";
+	-fx-font-size: 12px;
+}
+
+.text-field {
+    -fx-background-color: white;
+	-fx-border-color: white;
+}
+
+
+.root{
+    -fx-background-color: #daa520;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
+}
+
+/* Spaltenköpfe
+    Struktur column-header-background -> column-header */
+
+.table-view .column-header-background{
+	-fx-font-family: "Broadway";
+    -fx-background-color:  #daa520;
+}
+
+.table-view .column-header-background .label{
+	-fx-font-family: "Broadway";
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+
+.table-view .column-header {
+	-fx-font-family: "Broadway";
+    -fx-background-color: transparent;
+    -fx-border-color: white;
+}
+
+.table-view .table-cell{
+	-fx-font-family: "Broadway";
+    -fx-text-fill: white;
+}
+.table-row-cell{
+	-fx-font-family: "Broadway";
+    -fx-background-color: -fx-table-cell-border-color, #daa520;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em; /* 0 */
+}
+
+.table-row-cell:odd{
+	-fx-font-family: "Broadway";
+    -fx-background-color: -fx-table-cell-border-color, #daa520;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em; /* 0 */  
+}
+
+.table-row-cell:selected {
+	-fx-font-family: "Broadway";
+    -fx-background-color: #daa520;
+    -fx-background-insets: 0;
+    -fx-background-radius: 1;
+}
+.table-view > .virtual-flow > .scroll-bar:vertical,
+.table-view > .virtual-flow > .scroll-bar:vertical > .track,
+.table-view > .virtual-flow > .scroll-bar:vertical > .track-background, 
+.table-view > .virtual-flow > .scroll-bar:horizontal,
+.table-view > .virtual-flow > .scroll-bar:horizontal > .track,
+.table-view > .virtual-flow > .scroll-bar:horizontal > .track-background {
+    -fx-background-color: transparent;
+}
+
+
+
+.table-view > .virtual-flow > .scroll-bar > .increment-button, 
+.table-view > .virtual-flow > .scroll-bar > .decrement-button {
+	-fx-font-family: "Broadway";
+    -fx-opacity: 0;
+}

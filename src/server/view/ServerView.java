@@ -103,6 +103,7 @@ public class ServerView {
 		
 		fieldIpAdress = new TextField();
 		fieldIpAdress.setEditable(false);
+		fieldIpAdress.setPrefWidth(100);
 		try {
 			fieldIpAdress.setText(Inet4Address.getLocalHost().getHostAddress());
 		} catch (UnknownHostException e) {
@@ -111,6 +112,7 @@ public class ServerView {
 		fieldPort		= new TextField();
 		fieldPort.setEditable(false);
 		fieldPort.setText(Integer.toString(Globals.getPortNr()));
+		fieldPort.setPrefWidth(50);
 		
 		this.btnChangePort		= new Button();
 		this.btnRestartServer	= new Button("Restart Server");
