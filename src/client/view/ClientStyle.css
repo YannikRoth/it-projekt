@@ -40,14 +40,14 @@
 	-fx-font-weight: bold;
  	-fx-min-width: 110;
 	-fx-min-height: 20;
-	-fx-background-color: blue;
+	-fx-background-color: #daa520;
 }
 .root {
     -fx-background-image: url("file:./resource/images/boards/Board_06_A.jpg");
     -fx-background-repeat: stretch;   
     -fx-background-size: 985 455;
     -fx-background-position: bottom left;
-    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
+    -fx-effect: dropshadow(three-pass-box, white, 30, 0.5, 0, 0);
 }
 
 .table-view{
