@@ -62,6 +62,7 @@ public class ClientView {
 	TableColumn<Player, String> colPlayer;
 	ObservableList<TableColumn<Player, String>> dynamicCols = FXCollections.observableArrayList();
 	
+	TableView<ResourceType> tablePoints = new TableView<>();
 	TableColumn<ResourceType, String> ColType;
 	TableColumn<ResourceType, Integer> ColAmount;
 	
@@ -88,7 +89,7 @@ public class ClientView {
 		tableOpponents.setEditable(false);
 		tableOpponents.setItems(model.getOtherPlayers());
 		
-		colPlayer = new TableColumn<Player, String>("Player");
+		colPlayer = new TableColumn<Player, String>();
 		colPlayer.setMinWidth(100);
 		colPlayer.setCellValueFactory(new PropertyValueFactory<Player, String>("playerName"));
 		tableOpponents.getColumns().add(colPlayer);
@@ -112,6 +113,25 @@ public class ClientView {
 		}
         tableOpponents.getColumns().addAll(dynamicCols);
         tableOpponents.setMaxHeight(200);
+	}
+	
+	/**
+	 * Build table view for my points
+	 * @author david
+	 */
+	private void buildTablePoints() {
+		tablePoints = new TableView<>(this.model.getMyPlayer().getResources().getResourcesListObservable());
+		tablePoints.setEditable(false);
+		
+		ColType		= new TableColumn<>();
+		ColType.setMinWidth(100);
+		ColType.setCellValueFactory(cd -> Bindings.createStringBinding(() -> cd.getValue().toStringTranslate() ));
+
+		ColAmount	= new TableColumn<>();
+		ColAmount.setMinWidth(100);
+		ColAmount.setCellValueFactory(cd -> Bindings.valueAt(this.model.getMyPlayer().getResources().getResourcesObservable(), cd.getValue()));
+		
+		tablePoints.getColumns().addAll(ColType, ColAmount);
 	}
 	
 	public void buildView() {
@@ -340,29 +360,8 @@ public class ClientView {
 		
 		
 		//Points
-		/**
-		 * @author david
-		 */
-		TableView<ResourceType> tablePoints = new TableView<>(this.model.getMyPlayer().getResources().getResourcesListObservable());
-		
-		tablePoints.setEditable(false);
+		buildTablePoints();
 		hBoxPlayer.getChildren().addAll(tablePoints);
-		
-		ColType		= new TableColumn();
-		ColType.setMinWidth(100);
-		/**
-		 * @author david
-		 */
-		ColType.setCellValueFactory(cd -> Bindings.createStringBinding(() -> cd.getValue().toStringTranslate() ));
-
-		ColAmount	= new TableColumn();
-		ColAmount.setMinWidth(100);
-		/**
-		 * @author david
-		 */
-		ColAmount.setCellValueFactory(cd -> Bindings.valueAt(this.model.getMyPlayer().getResources().getResourcesObservable(), cd.getValue()));
-		
-		tablePoints.getColumns().addAll(ColType, ColAmount);
 		
 		//Deck
 		VBox hBoxDeck = new VBox();
@@ -503,6 +502,13 @@ public class ClientView {
 			this.cards2[i].setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(i).getImageFileName()));
 		}
 	}
+	
+//	protected void updatePlayableCardView() {
+//		System.out.println(model.getMyPlayer().getPlayedCards());
+//		for(int i = 0; i < model.getMyPlayer().getPlayedCards().size(); i++) {
+//			this.cards2[i].setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(i).getImageFileName()));
+//		}
+//	}
 	
 	
 	
