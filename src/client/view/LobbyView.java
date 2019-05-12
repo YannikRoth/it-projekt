@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import client.ClientMVC;
 import client.controller.ClientController;
+import client.controller.LobbyController;
 import client.model.ClientModel;
 import client.model.LobbyModel;
 import globals.Globals;
@@ -76,10 +77,7 @@ public class LobbyView {
 		
 		Optional<String> result = dialog.showAndWait();
 		result.ifPresent(name -> {
-			String ip = name.substring(0, name.indexOf(":"));
-			String port = name.substring(name.indexOf(":") + 1);
-			Globals.setDefaultIPAddr(ip);
-			Globals.setPortNr(Integer.parseInt(port));;
+			LobbyController.handleIpInput(name);
 		});
 		
 		

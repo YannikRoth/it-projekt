@@ -9,6 +9,7 @@ import client.model.ClientModel;
 import client.model.LobbyModel;
 import client.view.ClientView;
 import client.view.LobbyView;
+import globals.Globals;
 import globals.Translator;
 import javafx.application.Platform;
 import javafx.scene.control.MenuItem;
@@ -96,4 +97,15 @@ public class LobbyController {
 		});
 	}
 
+	/**
+	 * Handle IP Input and write globals
+	 * Format: IP:Port -> 127.0.0.1:8080
+	 * @author david
+	 */
+	public static void handleIpInput(String ipInput) {
+		String ip = ipInput.substring(0, ipInput.indexOf(":"));
+		String port = ipInput.substring(ipInput.indexOf(":") + 1);
+		Globals.setDefaultIPAddr(ip);
+		Globals.setPortNr(Integer.parseInt(port));;
+	}
 }
