@@ -129,7 +129,9 @@ public class ClientModel extends Thread {
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
-							CardOptionView view = new CardOptionView(ServicelocatorClient.getClientModel());
+							//CardOptionView view = new CardOptionView(ServicelocatorClient.getClientModel());
+							ServicelocatorClient.getClientView().updatePlayableCardView();
+							ServicelocatorClient.getClientController().processClickOnImage();
 						}
 					});
 					

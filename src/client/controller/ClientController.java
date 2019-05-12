@@ -44,7 +44,7 @@ public class ClientController {
 		processPlayCardButton();
 		processBuildWorldWonderButton();
 		processDiscardCardButton();
-//		processClickOnImage();
+		processClickOnImage();
 		
 	}
 	
@@ -116,7 +116,8 @@ public class ClientController {
 			//model.getMyPlayer().playCard(this.selectedCard);
 			model.sendPlayedCard(this.selectedCard, ClientAction.PLAYCARD);
 			logger.info("Played Card");
-
+			view.disableCards();
+			view.updatePlayedCardView();
 		});
 	}
 	
@@ -125,7 +126,8 @@ public class ClientController {
 			//model.getMyPlayer().playCard(this.selectedCard);
 			model.sendPlayedCard(this.selectedCard, ClientAction.BUILDWONDER);
 			logger.info("Build WorldWonder");
-
+			view.disableCards();
+			view.updatePlayedCardView();
 		});
 	}
 	
@@ -134,27 +136,36 @@ public class ClientController {
 			//TODO Method for discard card
 			model.sendPlayedCard(this.selectedCard, ClientAction.DISCARD);
 			logger.info("DiscardCard");
-
+			view.disableCards();
+//			ImageView v = (ImageView) e.getSource();
+			view.updatePlayedCardView();
 		});
 	}
 	
-//	private void processClickOnImage() {
-//		for (int i = 0; i<view.getShownCards().length;i++) {
-//			this.selectedCard = view.getCardsWithImages().get(view.getImageView(i));
-//			ImageView tempImage = view.getImageView(i);
-//			tempImage.setOnMouseClicked(e ->{
-//				tempImage.setEffect(new DropShadow(5, Color.RED));
-//				for (int j = 0;j<view.getShownCards().length;j++) {
-//					if(view.getImageView(j) != tempImage) {
-//						view.getImageView(j).setEffect(null);
-//					}
-//				}
-//			view.getPlayCardButton().setDisable(!model.getPlayOptionsOfCards().get(this.selectedCard).get(ClientAction.PLAYCARD));
-//			view.getBuildWorldWonderButton().setDisable(!model.getPlayOptionsOfCards().get(this.selectedCard).get(ClientAction.BUILDWONDER));
-//			view.getDiscardCardButton().setDisable(!model.getPlayOptionsOfCards().get(this.selectedCard).get(ClientAction.DISCARD));
-//			});
-//		}
-//	}
+	public void processClickOnImage() {
+		for (int i = 0; i<view.getShownCards().length;i++) {
+			this.selectedCard = view.getCardsWithImages().get(view.getImageView(i));
+			ImageView tempImage = view.getImageView(i);
+			tempImage.setOnMouseClicked(e ->{
+				tempImage.setEffect(new DropShadow(5, Color.RED));
+				for (int j = 0;j<view.getShownCards().length;j++) {
+					if(view.getImageView(j) != tempImage) {
+						view.getImageView(j).setEffect(null);
+					}else {
+						this.selectedCard = view.getCardsWithImages().get(view.getImageView(j));
+						if(this.selectedCard == null) {
+							System.out.println("The selected card value is null!!");
+						}
+					}
+				}
+			view.getPlayCardButton().setDisable(!model.getPlayOptionsOfCards().get(this.selectedCard).get(ClientAction.PLAYCARD));
+			view.getBuildWorldWonderButton().setDisable(!model.getPlayOptionsOfCards().get(this.selectedCard).get(ClientAction.BUILDWONDER));
+			view.getDiscardCardButton().setDisable(!model.getPlayOptionsOfCards().get(this.selectedCard).get(ClientAction.DISCARD));
+			});
+		}
+		
+	}
+	
 
 }
 

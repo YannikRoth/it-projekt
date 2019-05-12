@@ -52,6 +52,7 @@ public class ClientView {
 	private Translator translator = Translator.getTranslator();
 	private Menu menuLanguage, menuHelp, menuGame;
 	protected ImageView[] cards = new ImageView[7];
+	protected ImageView[] cards2 = new ImageView[12];
 	private Map<ImageView, Card> cardWithImages = new HashMap<>();
 	private HBox playableCards;
 	
@@ -152,41 +153,48 @@ public class ClientView {
 		cardPlayable1.setFitHeight(200);
 		cardPlayable1.setFitWidth(133);
 		cards[0] = cardPlayable1;
+		//cardWithImages.put(cards[0], model.getMyPlayer().getPlayableCards().get(0));
 		
 		cardPlayable2 = new ImageView(tempImage);
 		cardPlayable2.setFitHeight(200);
 		cardPlayable2.setFitWidth(133);
-
+		cards[1] = cardPlayable2;
+		//cardWithImages.put(cards[1], model.getMyPlayer().getPlayableCards().get(1));
 		
 		cardPlayable3 = new ImageView(tempImage);
 		cardPlayable3.setFitHeight(200);
 		cardPlayable3.setFitWidth(133);
-
+		cards[2] = cardPlayable3;
+		//cardWithImages.put(cards[2], model.getMyPlayer().getPlayableCards().get(2));
 		
 		cardPlayable4 = new ImageView(tempImage);
 		cardPlayable4.setFitHeight(200);
 		cardPlayable4.setFitWidth(133);
-
+		cards[3] = cardPlayable4;
+		//cardWithImages.put(cards[3], model.getMyPlayer().getPlayableCards().get(3));
 		
 		cardPlayable5 = new ImageView(tempImage);
 		cardPlayable5.setFitHeight(200);
 		cardPlayable5.setFitWidth(133);
-
+		cards[4] = cardPlayable5;
+		//cardWithImages.put(cards[4], model.getMyPlayer().getPlayableCards().get(4));
 		
 		cardPlayable6 = new ImageView(tempImage);
 		cardPlayable6.setFitHeight(200);
 		cardPlayable6.setFitWidth(133);
-
+		cards[5] = cardPlayable6;
+		//cardWithImages.put(cards[5], model.getMyPlayer().getPlayableCards().get(5));
 		
 		cardPlayable7 = new ImageView(tempImage);
 		cardPlayable7.setFitHeight(200);
 		cardPlayable7.setFitWidth(133);
-
+		cards[6] = cardPlayable7;
+		//cardWithImages.put(cards[6], model.getMyPlayer().getPlayableCards().get(6));
 		
 		card1 = new ImageView(image);
 		card1.setFitHeight(130);
 		card1.setFitWidth(86);
-//		cards[0] = card1;
+		cards2[0] = card1;
 		card1.setOnMouseClicked((e) -> {
 			System.out.println("Karte 1");
 			updatePlayedCardView(card1, 0);
@@ -204,7 +212,7 @@ public class ClientView {
 		card2 = new ImageView(image);
 		card2.setFitHeight(130);
 		card2.setFitWidth(86);
-//		cards[1] = card2;
+		cards2[1] = card2;
 		card2.setOnMouseClicked((e) -> {
 			System.out.println("Karte 2");
 			updatePlayedCardView(card2, 1);
@@ -221,7 +229,7 @@ public class ClientView {
 		card3 = new ImageView(image);
 		card3.setFitHeight(130);
 		card3.setFitWidth(86);
-//		cards[2] = card3;
+		cards2[2] = card3;
 		card3.setOnMouseClicked((e) -> {
 			System.out.println("Karte 3");
 			updatePlayedCardView(card3, 2);
@@ -232,7 +240,7 @@ public class ClientView {
 		card4 = new ImageView(image);
 		card4.setFitHeight(130);
 		card4.setFitWidth(86);
-//		cards[3] = card4;
+		cards2[3] = card4;
 		card4.setOnMouseClicked((e) -> {
 			System.out.println("Karte 4");
 			updatePlayedCardView(card4, 3);
@@ -243,7 +251,7 @@ public class ClientView {
 		card5 = new ImageView(image);
 		card5.setFitHeight(130);
 		card5.setFitWidth(86);
-//		cards[4] = card5;
+		cards2[4] = card5;
 		card5.setOnMouseClicked((e) -> {
 			System.out.println("Karte 5");
 			updatePlayedCardView(card5, 4);
@@ -254,7 +262,7 @@ public class ClientView {
 		card6 = new ImageView(image);
 		card6.setFitHeight(130);
 		card6.setFitWidth(86);
-//		cards[5] = card6;
+		cards2[5] = card6;
 		card6.setOnMouseClicked((e) -> {
 			System.out.println("Karte 6");
 			updatePlayedCardView(card6, 5);
@@ -265,7 +273,7 @@ public class ClientView {
 		card7 = new ImageView(image2);
 		card7.setFitHeight(130);
 		card7.setFitWidth(86);
-//		cards[6] = card7;
+		cards2[6] = card7;
 		card7.setOnMouseClicked((e) -> {
 			System.out.println("Karte 7");
 			updatePlayedCardView(card7, 6);
@@ -276,7 +284,7 @@ public class ClientView {
 		card8 = new ImageView(image2);
 		card8.setFitHeight(130);
 		card8.setFitWidth(86);
-//		cards[7] = card8;
+		cards2[7] = card8;
 		card8.setOnMouseClicked((e) -> {
 			System.out.println("Karte 8");
 			updatePlayedCardView(card8, 7);
@@ -287,7 +295,7 @@ public class ClientView {
 		card9 = new ImageView(image2);
 		card9.setFitHeight(130);
 		card9.setFitWidth(86);
-//		cards[8] = card9;
+		cards2[8] = card9;
 		card9.setOnMouseClicked((e) -> {
 			System.out.println("Karte 9");
 			updatePlayedCardView(card9, 8);
@@ -298,7 +306,7 @@ public class ClientView {
 		card10 = new ImageView(image2);
 		card10.setFitHeight(130);
 		card10.setFitWidth(86);
-//		cards[9] = card10;
+		cards2[9] = card10;
 		card10.setOnMouseClicked((e) -> {
 			System.out.println("Karte 10");
 			updatePlayedCardView(card10, 9);
@@ -309,7 +317,7 @@ public class ClientView {
 		card11 = new ImageView(image2);
 		card11.setFitHeight(130);
 		card11.setFitWidth(86);
-//		cards[10] = card11;
+		cards2[10] = card11;
 		card11.setOnMouseClicked((e) -> {
 			System.out.println("Karte 11");
 			updatePlayedCardView(card11, 10);
@@ -320,7 +328,7 @@ public class ClientView {
 		card12 = new ImageView(image2);
 		card12.setFitHeight(130);
 		card12.setFitWidth(86);
-//		cards[11] = card12;
+		cards2[11] = card12;
 		card12.setOnMouseClicked((e) -> {
 			System.out.println("Karte 12");
 			updatePlayedCardView(card12, 11);
@@ -425,6 +433,7 @@ public class ClientView {
 		playableCards.setAlignment(Pos.BASELINE_CENTER);
 		playableCards.setPadding(new Insets(30, 0, 0, 0));
 		playableCards.setSpacing(10);
+		playableCards.setPrefHeight(230);
 		
 		cardPlayable1.setOnMouseClicked((e) -> {
 			System.out.println("Karte kann gespielt werden");
@@ -479,7 +488,7 @@ public class ClientView {
 		this.stage.show();
 	}
 	
-	protected void updatePlayedCardView(ImageView v, int i) {
+	public void updatePlayedCardView(ImageView v, int i) {
 		if(i >= model.getMyPlayer().getPlayedCards().size()) {
 			//do nothing
 		}else {
@@ -488,8 +497,17 @@ public class ClientView {
 		
 	}
 	
-	protected void updatePlayableCardView() {
-		this.playableCards.getChildren().clear();;
+	public void updatePlayedCardView() {
+		System.out.println(model.getMyPlayer().getPlayedCards());
+		for(int i = 0; i < model.getMyPlayer().getPlayedCards().size(); i++) {
+			this.cards2[i].setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(i).getImageFileName()));
+		}
+	}
+	
+	
+	
+	public void updatePlayableCardView() {
+		this.playableCards.getChildren().clear();
 		cards = new ImageView[model.getMyPlayer().getPlayableCards().size()];
 		System.out.println(model.getMyPlayer().getPlayableCards());
 		for (int i = 0; i < model.getMyPlayer().getPlayableCards().size(); i++) {
@@ -499,6 +517,10 @@ public class ClientView {
 			this.playableCards.getChildren().add(cards[i]);
 			cardWithImages.put(cards[i], model.getMyPlayer().getPlayableCards().get(i));
 		}
+	}
+	
+	public void disableCards() {
+		this.playableCards.getChildren().clear();
 	}
 	
 	private String getLanguageDescription(String identifier) {

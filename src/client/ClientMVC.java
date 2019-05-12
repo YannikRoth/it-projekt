@@ -31,7 +31,9 @@ public class ClientMVC extends Application{
 		this.model = new ClientModel();
 		ServicelocatorClient.setClientModel(model);
 		this.view = new ClientView(primaryStage, model);
+		ServicelocatorClient.setClientView(view);
 		this.control = new ClientController(model, view);
+		ServicelocatorClient.setClientController(control);
 		view.start();
 		
 		logger.info("Client MVC started");
