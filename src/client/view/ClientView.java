@@ -120,7 +120,8 @@ public class ClientView {
 	 * @author david
 	 */
 	private void buildTablePoints() {
-		tablePoints = new TableView<>(this.model.getMyPlayer().getResources().getResourcesListObservable());
+		tablePoints = new TableView<>();
+//		tablePoints.setItems(this.model.getMyPlayer().getResources().getResourcesListObservable());
 		tablePoints.setEditable(false);
 		
 		ColType		= new TableColumn<>();
