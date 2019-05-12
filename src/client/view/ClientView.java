@@ -54,7 +54,7 @@ public class ClientView {
 	protected ImageView[] cards = new ImageView[7];
 	protected ImageView[] cards2 = new ImageView[12];
 	private Map<ImageView, Card> cardWithImages = new HashMap<>();
-	private HBox playableCards;
+	private HBox playableCards, hBoxCards;
 	
 	protected ImageView card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12, card13, card14, card15, card16, cardPlayable1, cardPlayable2, cardPlayable3, cardPlayable4, cardPlayable5, cardPlayable6, cardPlayable7, selectedCard = null;
 	
@@ -157,9 +157,10 @@ public class ClientView {
 		BorderPane borderPanePlayer = new BorderPane();
 		hBoxPlayer.getChildren().addAll(borderPanePlayer);
 		
-		HBox hBoxCards = new HBox();
+		hBoxCards = new HBox();
 		hBoxCards.setSpacing(10);
 		hBoxCards.setPadding(new Insets(0,0,0,0));
+		hBoxCards.setPrefHeight(130);
 		borderPanePlayer.setTop(hBoxCards);
 		hBoxPlayer.setHgrow(borderPanePlayer, Priority.ALWAYS);
 		
@@ -211,152 +212,75 @@ public class ClientView {
 		cards[6] = cardPlayable7;
 		//cardWithImages.put(cards[6], model.getMyPlayer().getPlayableCards().get(6));
 		
-		card1 = new ImageView(image);
-		card1.setFitHeight(130);
-		card1.setFitWidth(86);
-		cards2[0] = card1;
-		card1.setOnMouseClicked((e) -> {
-			System.out.println("Karte 1");
-			updatePlayedCardView(card1, 0);
+//		card1 = new ImageView(image);
+//		card1.setFitHeight(130);
+//		card1.setFitWidth(86);
+//		cards2[0] = card1;
+//
+//		card2 = new ImageView(image);
+//		card2.setFitHeight(130);
+//		card2.setFitWidth(86);
+//		cards2[1] = card2;
+//
+//		card3 = new ImageView(image);
+//		card3.setFitHeight(130);
+//		card3.setFitWidth(86);
+//		cards2[2] = card3;
+//
+//		card4 = new ImageView(image);
+//		card4.setFitHeight(130);
+//		card4.setFitWidth(86);
+//		cards2[3] = card4;
+//
+//		
+//		card5 = new ImageView(image);
+//		card5.setFitHeight(130);
+//		card5.setFitWidth(86);
+//		cards2[4] = card5;
+//
+//		
+//		card6 = new ImageView(image);
+//		card6.setFitHeight(130);
+//		card6.setFitWidth(86);
+//		cards2[5] = card6;
+//
+//		
+//		card7 = new ImageView(image2);
+//		card7.setFitHeight(130);
+//		card7.setFitWidth(86);
+//		cards2[6] = card7;
+//
+//		
+//		card8 = new ImageView(image2);
+//		card8.setFitHeight(130);
+//		card8.setFitWidth(86);
+//		cards2[7] = card8;
+//
+//		
+//		card9 = new ImageView(image2);
+//		card9.setFitHeight(130);
+//		card9.setFitWidth(86);
+//		cards2[8] = card9;
+//
+//		
+//		card10 = new ImageView(image2);
+//		card10.setFitHeight(130);
+//		card10.setFitWidth(86);
+//		cards2[9] = card10;
+//
+//		
+//		card11 = new ImageView(image2);
+//		card11.setFitHeight(130);
+//		card11.setFitWidth(86);
+//		cards2[10] = card11;
+//
+//		card12 = new ImageView(image2);
+//		card12.setFitHeight(130);
+//		card12.setFitWidth(86);
+//		cards2[11] = card12;
 
-			if(card1 != this.selectedCard) {
-				card1.setEffect(new DropShadow(5, Color.RED));
-				card2.setEffect(null);
-				selectedCard = card1;
-				}
-
-			
-//			cardPlayable1.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(0).getImageFileName()));
-		});
 		
-		card2 = new ImageView(image);
-		card2.setFitHeight(130);
-		card2.setFitWidth(86);
-		cards2[1] = card2;
-		card2.setOnMouseClicked((e) -> {
-			System.out.println("Karte 2");
-			updatePlayedCardView(card2, 1);
-			
-			if(card2 != this.selectedCard) {
-				card2.setEffect(new DropShadow(5, Color.RED));
-				card1.setEffect(null);
-				selectedCard = card2;
-				}
-			
-//			cardPlayable1.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(0).getImageFileName()));
-		});
-		
-		card3 = new ImageView(image);
-		card3.setFitHeight(130);
-		card3.setFitWidth(86);
-		cards2[2] = card3;
-		card3.setOnMouseClicked((e) -> {
-			System.out.println("Karte 3");
-			updatePlayedCardView(card3, 2);
-			
-//			cardPlayable1.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(0).getImageFileName()));
-		});
-		
-		card4 = new ImageView(image);
-		card4.setFitHeight(130);
-		card4.setFitWidth(86);
-		cards2[3] = card4;
-		card4.setOnMouseClicked((e) -> {
-			System.out.println("Karte 4");
-			updatePlayedCardView(card4, 3);
-			
-//			cardPlayable1.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(0).getImageFileName()));
-		});
-		
-		card5 = new ImageView(image);
-		card5.setFitHeight(130);
-		card5.setFitWidth(86);
-		cards2[4] = card5;
-		card5.setOnMouseClicked((e) -> {
-			System.out.println("Karte 5");
-			updatePlayedCardView(card5, 4);
-			
-//			cardPlayable1.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(0).getImageFileName()));
-		});
-		
-		card6 = new ImageView(image);
-		card6.setFitHeight(130);
-		card6.setFitWidth(86);
-		cards2[5] = card6;
-		card6.setOnMouseClicked((e) -> {
-			System.out.println("Karte 6");
-			updatePlayedCardView(card6, 5);
-			
-//			cardPlayable1.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(0).getImageFileName()));
-		});
-		
-		card7 = new ImageView(image2);
-		card7.setFitHeight(130);
-		card7.setFitWidth(86);
-		cards2[6] = card7;
-		card7.setOnMouseClicked((e) -> {
-			System.out.println("Karte 7");
-			updatePlayedCardView(card7, 6);
-			
-//			cardPlayable1.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(0).getImageFileName()));
-		});
-		
-		card8 = new ImageView(image2);
-		card8.setFitHeight(130);
-		card8.setFitWidth(86);
-		cards2[7] = card8;
-		card8.setOnMouseClicked((e) -> {
-			System.out.println("Karte 8");
-			updatePlayedCardView(card8, 7);
-			
-//			cardPlayable1.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(0).getImageFileName()));
-		});
-		
-		card9 = new ImageView(image2);
-		card9.setFitHeight(130);
-		card9.setFitWidth(86);
-		cards2[8] = card9;
-		card9.setOnMouseClicked((e) -> {
-			System.out.println("Karte 9");
-			updatePlayedCardView(card9, 8);
-			
-//			cardPlayable1.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(0).getImageFileName()));
-		});
-		
-		card10 = new ImageView(image2);
-		card10.setFitHeight(130);
-		card10.setFitWidth(86);
-		cards2[9] = card10;
-		card10.setOnMouseClicked((e) -> {
-			System.out.println("Karte 10");
-			updatePlayedCardView(card10, 9);
-			
-//			cardPlayable1.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(0).getImageFileName()));
-		});
-		
-		card11 = new ImageView(image2);
-		card11.setFitHeight(130);
-		card11.setFitWidth(86);
-		cards2[10] = card11;
-		card11.setOnMouseClicked((e) -> {
-			System.out.println("Karte 11");
-			updatePlayedCardView(card11, 10);
-			
-//			cardPlayable1.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(0).getImageFileName()));
-		});
-		
-		card12 = new ImageView(image2);
-		card12.setFitHeight(130);
-		card12.setFitWidth(86);
-		cards2[11] = card12;
-		card12.setOnMouseClicked((e) -> {
-			System.out.println("Karte 12");
-			updatePlayedCardView(card12, 11);
-			
-//			cardPlayable1.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(0).getImageFileName()));
-		});
-		
-		hBoxCards.getChildren().addAll(card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12);
+//		hBoxCards.getChildren().addAll(card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12);
 		
 		
 		//Points
@@ -487,21 +411,19 @@ public class ClientView {
 		this.stage.show();
 	}
 	
-	public void updatePlayedCardView(ImageView v, int i) {
-		if(i >= model.getMyPlayer().getPlayedCards().size()) {
-			//do nothing
-		}else {
-			v.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(i).getImageFileName()));
-		}
-		
+	public void addImageView(ImageView v) {
+		this.hBoxCards.getChildren().add(v);
+		v.setFitHeight(130);
+		v.setFitWidth(86);
 	}
 	
-	public void updatePlayedCardView() {
-		System.out.println(model.getMyPlayer().getPlayedCards());
-		for(int i = 0; i < model.getMyPlayer().getPlayedCards().size(); i++) {
-			this.cards2[i].setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(i).getImageFileName()));
-		}
-	}
+//	public void updatePlayedCardView() {
+//		System.out.println(model.getMyPlayer().getPlayedCards());
+//		for(int i = 0; i < model.getMyPlayer().getPlayedCards().size(); i++) {
+//			this.cards2[i].setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(i).getImageFileName()));
+//		}
+//	}
+//	
 	
 //	protected void updatePlayableCardView() {
 //		System.out.println(model.getMyPlayer().getPlayedCards());
@@ -509,8 +431,6 @@ public class ClientView {
 //			this.cards2[i].setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(i).getImageFileName()));
 //		}
 //	}
-	
-	
 	
 	public void updatePlayableCardView() {
 		this.playableCards.getChildren().clear();

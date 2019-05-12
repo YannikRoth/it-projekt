@@ -104,6 +104,7 @@ public class ClientModel extends Thread {
 					numberofPlayers = (Integer) objInputStream.readObject();
 					synchronized(objInputStream) {
 						player = (Player) objInputStream.readObject();
+						//todo: david
 					}
 					logger.info("Connection and Game opened with "+numberofPlayers+" Players");
 					break;

@@ -4,6 +4,7 @@ package client.controller;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import client.model.ClientModel;
@@ -108,6 +109,7 @@ public class ClientController {
 			        // no application registered for PDFs
 			    }
 			}
+			
 		});
 	}
 
@@ -117,7 +119,20 @@ public class ClientController {
 			model.sendPlayedCard(this.selectedCard, ClientAction.PLAYCARD);
 			logger.info("Played Card");
 			view.disableCards();
-			view.updatePlayedCardView();
+//			view.updatePlayedCardView();
+
+			ImageView correct = null;
+			
+			for(Entry<ImageView, Card> temp : view.getCardsWithImages().entrySet()){
+				ImageView v = temp.getKey();
+				Card c = temp.getValue();
+				
+				if(c.equals(this.selectedCard)) {
+					correct = v;
+					view.addImageView(correct);
+				}
+			}
+			
 		});
 	}
 	
@@ -127,7 +142,7 @@ public class ClientController {
 			model.sendPlayedCard(this.selectedCard, ClientAction.BUILDWONDER);
 			logger.info("Build WorldWonder");
 			view.disableCards();
-			view.updatePlayedCardView();
+			//view.updatePlayedCardView();
 		});
 	}
 	
@@ -138,7 +153,7 @@ public class ClientController {
 			logger.info("DiscardCard");
 			view.disableCards();
 //			ImageView v = (ImageView) e.getSource();
-			view.updatePlayedCardView();
+			//view.updatePlayedCardView();
 		});
 	}
 	
