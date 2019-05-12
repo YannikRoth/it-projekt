@@ -114,7 +114,7 @@ public class ClientView {
         	dynamicCols.add(tmpCol);
 		}
         tableOpponents.getColumns().addAll(dynamicCols);
-        tableOpponents.setMaxHeight(200);
+        tableOpponents.setPrefHeight(200);
 	}
 	
 	/**
@@ -158,7 +158,6 @@ public class ClientView {
 		borderPaneMain.setBottom(hBoxPlayer);
 		
 		BorderPane borderPanePlayer = new BorderPane();
-		hBoxPlayer.getChildren().addAll(borderPanePlayer);
 		
 		this.hBoxCards = new HBox();
 		hBoxCards.setPadding(new Insets(0,50,0,0));
@@ -169,7 +168,6 @@ public class ClientView {
 		hBoxPlayer.setHgrow(borderPanePlayer, Priority.ALWAYS);
 		
 		//Cards
-		Image image2 = new Image("file:./resource/images/cards/SCN_0151.jpg");
 		Image tempImage = new Image("file:./resource/images/cards/SCN_0150.jpg");
 		
 		//initiates back of the cards as default
@@ -211,13 +209,19 @@ public class ClientView {
 		
 		//Points
 		buildTablePoints();
-		hBoxPlayer.getChildren().addAll(tablePoints);
+		hBoxPlayer.getChildren().addAll(borderPanePlayer, tablePoints);
 		
 		//Deck
-		VBox hBoxDeck = new VBox();
-		hBoxDeck.setPadding(new Insets(55,0,15, 0));
-		hBoxDeck.setSpacing(10);
-		borderPanePlayer.setCenter(hBoxDeck);
+		VBox vBoxDeck = new VBox();
+		vBoxDeck.setPadding(new Insets(55,0,15, 0));
+		vBoxDeck.setSpacing(10);
+		borderPanePlayer.setCenter(vBoxDeck);
+		
+		borderPanePlayer.setStyle("-fx-background-image: url(file:./resource/images/boards/Board_06_A.jpg) \n" +
+		"-fx-background-repeat: stretch \n" +  
+		"-fx-background-size: cover, auto \n" +
+		"-fx-background-position: bottom left \n" +
+		"-fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);");
 		
 		//buttons for client action
 		this.playCard = new Button();
@@ -255,7 +259,7 @@ public class ClientView {
 		playableCards = new HBox();
 		playableCards.getChildren().addAll(cardPlayable1, cardPlayable2, cardPlayable3, cardPlayable4, cardPlayable5, cardPlayable6, cardPlayable7);
 				
-		hBoxDeck.getChildren().addAll(playableCards, buttonBox);
+		vBoxDeck.getChildren().addAll(playableCards, buttonBox);
 		playableCards.setAlignment(Pos.BASELINE_CENTER);
 		playableCards.setPadding(new Insets(30, 0, 0, 0));
 		playableCards.setPrefHeight(230);
