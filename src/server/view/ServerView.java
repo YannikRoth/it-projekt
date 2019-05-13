@@ -99,7 +99,7 @@ public class ServerView {
 		try {
 			fieldIpAdress.setText(Inet4Address.getLocalHost().getHostAddress());
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
+			ServiceLocator.getLogger().warning(e.getLocalizedMessage());
 		}
 		fieldPort		= new TextField();
 		fieldPort.setEditable(false);
@@ -122,7 +122,7 @@ public class ServerView {
 		
 		//TableView Bottom
 		TableView<ServerAction> tableView = new TableView<ServerAction>();
-		tableView.setItems(serverActionData);
+		tableView.setItems(model.getServerActionData());
 		pane.setBottom(tableView);
 		
 		tblcolTimestamp= new TableColumn<ServerAction,String>();
@@ -227,8 +227,4 @@ public class ServerView {
 	public Menu getMenuLanguage() {
 		return this.menuLanguage;
 	}
-	
-	public ObservableList<ServerAction> serverActionData = FXCollections.observableArrayList(
-	    new ServerAction("localhost", "Server", "StartUp")
-	);
 }

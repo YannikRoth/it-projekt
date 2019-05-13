@@ -1,35 +1,37 @@
 package server.model;
 
 import java.io.Serializable;
+import java.net.Inet4Address;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import globals.CardAge;
-import globals.CardType;
-import globals.CardType.CardColor;
 import globals.exception.DataConsistencyException;
-import javafx.util.converter.NumberStringConverter;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import server.ServiceLocator;
 import server.model.clienthandling.ServerClientThread;
 import server.model.clienthandling.ServerRequestHandler;
 import server.model.gameplay.Board;
 import server.model.gameplay.Card;
 import server.model.gameplay.Player;
+import server.model.gameplay.ServerAction;
 import server.model.init.BoardLoader;
 import server.model.init.CardLoader;
 
 public class ServerModel implements Serializable{
 	
 	private Logger logger = ServiceLocator.getLogger();
+	private String hostAddress;
+	
+	public ObservableList<ServerAction> serverActionData;
 	
 	private Map<Player, ServerClientThread> players = new HashMap<>();
 	private ServerRequestHandler requesthandler;
@@ -55,6 +57,11 @@ public class ServerModel implements Serializable{
 	//end of gameplay specific varibales
 	
 	public ServerModel() {
+		try {
+			setHostAddress(Inet4Address.getLocalHost().getHostAddress());
+		} catch (UnknownHostException e) {
+			logger.warning(e.getLocalizedMessage());
+		}
 		//load masterdata and store them into class maps
 		this.cards = new HashMap<>();
 		CardLoader.importCards(this);
@@ -67,6 +74,8 @@ public class ServerModel implements Serializable{
 		this.requesthandler = new ServerRequestHandler(this);
 		requesthandler.start();
 		
+		serverActionData = FXCollections.observableArrayList();
+		serverActionData.add(new ServerAction(getHostAddress(), "Server", "StartUp"));
 		//further code to follow
 	}
 	
@@ -448,5 +457,17 @@ public class ServerModel implements Serializable{
 	
 	public synchronized List<Player> getWinners() {
 		return this.gameWinners;
+	}
+	
+	public ObservableList<ServerAction> getServerActionData() {
+		return this.serverActionData;
+	}
+	
+	public void setHostAddress(String hostAddress) {
+		this.hostAddress = hostAddress;
+	}
+	
+	public String getHostAddress() {
+		return this.hostAddress;
 	}
 }

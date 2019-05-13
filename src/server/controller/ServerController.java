@@ -54,12 +54,12 @@ public class ServerController{
 				}
 			});
 			
-			view.serverActionData.add(new ServerAction("localhost", "Server", "Port changed to: " + Globals.getPortNr()));
+			model.getServerActionData().add(new ServerAction(model.getHostAddress(), "Server", "Port changed to: " + Globals.getPortNr()));
 		});
 		
 		view.getButtonRestartServer().setOnAction((event) -> {
 			//TODO: Restart ServerSocket
-			view.serverActionData.add(new ServerAction("localhost", "Server", "Server restarted"));
+			model.getServerActionData().add(new ServerAction(model.getHostAddress(), "Server", "Server restarted"));
 		});
 	}
 	
