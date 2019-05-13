@@ -3,6 +3,7 @@ package client;
 import java.util.logging.Logger;
 
 import client.controller.ClientController;
+import client.controller.LobbyController;
 import client.model.ClientModel;
 import client.view.ClientView;
 import javafx.application.Application;
@@ -21,6 +22,11 @@ public class ClientMVC extends Application{
 	private ClientView view;
 	private ClientController control;
 	private Logger logger = ServiceLocator.getLogger();
+	private LobbyController callingLobbyController;
+	
+	public ClientMVC(LobbyController callingLobbyController) {
+		this.callingLobbyController = callingLobbyController;
+	}
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -32,7 +38,7 @@ public class ClientMVC extends Application{
 		ServicelocatorClient.setClientModel(model);
 		this.view = new ClientView(primaryStage, model);
 		ServicelocatorClient.setClientView(view);
-		this.control = new ClientController(model, view);
+		this.control = new ClientController(model, view, this.callingLobbyController);
 		ServicelocatorClient.setClientController(control);
 		view.start();
 		

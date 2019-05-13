@@ -244,6 +244,18 @@ public class LobbyView {
 		btnQuit.setDisable(true);
 	}
 	
+	/**
+	 * enables functionality after close gameplay
+	 * @author david
+	 */
+	public void enableDialogElements() {
+		playerName.setEditable(true);
+		ipAdress.setEditable(true);
+		port.setEditable(true);
+		btnNewGame.setDisable(false);
+		btnQuit.setDisable(false);
+	}
+	
 	public void start() {
 		stage.show();
 	}

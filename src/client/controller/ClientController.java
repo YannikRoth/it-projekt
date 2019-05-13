@@ -36,10 +36,12 @@ public class ClientController {
 	private ClientView view;
 	private Card selectedCard;
 	private Logger logger = ServiceLocator.getLogger();
+	private LobbyController callingLobbyController;
 	
-	public ClientController(ClientModel model, ClientView view) {
+	public ClientController(ClientModel model, ClientView view, LobbyController callingLobbyController) {
 		this.model = model;
 		this.view = view;
+		this.callingLobbyController = callingLobbyController;
 		processRulesItem();
 		processHintItem();
 		processAboutItem();
@@ -77,8 +79,10 @@ public class ClientController {
 
 	private void processQuitItem() {
 		view.getQuitItem().setOnAction((e) -> {
-			Platform.exit();
-			System.exit(0);
+			callingLobbyController.showAndEnableView();
+			view.getStage().close();
+//			Platform.exit();
+//			System.exit(0);
 		});
 	}
 
@@ -214,8 +218,9 @@ public class ClientController {
 		view.getStage().setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent event) {
-				Platform.exit();
-				System.exit(0);
+				callingLobbyController.showAndEnableView();
+//				Platform.exit();
+//				System.exit(0);
 			}
 		});
 	}

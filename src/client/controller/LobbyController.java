@@ -69,8 +69,9 @@ public class LobbyController {
 			view.disableDialogElements();
 			handleInetAdress(view.getIpAdress(), view.getPort());
 			Stage secondStage = new Stage();
-			ClientMVC clientMVC = new ClientMVC();
+			ClientMVC clientMVC = new ClientMVC(this);
 			try {
+				view.stop();
 				clientMVC.start(secondStage);
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
@@ -108,6 +109,16 @@ public class LobbyController {
 	public static void handleInetAdress(String ip, int port) {
 		Globals.setDefaultIPAddr(ip);
 		Globals.setPortNr(port);
+	}
+	
+	/**
+	 * shows lobby an enables elements
+	 * can be called from ClientController after close request
+	 * @author david
+	 */
+	public void showAndEnableView() {
+		view.enableDialogElements();
+		view.start();
 	}
 	
 	/**
