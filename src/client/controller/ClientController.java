@@ -79,10 +79,13 @@ public class ClientController {
 
 	private void processQuitItem() {
 		view.getQuitItem().setOnAction((e) -> {
-			callingLobbyController.showAndEnableView();
-			view.getStage().close();
-//			Platform.exit();
-//			System.exit(0);
+			if(callingLobbyController != null) {
+				callingLobbyController.showAndEnableView();
+				view.getStage().close();
+			} else {
+				Platform.exit();
+				System.exit(0);
+			}
 		});
 	}
 
@@ -218,9 +221,12 @@ public class ClientController {
 		view.getStage().setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent event) {
-				callingLobbyController.showAndEnableView();
-//				Platform.exit();
-//				System.exit(0);
+				if(callingLobbyController != null)
+					callingLobbyController.showAndEnableView();
+				else {
+					Platform.exit();
+					System.exit(0);
+				}
 			}
 		});
 	}

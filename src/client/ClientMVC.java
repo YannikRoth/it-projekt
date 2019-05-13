@@ -24,6 +24,10 @@ public class ClientMVC extends Application{
 	private Logger logger = ServiceLocator.getLogger();
 	private LobbyController callingLobbyController;
 	
+	public ClientMVC() {
+		this.callingLobbyController = null;
+	}
+	
 	public ClientMVC(LobbyController callingLobbyController) {
 		this.callingLobbyController = callingLobbyController;
 	}
