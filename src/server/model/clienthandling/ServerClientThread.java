@@ -50,6 +50,8 @@ public class ServerClientThread extends Thread implements Serializable {
 			objOutputStream = new ObjectOutputStream(this.socket.getOutputStream());
 			objInputStream = new ObjectInputStream(this.socket.getInputStream());	
 		
+			ServiceLocator.getServerModel().getServerActionData().add(
+					new server.model.gameplay.ServerAction(socket.getInetAddress().toString(), player.getPlayerName(), "Connected"));
 		} catch (IOException e) {
 			logger.info("Error occured durring communication with client");
 		}
@@ -58,6 +60,7 @@ public class ServerClientThread extends Thread implements Serializable {
 	@Override
 	public void run() {
 		ClientAction action;
+		
 		
 		//this sends the own player obj to the server
 		try {
