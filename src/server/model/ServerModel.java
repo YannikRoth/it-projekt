@@ -35,6 +35,7 @@ public class ServerModel implements Serializable{
 	private ServerRequestHandler requesthandler;
 	
 	public volatile int counter = 0;
+	public volatile boolean gameEnd = false;
 	private volatile int cardPlayCounter = 0;
 	
 	//cards and boards are imported when class is initialized
@@ -49,6 +50,8 @@ public class ServerModel implements Serializable{
 	//index0 = age 1; index2 = age 3
 	private List<Map<Integer, Card>> activeCards = new ArrayList<>();
 	private CardAge cardAge;
+	private List<Player> gameWinners = null;
+	
 	//end of gameplay specific varibales
 	
 	public ServerModel() {
@@ -269,7 +272,8 @@ public class ServerModel implements Serializable{
 	 * @author Roman Leuenberger
 	 */
 	
-	public List<Player> evaluateWinner(Player...players ){
+	//public List<Player> evaluateWinner(Player...players ){
+	public List<Player> evaluateWinner(List<Player> players){
 		
 		//TODO count points for cards of 3. age
 		//add players to this list. Sort by winner -> Index 0 = winner; index max = looser.
@@ -414,17 +418,35 @@ public class ServerModel implements Serializable{
 			handoutCards(ageTwoCards);
 			//cardPlayCounter = 0;
 		}
+		
 		if(this.cardPlayCounter == NUMBEROFPLAYERS * 6 * 2) {
+			//loop through all client threads -> continue = false;
 			System.out.println("Entering age 3");
 			for(Entry<Player, ServerClientThread> p : this.players.entrySet()) {
 				Player player = p.getKey();
 				this.dealMilitaryPoints(player);
 			}
+			
+			//game ends
+			this.gameEnd = true;
+			List<Player> allPlayers = new ArrayList<>(this.players.keySet());
+			this.gameWinners = evaluateWinner(allPlayers);
+			
+			//clear all the cards from the player obj.
+			for(Player p : allPlayers) {
+				p.clearCurrentPlayableCards();
+			}
+			
+			
 			//this.cardAge = CardAge.THREE;
 			//List<Card> ageThreeCards = new ArrayList<>(this.activeCards.get(this.cardAge.getAgeValue()-1).values());
 			//handoutCards(ageThreeCards);
 		}
+		System.out.println("CARD-ROUND: " + cardPlayCounter);
 		
 	}
 	
+	public synchronized List<Player> getWinners() {
+		return this.gameWinners;
+	}
 }

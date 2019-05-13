@@ -480,4 +480,11 @@ public class Player implements Serializable{
 	public Board getBoard() {
 		return this.playerBoard;
 	}
+	
+	/**
+	 * Used when game ends. No card should be playable anymore
+	 */
+	public void clearCurrentPlayableCards() {
+		this.currentPlayableCards.clear();
+	}
 }
