@@ -159,7 +159,8 @@ public class ClientView {
 		this.hBoxCards = new HBox();
 		hBoxCards.setPadding(new Insets(0,50,0,0));
 		hBoxCards.setPrefHeight(130);
-		hBoxCards.setStyle("-fx-background-color: #daa520");
+		hBoxCards.setMinWidth(980);
+		hBoxCards.setAlignment(Pos.CENTER);
 		borderPanePlayer.setTop(hBoxCards);
 		borderPanePlayer.setPrefWidth(985);
 		hBoxPlayer.setHgrow(borderPanePlayer, Priority.ALWAYS);
@@ -203,14 +204,19 @@ public class ClientView {
 		cardPlayable7.setFitWidth(133);
 		cards[6] = cardPlayable7;
 		
+		VBox vBoxTablePoints = new VBox();
+		HBox hBoxEmpty = new HBox();
+		hBoxEmpty.setPrefHeight(130);
 		
 		//Points
 		buildTablePoints();
-		hBoxPlayer.getChildren().addAll(borderPanePlayer, tablePoints);
+		vBoxTablePoints.getChildren().addAll(hBoxEmpty, tablePoints);
+		hBoxPlayer.getChildren().addAll(borderPanePlayer, vBoxTablePoints);
+		hBoxPlayer.getStyleClass().add("hBoxDeck");
 		
 		//Deck
 		VBox vBoxDeck = new VBox();
-		vBoxDeck.setPadding(new Insets(55,0,15, 0));
+		vBoxDeck.setPadding(new Insets(30,0,15, 0));
 		vBoxDeck.setSpacing(10);
 		borderPanePlayer.setCenter(vBoxDeck);
 		
@@ -241,7 +247,7 @@ public class ClientView {
 		//hbox for world wonder (back of the card)
 		this.hBoxWorldWonderCards = new HBox();
 		hBoxWorldWonderCards.setSpacing(250);
-		hBoxWorldWonderCards.setPadding(new Insets(0,0,0,250));
+		hBoxWorldWonderCards.setPadding(new Insets(0,0,0,20));
 		hBoxWorldWonderCards.setPrefHeight(110);
 		borderPanePlayer.setBottom(hBoxWorldWonderCards);
 		

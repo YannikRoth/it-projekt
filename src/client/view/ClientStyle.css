@@ -3,8 +3,8 @@
 }
 
 .menu-bar{
-  -fx-background-color: #daa520;
-  -fx-border-color:  white;
+ -fx-background-color: transparent;
+	-fx-base: transparent;
  	-fx-border-width: 2
 
 }
@@ -12,13 +12,16 @@
 .menu-bar .label {
     -fx-font-size: 12 pt;
     -fx-font-family: "Broadway";
-    -fx-text-fill: black;
+    -fx-background-color: transparent;
+	-fx-base: transparent;
+    -fx-text-fill: white;
 
 }
 
 
 .menu:hover {
-    -fx-background-color: white;
+    -fx-background-color: transparent;
+	-fx-base: transparent;
 }
 
 .menu-item .label{
@@ -43,62 +46,63 @@
 	-fx-background-color: #daa520;
 }
 .root {
-    -fx-background-image: url("file:./resource/images/boards/Board_06_A.jpg");
-    -fx-background-repeat: stretch;   
-    -fx-background-size: 985 455;
-    -fx-background-position: bottom left;
-    -fx-effect: dropshadow(three-pass-box, white, 30, 0.5, 0, 0);
+ 	-fx-background-color: #daa520;
+ 	-fx-effect: dropshadow(three-pass-box, white, 30, 0.5, 0, 0);
 }
+
 
 .table-view{
-   -fx-background-color: #daa520;
+	-fx-background-color: transparent;
+	-fx-base: transparent;
 }
-
-.table-view:focused{
-    -fx-background-color: #daa520;
-}
-
-/* Spaltenk�pfe
-    Struktur column-header-background -> column-header */
 
 .table-view .column-header-background{
 	-fx-font-family: "Broadway";
-    -fx-background-color: #daa520;
+	-fx-background-color: transparent;
+	-fx-base: transparent;
 }
 
 .table-view .column-header-background .label{
 	-fx-font-family: "Broadway";
-    -fx-background-color: #daa520;
+	-fx-base: transparent;
+	-fx-background-color: transparent;
     -fx-text-fill: white;
 }
 
 .table-view .column-header {
 	-fx-font-family: "Broadway";
-    -fx-background-color: #daa520;
+    -fx-background-color: transparent;
+    -fx-base: transparent;
     -fx-border-color: white;
 }
 
 .table-view .table-cell{
 	-fx-font-family: "Broadway";
+	-fx-background-color: transparent;
+    -fx-base: transparent;
     -fx-text-fill: white;
+
 }
 .table-row-cell{
 	-fx-font-family: "Broadway";
-    -fx-background-color: -fx-table-cell-border-color, #daa520;
+    -fx-background-color: transparent;
+    -fx-base: transparent;
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em; /* 0 */
 }
 
 .table-row-cell:odd{
 	-fx-font-family: "Broadway";
-    -fx-background-color: -fx-table-cell-border-color, #daa520;
+    -fx-background-color: transparent;
+    -fx-base: transparent;
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em; /* 0 */  
 }
 
 .table-row-cell:selected {
 	-fx-font-family: "Broadway";
-    -fx-background-color: #daa520;
+    -fx-background-color: transparent;
+    -fx-base: transparent;
     -fx-background-insets: 0;
     -fx-background-radius: 1;
 }
@@ -108,7 +112,7 @@
 .table-view > .virtual-flow > .scroll-bar:horizontal,
 .table-view > .virtual-flow > .scroll-bar:horizontal > .track,
 .table-view > .virtual-flow > .scroll-bar:horizontal > .track-background {
-    -fx-background-color: #daa520;
+    -fx-background-color: transparent;
 }
 
 
@@ -117,4 +121,9 @@
 .table-view > .virtual-flow > .scroll-bar > .decrement-button {
 	-fx-font-family: "Broadway";
     -fx-opacity: 0;
+}
+
+.hBoxDeck {
+	-fx-background-image: url("file:./resource/images/boards/Board_06_A.jpg");
+	-fx-background-size: 1250 580;
 }

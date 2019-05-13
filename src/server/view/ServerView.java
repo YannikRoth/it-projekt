@@ -14,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -125,6 +126,8 @@ public class ServerView {
 		this.btnRestartServer.setDisable(true);
 		
 		hBox.getChildren().addAll(fieldDomain, fieldIpAdress, fieldPort, btnChangePort, btnRestartServer);
+		hBox.setSpacing(2);
+		hBox.setAlignment(Pos.CENTER);
 		
 		//TableView Bottom
 		TableView<ServerAction> tableView = new TableView<ServerAction>();
@@ -132,7 +135,7 @@ public class ServerView {
 		pane.setBottom(tableView);
 		
 		tblcolTimestamp= new TableColumn<ServerAction,String>();
-		tblcolTimestamp.setMinWidth(130);
+		tblcolTimestamp.setMinWidth(140);
 		tblcolTimestamp.setCellValueFactory(new PropertyValueFactory<ServerAction,String>("timestamp"));
 		
 		tblcolIpAdress	= new TableColumn<ServerAction,String>();
@@ -144,7 +147,7 @@ public class ServerView {
 		tblcolPlayer.setCellValueFactory(new PropertyValueFactory<ServerAction,String>("userName"));
 		
 		tblcolAction	= new TableColumn<ServerAction,String>();
-		tblcolAction.setMinWidth(350);
+		tblcolAction.setMinWidth(300);
 		tblcolAction.setCellValueFactory(new PropertyValueFactory<ServerAction,String>("action"));
 		
 		tableView.getColumns().addAll(tblcolTimestamp, tblcolIpAdress, tblcolPlayer, tblcolAction);

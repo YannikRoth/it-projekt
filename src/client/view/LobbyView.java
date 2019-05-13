@@ -142,7 +142,7 @@ public class LobbyView {
 		imageViewQuit.setFitWidth(30);
 		this.btnQuit = new Button("Quit", imageViewQuit);
 
-		hBoxButton.setPadding(new Insets(0, 0, 5, 0));
+		hBoxButton.setPadding(new Insets(0, 0, 10, 0));
 		
 		hBoxButton.getChildren().addAll(btnNewGame, btnRules, btnQuit);
 		

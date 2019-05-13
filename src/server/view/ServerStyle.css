@@ -3,8 +3,8 @@
 }
 
 .menu-bar{
-  -fx-background-color: #daa520;
-  -fx-border-color:  white;
+ -fx-background-color: transparent;
+	-fx-base: transparent;
  	-fx-border-width: 2
 
 }
@@ -12,13 +12,16 @@
 .menu-bar .label {
     -fx-font-size: 12 pt;
     -fx-font-family: "Broadway";
-    -fx-text-fill: black;
+    -fx-background-color: transparent;
+	-fx-base: transparent;
+    -fx-text-fill: white;
 
 }
 
 
 .menu:hover {
-    -fx-background-color: white;
+    -fx-background-color: transparent;
+	-fx-base: transparent;
 }
 
 .menu-item .label{
@@ -31,7 +34,8 @@
 	-fx-font-weight: bold;
  	-fx-min-width: 110;
 	-fx-min-height: 20;
-	-fx-background-color: white;
+	-fx-background-color: transparent;
+	-fx-base: transparent;
 }
 
 .button:hover {
@@ -42,52 +46,80 @@
 	-fx-min-height: 20;
 	-fx-background-color: #daa520;
 }
+
+.label{
+	-fx-font-family: "Broadway";
+	-fx-text-fill: white;
+	-fx-font-size: 12px;
+}
+
+.text-field {
+    -fx-background-color: white;
+	-fx-border-color: white;
+}
+
+
 .root{
-    -fx-background-color: #daa520;
-    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
+	-fx-background-image: url("file:./resource/images/title-logo.jpg");
+    -fx-background-size: 610 520;
+    -fx-effect: dropshadow(three-pass-box, white, 30, 0.5, 0, 0);
 }
 
 /* Spaltenköpfe
     Struktur column-header-background -> column-header */
 
+.table-view{
+	-fx-background-color: transparent;
+	-fx-base: transparent;
+}
+
 .table-view .column-header-background{
 	-fx-font-family: "Broadway";
-    -fx-background-color:  #daa520;
+	-fx-background-color: transparent;
+	-fx-base: transparent;
 }
 
 .table-view .column-header-background .label{
 	-fx-font-family: "Broadway";
-    -fx-background-color: transparent;
+	-fx-base: transparent;
+	-fx-background-color: transparent;
     -fx-text-fill: white;
 }
 
 .table-view .column-header {
 	-fx-font-family: "Broadway";
     -fx-background-color: transparent;
+    -fx-base: transparent;
     -fx-border-color: white;
 }
 
 .table-view .table-cell{
 	-fx-font-family: "Broadway";
+	-fx-background-color: transparent;
+    -fx-base: transparent;
     -fx-text-fill: white;
+
 }
 .table-row-cell{
 	-fx-font-family: "Broadway";
-    -fx-background-color: -fx-table-cell-border-color, #daa520;
+    -fx-background-color: transparent;
+    -fx-base: transparent;
     -fx-background-insets: 0, 0 0 1 0;
-
+    -fx-padding: 0.0em; /* 0 */
 }
 
 .table-row-cell:odd{
 	-fx-font-family: "Broadway";
-    -fx-background-color: -fx-table-cell-border-color, #daa520;
+    -fx-background-color: transparent;
+    -fx-base: transparent;
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em; /* 0 */  
 }
 
 .table-row-cell:selected {
 	-fx-font-family: "Broadway";
-    -fx-background-color: #daa520;
+    -fx-background-color: transparent;
+    -fx-base: transparent;
     -fx-background-insets: 0;
     -fx-background-radius: 1;
 }
