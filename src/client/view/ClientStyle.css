@@ -1,5 +1,9 @@
+/**
+ * @author: Philipp
+ */
+
 .gamebackground {
-	-fx-background-color: black;
+	-fx-background-color: #daa520;
 }
 
 .menu-bar{
