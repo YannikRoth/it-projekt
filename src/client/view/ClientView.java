@@ -232,10 +232,6 @@ public class ClientView {
 		buildWorldWonder.setMaxWidth(200);
 		discardCard.setMaxWidth(200);
 		
-		playCard.setDisable(true);
-		buildWorldWonder.setDisable(true);
-		discardCard.setDisable(true);
-		
 		//disable Buttons as they get only activated if action is possible
 		playCard.setDisable(true);
 		buildWorldWonder.setDisable(true);
