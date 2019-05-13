@@ -323,7 +323,8 @@ public class Player implements Serializable{
 	 * @param i
 	 */
 	public void addCoins(int i) {
-		this.resources.put(ResourceType.COIN, i);
+		int newAmountOfCoins = this.resources.get(ResourceType.COIN)+i;
+		this.resources.put(ResourceType.COIN, newAmountOfCoins);
 //		this.resourcesObservable.put(ResourceType.COIN, i);
 	}
 	
