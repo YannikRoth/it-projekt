@@ -5,10 +5,13 @@ import java.util.logging.Logger;
 
 import globals.Globals;
 import globals.Translator;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputDialog;
+import javafx.stage.WindowEvent;
 import server.ServiceLocator;
 import server.model.ServerModel;
 import server.model.gameplay.ServerAction;
@@ -26,6 +29,7 @@ public class ServerController{
 		
 		AddViewButtonListeners();
 		AddMenuItemListeners();
+		handleCloseRequest();
 	}
 
 	/**
@@ -75,5 +79,20 @@ public class ServerController{
 					view.setTexts();
 				}
 		}));
+	}
+	
+	/**
+	 * Disconnect from Server
+	 * Kill open threads
+	 * @author david
+	 */
+	public void handleCloseRequest() {
+		view.getStage().setOnCloseRequest(new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent event) {
+				Platform.exit();
+				System.exit(0);
+			}
+		});
 	}
 }

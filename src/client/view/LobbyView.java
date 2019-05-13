@@ -84,14 +84,6 @@ public class LobbyView {
 	}	
 		
 	public void buildView() {
-		//Damit beim schliessen die Threads "gekillt" werden
-		this.stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-			@Override
-			public void handle(WindowEvent event) {
-				Platform.exit();
-				System.exit(0);
-			}
-		});
 		//Erstellt die Grundmaske der Lobby
 		BorderPane borderPaneMain = new BorderPane();
 		

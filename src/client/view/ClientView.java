@@ -136,16 +136,6 @@ public class ClientView {
 	}
 	
 	public void buildView() {
-		//Damit beim schliessen die Threads "gekillt" werden
-		this.stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-			@Override
-			public void handle(WindowEvent event) {
-				//TODO: handle exit and log of from server - kill server connection threads
-				Platform.exit();
-				System.exit(0);
-			}
-		});
-		
 		BorderPane borderPaneMain = new BorderPane();
 		
 		//Table View opponents

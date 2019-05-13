@@ -7,16 +7,20 @@ import java.io.IOException;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
 
+import com.sun.glass.ui.View;
+
 import client.model.ClientModel;
 import client.view.CardOptionView;
 import client.view.ClientView;
 import globals.ClientAction;
 import globals.Translator;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.control.MenuItem;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.stage.WindowEvent;
 import server.ServiceLocator;
 import server.model.gameplay.Card;
 
@@ -46,7 +50,7 @@ public class ClientController {
 		processBuildWorldWonderButton();
 		processDiscardCardButton();
 		processClickOnImage();
-		
+		handleCloseRequest();
 	}
 	
 	private void processEnglishItem() {
@@ -201,6 +205,20 @@ public class ClientController {
 		
 	}
 	
+	/**
+	 * Disconnect from Server
+	 * Kill open threads
+	 * @author david
+	 */
+	public void handleCloseRequest() {
+		view.getStage().setOnCloseRequest(new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent event) {
+				Platform.exit();
+				System.exit(0);
+			}
+		});
+	}
 
 }
 

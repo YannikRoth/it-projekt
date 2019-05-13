@@ -72,15 +72,6 @@ public class ServerView {
 	 * @author david
 	 */
 	public void buildView() {
-		//Damit beim schliessen die Threads "gekillt" werden
-		this.stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-			@Override
-			public void handle(WindowEvent event) {
-				Platform.exit();
-				System.exit(0);
-			}
-		});
-		
 		BorderPane pane = new BorderPane();
 		
 		//MenuBar Top

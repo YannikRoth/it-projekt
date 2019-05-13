@@ -12,8 +12,10 @@ import client.view.LobbyView;
 import globals.Globals;
 import globals.Translator;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 
 /**
@@ -36,7 +38,7 @@ public class LobbyController {
 		processQuitButton();
 		processGermanMenuItem();
 		processEnglishItem();
-		
+		handleCloseRequest();
 	}
 	
 	
@@ -106,5 +108,20 @@ public class LobbyController {
 	public static void handleInetAdress(String ip, int port) {
 		Globals.setDefaultIPAddr(ip);
 		Globals.setPortNr(port);
+	}
+	
+	/**
+	 * Disconnect from Server
+	 * Kill open threads
+	 * @author david
+	 */
+	public void handleCloseRequest() {
+		view.getStage().setOnCloseRequest(new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent event) {
+				Platform.exit();
+				System.exit(0);
+			}
+		});
 	}
 }
