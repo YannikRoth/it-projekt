@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.Optional;
 
 import client.ClientMVC;
+import client.ServicelocatorClient;
 import client.controller.ClientController;
 import client.controller.LobbyController;
 import client.model.ClientModel;
@@ -36,6 +37,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import server.ServiceLocator;
+import server.model.gameplay.Player;
 import server.model.gameplay.ServerAction;
 
 /**
@@ -57,27 +60,12 @@ public class LobbyView {
 	
 	MenuItem itemGerman, itemEnglish;
 	
-	TableColumn<ServerAction,String> tblcolNr;
-	TableColumn<ServerAction,String> tblcolWaitingPlayer;
+	TableColumn<Player,String> tblcolNr;
+	TableColumn<Player,String> tblcolWaitingPlayer;
 	
 	public LobbyView(Stage primaryStage, LobbyModel model) {
 		this.stage = primaryStage;
 		this.model = model;
-		
-//		TextInputDialog dialog = new TextInputDialog("127.0.0.1:8080");
-//		dialog.setTitle(translator.getString("title.ip"));
-//		dialog.setHeaderText(translator.getString("header.opponents"));
-//		dialog.setContentText(translator.getString("content.ip"));
-//		
-//		((Button)dialog.getDialogPane().lookupButton(ButtonType.OK)).setText(translator.getString("dlg.ok"));
-//		((Button)dialog.getDialogPane().lookupButton(ButtonType.CANCEL)).setText(translator.getString("dlg.cancel"));
-//		
-//		
-//		Optional<String> result = dialog.showAndWait();
-//		result.ifPresent(name -> {
-//			LobbyController.handleIpInput(name);
-//		});
-//		
 		
 		buildView();
 		setTexts();
@@ -97,8 +85,7 @@ public class LobbyView {
 		try {
 			input = new FileInputStream("resource/images/playlogo.jpg");
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ServiceLocator.getLogger().warning(e.getLocalizedMessage());
 		}
         Image image = new Image(input);
         ImageView imageViewStart = new ImageView(image);
@@ -110,8 +97,7 @@ public class LobbyView {
 		try {
 			input2 = new FileInputStream("resource/images/regelnlogo.jpg");
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ServiceLocator.getLogger().warning(e.getLocalizedMessage());
 		}
         Image image2 = new Image(input2);
         ImageView imageViewRules = new ImageView(image2);
@@ -123,8 +109,7 @@ public class LobbyView {
 		try {
 			input3 = new FileInputStream("resource/images/beendenlogo.jpg");
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ServiceLocator.getLogger().warning(e.getLocalizedMessage());
 		}
         Image image3 = new Image(input3);
         ImageView imageViewQuit = new ImageView(image3);
@@ -170,17 +155,17 @@ public class LobbyView {
 		hBoxConnect.setPadding(new Insets(0, 0, 10, 0));
 		
 		//TODO: Wartende Personen anzeigen
-		TableView<ServerAction> tableView = new TableView<ServerAction>();
+		TableView<Player> tableView = new TableView<>();
 		tableView.setPrefHeight(250);
-		tableView.setItems(serverActionData);
+		tableView.setItems(model.getLobbyPlayerData());
 		
-		tblcolNr	= new TableColumn<ServerAction,String>();
+		tblcolNr	= new TableColumn<>();
 		tblcolNr.setMinWidth(90);
-		tblcolNr.setCellValueFactory(new PropertyValueFactory<ServerAction,String>("Nr."));
+		tblcolNr.setCellValueFactory(new PropertyValueFactory<Player,String>("playerID"));
 		
-		tblcolWaitingPlayer	= new TableColumn<ServerAction,String>();
+		tblcolWaitingPlayer	= new TableColumn<>();
 		tblcolWaitingPlayer.setMinWidth(350);
-		tblcolWaitingPlayer.setCellValueFactory(new PropertyValueFactory<ServerAction,String>("Waiting Players"));
+		tblcolWaitingPlayer.setCellValueFactory(new PropertyValueFactory<Player,String>("playerName"));
 		
 		tableView.getColumns().addAll(tblcolNr, tblcolWaitingPlayer);
 		borderPaneMain.setBottom(tableView);
@@ -193,7 +178,6 @@ public class LobbyView {
 		
 		MenuBar menuBar = new MenuBar(menuLanguage);
 		borderPaneMain.setTop(menuBar);
-		
 		
 		this.stage.setResizable(false);
 		Scene scene = new Scene(borderPaneMain);
@@ -230,6 +214,7 @@ public class LobbyView {
 		tblcolNr.setText(translator.getString("column.nr"));
 		tblcolWaitingPlayer.setText(translator.getString("column.waitingplayers"));
 
+		
 	}
 	
 	/**
@@ -299,9 +284,4 @@ public class LobbyView {
 	public int getPort() {
 		return Integer.parseInt(this.port.getText());
 	}
-
-	public ObservableList<ServerAction> serverActionData = FXCollections.observableArrayList(
-		    new ServerAction("Nr", "Waiting Players", "test")
-		);
-	
 }

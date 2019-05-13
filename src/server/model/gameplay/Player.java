@@ -65,7 +65,7 @@ public class Player implements Serializable{
 	
 	public Player(String name) {
 		setPlayerName(name);
-		this.playerID = ServiceLocator.getNewPlayerId();
+		this.setPlayerID(ServiceLocator.getNewPlayerId());
 		this.resources = new ResourceMap(ResourceMapType.PRODUCE);
 		for (ResourceType r : ResourceType.values()) {
 			this.resources.put(r, 0);
@@ -486,5 +486,13 @@ public class Player implements Serializable{
 	 */
 	public void clearCurrentPlayableCards() {
 		this.currentPlayableCards.clear();
+	}
+
+	public int getPlayerID() {
+		return playerID;
+	}
+
+	public void setPlayerID(int playerID) {
+		this.playerID = playerID;
 	}
 }
