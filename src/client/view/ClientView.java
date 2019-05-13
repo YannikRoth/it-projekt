@@ -220,6 +220,10 @@ public class ClientView {
 		vBoxDeck.setSpacing(10);
 		borderPanePlayer.setCenter(vBoxDeck);
 		
+		/**
+		 * @author Roman Leuenberger
+		 */
+		
 		//buttons for client action
 		this.playCard = new Button();
 		this.buildWorldWonder = new Button();
@@ -239,6 +243,10 @@ public class ClientView {
 		buttonBox.setSpacing(10);
 		buttonBox.setAlignment(Pos.CENTER);
 		buttonBox.setPadding(new Insets(0,0,10,0));
+		
+		/**
+		 * @author philipp
+		 */
 		
 		//hbox for world wonder (back of the card)
 		this.hBoxWorldWonderCards = new HBox();

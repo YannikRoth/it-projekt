@@ -142,6 +142,9 @@ public class ClientController {
 		});
 	}
 	
+	/**
+	 * @author Roman Leuenberger
+	 */
 	
 	private void processBuildWorldWonderButton() {
 		view.getBuildWorldWonderButton().setOnAction(e -> {
@@ -154,6 +157,10 @@ public class ClientController {
 		});
 	}
 	
+	/**
+	 * @author Roman Leuenberger
+	 */
+	
 	private void processDiscardCardButton() {
 		view.getDiscardCardButton().setOnAction(e -> {
 			//TODO Method for discard card
@@ -165,6 +172,10 @@ public class ClientController {
 			//view.updatePlayedCardView();
 		});
 	}
+	
+	/**
+	 * @author Roman Leuenberger
+	 */
 	
 	public void processClickOnImage() {
 		for (int i = 0; i<view.getShownCards().length;i++) {
