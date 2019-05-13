@@ -127,7 +127,7 @@ public class ServerView {
 		
 		hBox.getChildren().addAll(fieldDomain, fieldIpAdress, fieldPort, btnChangePort, btnRestartServer);
 		hBox.setSpacing(2);
-		hBox.setAlignment(Pos.CENTER);
+
 		
 		//TableView Bottom
 		TableView<ServerAction> tableView = new TableView<ServerAction>();
@@ -147,7 +147,7 @@ public class ServerView {
 		tblcolPlayer.setCellValueFactory(new PropertyValueFactory<ServerAction,String>("userName"));
 		
 		tblcolAction	= new TableColumn<ServerAction,String>();
-		tblcolAction.setMinWidth(300);
+		tblcolAction.setMinWidth(290);
 		tblcolAction.setCellValueFactory(new PropertyValueFactory<ServerAction,String>("action"));
 		
 		tableView.getColumns().addAll(tblcolTimestamp, tblcolIpAdress, tblcolPlayer, tblcolAction);

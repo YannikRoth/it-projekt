@@ -49,11 +49,9 @@ public class LobbyView {
 	private Stage stage;
 	private Translator translator = Translator.getTranslator();
 	
-	private Button btnNewGame;
-	private Button btnRules;
-	private Button btnQuit;
-	private Label player;
-	private TextField playerName;
+	private Button btnNewGame, btnRules, btnQuit, btnConnect;
+	private Label player, ipAdressLabel, portLabel;
+	private TextField playerName, ipAdress, port;
 	
 	Menu menuLanguage;
 	
@@ -66,20 +64,20 @@ public class LobbyView {
 		this.stage = primaryStage;
 		this.model = model;
 		
-		TextInputDialog dialog = new TextInputDialog("127.0.0.1:8080");
-		dialog.setTitle(translator.getString("title.ip"));
-		dialog.setHeaderText(translator.getString("header.opponents"));
-		dialog.setContentText(translator.getString("content.ip"));
-		
-		((Button)dialog.getDialogPane().lookupButton(ButtonType.OK)).setText(translator.getString("dlg.ok"));
-		((Button)dialog.getDialogPane().lookupButton(ButtonType.CANCEL)).setText(translator.getString("dlg.cancel"));
-		
-		
-		Optional<String> result = dialog.showAndWait();
-		result.ifPresent(name -> {
-			LobbyController.handleIpInput(name);
-		});
-		
+//		TextInputDialog dialog = new TextInputDialog("127.0.0.1:8080");
+//		dialog.setTitle(translator.getString("title.ip"));
+//		dialog.setHeaderText(translator.getString("header.opponents"));
+//		dialog.setContentText(translator.getString("content.ip"));
+//		
+//		((Button)dialog.getDialogPane().lookupButton(ButtonType.OK)).setText(translator.getString("dlg.ok"));
+//		((Button)dialog.getDialogPane().lookupButton(ButtonType.CANCEL)).setText(translator.getString("dlg.cancel"));
+//		
+//		
+//		Optional<String> result = dialog.showAndWait();
+//		result.ifPresent(name -> {
+//			LobbyController.handleIpInput(name);
+//		});
+//		
 		
 		buildView();
 		setTexts();
@@ -151,14 +149,37 @@ public class LobbyView {
 
 		
 		hBoxPlayer.getChildren().addAll(player, playerName);
+		hBoxPlayer.setPadding(new Insets(0, 0, 10, 0));
 		
-		buttonAndPlayer.getChildren().addAll(hBoxButton, hBoxPlayer);
+		HBox hBoxIpAdress = new HBox();
+		HBox hBoxConnect = new HBox();
+		this.ipAdressLabel = new Label();
+		this.ipAdress = new TextField("127.0.0.1");
+		this.portLabel = new Label();
+		this.port = new TextField("8080");
+		port.setPrefWidth(50);
+		ipAdress.setPrefWidth(80);
+		
+		ipAdress.setEditable(false);
+		port.setEditable(false);
+		hBoxIpAdress.getChildren().addAll(ipAdressLabel, ipAdress, portLabel, port);
+		hBoxIpAdress.setSpacing(5);
+		
+		this.btnConnect = new Button();
+		hBoxConnect.getChildren().add(btnConnect);
+		
+		buttonAndPlayer.getChildren().addAll(hBoxIpAdress, hBoxButton, hBoxPlayer, hBoxConnect);
 		hBoxButton.setAlignment(Pos.CENTER);
 		hBoxPlayer.setAlignment(Pos.CENTER);
+		hBoxIpAdress.setAlignment(Pos.CENTER);
+		hBoxConnect.setAlignment(Pos.CENTER);
+		
+		hBoxIpAdress.setPadding(new Insets(0, 0, 10, 0));
+		hBoxConnect.setPadding(new Insets(0, 0, 10, 0));
 		
 		//TODO: Wartende Personen anzeigen
 		TableView<ServerAction> tableView = new TableView<ServerAction>();
-		tableView.setPrefHeight(290);
+		tableView.setPrefHeight(250);
 		tableView.setItems(serverActionData);
 		
 		tblcolNr	= new TableColumn<ServerAction,String>();
@@ -200,9 +221,12 @@ public class LobbyView {
 		btnNewGame.setText(translator.getString("button.newgame"));
 		btnRules.setText(translator.getString("button.rules"));
 		btnQuit.setText(translator.getString("button.quit"));
+		btnConnect.setText(translator.getString("button.connect"));
 		
 		player.setText(translator.getString("label.player"));
 		playerName.setText(translator.getString("textfield.player"));
+		ipAdressLabel.setText(translator.getString("label.ipadress"));
+		portLabel.setText(translator.getString("label.port"));
 		
 		stage.setTitle(translator.getString("clientLobby.name"));
 		

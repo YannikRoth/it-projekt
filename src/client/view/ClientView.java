@@ -86,7 +86,7 @@ public class ClientView {
 		tableOpponents.setItems(model.getOtherPlayers());
 		
 		colPlayer = new TableColumn<Player, String>();
-		colPlayer.setMinWidth(365);
+		colPlayer.setPrefWidth(260);
 		colPlayer.setCellValueFactory(new PropertyValueFactory<Player, String>("playerName"));
 		tableOpponents.getColumns().add(colPlayer);
 		
@@ -109,6 +109,7 @@ public class ClientView {
         	tmpCol.setUserData(t);
         	tmpCol.setCellValueFactory(callBack);
         	dynamicCols.add(tmpCol);
+        	tmpCol.setPrefWidth(90);
 		}
         tableOpponents.getColumns().addAll(dynamicCols);
         tableOpponents.setPrefHeight(200);
