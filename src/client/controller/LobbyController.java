@@ -64,6 +64,8 @@ public class LobbyController {
 
 	private void processNewGameButton() {
 		view.getNewGameButton().setOnAction((e) -> {
+			view.disableDialogElements();
+			handleInetAdress(view.getIpAdress(), view.getPort());
 			Stage secondStage = new Stage();
 			ClientMVC clientMVC = new ClientMVC();
 			try {
@@ -98,14 +100,11 @@ public class LobbyController {
 	}
 
 	/**
-	 * Handle IP Input and write globals
-	 * Format: IP:Port -> 127.0.0.1:8080
+	 * Handle IP and port input and write globals
 	 * @author david
 	 */
-	public static void handleIpInput(String ipInput) {
-		String ip = ipInput.substring(0, ipInput.indexOf(":"));
-		String port = ipInput.substring(ipInput.indexOf(":") + 1);
+	public static void handleInetAdress(String ip, int port) {
 		Globals.setDefaultIPAddr(ip);
-		Globals.setPortNr(Integer.parseInt(port));;
+		Globals.setPortNr(port);
 	}
 }

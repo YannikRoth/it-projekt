@@ -146,6 +146,7 @@ public class LobbyView {
 		
 		this.player = new Label();
 		this.playerName = new TextField();
+		playerName.setText(System.getProperty("user.name"));
 
 		
 		hBoxPlayer.getChildren().addAll(player, playerName);
@@ -160,15 +161,14 @@ public class LobbyView {
 		port.setPrefWidth(50);
 		ipAdress.setPrefWidth(80);
 		
-		ipAdress.setEditable(false);
-		port.setEditable(false);
 		hBoxIpAdress.getChildren().addAll(ipAdressLabel, ipAdress, portLabel, port);
 		hBoxIpAdress.setSpacing(5);
 		
 		this.btnConnect = new Button();
 		hBoxConnect.getChildren().add(btnConnect);
 		
-		buttonAndPlayer.getChildren().addAll(hBoxIpAdress, hBoxButton, hBoxPlayer, hBoxConnect);
+		buttonAndPlayer.getChildren().addAll(hBoxIpAdress, hBoxButton, hBoxPlayer);
+//		buttonAndPlayer.getChildren().addAll(hBoxIpAdress, hBoxButton, hBoxPlayer, hBoxConnect);
 		hBoxButton.setAlignment(Pos.CENTER);
 		hBoxPlayer.setAlignment(Pos.CENTER);
 		hBoxIpAdress.setAlignment(Pos.CENTER);
@@ -224,7 +224,7 @@ public class LobbyView {
 		btnConnect.setText(translator.getString("button.connect"));
 		
 		player.setText(translator.getString("label.player"));
-		playerName.setText(translator.getString("textfield.player"));
+		playerName.setPromptText(translator.getString("textfield.player"));
 		ipAdressLabel.setText(translator.getString("label.ipadress"));
 		portLabel.setText(translator.getString("label.port"));
 		
@@ -239,6 +239,19 @@ public class LobbyView {
 		tblcolWaitingPlayer.setText(translator.getString("column.waitingplayers"));
 
 	}
+	
+	/**
+	 * disables functionality when the game has started
+	 * @author david
+	 */
+	public void disableDialogElements() {
+		playerName.setEditable(false);
+		ipAdress.setEditable(false);
+		port.setEditable(false);
+		btnNewGame.setDisable(true);
+		btnQuit.setDisable(true);
+	}
+	
 	public void start() {
 		stage.show();
 	}
@@ -273,6 +286,14 @@ public class LobbyView {
 	
 	public MenuItem getEnglishItem2() {
 		return this.itemEnglish;
+	}
+	
+	public String getIpAdress() {
+		return this.ipAdress.getText();
+	}
+	
+	public int getPort() {
+		return Integer.parseInt(this.port.getText());
 	}
 
 	public ObservableList<ServerAction> serverActionData = FXCollections.observableArrayList(
