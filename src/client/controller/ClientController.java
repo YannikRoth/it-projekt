@@ -112,6 +112,10 @@ public class ClientController {
 			
 		});
 	}
+	
+	/**
+	 * @author Roman Leuenberger
+	 */
 
 	private void processPlayCardButton() {
 		view.getPlayCardButton().setOnAction(e -> {
@@ -119,6 +123,7 @@ public class ClientController {
 			model.sendPlayedCard(this.selectedCard, ClientAction.PLAYCARD);
 			logger.info("Played Card");
 			view.disableCards();
+			view.disableButtons();
 //			view.updatePlayedCardView();
 
 			ImageView correct = null;
@@ -137,12 +142,14 @@ public class ClientController {
 		});
 	}
 	
+	
 	private void processBuildWorldWonderButton() {
 		view.getBuildWorldWonderButton().setOnAction(e -> {
 			//model.getMyPlayer().playCard(this.selectedCard);
 			model.sendPlayedCard(this.selectedCard, ClientAction.BUILDWONDER);
 			logger.info("Build WorldWonder");
 			view.disableCards();
+			view.disableButtons();
 			view.addImageViewWorldWonder();
 		});
 	}
@@ -153,6 +160,7 @@ public class ClientController {
 			model.sendPlayedCard(this.selectedCard, ClientAction.DISCARD);
 			logger.info("DiscardCard");
 			view.disableCards();
+			view.disableButtons();
 //			ImageView v = (ImageView) e.getSource();
 			//view.updatePlayedCardView();
 		});

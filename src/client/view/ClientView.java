@@ -329,6 +329,10 @@ public class ClientView {
 //		}
 //	}
 	
+	/**
+	 * @author Roman Leuenberger
+	 */
+	
 	public void updatePlayableCardView() {
 		this.playableCards.getChildren().clear();
 		cards = new ImageView[model.getMyPlayer().getPlayableCards().size()];
@@ -340,6 +344,15 @@ public class ClientView {
 			this.playableCards.getChildren().add(cards[i]);
 			cardWithImages.put(cards[i], model.getMyPlayer().getPlayableCards().get(i));
 		}
+	}
+	/**
+	 * @author Roman Leuenberger
+	 */
+	
+	public void disableButtons() {
+		this.playCard.setDisable(true);
+		this.buildWorldWonder.setDisable(true);
+		this.discardCard.setDisable(true);
 	}
 	
 	public void disableCards() {
