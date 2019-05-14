@@ -124,7 +124,10 @@ public class ClientView {
 	 */
 	private void buildTablePoints() {
 		tablePoints = new TableView<>();
-//		tablePoints.setItems(this.model.getMyPlayer().getResources().getResourcesListObservable());
+//		if(this.model.getMyPlayer() != null &&
+//				this.model.getMyPlayer().getResources() != null &&
+//				this.model.getMyPlayer().getResources().getResourcesListObservable() != null)
+//			tablePoints.setItems(this.model.getMyPlayer().getResources().getResourcesListObservable());
 		tablePoints.setEditable(false);
 		
 		ColType		= new TableColumn<>();

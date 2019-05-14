@@ -53,6 +53,11 @@ public class ClientController {
 		processDiscardCardButton();
 		processClickOnImage();
 		handleCloseRequest();
+		
+		if(model.getMyPlayer() != null &&
+				model.getMyPlayer().getResources() != null &&
+				model.getMyPlayer().getResources().getResourcesListObservable() != null)
+			view.getTablePoints().setItems(model.getMyPlayer().getResources().getResourcesListObservable());
 	}
 	
 	private void processEnglishItem() {

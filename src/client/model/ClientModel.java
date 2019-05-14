@@ -238,10 +238,14 @@ public class ClientModel extends Thread {
 	 */
 	public void setMyPlayer(Player player) {
 		this.player = player;
-		player.getResources().refreshObservableMap();
-		if(ServicelocatorClient.getClientView() != null) {
-			ServicelocatorClient.getClientView().getTablePoints().setItems(
-					player.getResources().getResourcesListObservable());
+		synchronized (this.player) {
+			player.getResources().refreshObservableMap();
+			if(ServicelocatorClient.getClientView() != null) {
+				ServicelocatorClient.getClientView().getTablePoints().setItems(
+						player.getResources().getResourcesListObservable());
+			} else {
+				System.out.println("NULL");
+			}
 		}
 	}
 
