@@ -240,9 +240,9 @@ public class ClientModel extends Thread {
 		synchronized (this.player) {
 			player.getResources().refreshObservableMap();
 			if(ServicelocatorClient.getClientView() != null) {
-				//Listener entfernen
+				//Liste löschen
 				ServicelocatorClient.getClientView().getTablePoints().getItems().clear();
-				//Listener wieder setzen
+				//Listener mit neuer Liste
 				ServicelocatorClient.getClientView().getTablePoints().setItems(
 						player.getResources().getResourcesListObservable());
 			}

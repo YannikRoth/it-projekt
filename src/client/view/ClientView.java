@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
+import client.ServicelocatorClient;
 import client.model.ClientModel;
 import globals.ResourceType;
 import globals.Translator;
@@ -411,6 +412,16 @@ public class ClientView {
 			Integer v = entry.getValue();
 			this.model.getMyPlayer().getResources().getResourcesObservable().put(t, v);
 		}*/
+		if(model.getMyPlayer() != null) {
+			//Alte Liste leeren
+			getTablePoints().getItems().clear();
+			//Liste neu aufbauen
+			model.getMyPlayer().getResources().refreshObservableMap();
+			//Listener setzen
+			getTablePoints().setItems(
+					model.getMyPlayer().getResources().getResourcesListObservable());
+			System.out.println(model.getMyPlayer().getResources().getResourcesListObservable());
+		}
 	}
 
 	public void start() {
