@@ -38,29 +38,29 @@ public class ServerController{
 	 * 
 	 */
 	private void AddViewButtonListeners() {
-		view.getButtonChangePort().setOnAction((event) -> {
-			//TODO: Notify Clients and Change ServerSocket Port (I think it's a model task...)
-			
-			view.startNewPortDialog().ifPresent(name -> {
-				int port;
-				try {
-					port = Integer.parseInt(name);
-					if(Globals.getPortNr() != port)
-						Globals.setPortNr(port);
-					//TODO: Change server port
-				} catch (NumberFormatException e){
-					logger.info("Error cast port to \"" + name + "\", use default: 8080");
-					Globals.setPortNr(8080);
-				}
-			});
-			
-			model.getServerActionData().add(new ServerAction(model.getHostAddress(), "Server", "Port changed to: " + Globals.getPortNr()));
-		});
-		
-		view.getButtonRestartServer().setOnAction((event) -> {
-			//TODO: Restart ServerSocket
-			model.getServerActionData().add(new ServerAction(model.getHostAddress(), "Server", "Server restarted"));
-		});
+//		view.getButtonChangePort().setOnAction((event) -> {
+//			//TODO: Notify Clients and Change ServerSocket Port (I think it's a model task...)
+//			
+//			view.startNewPortDialog().ifPresent(name -> {
+//				int port;
+//				try {
+//					port = Integer.parseInt(name);
+//					if(Globals.getPortNr() != port)
+//						Globals.setPortNr(port);
+//					//TODO: Change server port
+//				} catch (NumberFormatException e){
+//					logger.info("Error cast port to \"" + name + "\", use default: 8080");
+//					Globals.setPortNr(8080);
+//				}
+//			});
+//			
+//			model.getServerActionData().add(new ServerAction(model.getHostAddress(), "Server", "Port changed to: " + Globals.getPortNr()));
+//		});
+//		
+//		view.getButtonRestartServer().setOnAction((event) -> {
+//			//TODO: Restart ServerSocket
+//			model.getServerActionData().add(new ServerAction(model.getHostAddress(), "Server", "Server restarted"));
+//		});
 	}
 	
 	/**

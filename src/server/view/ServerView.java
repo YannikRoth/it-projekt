@@ -18,6 +18,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -51,8 +52,11 @@ public class ServerView {
 	private TextField fieldDomain;
 	private TextField fieldIpAdress;
 	private TextField fieldPort;
-	private Button btnChangePort;
-	private Button btnRestartServer;
+	private Label lblDomain;
+	private Label lblIpAdress;
+	private Label lblPort;
+//	private Button btnChangePort;
+//	private Button btnRestartServer;
 	
 	TableColumn<ServerAction,String> tblcolTimestamp;
 	TableColumn<ServerAction,String> tblcolIpAdress;
@@ -103,18 +107,23 @@ public class ServerView {
 		fieldPort.setText(Integer.toString(Globals.getPortNr()));
 		fieldPort.setPrefWidth(50);
 		
-		this.btnChangePort		= new Button();
-		this.btnRestartServer	= new Button("Restart Server");
+		lblDomain = new Label();
+		lblIpAdress = new Label();
+		lblPort = new Label();
+		
+//		this.btnChangePort		= new Button();
+//		this.btnRestartServer	= new Button("Restart Server");
 		
 		/**
 		 * disabled till the functionality can be implemented
 		 * @author david
 		 */
-		this.btnChangePort.setDisable(true);
-		this.btnRestartServer.setDisable(true);
+//		this.btnChangePort.setDisable(true);
+//		this.btnRestartServer.setDisable(true);
 		
-		hBox.getChildren().addAll(fieldDomain, fieldIpAdress, fieldPort, btnChangePort, btnRestartServer);
-		hBox.setSpacing(2);
+//		hBox.getChildren().addAll(fieldDomain, fieldIpAdress, fieldPort, btnChangePort, btnRestartServer);
+		hBox.getChildren().addAll(lblDomain, fieldDomain, lblIpAdress, fieldIpAdress, lblPort, fieldPort);
+		hBox.setSpacing(5);
 
 		
 		//TableView Bottom
@@ -160,9 +169,12 @@ public class ServerView {
 		
 		fieldDomain.setPromptText(	translator.getString("text.nodomain"));
 		fieldIpAdress.setPromptText(translator.getString("text.noipadress"));
-		fieldPort.setPromptText(	translator.getString("text.noport"));
-		btnChangePort.setText(		translator.getString("button.changeport"));
-		btnRestartServer.setText(	translator.getString("button.restartserver"));
+		fieldPort.setPromptText(translator.getString("text.noport"));
+		lblDomain.setText(translator.getString("label.domain"));
+		lblIpAdress.setText(translator.getString("label.ipadress"));
+		lblPort.setText(translator.getString("label.port"));
+//		btnChangePort.setText(		translator.getString("button.changeport"));
+//		btnRestartServer.setText(	translator.getString("button.restartserver"));
 		
 		tblcolTimestamp.setText(	translator.getString("column.timestamp"));
 		tblcolIpAdress.setText(		translator.getString("column.ipadress"));
@@ -214,12 +226,12 @@ public class ServerView {
 		return this.stage;
 	}
 	
-	public Button getButtonChangePort() {
-		return this.btnChangePort;
-	}
-	public Button getButtonRestartServer() {
-		return this.btnRestartServer;
-	}
+//	public Button getButtonChangePort() {
+//		return this.btnChangePort;
+//	}
+//	public Button getButtonRestartServer() {
+//		return this.btnRestartServer;
+//	}
 	
 	public Menu getMenuLanguage() {
 		return this.menuLanguage;
