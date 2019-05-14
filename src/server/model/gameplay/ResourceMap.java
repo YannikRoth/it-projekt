@@ -1,5 +1,7 @@
 package server.model.gameplay;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import globals.ResourceMapType;
@@ -43,6 +45,12 @@ public class ResourceMap extends HashMap<ResourceType, Integer>{
 				} else {
 					resourcesListObservable.add(change.getKey());
 				}
+				Collections.sort(resourcesListObservable, new Comparator<ResourceType>() {
+					@Override
+					public int compare(ResourceType r1, ResourceType r2) {
+						return r1.ordinal() - r2.ordinal();
+					}
+				});
 			}
 		});
 	}

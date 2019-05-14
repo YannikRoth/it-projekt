@@ -163,7 +163,7 @@ public class ClientView {
 		//Cards
 		Image tempImage = new Image("file:./resource/images/cards/SCN_0150.jpg");
 		
-		//initiates back of the cards as default
+		//initiates back of the cards as default before loading playable cards of player
 		cardPlayable1 = new ImageView(tempImage);
 		cardPlayable1.setFitHeight(200);
 		cardPlayable1.setFitWidth(133);
@@ -245,7 +245,7 @@ public class ClientView {
 		
 		//hbox for world wonder (back of the card)
 		this.hBoxWorldWonderCards = new HBox();
-		hBoxWorldWonderCards.setSpacing(250);
+		hBoxWorldWonderCards.setSpacing(290);
 		hBoxWorldWonderCards.setPadding(new Insets(0,0,0,20));
 		hBoxWorldWonderCards.setPrefHeight(110);
 		borderPanePlayer.setBottom(hBoxWorldWonderCards);
