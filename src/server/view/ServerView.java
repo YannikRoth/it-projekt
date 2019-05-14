@@ -96,12 +96,8 @@ public class ServerView {
 		fieldIpAdress = new TextField();
 		fieldIpAdress.setEditable(false);
 		fieldIpAdress.setPrefWidth(100);
-		try {
-			fieldIpAdress.setText(Inet4Address.getLocalHost().getHostAddress());
-			fieldDomain.setText(Inet4Address.getLocalHost().getHostName());
-		} catch (UnknownHostException e) {
-			ServiceLocator.getLogger().warning(e.getLocalizedMessage());
-		}
+		fieldIpAdress.setText(model.getHostAddress());
+		fieldDomain.setText(model.getHostName());
 		fieldPort		= new TextField();
 		fieldPort.setEditable(false);
 		fieldPort.setText(Integer.toString(Globals.getPortNr()));

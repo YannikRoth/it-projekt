@@ -29,6 +29,7 @@ import server.model.init.CardLoader;
 public class ServerModel implements Serializable{
 	
 	private Logger logger = ServiceLocator.getLogger();
+	private String hostName;
 	private String hostAddress;
 	
 	public ObservableList<ServerAction> serverActionData;
@@ -59,6 +60,7 @@ public class ServerModel implements Serializable{
 	
 	public ServerModel() {
 		try {
+			setHostName(Inet4Address.getLocalHost().getHostName());
 			setHostAddress(Inet4Address.getLocalHost().getHostAddress());
 		} catch (UnknownHostException e) {
 			logger.warning(e.getLocalizedMessage());
@@ -477,5 +479,13 @@ public class ServerModel implements Serializable{
 	}
 	public ArrayList<Player> getConnectedPlayerList() {
 		return connectedPlayerList;
+	}
+
+	public String getHostName() {
+		return hostName;
+	}
+
+	public void setHostName(String hostName) {
+		this.hostName = hostName;
 	}
 }
