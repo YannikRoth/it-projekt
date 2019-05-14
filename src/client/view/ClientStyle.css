@@ -49,6 +49,7 @@
  	-fx-min-width: 110;
 	-fx-min-height: 20;
 	-fx-background-color: #daa520;
+	-fx-effect: dropshadow(three-pass-box, #daa520, 30, 0.5, 0, 0);
 }
 .root {
  	-fx-background-color: #daa520;
@@ -130,6 +131,6 @@
 
 .vBoxPlayer {
 	-fx-background-image: url("file:./resource/images/boards/Board_06_A.jpg");
-	-fx-background-size: 1250 580;
+	-fx-background-size: 1250 570;
 	-fx-effect: dropshadow(three-pass-box, white, 30, 0.5, 0, 0);
 }

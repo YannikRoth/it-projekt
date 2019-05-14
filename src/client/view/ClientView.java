@@ -158,10 +158,9 @@ public class ClientView {
 		this.hBoxCards = new HBox();
 		hBoxCards.setPadding(new Insets(0,50,0,150));
 		hBoxCards.setSpacing(-10);
-		hBoxCards.setMinHeight(150);
-		hBoxCards.setMinWidth(1250);
+		hBoxCards.setMinHeight(130);
+		hBoxCards.setPrefWidth(1250);
 		hBoxCards.setAlignment(Pos.CENTER);
-		vBoxPlayer.getChildren().addAll(hBoxCards, hBoxPlayer);
 		vBoxPlayer.setMinWidth(1250);
 		borderPanePlayer.setPrefWidth(980);
 		hBoxPlayer.setHgrow(borderPanePlayer, Priority.ALWAYS);
@@ -213,12 +212,12 @@ public class ClientView {
 		buildTablePoints();
 //		vBoxTablePoints.getChildren().addAll(tablePoints);
 		hBoxPlayer.getChildren().addAll(borderPanePlayer, tablePoints);
-		vBoxPlayer.setPrefHeight(580);
+		vBoxPlayer.setPrefHeight(560);
 		vBoxPlayer.getStyleClass().add("vBoxPlayer");
 		
 		//Deck
 		VBox vBoxDeck = new VBox();
-		vBoxDeck.setPadding(new Insets(30,0,15, 0));
+		vBoxDeck.setPadding(new Insets(30,0,0, 0));
 		vBoxDeck.setSpacing(10);
 		borderPanePlayer.setCenter(vBoxDeck);
 		
@@ -244,7 +243,7 @@ public class ClientView {
 		discardCard.setDisable(true);
 		buttonBox.setSpacing(10);
 		buttonBox.setAlignment(Pos.CENTER);
-		buttonBox.setPadding(new Insets(0,0,10,0));
+//		buttonBox.setPadding(new Insets(0,0,10,0));
 		
 		/**
 		 * @author philipp
@@ -253,9 +252,10 @@ public class ClientView {
 		//hbox for world wonder (back of the card)
 		this.hBoxWorldWonderCards = new HBox();
 		hBoxWorldWonderCards.setSpacing(290);
-		hBoxWorldWonderCards.setPadding(new Insets(0,0,0,20));
-		hBoxWorldWonderCards.setPrefHeight(110);
-		borderPanePlayer.setBottom(hBoxWorldWonderCards);
+		hBoxWorldWonderCards.setPadding(new Insets(0,0,0,10));
+		hBoxWorldWonderCards.setMinHeight(125);
+		hBoxWorldWonderCards.setAlignment(Pos.BOTTOM_LEFT);
+		vBoxPlayer.getChildren().addAll(hBoxCards, hBoxPlayer, hBoxWorldWonderCards);
 		
 		//hbox for player's playable card
 		playableCards = new HBox();
@@ -264,8 +264,8 @@ public class ClientView {
 		vBoxDeck.getChildren().addAll(playableCards, buttonBox);
 		playableCards.setAlignment(Pos.BASELINE_CENTER);
 		playableCards.setSpacing(2);
-		playableCards.setPadding(new Insets(30, 0, 0, 0));
-		playableCards.setPrefHeight(230);
+		playableCards.setPadding(new Insets(0, 0, 0, 0));
+		playableCards.setPrefHeight(210);
 		playableCards.setPrefWidth(985);
 		
 		//Menu "Game"
@@ -308,16 +308,16 @@ public class ClientView {
 	
 	public void addImageView(ImageView v) {
 		this.hBoxCards.getChildren().add(v);
-		v.setFitHeight(150);
-		v.setFitWidth(100);
+		v.setFitHeight(130);
+		v.setFitWidth(86);
 		v.setEffect(new DropShadow(30, Color.GOLD));
 	}
 	
 	public void addImageViewWorldWonder() {
 		ImageView v = new ImageView(new Image("file:./resource/images/cards/SCN_0150.jpg"));
 		this.hBoxWorldWonderCards.getChildren().add(v);
-		v.setFitHeight(110);
-		v.setFitWidth(73);
+		v.setFitHeight(125);
+		v.setFitWidth(83);
 		v.setEffect(new DropShadow(30, Color.GOLD));
 	}
 	
