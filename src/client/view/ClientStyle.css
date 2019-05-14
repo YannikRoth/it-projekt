@@ -39,21 +39,23 @@
 	-fx-font-weight: bold;
  	-fx-min-width: 110;
 	-fx-min-height: 20;
-	-fx-background-color: white;
+	-fx-text-fill: white;
+	-fx-background-color: #daa520;
 }
 
 .button:hover {
 	-fx-font-family: "Broadway";
 	-fx-font-size: 12px;
 	-fx-font-weight: bold;
+	-fx-text-fill: white;
  	-fx-min-width: 110;
 	-fx-min-height: 20;
 	-fx-background-color: #daa520;
-	-fx-effect: dropshadow(three-pass-box, #daa520, 30, 0.5, 0, 0);
+	-fx-effect: dropshadow(three-pass-box, #daa520, 40, 0, 0, 0);
 }
 .root {
  	-fx-background-color: #daa520;
- 	-fx-effect: dropshadow(three-pass-box, white, 30, 0.5, 0, 0);
+ 	-fx-effect: dropshadow(three-pass-box, white, 30, 0, 0, 0);
 }
 
 
@@ -87,7 +89,6 @@
 	-fx-background-color: transparent;
     -fx-base: transparent;
     -fx-text-fill: white;
-
 }
 .table-row-cell{
 	-fx-font-family: "Broadway";
@@ -131,6 +132,6 @@
 
 .vBoxPlayer {
 	-fx-background-image: url("file:./resource/images/boards/Board_06_A.jpg");
-	-fx-background-size: 1250 570;
+	-fx-background-size: 1370 580;
 	-fx-effect: dropshadow(three-pass-box, white, 30, 0.5, 0, 0);
 }

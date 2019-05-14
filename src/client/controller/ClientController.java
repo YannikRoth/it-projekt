@@ -180,7 +180,11 @@ public class ClientController {
 			logger.info("Build WorldWonder");
 			view.disableCards();
 			view.disableButtons();
-			view.addImageViewWorldWonder();
+			if(this.selectedCard.getCardAgeValue() == 1) {
+				view.addImageViewWorldWonderOne();
+			} else {
+				view.addImageViewWorldWonderTwo();
+			}
 		});
 	}
 	

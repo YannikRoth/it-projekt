@@ -161,6 +161,7 @@ public class LobbyView {
 		
 		tblcolNr	= new TableColumn<>();
 		tblcolNr.setMinWidth(90);
+		tblcolNr.setStyle("-fx-alignment: CENTER");
 		tblcolNr.setCellValueFactory(new PropertyValueFactory<Player,String>("playerID"));
 		
 		tblcolWaitingPlayer	= new TableColumn<>();
