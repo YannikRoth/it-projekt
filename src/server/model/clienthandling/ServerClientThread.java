@@ -39,8 +39,6 @@ public class ServerClientThread extends Thread implements Serializable {
 	// TODO ObjectInput/Output reader instead of inputstreamreader
 
 	public ServerClientThread(Socket socket, ServerModel model) {
-		// TODO: Add player name in constructor
-		
 		//When the game starts the player object and numbers of players will be sent to the client
 		String name = "";
 		try {
@@ -52,11 +50,26 @@ public class ServerClientThread extends Thread implements Serializable {
 			if(name == "")
 				name = "Player " + ServiceLocator.getmanualCardId();
 			
-			player = new Player(name);
-			servermodel = model;
-			start = false;
-			player.setBoard(servermodel.getBoard(7));
-			this.socket = socket;
+			synchronized (model.getConnectedPlayerList()) {
+				ArrayList<String> playerNames = new ArrayList<>();
+				for (Player p : model.getConnectedPlayerList()) {
+					playerNames.add(p.getPlayerName());
+				}
+				if(playerNames.contains(name)) {
+					int i = 2;
+					while(playerNames.contains(name + " " + i)) {
+						++i;
+					}
+					name = name + " " + i;
+				}
+				
+				player = new Player(name);
+				model.getConnectedPlayerList().add(player);
+				servermodel = model;
+				start = false;
+				player.setBoard(servermodel.getBoard(7));
+				this.socket = socket;
+			}
 			
 			ServiceLocator.getServerModel().getServerActionData().add(
 					new server.model.gameplay.ServerAction(socket.getInetAddress().toString(), player.getPlayerName(), "Connected"));

@@ -33,6 +33,7 @@ public class ServerModel implements Serializable{
 	
 	public ObservableList<ServerAction> serverActionData;
 	
+	private ArrayList<Player> connectedPlayerList = new ArrayList<>();
 	private Map<Player, ServerClientThread> players = new HashMap<>();
 	private ServerRequestHandler requesthandler;
 	
@@ -469,5 +470,8 @@ public class ServerModel implements Serializable{
 	
 	public String getHostAddress() {
 		return this.hostAddress;
+	}
+	public ArrayList<Player> getConnectedPlayerList() {
+		return connectedPlayerList;
 	}
 }
