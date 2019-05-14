@@ -150,7 +150,7 @@ public class ServerClientThread extends Thread implements Serializable {
 						}
 						logger.info(cardplayed.getCardName() + "Cards received from "
 									+ player.getPlayerName() + " with following Action: " + action);
-						//TODO function in Servermodel
+						
 						break;				
 					default:
 						logger.info("An error occured during the Communication - invalid input from " + player.getPlayerName()+ " ----retry");
@@ -161,11 +161,27 @@ public class ServerClientThread extends Thread implements Serializable {
 				
 				//this method is used to pass the card to the next player
 				servermodel.updateGameStatus();
+				//If game end send players ordered from winner to loser
+				if(servermodel.gameEnd) {
+					synchronized(objOutputStream) {
+						objOutputStream.reset();
+						objOutputStream.writeObject(ServerAction.ENDGAME);
+						objOutputStream.flush();
+						for (Player currentplayer : servermodel.getWinners()) {
+							objOutputStream.reset();
+							objOutputStream.writeObject(currentplayer);
+							objOutputStream.flush();						
+						}
+					}
+					//stop the thread
+					stop = true;
+				}
 				
-				//TODO wait for Servermodel to notify the updated cardset and other players
 			} catch (IOException e) {
+				stop = true;
 				logger.info(e.getLocalizedMessage());
 			} catch (ClassNotFoundException e) {
+				stop = true;
 				logger.info(e.getLocalizedMessage());
 			}
 		}

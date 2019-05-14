@@ -1,7 +1,10 @@
 package client.view;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.swing.JOptionPane;
 
 import client.model.ClientModel;
 import globals.ResourceType;
@@ -471,5 +474,15 @@ public class ClientView {
 	
 	public TableView<ResourceType> getTablePoints() {
 		return tablePoints;
+	}
+	
+	
+	public void updateViewGameEnd(ArrayList<Player> winnerList) {
+		//TODO proper winner output
+		int i = 0;
+		for (Player playerrank : winnerList) {
+			i++;
+			JOptionPane.showMessageDialog(null, playerrank.getPlayerName(), " has placed " + i , JOptionPane.INFORMATION_MESSAGE);
+		}
 	}
 }

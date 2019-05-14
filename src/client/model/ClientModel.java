@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -127,7 +128,17 @@ public class ClientModel extends Thread {
 
 				case INFORMATION:				
 					break;
-				case ENDGAME:				
+				case ENDGAME:	
+				    ArrayList<Player> winnerList = new ArrayList<>();
+				    Player tempplayer1 = null;
+					synchronized(winnerList) {
+						for (int i = 0; i < numberofPlayers - 1; i++) {
+							tempplayer1 = (Player) objInputStream.readObject();
+							winnerList.add(tempplayer1);
+							logger.info("Number "+ i + tempplayer1.getPlayerName()+" received from Server");						
+						}
+					}				    
+					ServicelocatorClient.getClientView().updateViewGameEnd(winnerList);
 					break;
 
 				default:
@@ -141,9 +152,6 @@ public class ClientModel extends Thread {
 		} catch (ClassNotFoundException e) {
 			logger.info(e.getLocalizedMessage());
 		} 
-//		catch (InterruptedException e) {
-//			logger.info(e.getLocalizedMessage());
-//		}
 	}
 
 	private void setneigbours() {
