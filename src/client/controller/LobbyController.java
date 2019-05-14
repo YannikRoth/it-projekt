@@ -97,6 +97,7 @@ public class LobbyController {
 			if(!ServicelocatorClient.getClientModel().isAlive()) {
 				ServicelocatorClient.getClientModel().setInputPlayerName(view.getPlayerName().getText());
 				ServicelocatorClient.getClientModel().start();
+				view.disableDialogElements();
 			}
 		});
 	}
