@@ -19,6 +19,7 @@ import globals.Globals;
 import globals.ServerAction;
 import globals.message.ClientPlayerName;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import server.ServiceLocator;
@@ -239,10 +240,11 @@ public class ClientModel extends Thread {
 		synchronized (this.player) {
 			player.getResources().refreshObservableMap();
 			if(ServicelocatorClient.getClientView() != null) {
+				//Listener entfernen
+				ServicelocatorClient.getClientView().getTablePoints().getItems().clear();
+				//Listener wieder setzen
 				ServicelocatorClient.getClientView().getTablePoints().setItems(
 						player.getResources().getResourcesListObservable());
-			} else {
-				System.out.println("NULL");
 			}
 		}
 	}
