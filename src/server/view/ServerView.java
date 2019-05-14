@@ -124,6 +124,7 @@ public class ServerView {
 //		hBox.getChildren().addAll(fieldDomain, fieldIpAdress, fieldPort, btnChangePort, btnRestartServer);
 		hBox.getChildren().addAll(lblDomain, fieldDomain, lblIpAdress, fieldIpAdress, lblPort, fieldPort);
 		hBox.setSpacing(5);
+		hBox.setAlignment(Pos.CENTER);
 
 		
 		//TableView Bottom
@@ -150,6 +151,7 @@ public class ServerView {
 		tableView.getColumns().addAll(tblcolTimestamp, tblcolIpAdress, tblcolPlayer, tblcolAction);
 		
 		//Final Initialisation
+		this.stage.setResizable(false);
 		Scene scene = new Scene(pane);
 		scene.getStylesheets().add(getClass().getResource("ServerStyle.css").toExternalForm());
 		this.stage.sizeToScene();

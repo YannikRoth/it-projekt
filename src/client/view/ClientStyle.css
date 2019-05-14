@@ -130,4 +130,5 @@
 .hBoxDeck {
 	-fx-background-image: url("file:./resource/images/boards/Board_06_A.jpg");
 	-fx-background-size: 1250 580;
+	-fx-effect: dropshadow(three-pass-box, white, 30, 0.5, 0, 0);
 }
