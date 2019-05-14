@@ -149,19 +149,21 @@ public class ClientView {
 		borderPaneMain.setCenter(tableOpponents);
 		
 		//Player Deck
+		VBox vBoxPlayer = new VBox();
 		HBox hBoxPlayer = new HBox();
-		borderPaneMain.setBottom(hBoxPlayer);
+		borderPaneMain.setBottom(vBoxPlayer);
 		
 		BorderPane borderPanePlayer = new BorderPane();
 		
 		this.hBoxCards = new HBox();
-		hBoxCards.setPadding(new Insets(0,50,0,200));
+		hBoxCards.setPadding(new Insets(0,50,0,150));
 		hBoxCards.setSpacing(-10);
-		hBoxCards.setPrefHeight(130);
-		hBoxCards.setMinWidth(980);
-//		hBoxCards.setAlignment(Pos.CENTER);
-		borderPanePlayer.setTop(hBoxCards);
-		borderPanePlayer.setPrefWidth(985);
+		hBoxCards.setMinHeight(150);
+		hBoxCards.setMinWidth(1250);
+		hBoxCards.setAlignment(Pos.CENTER);
+		vBoxPlayer.getChildren().addAll(hBoxCards, hBoxPlayer);
+		vBoxPlayer.setMinWidth(1250);
+		borderPanePlayer.setPrefWidth(980);
 		hBoxPlayer.setHgrow(borderPanePlayer, Priority.ALWAYS);
 		
 		//Cards
@@ -203,15 +205,16 @@ public class ClientView {
 		cardPlayable7.setFitWidth(133);
 		cards[6] = cardPlayable7;
 		
-		VBox vBoxTablePoints = new VBox();
-		HBox hBoxEmpty = new HBox();
-		hBoxEmpty.setPrefHeight(130);
+//		VBox vBoxTablePoints = new VBox();
+//		HBox hBoxEmpty = new HBox();
+//		hBoxEmpty.setPrefHeight(130);
 		
 		//Points
 		buildTablePoints();
-		vBoxTablePoints.getChildren().addAll(hBoxEmpty, tablePoints);
-		hBoxPlayer.getChildren().addAll(borderPanePlayer, vBoxTablePoints);
-		hBoxPlayer.getStyleClass().add("hBoxDeck");
+//		vBoxTablePoints.getChildren().addAll(tablePoints);
+		hBoxPlayer.getChildren().addAll(borderPanePlayer, tablePoints);
+		vBoxPlayer.setPrefHeight(580);
+		vBoxPlayer.getStyleClass().add("vBoxPlayer");
 		
 		//Deck
 		VBox vBoxDeck = new VBox();
@@ -304,9 +307,9 @@ public class ClientView {
 	
 	public void addImageView(ImageView v) {
 		this.hBoxCards.getChildren().add(v);
-		v.setFitHeight(130);
-		v.setFitWidth(86);
-		v.setEffect(new DropShadow(5, Color.GOLD));
+		v.setFitHeight(150);
+		v.setFitWidth(100);
+		v.setEffect(new DropShadow(30, Color.GOLD));
 	}
 	
 	public void addImageViewWorldWonder() {
@@ -314,7 +317,7 @@ public class ClientView {
 		this.hBoxWorldWonderCards.getChildren().add(v);
 		v.setFitHeight(110);
 		v.setFitWidth(73);
-		v.setEffect(new DropShadow(5, Color.GOLD));
+		v.setEffect(new DropShadow(30, Color.GOLD));
 	}
 	
 //	public void updatePlayedCardView() {
