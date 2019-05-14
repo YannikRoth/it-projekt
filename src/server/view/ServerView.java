@@ -98,6 +98,7 @@ public class ServerView {
 		fieldIpAdress.setPrefWidth(100);
 		try {
 			fieldIpAdress.setText(Inet4Address.getLocalHost().getHostAddress());
+			fieldDomain.setText(Inet4Address.getLocalHost().getHostName());
 		} catch (UnknownHostException e) {
 			ServiceLocator.getLogger().warning(e.getLocalizedMessage());
 		}
