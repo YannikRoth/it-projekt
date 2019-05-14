@@ -26,7 +26,7 @@ import test.testclassserializable;
  * @author martin
  *
  */
-public class ServerClientThread extends Thread implements Serializable {
+public class ServerClientThread extends Thread {
 	private Socket socket;
 	private ServerModel servermodel;
 	private boolean stop;
@@ -34,149 +34,181 @@ public class ServerClientThread extends Thread implements Serializable {
 	private final Logger logger = ServiceLocator.getLogger();
 	private ObjectInputStream objInputStream;
 	private ObjectOutputStream objOutputStream;
-	private boolean start;
-
-	// TODO ObjectInput/Output reader instead of inputstreamreader
 
 	public ServerClientThread(Socket socket, ServerModel model) {
-		//When the game starts the player object and numbers of players will be sent to the client
+		// When the game starts the player object and numbers of players will be sent to
+		// the client
 		String name = "";
 		try {
 			objOutputStream = new ObjectOutputStream(socket.getOutputStream());
-			objInputStream = new ObjectInputStream(socket.getInputStream());	
-			ClientPlayerName cpn = (ClientPlayerName)objInputStream.readObject();
+			objInputStream = new ObjectInputStream(socket.getInputStream());
+			ClientPlayerName cpn = (ClientPlayerName) objInputStream.readObject();
 			name = cpn.getName();
-			
-			if(name == "")
+
+			if (name == "")
 				name = "Player " + ServiceLocator.getmanualCardId();
-			
+
 			synchronized (model.getConnectedPlayerList()) {
 				ArrayList<String> playerNames = new ArrayList<>();
 				for (Player p : model.getConnectedPlayerList()) {
 					playerNames.add(p.getPlayerName());
 				}
-				if(playerNames.contains(name)) {
+				if (playerNames.contains(name)) {
 					int i = 2;
-					while(playerNames.contains(name + " " + i)) {
+					while (playerNames.contains(name + " " + i)) {
 						++i;
 					}
 					name = name + " " + i;
 				}
-				
+
 				player = new Player(name);
 				model.getConnectedPlayerList().add(player);
 				servermodel = model;
-				start = false;
 				player.setBoard(servermodel.getBoard(7));
 				this.setSocket(socket);
 			}
 		} catch (IOException e) {
 			logger.info("Error occured during communication with client");
-		} 
-		catch (ClassNotFoundException e) {
+		} catch (ClassNotFoundException e) {
 			logger.warning(e.getLocalizedMessage());
+		}
+	}
+
+	public synchronized void establishconnection() {
+
+		// this sends the own player obj to the server and tells him the game is
+		// established
+		// =================================================================
+		try {
+			objOutputStream.writeObject(ServerAction.ESTABLISHED);
+			objOutputStream.writeObject(new Integer(servermodel.getNumberOfPlayers()));
+			objOutputStream.writeObject(this.player);
+			objOutputStream.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public synchronized void sendUpdateOfPlayers() {
+		// this updates the client with the list of players currently waiting in lobby
+		// =================================================================
+		try {
+			objOutputStream.writeObject(ServerAction.INFORMATION);
+			objOutputStream.reset();
+			objOutputStream.writeObject(new Integer(servermodel.getConnectedPlayerList().size()));
+			objOutputStream.flush();
+			for (Player players : servermodel.getConnectedPlayerList()) {
+				objOutputStream.reset();
+				objOutputStream.writeObject(players);
+				objOutputStream.flush();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
 	@Override
 	public void run() {
-		ClientAction action;
-		
-		
-		//this sends the own player obj to the server
+		// tells the client to start its gameview
+		// =================================================================
 		try {
-			synchronized (objInputStream) {
-				objOutputStream.writeObject(ServerAction.ESTABLISHED);
-				objOutputStream.writeObject(new Integer(servermodel.getNumberOfPlayers()));
-				objOutputStream.writeObject(this.player);
-				objOutputStream.flush();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+			objOutputStream.reset();
+			objOutputStream.writeObject(ServerAction.STARTGAME);
+			objOutputStream.flush();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		
+		// this will iterrate through all the client and server actions
+		// =================================================================
+		ClientAction action;
 		boolean legalaction = true;
 		Card cardplayed = null;
 		stop = false;
 		while (!stop) {
 			try {
-				
-				while(servermodel.counter != 0) {
-					//wait
+
+				while (servermodel.counter != 0) {
+					// wait
 					logger.info("waiting...");
 					try {
-						this.sleep(1000);
+						this.sleep(2000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
-				
-				//notify the client that updated player objects will be sent
-				synchronized(objOutputStream) {
+
+				// notify the client that updated player objects will be sent
+				synchronized (objOutputStream) {
 					objOutputStream.writeObject(ServerAction.UPDATEVIEW);
 					objOutputStream.flush();
 				}
-				//send all playerobjects to client
+				// send all playerobjects to client
 				OutputAllplayers(this.player);
-				
-				
+
 				do {
-					//get the action the client wishes to do with the incoming card
+					// get the action the client wishes to do with the incoming card
 					action = (ClientAction) objInputStream.readObject();
 					switch (action) {
 					case PLAYCARD:
-						synchronized(objInputStream) {
+						synchronized (objInputStream) {
 							cardplayed = (Card) objInputStream.readObject();
 							this.player.playCard(cardplayed);
 						}
-						logger.info(cardplayed.getCardName() + " Cards received from "
-									+ player.getPlayerName() + " with following Action: " + action);
+						logger.info(cardplayed.getCardName() + " Cards received from " + player.getPlayerName()
+								+ " with following Action: " + action);
 						break;
-	
+
 					case DISCARD:
-						synchronized(objInputStream) {
+						synchronized (objInputStream) {
 							cardplayed = (Card) objInputStream.readObject();
 							this.player.discardCard(cardplayed);
 						}
-						logger.info(cardplayed.getCardName() + "Cards received from "
-									+ player.getPlayerName() + " with following Action: " + action);
+						logger.info(cardplayed.getCardName() + "Cards received from " + player.getPlayerName()
+								+ " with following Action: " + action);
 						break;
 					case BUILDWONDER:
-						synchronized(objInputStream) {
+						synchronized (objInputStream) {
 							cardplayed = (Card) objInputStream.readObject();
 							this.player.playWorldWonder(this.player.getBoard().getNextWorldWonderStage());
 							this.player.removeCardFromCurrentPlayabled(cardplayed);
 						}
-						logger.info(cardplayed.getCardName() + "Cards received from "
-									+ player.getPlayerName() + " with following Action: " + action);
-						
-						break;				
+						logger.info(cardplayed.getCardName() + "Cards received from " + player.getPlayerName()
+								+ " with following Action: " + action);
+
+						break;
 					default:
-						logger.info("An error occured during the Communication - invalid input from " + player.getPlayerName()+ " ----retry");
+						logger.info("An error occured during the Communication - invalid input from "
+								+ player.getPlayerName() + " ----retry");
 						legalaction = false;
 						break;
 					}
-				}while(!legalaction);
-				
-				//this method is used to pass the card to the next player
+				} while (!legalaction);
+
+				// this method is used to Update the current game status
+				// =========================================================
 				servermodel.updateGameStatus();
-				//If game end send players ordered from winner to loser
-				if(servermodel.gameEnd) {
-					synchronized(objOutputStream) {
+
+				// if the game ends the client of the thread will be notified with the winners
+				// and the thread stops
+				// =========================================================
+				if (servermodel.gameEnd) {
+					synchronized (objOutputStream) {
 						objOutputStream.reset();
 						objOutputStream.writeObject(ServerAction.ENDGAME);
 						objOutputStream.flush();
 						for (Player currentplayer : servermodel.getWinners()) {
 							objOutputStream.reset();
 							objOutputStream.writeObject(currentplayer);
-							objOutputStream.flush();						
+							objOutputStream.flush();
 						}
 					}
-					//stop the thread
 					stop = true;
 				}
-				
+
 			} catch (IOException e) {
 				stop = true;
 				logger.info(e.getLocalizedMessage());
@@ -185,9 +217,8 @@ public class ServerClientThread extends Thread implements Serializable {
 				logger.info(e.getLocalizedMessage());
 			}
 		}
-
 	}
-	
+
 	public void OutputAllplayers(Player curplayer) throws IOException {
 //		System.out.println("Sending players " + curplayer.getPlayerName() + " " + curplayer.getPlayableCards());
 //		System.out.println("Resources" + curplayer.getResources());
@@ -196,7 +227,7 @@ public class ServerClientThread extends Thread implements Serializable {
 			objOutputStream.writeObject(curplayer);
 			objOutputStream.flush();
 		}
-		logger.info("Player "+curplayer.getPlayerName()+" sent to "+player.getPlayerName());	
+		logger.info("Player " + curplayer.getPlayerName() + " sent to " + player.getPlayerName());
 		if (curplayer.getRightPlayer() != player) {
 			OutputAllplayers(curplayer.getRightPlayer());
 		}
@@ -213,6 +244,5 @@ public class ServerClientThread extends Thread implements Serializable {
 	public void setSocket(Socket socket) {
 		this.socket = socket;
 	}
-
 
 }

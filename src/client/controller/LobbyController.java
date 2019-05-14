@@ -3,8 +3,10 @@ package client.controller;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import client.ClientMVC;
+import client.ServicelocatorClient;
 import client.model.ClientModel;
 import client.model.LobbyModel;
 import client.view.ClientView;
@@ -64,22 +66,24 @@ public class LobbyController {
 			}
 		});
 	}
-
+	public void processNewGame() {
+		view.disableDialogElements();
+		handleInetAdress(view.getIpAdress(), view.getPort());
+		Stage secondStage = new Stage();
+		ClientMVC clientMVC = new ClientMVC();
+		try {
+			view.stop();
+			clientMVC.start(secondStage);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+//		view.getStage().hide();		
+	}
 
 	private void processNewGameButton() {
 		view.getNewGameButton().setOnAction((e) -> {
-			view.disableDialogElements();
-			handleInetAdress(view.getIpAdress(), view.getPort());
-			Stage secondStage = new Stage();
-			ClientMVC clientMVC = new ClientMVC(this);
-			try {
-				view.stop();
-				clientMVC.start(secondStage);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-//			view.getStage().hide();
+			ServicelocatorClient.getClientModel().start();
 		});
 	}
 	
@@ -150,5 +154,11 @@ public class LobbyController {
 	}
 	public void setView(LobbyView view) {
 		this.view = view;
+	}
+
+
+	public void updateWaitingPlayers(ArrayList<String> listOfWaitingPlayers) {
+		
+		
 	}
 }

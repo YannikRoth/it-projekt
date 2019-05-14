@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 import com.sun.glass.ui.View;
 
+import client.ServicelocatorClient;
 import client.model.ClientModel;
 import client.view.CardOptionView;
 import client.view.ClientView;
@@ -36,12 +37,11 @@ public class ClientController {
 	private ClientView view;
 	private Card selectedCard;
 	private Logger logger = ServiceLocator.getLogger();
-	private LobbyController callingLobbyController;
+	private LobbyController callingLobbyController = ServicelocatorClient.getLobbyController();
 	
-	public ClientController(ClientModel model, ClientView view, LobbyController callingLobbyController) {
+	public ClientController(ClientModel model, ClientView view) {
 		this.model = model;
 		this.view = view;
-		this.callingLobbyController = callingLobbyController;
 		processRulesItem();
 		processHintItem();
 		processAboutItem();
