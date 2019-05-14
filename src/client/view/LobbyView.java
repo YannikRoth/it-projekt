@@ -58,7 +58,7 @@ public class LobbyView {
 
 	Menu menuLanguage;
 	
-	MenuItem itemGerman, itemEnglish;
+	MenuItem itemGerman, itemEnglish, itemFrench;
 	
 	TableColumn<Player,String> tblcolNr;
 	TableColumn<Player,String> tblcolWaitingPlayer;
@@ -173,8 +173,9 @@ public class LobbyView {
 		//Menu "Language"
 		itemGerman = new MenuItem();
 		itemEnglish = new MenuItem();
+		itemFrench = new MenuItem();
 		menuLanguage = new Menu();
-		menuLanguage.getItems().addAll(itemGerman, itemEnglish);
+		menuLanguage.getItems().addAll(itemGerman, itemEnglish, itemFrench);
 		
 		MenuBar menuBar = new MenuBar(menuLanguage);
 		borderPaneMain.setTop(menuBar);
@@ -208,6 +209,7 @@ public class LobbyView {
 		
 		itemGerman.setText(this.getLanguageDescription("language.german"));
 		itemEnglish.setText(this.getLanguageDescription("language.english"));
+		itemFrench.setText(this.getLanguageDescription("language.french"));
 		
 		menuLanguage.setText(translator.getString("menu.language"));
 		
@@ -275,6 +277,9 @@ public class LobbyView {
 	
 	public MenuItem getEnglishItem2() {
 		return this.itemEnglish;
+	}
+	public MenuItem getFrenchItem2() {
+		return this.itemFrench;
 	}
 	
 	public String getIpAdress() {

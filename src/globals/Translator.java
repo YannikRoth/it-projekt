@@ -13,14 +13,16 @@ import server.ServiceLocator;
 /**
  * Class for translation in User-Interfaces
  * Based on system language
+ * german is the default language, if system has no supported language
  * @author david
  *
  */
 public class Translator {
 	// Supported languages for translations
 	final Locale[] locales = new Locale[] { 
-			new Locale("de"),//first is the default language
-			new Locale("en")
+			new Locale("de"),
+			new Locale("en"),
+			new Locale("fr")
 	};
 	private static Logger logger = ServiceLocator.getLogger();
 	private static Locale defaultLocale;

@@ -48,6 +48,7 @@ public class ServerView {
 	Menu menuLanguage;
 	MenuItem itemGerman;
 	MenuItem itemEnglish;
+	MenuItem itemFrench;
 	
 	private TextField fieldDomain;
 	private TextField fieldIpAdress;
@@ -87,7 +88,8 @@ public class ServerView {
 		
 		itemGerman = new MenuItem();
 		itemEnglish = new MenuItem();
-		menuLanguage.getItems().addAll(itemGerman, itemEnglish);
+		itemFrench = new MenuItem();
+		menuLanguage.getItems().addAll(itemGerman, itemEnglish, itemFrench);
 		
 		//HBox Center
 		HBox hBox = new HBox();
@@ -168,6 +170,7 @@ public class ServerView {
 		menuLanguage.setText(		translator.getString("menu.language"));
 		itemGerman.setText(			this.getLanguageDescription("language.german"));
 		itemEnglish.setText(		this.getLanguageDescription("language.english"));
+		itemFrench.setText(		this.getLanguageDescription("language.french"));
 		
 		fieldDomain.setPromptText(	translator.getString("text.nodomain"));
 		fieldIpAdress.setPromptText(translator.getString("text.noipadress"));

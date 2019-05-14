@@ -67,7 +67,7 @@ public class ClientView {
 	private TableColumn<ResourceType, String> ColType;
 	private TableColumn<ResourceType, Integer> ColAmount;
 	
-	MenuItem itemM1, itemM2, itemM3, itemM4, itemM5, itemM6, itemM7, itemM8, itemM9, itemM10, itemM11, itemM12, itemM13;
+	MenuItem itemM1, itemM2, itemM3, itemM4, itemM5, itemM6, itemM7, itemM8, itemM9, itemM10, itemM11, itemM12, itemM13, itemM14;
 	private Button playCard;
 	private Button buildWorldWonder;
 	private Button discardCard;
@@ -291,8 +291,9 @@ public class ClientView {
 		//Menu "Language"
 		itemM12 = new MenuItem();
 		itemM13 = new MenuItem();
+		itemM14 = new MenuItem();
 		menuLanguage = new Menu();
-		menuLanguage.getItems().addAll(itemM12, itemM13);
+		menuLanguage.getItems().addAll(itemM12, itemM13, itemM14);
 		
 		
 		MenuBar menuBar = new MenuBar(menuHelp, menuLanguage);
@@ -393,6 +394,7 @@ public class ClientView {
 		itemM11.setText(translator.getString("item.quit"));
 		itemM12.setText(this.getLanguageDescription("language.german"));
 		itemM13.setText(this.getLanguageDescription("language.english"));
+		itemM14.setText(this.getLanguageDescription("language.french"));
 		
 		menuHelp.setText(translator.getString("menu.help"));
 		menuGame.setText(translator.getString("menu.game"));
@@ -460,6 +462,9 @@ public class ClientView {
 	
 	public MenuItem getEnglishItem() {
 		return this.itemM13;
+	}
+	public MenuItem getFrenchItem() {
+		return this.itemM14;
 	}
 	
 	public ImageView getImageView (int i) {

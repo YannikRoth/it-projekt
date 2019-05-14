@@ -48,6 +48,7 @@ public class ClientController {
 		processQuitItem();
 		processGermanItem();
 		processEnglishItem();
+		processFrenchItem();
 		processPlayCardButton();
 		processBuildWorldWonderButton();
 		processDiscardCardButton();
@@ -60,6 +61,16 @@ public class ClientController {
 			view.getTablePoints().setItems(model.getMyPlayer().getResources().getResourcesListObservable());
 	}
 	
+	private void processFrenchItem() {
+		view.getFrenchItem().setOnAction((e) -> {
+			MenuItem i = (MenuItem) e.getSource();
+			String newLanguage = i.getText().toLowerCase().substring(0, 2);
+			if(!Translator.getTranslator().getLocale().getLanguage().equalsIgnoreCase(newLanguage)) {
+				Translator.getTranslator().setLanguage(newLanguage);
+				view.setTexts();
+			}
+		});
+	}
 	private void processEnglishItem() {
 		view.getEnglishItem().setOnAction((e) -> {
 			MenuItem i = (MenuItem) e.getSource();
