@@ -346,8 +346,7 @@ public class Player implements Serializable{
 	 * @param playerName
 	 * @author david
 	 */
-	public void setPlayerName(String playerName) {
-		//TODO: Check if other players has the same name - name has to be unique
+	private void setPlayerName(String playerName) {
 		this.playerName = playerName;
 	}
 	
@@ -360,8 +359,8 @@ public class Player implements Serializable{
 	public boolean equals(Object o) {
 		if(o instanceof Player)
 			return this.playerName.equals(((Player)o).getPlayerName());
-		
-		logger.warning("Called player method with no \"Player\" object: " + o.getClass().getName());
+		else
+			logger.warning("Called player method with no \"Player\" object: " + o.getClass().getName());
 		return false;
 	}
 	
