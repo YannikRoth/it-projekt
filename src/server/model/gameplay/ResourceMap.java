@@ -45,7 +45,6 @@ public class ResourceMap extends HashMap<ResourceType, Integer>{
 				} else {
 					resourcesListObservable.add(change.getKey());
 				}
-				Collections.sort(resourcesListObservable);
 				Collections.sort(resourcesListObservable, new Comparator<ResourceType>() {
 					@Override
 					public int compare(ResourceType r1, ResourceType r2) {
