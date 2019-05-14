@@ -83,7 +83,9 @@ public class LobbyController {
 
 	private void processNewGameButton() {
 		view.getNewGameButton().setOnAction((e) -> {
-			ServicelocatorClient.getClientModel().start();
+			if(!ServicelocatorClient.getClientModel().isAlive()) {
+				ServicelocatorClient.getClientModel().start();
+			}
 		});
 	}
 	
