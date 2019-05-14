@@ -10,10 +10,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import com.sun.glass.ui.View;
+
 import client.ServicelocatorClient;
 import globals.ClientAction;
 import globals.Globals;
 import globals.ServerAction;
+import globals.message.ClientPlayerName;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,11 +39,17 @@ public class ClientModel extends Thread {
 	private ObjectInputStream objInputStream;
 	private ObjectOutputStream objOutputStream;
 	//private ServerModel model;
+	private String inputPlayerName = "";
 
 	private static final Logger logger = ServiceLocator.getLogger();
 
 	public ClientModel() {
 		super();
+		this.setInputPlayerName(System.getProperty("user.name"));
+	}
+	public ClientModel(String name) {
+		super();
+		this.setInputPlayerName(name);
 	}
 	
 	
@@ -70,8 +79,11 @@ public class ClientModel extends Thread {
 		ServerAction action;
 
 		try (Socket socket = new Socket(Globals.getDefaultIPAddr(), Globals.getPortNr())) {
-			this.objOutputStream = new ObjectOutputStream(socket.getOutputStream());
 			this.objInputStream = new ObjectInputStream(socket.getInputStream());
+			this.objOutputStream = new ObjectOutputStream(socket.getOutputStream());
+			ClientPlayerName cpn = new ClientPlayerName(inputPlayerName);
+			objOutputStream.writeObject(cpn);
+			objOutputStream.flush();
 			//waiting for Server input
 			while (((action = (ServerAction) objInputStream.readObject()) != null)) {
 				switch (action) {
@@ -223,5 +235,18 @@ public class ClientModel extends Thread {
 			ServicelocatorClient.getClientView().getTablePoints().setItems(
 					player.getResources().getResourcesListObservable());
 		}
+	}
+
+
+	public String getInputPlayerName() {
+		return inputPlayerName;
+	}
+
+
+	public void setInputPlayerName(String inputPlayerName) {
+		if(inputPlayerName == "")
+			this.inputPlayerName = System.getProperty("user.name");
+		else
+			this.inputPlayerName = inputPlayerName;
 	}
 }

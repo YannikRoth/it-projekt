@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import globals.*;
+import globals.message.ClientPlayerName;
 import server.ServiceLocator;
 import server.model.ServerModel;
 import server.model.gameplay.Card;
@@ -39,21 +40,31 @@ public class ServerClientThread extends Thread implements Serializable {
 
 	public ServerClientThread(Socket socket, ServerModel model) {
 		// TODO: Add player name in constructor
-		player = new Player("Player " + ServiceLocator.getmanualCardId());
-		servermodel = model;
-		start = false;
-		player.setBoard(servermodel.getBoard(7));
-		this.socket = socket;
 		
 		//When the game starts the player object and numbers of players will be sent to the client
+		String name = "";
 		try {
-			objOutputStream = new ObjectOutputStream(this.socket.getOutputStream());
-			objInputStream = new ObjectInputStream(this.socket.getInputStream());	
-		
+			objOutputStream = new ObjectOutputStream(socket.getOutputStream());
+			objInputStream = new ObjectInputStream(socket.getInputStream());	
+			ClientPlayerName cpn = (ClientPlayerName)objInputStream.readObject();
+			name = cpn.getName();
+			
+			if(name == "")
+				name = "Player " + ServiceLocator.getmanualCardId();
+			
+			player = new Player(name);
+			servermodel = model;
+			start = false;
+			player.setBoard(servermodel.getBoard(7));
+			this.socket = socket;
+			
 			ServiceLocator.getServerModel().getServerActionData().add(
 					new server.model.gameplay.ServerAction(socket.getInetAddress().toString(), player.getPlayerName(), "Connected"));
 		} catch (IOException e) {
-			logger.info("Error occured durring communication with client");
+			logger.info("Error occured during communication with client");
+		} 
+		catch (ClassNotFoundException e) {
+			logger.warning(e.getLocalizedMessage());
 		}
 	}
 

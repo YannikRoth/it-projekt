@@ -55,7 +55,7 @@ public class LobbyView {
 	private Button btnNewGame, btnRules, btnQuit, btnConnect;
 	private Label player, ipAdressLabel, portLabel;
 	private TextField playerName, ipAdress, port;
-	
+
 	Menu menuLanguage;
 	
 	MenuItem itemGerman, itemEnglish;
@@ -283,5 +283,12 @@ public class LobbyView {
 	
 	public int getPort() {
 		return Integer.parseInt(this.port.getText());
+	}
+	
+	public TextField getPlayerName() {
+		return playerName;
+	}
+	public void setPlayerName(TextField playerName) {
+		this.playerName = playerName;
 	}
 }

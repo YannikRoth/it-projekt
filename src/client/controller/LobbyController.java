@@ -29,8 +29,10 @@ public class LobbyController {
 	private LobbyModel model;
 	private LobbyView view;
 	
+
+
 	public LobbyController(LobbyModel model, LobbyView view) {
-		this.model = model;
+		this.setModel(model);
 		this.view = view;
 		
 		processNewGameButton();
@@ -134,5 +136,19 @@ public class LobbyController {
 				System.exit(0);
 			}
 		});
+	}
+
+
+	public LobbyModel getModel() {
+		return model;
+	}
+	public void setModel(LobbyModel model) {
+		this.model = model;
+	}
+	public LobbyView getView() {
+		return view;
+	}
+	public void setView(LobbyView view) {
+		this.view = view;
 	}
 }

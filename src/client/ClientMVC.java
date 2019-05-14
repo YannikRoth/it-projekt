@@ -38,7 +38,10 @@ public class ClientMVC extends Application{
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		this.model = new ClientModel();
+		if(this.callingLobbyController != null)
+			this.model = new ClientModel(this.callingLobbyController.getView().getPlayerName().getText());
+		else
+			this.model = new ClientModel();
 		ServicelocatorClient.setClientModel(model);
 		this.view = new ClientView(primaryStage, model);
 		ServicelocatorClient.setClientView(view);
