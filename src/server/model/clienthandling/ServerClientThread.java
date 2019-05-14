@@ -189,7 +189,8 @@ public class ServerClientThread extends Thread implements Serializable {
 	}
 	
 	public void OutputAllplayers(Player curplayer) throws IOException {
-		System.out.println("Sending players " + curplayer.getPlayerName() + " " + curplayer.getPlayableCards());
+//		System.out.println("Sending players " + curplayer.getPlayerName() + " " + curplayer.getPlayableCards());
+//		System.out.println("Resources" + curplayer.getResources());
 		synchronized(objOutputStream) {
 			objOutputStream.reset();
 			objOutputStream.writeObject(curplayer);

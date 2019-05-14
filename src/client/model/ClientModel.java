@@ -101,8 +101,6 @@ public class ClientModel extends Thread {
 					Player tempplayer = null;
 					synchronized(objInputStream) {
 						setMyPlayer((Player) objInputStream.readObject());
-						System.out.println("My player has: " + getMyPlayer().getResources());
-						System.out.println(getMyPlayer().getPlayerName() + "_My playable cards are: " + getMyPlayer().getPlayableCards());
 					}
 					logger.info("Own Player Object "+getMyPlayer().getPlayerName()+" received from Server");
 					otherPlayers.clear();
