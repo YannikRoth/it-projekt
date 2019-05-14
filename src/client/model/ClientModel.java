@@ -40,7 +40,7 @@ public class ClientModel extends Thread {
 	private int numberofPlayers;
 	private ObjectInputStream objInputStream;
 	private ObjectOutputStream objOutputStream;
-	//private ServerModel model;
+	// private ServerModel model;
 	private String inputPlayerName = "";
 
 	private static final Logger logger = ServiceLocator.getLogger();
@@ -49,31 +49,32 @@ public class ClientModel extends Thread {
 		super();
 		this.setInputPlayerName(System.getProperty("user.name"));
 	}
+
 	public ClientModel(String name) {
 		super();
 		this.setInputPlayerName(name);
 	}
-	
-	
+
 	/**
-	 * Sends the played card to the server. It DOES NOT effectively plax the card on the player obj. To do so, use <code>getMyPlayer().playCard(Card c)</code>
+	 * Sends the played card to the server. It DOES NOT effectively plax the card on
+	 * the player obj. To do so, use <code>getMyPlayer().playCard(Card c)</code>
+	 * 
 	 * @param playedcard
 	 * @param action
 	 */
 	public void sendPlayedCard(Card playedcard, ClientAction action) {
 		try {
-			
+
 			objOutputStream.writeObject(action);
 			objOutputStream.writeObject(playedcard);
 			objOutputStream.flush();
-			logger.info("Card "+playedcard.getCardName()+" sent to Server - with following Action: " + action);
+			logger.info("Card " + playedcard.getCardName() + " sent to Server - with following Action: " + action);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			logger.info("Error occured while sending card");
 		}
 	}
-
 
 	@Override
 	public void run() {
@@ -125,8 +126,29 @@ public class ClientModel extends Thread {
 					
 					break;
 
-				case INFORMATION:				
+				case INFORMATION:	
+					Integer numberofPlayersConnected = 0;
+					numberofPlayersConnected = (Integer) objInputStream.readObject();
+				    ArrayList<Player> ListOfWaitingPlayers = new ArrayList<>();
+				    Player tempplayerr= null;
+					synchronized(ListOfWaitingPlayers) {
+						for (int i = 0; i < numberofPlayersConnected; i++) {
+							tempplayerr = (Player) objInputStream.readObject();
+							ListOfWaitingPlayers.add(tempplayerr);
+							logger.info("Waiting player "+  tempplayerr + " received from Server");						
+						}
+					}
+					ServicelocatorClient.getLobbyModel().setLobbyPlayerData(ListOfWaitingPlayers);
 					break;
+					
+				case STARTGAME:		
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							ServicelocatorClient.getLobbyController().processNewGame();
+						}
+					});
+					break;					
 				case ENDGAME:	
 				    ArrayList<Player> winnerList = new ArrayList<>();
 				    Player tempplayer1 = null;
@@ -154,24 +176,23 @@ public class ClientModel extends Thread {
 	}
 
 	private void setneigbours() {
-		//iterrate through all players
+		// iterrate through all players
 		getMyPlayer().setRightPlayer(otherPlayers.get(0));
-		getMyPlayer().setLeftPlayer(otherPlayers.get(otherPlayers.size()-1));
-			
+		getMyPlayer().setLeftPlayer(otherPlayers.get(otherPlayers.size() - 1));
+
 		for (int p = 0; p < otherPlayers.size(); p++) {
-			if(p==0) {
+			if (p == 0) {
 				otherPlayers.get(0).setLeftPlayer(getMyPlayer());
-				otherPlayers.get(p).setRightPlayer(otherPlayers.get(p+1));	
-			}else if (p==otherPlayers.size()-1) {
-				otherPlayers.get(otherPlayers.size()-1).setRightPlayer(getMyPlayer());	
-				otherPlayers.get(p).setLeftPlayer(otherPlayers.get(p-1));
-			}else {
-				otherPlayers.get(p).setLeftPlayer(otherPlayers.get(p-1));
-				otherPlayers.get(p).setRightPlayer(otherPlayers.get(p+1));	
+				otherPlayers.get(p).setRightPlayer(otherPlayers.get(p + 1));
+			} else if (p == otherPlayers.size() - 1) {
+				otherPlayers.get(otherPlayers.size() - 1).setRightPlayer(getMyPlayer());
+				otherPlayers.get(p).setLeftPlayer(otherPlayers.get(p - 1));
+			} else {
+				otherPlayers.get(p).setLeftPlayer(otherPlayers.get(p - 1));
+				otherPlayers.get(p).setRightPlayer(otherPlayers.get(p + 1));
 			}
 		}
 	}
-
 
 	public ObservableList<Player> getOtherPlayers() {
 		return otherPlayers;
@@ -198,13 +219,14 @@ public class ClientModel extends Thread {
 			});
 		}
 	}
+
 	/**
 	 * @author Roman Leuenberger
-	 * @return
-	 * This method returns a Map with all playable cards and possible play option for each card
+	 * @return This method returns a Map with all playable cards and possible play
+	 *         option for each card
 	 */
 	public Map<Card, Map<ClientAction, Boolean>> getPlayOptionsOfCards() {
-		Map<Card, Map<ClientAction,Boolean>> cardsWithOptions = new HashMap<Card, Map<ClientAction, Boolean>>();
+		Map<Card, Map<ClientAction, Boolean>> cardsWithOptions = new HashMap<Card, Map<ClientAction, Boolean>>();
 		for (Card c : getMyPlayer().getPlayableCards()) {
 			Map<ClientAction, Boolean> optionValues = new HashMap<ClientAction, Boolean>();
 			optionValues.put(ClientAction.PLAYCARD, false);
@@ -212,12 +234,13 @@ public class ClientModel extends Thread {
 			optionValues.put(ClientAction.DISCARD, true);
 			if (getMyPlayer().isAbleToAffordCard(c)) {
 				optionValues.replace(ClientAction.PLAYCARD, false, true);
-				//optionValues.put(ClientAction.PLAYCARD, true);
+				// optionValues.put(ClientAction.PLAYCARD, true);
 			}
 			if (getMyPlayer().getPlayerBoard().getNextWorldWonderStage() != null) {
-				if (getMyPlayer().isAbleToAffordCard(getMyPlayer().getPlayerBoard().getNextWorldWonderStage().getWorldWonderCard())) {
+				if (getMyPlayer().isAbleToAffordCard(
+						getMyPlayer().getPlayerBoard().getNextWorldWonderStage().getWorldWonderCard())) {
 					optionValues.replace(ClientAction.BUILDWONDER, false, true);
-					//optionValues.put(ClientAction.BUILDWONDER, true);
+					// optionValues.put(ClientAction.BUILDWONDER, true);
 				}
 			}
 			cardsWithOptions.put(c, optionValues);
@@ -230,8 +253,9 @@ public class ClientModel extends Thread {
 	}
 
 	/**
-	 * Set player and refresh observable maps from resources
-	 * refresh tableview to show myPlayers resources
+	 * Set player and refresh observable maps from resources refresh tableview to
+	 * show myPlayers resources
+	 * 
 	 * @param player
 	 * @author david
 	 */
@@ -240,7 +264,7 @@ public class ClientModel extends Thread {
 		synchronized (this.player) {
 			player.getResources().refreshObservableMap();
 			if(ServicelocatorClient.getClientView() != null) {
-				//Liste löschen
+				//Liste lï¿½schen
 				ServicelocatorClient.getClientView().getTablePoints().getItems().clear();
 				//Listener mit neuer Liste
 				ServicelocatorClient.getClientView().getTablePoints().setItems(
@@ -249,14 +273,12 @@ public class ClientModel extends Thread {
 		}
 	}
 
-
 	public String getInputPlayerName() {
 		return inputPlayerName;
 	}
 
-
 	public void setInputPlayerName(String inputPlayerName) {
-		if(inputPlayerName == "")
+		if (inputPlayerName == "")
 			this.inputPlayerName = System.getProperty("user.name");
 		else
 			this.inputPlayerName = inputPlayerName;

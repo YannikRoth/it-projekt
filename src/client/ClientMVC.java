@@ -22,15 +22,11 @@ public class ClientMVC extends Application{
 	private ClientView view;
 	private ClientController control;
 	private Logger logger = ServiceLocator.getLogger();
-	private LobbyController callingLobbyController;
 	
 	public ClientMVC() {
-		this.callingLobbyController = null;
+		
 	}
-	
-	public ClientMVC(LobbyController callingLobbyController) {
-		this.callingLobbyController = callingLobbyController;
-	}
+
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -38,14 +34,15 @@ public class ClientMVC extends Application{
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		if(this.callingLobbyController != null)
-			this.model = new ClientModel(this.callingLobbyController.getView().getPlayerName().getText());
-		else
-			this.model = new ClientModel();
-		ServicelocatorClient.setClientModel(model);
+//		if(this.callingLobbyController != null)
+//			this.model = new ClientModel(this.callingLobbyController.getView().getPlayerName().getText());
+//		else
+//			this.model = new ClientModel();
+//		ServicelocatorClient.setClientModel(model);
+		this.model = ServicelocatorClient.getClientModel();
 		this.view = new ClientView(primaryStage, model);
 		ServicelocatorClient.setClientView(view);
-		this.control = new ClientController(model, view, this.callingLobbyController);
+		this.control = new ClientController(model, view);
 		ServicelocatorClient.setClientController(control);
 		view.start();
 		

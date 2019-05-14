@@ -107,7 +107,8 @@ public class ServerModel implements Serializable{
 		if(players.size() < NUMBEROFPLAYERS) {
 			//add player to active player list
 			players.put(client.getPlayer(), client);
-			//client.getPlayer().setBoard(boards.get(7));
+			client.establishconnection();
+			
 			logger.info("successfully added client");
 			ServiceLocator.getServerModel().getServerActionData().add(
 					new server.model.gameplay.ServerAction(client.getSocket().getInetAddress().toString(), client.getPlayer().getPlayerName(), "Connected"));
@@ -116,6 +117,10 @@ public class ServerModel implements Serializable{
 				ServiceLocator.getServerModel().getServerActionData().add(
 						new server.model.gameplay.ServerAction(getHostAddress(), "Server", "Game started"));
 				this.startGame();
+			}else {
+				for(Entry<Player, ServerClientThread> serverClientThread : players.entrySet()) {
+					serverClientThread.getValue().sendUpdateOfPlayers();
+				}
 			}
 		}else {
 			logger.info("client could not be added");
