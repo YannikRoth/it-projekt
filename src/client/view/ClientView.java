@@ -155,11 +155,11 @@ public class ClientView {
 		BorderPane borderPanePlayer = new BorderPane();
 		
 		this.hBoxCards = new HBox();
-		hBoxCards.setPadding(new Insets(0,50,0,100));
+		hBoxCards.setPadding(new Insets(0,50,0,200));
 		hBoxCards.setSpacing(-10);
 		hBoxCards.setPrefHeight(130);
 		hBoxCards.setMinWidth(980);
-		hBoxCards.setAlignment(Pos.CENTER);
+//		hBoxCards.setAlignment(Pos.CENTER);
 		borderPanePlayer.setTop(hBoxCards);
 		borderPanePlayer.setPrefWidth(985);
 		hBoxPlayer.setHgrow(borderPanePlayer, Priority.ALWAYS);
