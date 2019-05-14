@@ -156,7 +156,7 @@ public class ClientView {
 		BorderPane borderPanePlayer = new BorderPane();
 		
 		this.hBoxCards = new HBox();
-		hBoxCards.setPadding(new Insets(0,50,0,150));
+		hBoxCards.setPadding(new Insets(0,30,0,150));
 		hBoxCards.setSpacing(-10);
 		hBoxCards.setMinHeight(130);
 		hBoxCards.setPrefWidth(1250);
@@ -212,13 +212,13 @@ public class ClientView {
 		buildTablePoints();
 //		vBoxTablePoints.getChildren().addAll(tablePoints);
 		hBoxPlayer.getChildren().addAll(borderPanePlayer, tablePoints);
-		vBoxPlayer.setPrefHeight(560);
+		vBoxPlayer.setPrefHeight(570);
 		vBoxPlayer.getStyleClass().add("vBoxPlayer");
 		
 		//Deck
 		VBox vBoxDeck = new VBox();
 		vBoxDeck.setPadding(new Insets(30,0,0, 0));
-		vBoxDeck.setSpacing(10);
+		vBoxDeck.setSpacing(5);
 		borderPanePlayer.setCenter(vBoxDeck);
 		
 		/**
