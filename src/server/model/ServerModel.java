@@ -107,8 +107,12 @@ public class ServerModel implements Serializable{
 			players.put(client.getPlayer(), client);
 			//client.getPlayer().setBoard(boards.get(7));
 			logger.info("successfully added client");
+			ServiceLocator.getServerModel().getServerActionData().add(
+					new server.model.gameplay.ServerAction(client.getSocket().getInetAddress().toString(), client.getPlayer().getPlayerName(), "Connected"));
 			if(players.size() >= NUMBEROFPLAYERS) {
 				logger.info("game Startet");
+				ServiceLocator.getServerModel().getServerActionData().add(
+						new server.model.gameplay.ServerAction(getHostAddress(), "Server", "Game started"));
 				this.startGame();
 			}
 		}else {

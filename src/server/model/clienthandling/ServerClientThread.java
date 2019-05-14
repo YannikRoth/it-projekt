@@ -68,11 +68,8 @@ public class ServerClientThread extends Thread implements Serializable {
 				servermodel = model;
 				start = false;
 				player.setBoard(servermodel.getBoard(7));
-				this.socket = socket;
+				this.setSocket(socket);
 			}
-			
-			ServiceLocator.getServerModel().getServerActionData().add(
-					new server.model.gameplay.ServerAction(socket.getInetAddress().toString(), player.getPlayerName(), "Connected"));
 		} catch (IOException e) {
 			logger.info("Error occured during communication with client");
 		} 
@@ -190,6 +187,14 @@ public class ServerClientThread extends Thread implements Serializable {
 
 	public Player getPlayer() {
 		return player;
+	}
+
+	public Socket getSocket() {
+		return socket;
+	}
+
+	public void setSocket(Socket socket) {
+		this.socket = socket;
 	}
 
 
