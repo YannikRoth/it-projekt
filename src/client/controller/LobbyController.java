@@ -95,6 +95,7 @@ public class LobbyController {
 	private void processNewGameButton() {
 		view.getNewGameButton().setOnAction((e) -> {
 			if(!ServicelocatorClient.getClientModel().isAlive()) {
+				ServicelocatorClient.getClientModel().setInputPlayerName(view.getPlayerName().getText());
 				ServicelocatorClient.getClientModel().start();
 			}
 		});
