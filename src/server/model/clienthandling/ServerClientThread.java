@@ -177,7 +177,10 @@ public class ServerClientThread extends Thread {
 						case PLAYCARD:
 							synchronized (objInputStream) {
 								cardplayed = (Card) objInputStream.readObject();
-								this.player.playCard(cardplayed);
+								boolean check = this.player.playCard(cardplayed);
+								if(check == false) {
+									logger.warning("card could not be played, maybe a consistency problem?");
+								}
 							}
 							logger.info(cardplayed.getCardName() + " Cards received from " + player.getPlayerName()
 									+ " with following Action: " + action);
@@ -194,8 +197,11 @@ public class ServerClientThread extends Thread {
 						case BUILDWONDER:
 							synchronized (objInputStream) {
 								cardplayed = (Card) objInputStream.readObject();
-								this.player.playWorldWonder(this.player.getBoard().getNextWorldWonderStage());
+								boolean check = this.player.playWorldWonder(this.player.getBoard().getNextWorldWonderStage());
 								this.player.removeCardFromCurrentPlayabled(cardplayed);
+								if(check == false) {
+									logger.warning("card could not be played, maybe a consistency problem?");
+								}
 							}
 							logger.info(cardplayed.getCardName() + "Cards received from " + player.getPlayerName()
 									+ " with following Action: " + action);
