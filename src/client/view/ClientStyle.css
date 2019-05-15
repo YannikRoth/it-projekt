@@ -135,3 +135,32 @@
 	-fx-background-size: 1370 580;
 	-fx-effect: dropshadow(three-pass-box, white, 30, 0.5, 0, 0);
 }
+
+.vBoxEndGame{
+	-fx-font-family: "Broadway";
+	-fx-font-size: 25px;
+	-fx-background-color: transparent;
+    -fx-base: transparent;
+}
+
+
+.vBoxEndGame .button {
+	-fx-font-family: "Broadway";
+	-fx-font-size: 12px;
+	-fx-font-weight: bold;
+ 	-fx-min-width: 110;
+	-fx-min-height: 20;
+	-fx-text-fill: white;
+	-fx-background-color: #daa520;
+}
+
+.vBoxEndGame .button:hover {
+	-fx-font-family: "Broadway";
+	-fx-font-size: 12px;
+	-fx-font-weight: bold;
+	-fx-text-fill: white;
+ 	-fx-min-width: 110;
+	-fx-min-height: 20;
+	-fx-background-color: #daa520;
+	-fx-effect: dropshadow(three-pass-box, #daa520, 40, 0, 0, 0);
+}

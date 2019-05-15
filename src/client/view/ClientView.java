@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import client.ServicelocatorClient;
 import client.model.ClientModel;
 import globals.ResourceType;
 import globals.Translator;
@@ -66,9 +67,7 @@ public class ClientView {
 	private TableColumn<ResourceType, Integer> ColAmount;
 	
 	MenuItem itemM1, itemM2, itemM3, itemM4, itemM5, itemM6, itemM7, itemM8, itemM9, itemM10, itemM11, itemM12, itemM13, itemM14;
-	private Button playCard;
-	private Button buildWorldWonder;
-	private Button discardCard;
+	private Button playCard, buildWorldWonder, discardCard, okButton;
 	
 	public ClientView(Stage primaryStage, ClientModel model) {
 		this.stage = primaryStage;
@@ -478,6 +477,10 @@ public class ClientView {
 		return this.discardCard;
 	}
 	
+	public Button getOkButton() {
+		return this.okButton;
+	}
+	
 	public Map<ImageView, Card> getCardsWithImages(){
 		return this.cardWithImages;
 	}
@@ -494,13 +497,19 @@ public class ClientView {
 	public void updateClientViewEndGame(ArrayList<Player> winner) {
 		VBox vBoxEndGame = new VBox();
 		vBoxEndGame.setAlignment(Pos.CENTER);
-		Button okButton = new Button("OK");
+		this.okButton = new Button("Spiel beenden");
 		for (int i = 0; i< winner.size(); i++) {
-			Label lblPlace = new Label(winner.get(i).getPlayerName());
+			Label lblPlace = new Label(i+1 +". Platz: "+winner.get(i).getPlayerName());
 			vBoxEndGame.getChildren().add(lblPlace);
 		}
 		this.playableCards.getChildren().add(vBoxEndGame);
 		vBoxEndGame.getChildren().add(okButton);
+		vBoxEndGame.setSpacing(15);
+		vBoxEndGame.setPadding(new Insets(30, 0, 0, 0));
+		vBoxEndGame.getStyleClass().add("vBoxEndGame");
+		this.okButton.setOnAction(e -> {
+			ServicelocatorClient.getClientController().handleCloseRequest();
+		});
 	}
 	
 }
