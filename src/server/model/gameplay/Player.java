@@ -44,6 +44,7 @@ public class Player implements Serializable{
 	private ArrayList<HashMap<ResourceType, Integer>> alternateResources; //only resources with alternating resource types
 	private List<Card> cards; //the cards that have been played by this player
 	private List<Card> worldWonderCards; //the cards/stages of world wonder which been played by this player, needed for a special Gilde-card
+	private Map<Card, Map<Player, Integer>> cardsTradingNeeded = new HashMap<>();
 	
 	//free cards (building chains) -> saved in lower case!
 	private Set<String> freePlayableCards = new HashSet<>();
@@ -151,6 +152,14 @@ public class Player implements Serializable{
 				this.addCoins((int)countOfOwnGreyCards + (int)countOfGreyCardsLeftPlayer + (int)countOfGreyCardsRightPlayer);
 			}
 			
+			//check if card was able to afford with trade, if yes, pay opponents
+			if (this.cardsTradingNeeded.containsKey(c)) {
+				for (Player p : this.cardsTradingNeeded.get(c).keySet()) {
+					p.addCoins(2*this.cardsTradingNeeded.get(c).get(p));
+					this.addCoins(-2*this.cardsTradingNeeded.get(c).get(p));
+				}
+			}
+			
 			removeCardFromCurrentPlayabled(c);
 			
 			return true;
@@ -178,6 +187,15 @@ public class Player implements Serializable{
 			this.updateMilitaryPlusPoints(wwCard.getMilitaryPoints());
 			//this.militaryStrength += wwCard.getMilitaryPoints();
 			this.winningPoints += wwCard.getWinningPoints();
+			
+			//check if card was able to afford with trade, if yes, pay opponents
+			if (this.cardsTradingNeeded.containsKey(wwCard)) {
+				for (Player p : this.cardsTradingNeeded.get(wwCard).keySet()) {
+					p.addCoins(2*this.cardsTradingNeeded.get(wwCard).get(p));
+					this.addCoins(-2*this.cardsTradingNeeded.get(wwCard).get(p));
+				}
+			}
+			
 			return true;
 		} else {
 			logger.info("Can not afford card");
@@ -202,7 +220,7 @@ public class Player implements Serializable{
 	 * @return <code>false</code> if the card can not be played because the player can't afford it
 	 * @author yannik roth
 	 */
-	public boolean isAbleToAffordCard(Card c) {
+	public Boolean isAbleToAffordCard(Card c) {
 		//if card can be played for free because of an earlier played card, instantly return true
 		if(this.freePlayableCards.contains(c.getCardName().toLowerCase())) {
 			return true;
@@ -239,10 +257,20 @@ public class Player implements Serializable{
 		}
 		
 		//evaluate the difficult ones : one card produces alternating products		
-		Map<ResourceType, Integer> absoluteAmountAlternatingResources = getAbsoluteAlternateResourceAmount();
-		ArrayList<ResourceType> sortedRequiredResources = Globals.sortMapByValue(absoluteAmountAlternatingResources);
+		Map<ResourceType, Integer> absoluteAmountAlternatingResources = getAbsoluteAlternateResourceAmount();		
+		ArrayList<ResourceType> sortedRequiredResources = Globals.sortMapByValue(absoluteAmountAlternatingResources);		
 		sortedRequiredResources = (ArrayList<ResourceType>) sortedRequiredResources.stream()
 				.filter(f -> checkedResources.get(f) != null).collect(Collectors.toList());
+		//this is needed to get all missing resources
+		for(ResourceType t : checkedResources.keySet()) {
+			if (checkedResources.get(t) == false) {
+				if (!sortedRequiredResources.contains(t)) {
+				sortedRequiredResources.add(t);
+				}
+			}
+		}
+		
+		Map<ResourceType, Integer> missingResources = new HashMap<>();
 		
 		for(ResourceType t : sortedRequiredResources) {	
 			//ResourceType searchResourceType = entry.getKey();
@@ -262,6 +290,7 @@ public class Player implements Serializable{
 							// afforded
 							amountRequired = 0;
 						}
+						
 						alternateResourceCopy.set(i, null);
 					}
 				}
@@ -272,6 +301,7 @@ public class Player implements Serializable{
 			}else {
 				//should already be false, don't know if required
 				checkedResources.put(searchResourceType, false);
+				missingResources.put(searchResourceType, amountRequired);
 			}
 			
 		}
@@ -279,10 +309,71 @@ public class Player implements Serializable{
 		//if the entire checkedResource map only contains "true" values, then the card can be afforded
 		if(checkedResources.entrySet().stream().filter(b -> b.getValue() == false).count() <= 0) {
 			return true;
+		}
+		if(isAbleToAffordCardWithTrade(c, checkedResources, missingResources)){
+			return true;
 		}else {
 			return false;
 		}
 
+	}
+	
+	/**
+	 * @author Roman Leuenberger
+	 * @param c
+	 * @param checkedResources
+	 * @param missingResources
+	 * @return
+	 */
+	
+	private Boolean isAbleToAffordCardWithTrade (Card c, Map<ResourceType, Boolean> checkedResources, Map<ResourceType, Integer> missingResources) {
+		//card cannot be played with own resources...see if opponents got the required resources
+		Map<Player, Map<ResourceType, Integer>> resourcesOfBothOpponents = new HashMap<>();
+		Map<ResourceType, Integer> tempMapLeftPlayer = new HashMap<>();
+		for(ResourceType type : leftPlayer.getResources().keySet()) {
+			tempMapLeftPlayer.put(type, leftPlayer.getResources().get(type));
+		}
+		resourcesOfBothOpponents.put(leftPlayer, tempMapLeftPlayer);
+		Map<ResourceType, Integer> tempMapRightPlayer = new HashMap<>();
+		for(ResourceType type : rightPlayer.getResources().keySet()) {
+			tempMapRightPlayer.put(type, rightPlayer.getResources().get(type));
+			resourcesOfBothOpponents.put(rightPlayer, tempMapRightPlayer);
+			}
+				
+		int amountOfUsedResourcesLeftPlayer = 0;
+		int amountOfUsedResourcesRightPlayer = 0;
+				
+		for (ResourceType t : missingResources.keySet()) {
+			Integer amountRequired = missingResources.get(t);
+			for (Player p : resourcesOfBothOpponents.keySet()) {
+				if(resourcesOfBothOpponents.get(p).get(t) != null) {
+					if(resourcesOfBothOpponents.get(p).get(t) > 0) {
+						amountRequired -= resourcesOfBothOpponents.get(p).get(t);
+						if (p.equals(this.leftPlayer)) {
+							amountOfUsedResourcesLeftPlayer += resourcesOfBothOpponents.get(p).get(t);
+						}
+						if (p.equals(this.rightPlayer)) {
+							amountOfUsedResourcesRightPlayer += resourcesOfBothOpponents.get(p).get(t);
+						}
+						if (amountRequired <= 0) {
+							int totalAmountOfNeedeResources = amountOfUsedResourcesLeftPlayer + amountOfUsedResourcesRightPlayer;
+							if (2*totalAmountOfNeedeResources <= this.getCoins()) {
+								checkedResources.put(t, true);
+								Map<Player, Integer> tempMap = new HashMap<>();
+								tempMap.put(leftPlayer, amountOfUsedResourcesLeftPlayer);
+								tempMap.put(rightPlayer, amountOfUsedResourcesRightPlayer);
+								this.cardsTradingNeeded.put(c, tempMap);
+							}
+						}
+					}
+				}
+			}
+		}
+	if(checkedResources.entrySet().stream().filter(b -> b.getValue() == false).count() <= 0) {
+		return true;
+	}else {
+		return false;
+		}
 	}
 
 	/**
