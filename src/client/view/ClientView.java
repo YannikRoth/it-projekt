@@ -330,21 +330,6 @@ public class ClientView {
 		v.setEffect(new DropShadow(30, Color.GOLD));
 	}
 	
-//	public void updatePlayedCardView() {
-//		System.out.println(model.getMyPlayer().getPlayedCards());
-//		for(int i = 0; i < model.getMyPlayer().getPlayedCards().size(); i++) {
-//			this.cards2[i].setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(i).getImageFileName()));
-//		}
-//	}
-//	
-	
-//	protected void updatePlayableCardView() {
-//		System.out.println(model.getMyPlayer().getPlayedCards());
-//		for(int i = 0; i < model.getMyPlayer().getPlayedCards().size(); i++) {
-//			this.cards2[i].setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(i).getImageFileName()));
-//		}
-//	}
-	
 	/**
 	 * @author Roman Leuenberger
 	 */
