@@ -176,8 +176,8 @@ public class Player implements Serializable{
 			//Karte wird in die Liste worldWonderCards eingefügt. Dies würde dann gebraucht, wenn wir die Gilden vom 3. Zeitalter noch implementieren
 			this.worldWonderCards.add(wwCard);
 			this.updateMilitaryPlusPoints(wwCard.getMilitaryPoints());
-			//this.militaryStrength += wwCard.getMilitaryPoints();
-			this.winningPoints += wwCard.getWinningPoints();
+			this.addWinningPoints(wwCard.getWinningPoints());
+			
 			return true;
 		} else {
 			logger.info("Can not afford card");
