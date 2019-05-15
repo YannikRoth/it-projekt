@@ -120,7 +120,7 @@ public class ServerClientThread extends Thread {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 		// this will iterrate through all the client and server actions
 		// =================================================================
 		ClientAction action;
@@ -131,7 +131,7 @@ public class ServerClientThread extends Thread {
 			try {
 
 				while (servermodel.counter != 0) {
-					// wait
+					// wait for model to allow thread to continue
 					logger.info("waiting...");
 					try {
 						this.sleep(2000);
@@ -140,57 +140,6 @@ public class ServerClientThread extends Thread {
 						e.printStackTrace();
 					}
 				}
-
-				// notify the client that updated player objects will be sent
-				synchronized (objOutputStream) {
-					objOutputStream.writeObject(ServerAction.UPDATEVIEW);
-					objOutputStream.flush();
-				}
-				// send all playerobjects to client
-				OutputAllplayers(this.player);
-
-				do {
-					// get the action the client wishes to do with the incoming card
-					action = (ClientAction) objInputStream.readObject();
-					switch (action) {
-					case PLAYCARD:
-						synchronized (objInputStream) {
-							cardplayed = (Card) objInputStream.readObject();
-							this.player.playCard(cardplayed);
-						}
-						logger.info(cardplayed.getCardName() + " Cards received from " + player.getPlayerName()
-								+ " with following Action: " + action);
-						break;
-
-					case DISCARD:
-						synchronized (objInputStream) {
-							cardplayed = (Card) objInputStream.readObject();
-							this.player.discardCard(cardplayed);
-						}
-						logger.info(cardplayed.getCardName() + "Cards received from " + player.getPlayerName()
-								+ " with following Action: " + action);
-						break;
-					case BUILDWONDER:
-						synchronized (objInputStream) {
-							cardplayed = (Card) objInputStream.readObject();
-							this.player.playWorldWonder(this.player.getBoard().getNextWorldWonderStage());
-							this.player.removeCardFromCurrentPlayabled(cardplayed);
-						}
-						logger.info(cardplayed.getCardName() + "Cards received from " + player.getPlayerName()
-								+ " with following Action: " + action);
-
-						break;
-					default:
-						logger.info("An error occured during the Communication - invalid input from "
-								+ player.getPlayerName() + " ----retry");
-						legalaction = false;
-						break;
-					}
-				} while (!legalaction);
-
-				// this method is used to Update the current game status
-				// =========================================================
-				servermodel.updateGameStatus();
 
 				// if the game ends the client of the thread will be notified with the winners
 				// and the thread stops
@@ -204,9 +153,64 @@ public class ServerClientThread extends Thread {
 							objOutputStream.reset();
 							objOutputStream.writeObject(currentplayer);
 							objOutputStream.flush();
+							logger.info(currentplayer.getPlayerName() + " sent to " + getPlayer().getPlayerName()
+							+ " for winnerevaluation.");
 						}
+						
 					}
 					stop = true;
+				} else {
+
+					// notify the client that updated player objects will be sent
+					synchronized (objOutputStream) {
+						objOutputStream.writeObject(ServerAction.UPDATEVIEW);
+						objOutputStream.flush();
+					}
+					// send all playerobjects to client
+					OutputAllplayers(this.player);
+
+					do {
+						// get the action the client wishes to do with the incoming card
+						action = (ClientAction) objInputStream.readObject();
+						switch (action) {
+						case PLAYCARD:
+							synchronized (objInputStream) {
+								cardplayed = (Card) objInputStream.readObject();
+								this.player.playCard(cardplayed);
+							}
+							logger.info(cardplayed.getCardName() + " Cards received from " + player.getPlayerName()
+									+ " with following Action: " + action);
+							break;
+
+						case DISCARD:
+							synchronized (objInputStream) {
+								cardplayed = (Card) objInputStream.readObject();
+								this.player.discardCard(cardplayed);
+							}
+							logger.info(cardplayed.getCardName() + "Cards received from " + player.getPlayerName()
+									+ " with following Action: " + action);
+							break;
+						case BUILDWONDER:
+							synchronized (objInputStream) {
+								cardplayed = (Card) objInputStream.readObject();
+								this.player.playWorldWonder(this.player.getBoard().getNextWorldWonderStage());
+								this.player.removeCardFromCurrentPlayabled(cardplayed);
+							}
+							logger.info(cardplayed.getCardName() + "Cards received from " + player.getPlayerName()
+									+ " with following Action: " + action);
+
+							break;
+						default:
+							logger.info("An error occured during the Communication - invalid input from "
+									+ player.getPlayerName() + " ----retry");
+							legalaction = false;
+							break;
+						}
+					} while (!legalaction);
+
+					// this method is used to Update the current game status
+					// =========================================================
+					servermodel.updateGameStatus();
 				}
 
 			} catch (IOException e) {
@@ -220,9 +224,10 @@ public class ServerClientThread extends Thread {
 	}
 
 	public void OutputAllplayers(Player curplayer) throws IOException {
-//		System.out.println("Sending players " + curplayer.getPlayerName() + " " + curplayer.getPlayableCards());
-//		System.out.println("Resources" + curplayer.getResources());
-		synchronized(objOutputStream) {
+		// System.out.println("Sending players " + curplayer.getPlayerName() + " " +
+		// curplayer.getPlayableCards());
+		// System.out.println("Resources" + curplayer.getResources());
+		synchronized (objOutputStream) {
 			objOutputStream.reset();
 			objOutputStream.writeObject(curplayer);
 			objOutputStream.flush();

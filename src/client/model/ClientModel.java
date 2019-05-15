@@ -153,14 +153,19 @@ public class ClientModel extends Thread {
 				    ArrayList<Player> winnerList = new ArrayList<>();
 				    Player tempplayer1 = null;
 					synchronized(winnerList) {
-						for (int i = 0; i < numberofPlayers - 1; i++) {
+						for (int i = 0; i < numberofPlayers; i++) {
 							tempplayer1 = (Player) objInputStream.readObject();
 							winnerList.add(tempplayer1);
 							logger.info("Number "+ i + tempplayer1.getPlayerName()+" received from Server");						
 						}
 					}				    
-					ServicelocatorClient.getClientView().updateViewGameEnd(winnerList);
-					ServicelocatorClient.getClientView().updateClientViewEndGame(winnerList);
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							ServicelocatorClient.getClientView().updateClientViewEndGame(winnerList);
+						}
+					});
+					
 					break;
 
 				default:
