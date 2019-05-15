@@ -134,7 +134,8 @@ public class ServerClientThread extends Thread {
 					// wait for model to allow thread to continue
 					logger.info("waiting...");
 					try {
-						this.sleep(2000);
+						//this.sleep(1000);
+						ServerClientThread.sleep(1000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
