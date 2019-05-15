@@ -160,6 +160,7 @@ public class ClientModel extends Thread {
 						}
 					}				    
 					ServicelocatorClient.getClientView().updateViewGameEnd(winnerList);
+					ServicelocatorClient.getClientView().updateClientViewEndGame(winnerList);
 					break;
 
 				default:

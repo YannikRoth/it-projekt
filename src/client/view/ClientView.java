@@ -21,6 +21,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -501,4 +502,18 @@ public class ClientView {
 			JOptionPane.showMessageDialog(null, playerrank.getPlayerName(), " has placed " + i , JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
+
+
+	public void updateClientViewEndGame(ArrayList<Player> winner) {
+		VBox vBoxEndGame = new VBox();
+		vBoxEndGame.setAlignment(Pos.CENTER);
+		Button okButton = new Button("OK");
+		for (int i = 0; i< winner.size(); i++) {
+			Label lblPlace = new Label(winner.get(i).getPlayerName());
+			vBoxEndGame.getChildren().add(lblPlace);
+		}
+		this.playableCards.getChildren().add(vBoxEndGame);
+		vBoxEndGame.getChildren().add(okButton);
+	}
+	
 }
