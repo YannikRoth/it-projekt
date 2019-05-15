@@ -325,7 +325,6 @@ public class Player implements Serializable{
 	public void addCoins(int i) {
 		int newAmountOfCoins = this.resources.get(ResourceType.COIN)+i;
 		this.resources.put(ResourceType.COIN, newAmountOfCoins);
-//		this.resourcesObservable.put(ResourceType.COIN, i);
 	}
 	
 	/**
@@ -365,7 +364,6 @@ public class Player implements Serializable{
 	}
 	
 	public void updateCardset(ArrayList<Card> cards) {
-		//currentPlayableCards.clear();
 		currentPlayableCards = cards;
 	}
 	
@@ -411,7 +409,6 @@ public class Player implements Serializable{
 	 */
 	public int getMilitaryStrength() {
 		return this.resources.get(ResourceType.MILITARYPLUSPOINTS);
-		//return this.militaryStrength;
 	}
 
 	/**
@@ -422,7 +419,6 @@ public class Player implements Serializable{
 	public void updateMilitaryPlusPoints(int points) {
 		int currentMilPoints = this.resources.get(ResourceType.MILITARYPLUSPOINTS);
 		this.resources.put(ResourceType.MILITARYPLUSPOINTS, currentMilPoints + points);
-		//this.militaryPlusPoints += points;
 	}
 	
 	/**
@@ -433,17 +429,14 @@ public class Player implements Serializable{
 	public void updateMilitaryMinusPoints(int points) {
 		int currentMilPoints = this.resources.get(ResourceType.MILITARYMINUSPOINTS);
 		this.resources.put(ResourceType.MILITARYMINUSPOINTS, currentMilPoints + points);
-		//this.militaryMinusPoints =+ points;
 	}
 	public int getWinningPoints() {
 		return this.resources.get(ResourceType.WINNINGPOINTS);
-		//return this.winningPoints;
 	}
 	
 	public void addWinningPoints (int points) {
 		int currentWinPoints = this.resources.get(ResourceType.WINNINGPOINTS);
 		this.resources.put(ResourceType.WINNINGPOINTS, currentWinPoints + points);
-		//this.winningPoints += points;
 	}
 	
 	public ResourceMap getResources() {
@@ -465,7 +458,6 @@ public class Player implements Serializable{
 	 */
 	public boolean discardCard(Card c) {
 		this.addCoins(3);
-		//this.cards.add(c);
 		removeCardFromCurrentPlayabled(c);
 		return true;
 	}
