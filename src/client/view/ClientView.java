@@ -68,6 +68,7 @@ public class ClientView {
 	
 	MenuItem itemM1, itemM2, itemM3, itemM4, itemM5, itemM6, itemM7, itemM8, itemM9, itemM10, itemM11, itemM12, itemM13, itemM14;
 	private Button playCard, buildWorldWonder, discardCard, okButton;
+	private Label playerName;
 	
 	public ClientView(Stage primaryStage, ClientModel model) {
 		this.stage = primaryStage;
@@ -208,7 +209,11 @@ public class ClientView {
 		//Points
 		buildTablePoints();
 //		vBoxTablePoints.getChildren().addAll(tablePoints);
-		hBoxPlayer.getChildren().addAll(borderPanePlayer, tablePoints);
+		VBox vBoxPlayerPoints = new VBox();
+		playerName = new Label();
+		playerName.getStyleClass().add("vBoxEndGame");
+		vBoxPlayerPoints.getChildren().addAll(playerName, tablePoints);
+		hBoxPlayer.getChildren().addAll(borderPanePlayer, vBoxPlayerPoints);
 		vBoxPlayer.setPrefHeight(570);
 		vBoxPlayer.setMinWidth(1350);
 		vBoxPlayer.getStyleClass().add("vBoxPlayer");
@@ -399,6 +404,8 @@ public class ClientView {
 		if(this.okButton != null)
 			this.okButton.setText(translator.getString("button.quitgame"));
 		
+		playerName.setText(translator.getString("column.player") + ": " + model.getMyPlayer().getPlayerName());
+		
 		if(model.getMyPlayer() != null) {
 			//Alte Liste leeren
 			getTablePoints().getItems().clear();
@@ -488,6 +495,12 @@ public class ClientView {
 		return tablePoints;
 	}
 
+	public Label getPlayerName() {
+		return playerName;
+	}
+	public void setPlayerName(Label playerName) {
+		this.playerName = playerName;
+	}
 
 	public void updateClientViewEndGame(ArrayList<Player> winner) {
 		VBox vBoxEndGame = new VBox();
@@ -506,5 +519,4 @@ public class ClientView {
 			ServicelocatorClient.getClientController().handleCloseRequest();
 		});
 	}
-	
 }
