@@ -396,14 +396,9 @@ public class ClientView {
 		
 		stage.setTitle(translator.getString("clientGame.name"));
 
-		//TODO fix translations in right bottom corner
-		/*
-		this.model.getMyPlayer().getResources().getResourcesObservable().clear();
-		for(Entry<ResourceType, Integer> entry : this.model.getMyPlayer().getResources().entrySet()) {
-			ResourceType t = entry.getKey();
-			Integer v = entry.getValue();
-			this.model.getMyPlayer().getResources().getResourcesObservable().put(t, v);
-		}*/
+		if(this.okButton != null)
+			this.okButton.setText(translator.getString("button.quitgame"));
+		
 		if(model.getMyPlayer() != null) {
 			//Alte Liste leeren
 			getTablePoints().getItems().clear();
@@ -497,7 +492,7 @@ public class ClientView {
 	public void updateClientViewEndGame(ArrayList<Player> winner) {
 		VBox vBoxEndGame = new VBox();
 		vBoxEndGame.setAlignment(Pos.CENTER);
-		this.okButton = new Button("Spiel beenden");
+		this.okButton = new Button(translator.getString("button.quitgame"));
 		for (int i = 0; i< winner.size(); i++) {
 			Label lblPlace = new Label(i+1 +". Platz: "+winner.get(i).getPlayerName());
 			vBoxEndGame.getChildren().add(lblPlace);
