@@ -164,3 +164,10 @@
 	-fx-background-color: #daa520;
 	-fx-effect: dropshadow(three-pass-box, #daa520, 40, 0, 0, 0);
 }
+
+.myPlayerName{
+	-fx-font-family: "Broadway";
+	-fx-font-size: 12pt ;
+	-fx-background-color: transparent;
+    -fx-base: transparent;
+}

@@ -211,7 +211,7 @@ public class ClientView {
 //		vBoxTablePoints.getChildren().addAll(tablePoints);
 		VBox vBoxPlayerPoints = new VBox();
 		playerName = new Label();
-		playerName.getStyleClass().add("vBoxEndGame");
+		playerName.getStyleClass().add("myPlayerName");
 		vBoxPlayerPoints.getChildren().addAll(playerName, tablePoints);
 		hBoxPlayer.getChildren().addAll(borderPanePlayer, vBoxPlayerPoints);
 		vBoxPlayer.setPrefHeight(570);
