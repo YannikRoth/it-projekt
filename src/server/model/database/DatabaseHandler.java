@@ -16,6 +16,11 @@ public class DatabaseHandler {
 	private static Connection con = ConnectionManager.getDbConnection();
 	private static Logger logger = ServiceLocator.getLogger();
 	
+	/**
+	 * Creates the table if it does not exist
+	 * @author yannik roth
+	 * @param p
+	 */
 	public static void checkTable(Persistent p) {
 		try {
 			Statement stmt = con.prepareStatement("SELECT * FROM " + p.getTableName());
@@ -31,6 +36,12 @@ public class DatabaseHandler {
 		}
 	}
 	
+	/**
+	 * This method clears the table for any persistent object
+	 * It is important that the persistent object has the same db name as its class name
+	 * @author yannik roth
+	 * @param c
+	 */
 	public static void clearTable(Class<? extends Persistent> c) {
 		try {
 			Statement stmt = con.createStatement();
@@ -41,6 +52,11 @@ public class DatabaseHandler {
 		}
 	}
 	
+	/**
+	 * This method checks if the entry already exists.
+	 * @param p
+	 * @return true if entry exists and false if entry does not exist
+	 */
 	public static boolean checkExistancy(Persistent p) {
 		try {
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM "+ p.getTableName() +" WHERE id=?");

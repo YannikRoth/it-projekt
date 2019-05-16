@@ -23,6 +23,11 @@ public interface Persistent {
 	 */
 	public String getTableName();
 	
+	/**
+	 * This method is required to identify the primary key of the persistent object
+	 * @return the id (primary key) of the obj.
+	 * @author yannik roth
+	 */
 	public int getId();
 
 }
