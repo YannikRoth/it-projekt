@@ -1,19 +1,11 @@
 package server.view;
 
-import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import globals.Globals;
 import globals.Translator;
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -27,10 +19,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import server.ServiceLocator;
 import server.model.ServerModel;
 import server.model.gameplay.ServerAction;
@@ -56,8 +49,7 @@ public class ServerView {
 	private Label lblDomain;
 	private Label lblIpAdress;
 	private Label lblPort;
-//	private Button btnChangePort;
-//	private Button btnRestartServer;
+	private Button btnLeaderboard;
 	
 	TableColumn<ServerAction,String> tblcolTimestamp;
 	TableColumn<ServerAction,String> tblcolIpAdress;
@@ -95,7 +87,6 @@ public class ServerView {
 		HBox hBox = new HBox();
 		pane.setCenter(hBox);
 		
-		//TODO: Insert correct values from model
 		fieldDomain	= new TextField();
 		fieldDomain.setEditable(false);
 		
@@ -113,8 +104,17 @@ public class ServerView {
 		lblIpAdress = new Label();
 		lblPort = new Label();
 		
-//		this.btnChangePort		= new Button();
-//		this.btnRestartServer	= new Button("Restart Server");
+		FileInputStream input = null;
+		try {
+			input = new FileInputStream("resource/images/information.jpg");
+		} catch (FileNotFoundException e) {
+			ServiceLocator.getLogger().warning(e.getLocalizedMessage());
+		}
+		Image image = new Image(input);
+		ImageView imageViewLeaderboard = new ImageView(image);
+		imageViewLeaderboard.setFitHeight(30);
+		imageViewLeaderboard.setFitWidth(30);
+		btnLeaderboard = new Button("Leaderboard", imageViewLeaderboard);
 		
 		/**
 		 * disabled till the functionality can be implemented
@@ -124,7 +124,7 @@ public class ServerView {
 //		this.btnRestartServer.setDisable(true);
 		
 //		hBox.getChildren().addAll(fieldDomain, fieldIpAdress, fieldPort, btnChangePort, btnRestartServer);
-		hBox.getChildren().addAll(lblDomain, fieldDomain, lblIpAdress, fieldIpAdress, lblPort, fieldPort);
+		hBox.getChildren().addAll(lblDomain, fieldDomain, lblIpAdress, fieldIpAdress, lblPort, fieldPort, btnLeaderboard);
 		hBox.setSpacing(5);
 		hBox.setAlignment(Pos.CENTER);
 
@@ -178,8 +178,7 @@ public class ServerView {
 		lblDomain.setText(translator.getString("label.domain"));
 		lblIpAdress.setText(translator.getString("label.ipadress"));
 		lblPort.setText(translator.getString("label.port"));
-//		btnChangePort.setText(		translator.getString("button.changeport"));
-//		btnRestartServer.setText(	translator.getString("button.restartserver"));
+		btnLeaderboard.setText(translator.getString("button.leaderboard"));
 		
 		tblcolTimestamp.setText(	translator.getString("column.timestamp"));
 		tblcolIpAdress.setText(		translator.getString("column.ipadress"));
@@ -231,12 +230,9 @@ public class ServerView {
 		return this.stage;
 	}
 	
-//	public Button getButtonChangePort() {
-//		return this.btnChangePort;
-//	}
-//	public Button getButtonRestartServer() {
-//		return this.btnRestartServer;
-//	}
+	public Button getButtonLeaderboard() {
+		return this.btnLeaderboard;
+	}
 	
 	public Menu getMenuLanguage() {
 		return this.menuLanguage;
