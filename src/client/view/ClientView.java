@@ -154,7 +154,7 @@ public class ClientView {
 		this.hBoxCards = new HBox();
 		hBoxCards.setPadding(new Insets(0,30,0,230));
 		hBoxCards.setSpacing(-10);
-		hBoxCards.setMinHeight(130);
+		hBoxCards.setMinHeight(120);
 		hBoxCards.setAlignment(Pos.CENTER);
 		borderPanePlayer.setPrefWidth(980);
 		hBoxPlayer.setHgrow(borderPanePlayer, Priority.ALWAYS);
@@ -241,14 +241,13 @@ public class ClientView {
 		buttonBox.setAlignment(Pos.CENTER);
 		
 		/**
+		 * hbox for world wonder (back of the card)
 		 * @author philipp
 		 */
-		
-		//hbox for world wonder (back of the card)
 		this.hBoxWorldWonderCards = new HBox();
 		hBoxWorldWonderCards.setSpacing(330);
 		hBoxWorldWonderCards.setPadding(new Insets(0,0,0,10));
-		hBoxWorldWonderCards.setMinHeight(125);
+		hBoxWorldWonderCards.setMinHeight(120);
 		hBoxWorldWonderCards.setAlignment(Pos.BOTTOM_LEFT);
 		vBoxPlayer.getChildren().addAll(hBoxCards, hBoxPlayer, hBoxWorldWonderCards);
 		
@@ -261,7 +260,6 @@ public class ClientView {
 		playableCards.setSpacing(2);
 		playableCards.setPadding(new Insets(0, 0, 0, 0));
 		playableCards.setPrefHeight(210);
-//		playableCards.setMinWidth(1000);
 		
 		//Menu "Game"
 		itemM1 = new MenuItem();
@@ -303,24 +301,24 @@ public class ClientView {
 	
 	public void addImageView(ImageView v) {
 		this.hBoxCards.getChildren().add(v);
-		v.setFitHeight(130);
-		v.setFitWidth(86);
+		v.setFitHeight(120);
+		v.setFitWidth(76);
 		v.setEffect(new DropShadow(30, Color.GOLD));
 	}
 	
 	public void addImageViewWorldWonderOne() {
 		ImageView v = new ImageView(new Image("file:./resource/images/cards/SCN_0150.jpg"));
 		this.hBoxWorldWonderCards.getChildren().add(v);
-		v.setFitHeight(125);
-		v.setFitWidth(83);
+		v.setFitHeight(120);
+		v.setFitWidth(76);
 		v.setEffect(new DropShadow(30, Color.GOLD));
 	}
 	
 	public void addImageViewWorldWonderTwo() {
 		ImageView v = new ImageView(new Image("file:./resource/images/cards/SCN_0151.jpg"));
 		this.hBoxWorldWonderCards.getChildren().add(v);
-		v.setFitHeight(125);
-		v.setFitWidth(83);
+		v.setFitHeight(120);
+		v.setFitWidth(76);
 		v.setEffect(new DropShadow(30, Color.GOLD));
 	}
 	

@@ -18,6 +18,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import server.ServiceLocator;
 
 
 /**
@@ -86,10 +87,8 @@ public class LobbyController {
 			view.stop();
 			clientMVC.start(secondStage);
 		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			ServiceLocator.getLogger().warning(e1.getMessage());
 		}
-//		view.getStage().hide();		
 	}
 
 	private void processNewGameButton() {
