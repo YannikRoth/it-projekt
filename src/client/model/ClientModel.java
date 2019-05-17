@@ -113,9 +113,11 @@ public class ClientModel extends Thread {
 						@Override
 						public void run() {
 							//CardOptionView view = new CardOptionView(ServicelocatorClient.getClientModel());
-							ServicelocatorClient.getClientView().updatePlayableCardView();
-							ServicelocatorClient.getClientView().refreshAgeLabelFromModel();
-							ServicelocatorClient.getClientController().processClickOnImage();
+							synchronized(getMyPlayer().getPlayableCards()) {
+								ServicelocatorClient.getClientView().updatePlayableCardView();
+								ServicelocatorClient.getClientView().refreshAgeLabelFromModel();
+								ServicelocatorClient.getClientController().processClickOnImage();
+							}
 						}
 					});
 					
