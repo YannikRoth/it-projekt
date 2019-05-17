@@ -15,6 +15,8 @@ import globals.Globals;
 import globals.Translator;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -41,6 +43,7 @@ public class LobbyController {
 		processNewGameButton();
 		processRulesButton();
 		processQuitButton();
+		processLeaderboardButton();
 		processGermanMenuItem();
 		processEnglishItem();
 		processFrenchItem();
@@ -80,6 +83,7 @@ public class LobbyController {
 	}
 	public void processNewGame() {
 		view.disableDialogElements();
+		view.getButtonLeaderboard().setDisable(false);
 		handleInetAdress(view.getIpAdress(), view.getPort());
 		Stage secondStage = new Stage();
 		ClientMVC clientMVC = new ClientMVC();
@@ -97,6 +101,7 @@ public class LobbyController {
 				ServicelocatorClient.getClientModel().setInputPlayerName(view.getPlayerName().getText());
 				ServicelocatorClient.getClientModel().start();
 				view.disableDialogElements();
+				view.getButtonLeaderboard().setDisable(false);
 			}
 		});
 	}
@@ -121,6 +126,20 @@ public class LobbyController {
 			System.exit(0);
 		});
 	}
+	
+	/**
+	 * shows leaderboard on button click
+	 * @author david
+	 */
+	private void processLeaderboardButton() {
+		view.getButtonLeaderboard().setOnAction((e) -> {
+			Alert dialog = new Alert(AlertType.INFORMATION);
+			dialog.setTitle(Translator.getTranslator().getString("button.leaderboard"));
+			dialog.setHeaderText(Translator.getTranslator().getString("message.leaderboard"));
+			dialog.setContentText("1...\r\n2...\r\n3...");
+			dialog.showAndWait();
+		});
+	}
 
 	/**
 	 * Handle IP and port input and write globals
@@ -138,6 +157,7 @@ public class LobbyController {
 	 */
 	public void showAndEnableView() {
 		view.enableDialogElements();
+		view.getButtonLeaderboard().setDisable(true);
 		view.start();
 	}
 	
