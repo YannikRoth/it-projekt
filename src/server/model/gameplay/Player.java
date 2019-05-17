@@ -395,34 +395,42 @@ public class Player implements Serializable{
 
 		copy.clear();
 		copy = (HashMap) missingResources.clone();
-		for (ResourceType t : copy.keySet()) {	
+		for (ResourceType t : copy.keySet()) {
 			Integer amountRequired = copy.get(t);
-			for (int map=0; map<alternateResourcesOfBothOpponents.size();map++) {
+			for (int map = 0; map < alternateResourcesOfBothOpponents.size(); map++) {
 				for (Player player : alternateResourcesOfBothOpponents.get(map).keySet()) {
-					for (int hashMap = 0; hashMap < alternateResourcesOfBothOpponents.get(map).get(player).size(); hashMap++) {
-						if (alternateResourcesOfBothOpponents.get(map).get(player).get(hashMap).get(t) >= 1);
-						amountRequired -= alternateResourcesOfBothOpponents.get(map).get(player).get(hashMap).get(t);
-						if (player.equals(this.leftPlayer)) {
-							amountOfUsedResourcesLeftPlayer += alternateResourcesOfBothOpponents.get(map).get(player).get(hashMap).get(t);
-						}
-						if (player.equals(this.rightPlayer)) {
-							amountOfUsedResourcesRightPlayer += alternateResourcesOfBothOpponents.get(map).get(player).get(hashMap).get(t);
-						}
-						if (amountRequired <= 0) {
-							int totalAmountOfNeedeResources = amountOfUsedResourcesLeftPlayer + amountOfUsedResourcesRightPlayer;
-							if (2*totalAmountOfNeedeResources <= this.getCoins()) {
-								checkedResources.put(t, true);
-								missingResources.remove(t);
-								Map<Player, Integer> tempMap = new HashMap<>();
-								tempMap.put(leftPlayer, amountOfUsedResourcesLeftPlayer);
-								tempMap.put(rightPlayer, amountOfUsedResourcesRightPlayer);
-								this.cardsTradingNeeded.put(card, tempMap);
+					for (int hashMap = 0; hashMap < alternateResourcesOfBothOpponents.get(map).get(player)
+							.size(); hashMap++) {
+						//check if value even exists in map
+						if (alternateResourcesOfBothOpponents.get(map).get(player).get(hashMap).get(t) != null) {
+							if (alternateResourcesOfBothOpponents.get(map).get(player).get(hashMap).get(t) >= 1) {
+								amountRequired -= alternateResourcesOfBothOpponents.get(map).get(player).get(hashMap).get(t);
+							}
+							if (player.equals(this.leftPlayer)) {
+								amountOfUsedResourcesLeftPlayer += alternateResourcesOfBothOpponents.get(map).get(player).get(hashMap).get(t);
+							}
+							if (player.equals(this.rightPlayer)) {
+								amountOfUsedResourcesRightPlayer += alternateResourcesOfBothOpponents.get(map).get(player).get(hashMap).get(t);
+							}
+							if (amountRequired <= 0) {
+								int totalAmountOfNeedeResources = amountOfUsedResourcesLeftPlayer
+										+ amountOfUsedResourcesRightPlayer;
+								if (2 * totalAmountOfNeedeResources <= this.getCoins()) {
+									checkedResources.put(t, true);
+									missingResources.remove(t);
+									Map<Player, Integer> tempMap = new HashMap<>();
+									tempMap.put(leftPlayer, amountOfUsedResourcesLeftPlayer);
+									tempMap.put(rightPlayer, amountOfUsedResourcesRightPlayer);
+									this.cardsTradingNeeded.put(card, tempMap);
 								}
 							}
+						}else {
+							System.out.println("value in trading is null");
 						}
 					}
 				}
 			}
+		}
 
 		if(checkedResources.entrySet().stream().filter(b -> b.getValue() == false).count() <= 0) {
 			return true;
