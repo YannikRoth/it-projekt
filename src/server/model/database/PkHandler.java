@@ -5,6 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * This class ensured that all PK throughout all persistent objects can be distinctive.
+ * @author yannik roth
+ *
+ */
 public class PkHandler implements Persistent{
 
 	private int pkid;
@@ -14,6 +19,13 @@ public class PkHandler implements Persistent{
 		DatabaseHandler.checkTable(new PkHandler());
 	}
 	
+	
+	/**
+	 * Returns the next valid pk. 
+	 * Reads the current highest pk and adds 1
+	 * @author yannik
+	 * @return
+	 */
 	public int getNextPk() {
 		int nextPk = 0;
 		String sql = "SELECT nextPk FROM $tableName";
