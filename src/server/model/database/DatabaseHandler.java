@@ -62,10 +62,11 @@ public class DatabaseHandler {
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM "+ p.getTableName() +" WHERE id=?");
 			stmt.setInt(1, p.getId());
 			ResultSet result = stmt.executeQuery();
-			if(result.getFetchSize() <=0) {
-				return false;
-			}else {
+			boolean hasResult = result.next();
+			if(hasResult) {
 				return true;
+			}else {
+				return false;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

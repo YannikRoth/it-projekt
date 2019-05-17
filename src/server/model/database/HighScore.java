@@ -110,7 +110,7 @@ public class HighScore implements Persistent{
 		String sql = null;
 		//check if entry exists, if yes perform update
 		if(DatabaseHandler.checkExistancy(this)) {
-			sql = "UPDATE $tableName(playerName, winningPoints, dateOfAchievement) VALUES(?,?,?) WHERE id=?";
+			sql = "UPDATE $tableName SET playerName=?, winningPoints=?, dateOfAchievement=? WHERE id=?";
 			sql = sql.replace("$tableName", this.getTableName());
 			try {
 				PreparedStatement ps = con.prepareStatement(sql);
