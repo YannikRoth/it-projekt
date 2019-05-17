@@ -106,6 +106,12 @@ public class HighScore implements Persistent{
 	}
 	
 	@Override
+	public String toString() {
+		return this.playerName + " has " + this.winningPoints + 
+				" winning points. Played on " + this.dateOfAchievment;
+	}
+	
+	@Override
 	public void savePersistent() {
 		
 		String sql = null;
