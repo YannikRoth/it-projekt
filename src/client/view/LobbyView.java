@@ -52,7 +52,7 @@ public class LobbyView {
 	private Stage stage;
 	private Translator translator = Translator.getTranslator();
 	
-	private Button btnNewGame, btnRules, btnQuit, btnConnect;
+	private Button btnNewGame, btnRules, btnQuit, btnConnect, btnLeaderboard;
 	private Label player, ipAdressLabel, portLabel;
 	private TextField playerName, ipAdress, port;
 
@@ -118,7 +118,6 @@ public class LobbyView {
 		this.btnQuit = new Button("Quit", imageViewQuit);
 
 		hBoxButton.setPadding(new Insets(0, 0, 10, 0));
-		
 		hBoxButton.getChildren().addAll(btnNewGame, btnRules, btnQuit);
 		
 		this.player = new Label();
@@ -138,7 +137,20 @@ public class LobbyView {
 		port.setPrefWidth(50);
 		ipAdress.setPrefWidth(80);
 		
-		hBoxIpAdress.getChildren().addAll(ipAdressLabel, ipAdress, portLabel, port);
+		FileInputStream input4 = null;
+		try {
+			input4 = new FileInputStream("resource/images/information.jpg");
+		} catch (FileNotFoundException e) {
+			ServiceLocator.getLogger().warning(e.getLocalizedMessage());
+		}
+		Image image4 = new Image(input4);
+		ImageView imageViewLeaderboard = new ImageView(image4);
+		imageViewLeaderboard.setFitHeight(30);
+		imageViewLeaderboard.setFitWidth(30);
+		btnLeaderboard = new Button("Leaderboard", imageViewLeaderboard);
+		btnLeaderboard.setDisable(true);
+		
+		hBoxIpAdress.getChildren().addAll(ipAdressLabel, ipAdress, portLabel, port, btnLeaderboard);
 		hBoxIpAdress.setSpacing(5);
 		
 		this.btnConnect = new Button();
@@ -200,6 +212,7 @@ public class LobbyView {
 		btnRules.setText(translator.getString("button.rules"));
 		btnQuit.setText(translator.getString("button.quit"));
 		btnConnect.setText(translator.getString("button.connect"));
+		btnLeaderboard.setText(translator.getString("button.leaderboard"));
 		
 		player.setText(translator.getString("label.player"));
 		playerName.setPromptText(translator.getString("textfield.player"));
@@ -270,6 +283,10 @@ public class LobbyView {
 	
 	public Button getQuitButton() {
 		return this.btnQuit;
+	}
+	
+	public Button getButtonLeaderboard() {
+		return this.btnLeaderboard;
 	}
 	
 	public MenuItem getGermanItem2() {

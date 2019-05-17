@@ -40,7 +40,6 @@ public class ClientModel extends Thread {
 	private int numberofPlayers;
 	private ObjectInputStream objInputStream;
 	private ObjectOutputStream objOutputStream;
-	// private ServerModel model;
 	private String inputPlayerName = "";
 
 	private static final Logger logger = ServiceLocator.getLogger();
