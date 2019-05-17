@@ -1,5 +1,6 @@
 package server.controller;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import globals.Translator;
@@ -11,6 +12,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.stage.WindowEvent;
 import server.ServiceLocator;
 import server.model.ServerModel;
+import server.model.database.HighScore;
 import server.view.ServerView;
 
 public class ServerController{
@@ -38,8 +40,14 @@ public class ServerController{
 			Alert dialog = new Alert(AlertType.INFORMATION);
 			dialog.setTitle(Translator.getTranslator().getString("button.leaderboard"));
 			dialog.setHeaderText(Translator.getTranslator().getString("message.leaderboard"));
-			dialog.setContentText("1...\r\n2...\r\n3...");
+			List<HighScore> highscores = HighScore.getBestPlayers(3);
+			String output = "";
+			for(HighScore h : highscores) {
+				output += h.toString() + "\n";
+			}
+			dialog.setContentText(output);
 			dialog.showAndWait();
+			
 		});
 	}
 	
