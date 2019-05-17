@@ -66,7 +66,7 @@ class WinnerEvaluationTest {
 		//player.getPlayableCards().add(model.getCard(11));
 		//player.getPlayableCards().add(model.getCard(25));
 		//player.getPlayableCards().add(model.getCard(42));
-		//player.getPlayableCards().add(model.getCard(85));
+		player.getPlayableCards().add(model.getCard(125));
 
 		
 		//assign card to cardSet of LeftPlayer

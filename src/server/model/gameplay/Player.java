@@ -270,7 +270,7 @@ public class Player implements Serializable{
 			}
 		}
 		
-		Map<ResourceType, Integer> missingResources = new HashMap<>();
+		HashMap<ResourceType, Integer> missingResources = new HashMap<>();
 		
 		for(ResourceType t : sortedRequiredResources) {	
 			//ResourceType searchResourceType = entry.getKey();
@@ -326,7 +326,7 @@ public class Player implements Serializable{
 	 * @return
 	 */
 	
-	private Boolean isAbleToAffordCardWithTrade (Card c, Map<ResourceType, Boolean> checkedResources, Map<ResourceType, Integer> missingResources) {
+	private Boolean isAbleToAffordCardWithTrade (Card c, Map<ResourceType, Boolean> checkedResources, HashMap<ResourceType, Integer> missingResources) {
 		//card cannot be played with own resources...see if opponents got the required resources
 		Map<Player, Map<ResourceType, Integer>> resourcesOfBothOpponents = new HashMap<>();
 		Map<ResourceType, Integer> tempMapLeftPlayer = new HashMap<>();
@@ -342,8 +342,8 @@ public class Player implements Serializable{
 				
 		int amountOfUsedResourcesLeftPlayer = 0;
 		int amountOfUsedResourcesRightPlayer = 0;
-		
-		for (ResourceType t : missingResources.keySet()) {
+		Map<ResourceType, Integer> copy = (HashMap) missingResources.clone(); //make a copy because items will be removed in loop
+		for (ResourceType t : copy.keySet()) {
 			Integer amountRequired = missingResources.get(t);
 			for (Player p : resourcesOfBothOpponents.keySet()) {
 				if(resourcesOfBothOpponents.get(p).get(t) != null && resourcesOfBothOpponents.get(p).get(t) > 0) {
@@ -377,9 +377,10 @@ public class Player implements Serializable{
 		Map<Player, ArrayList<HashMap<ResourceType, Integer>>> alternateResourcesLeftPlayer = new HashMap();
 		alternateResourcesLeftPlayer.put(leftPlayer, leftPlayer.getAlternateResources());
 		Map<Player, ArrayList<HashMap<ResourceType, Integer>>> alternateResourcesRightPlayer = new HashMap();
-		alternateResourcesRightPlayer.put(leftPlayer, leftPlayer.getAlternateResources());
+		alternateResourcesRightPlayer.put(rightPlayer, rightPlayer.getAlternateResources());
 		alternateResourcesOfBothOpponents.add(alternateResourcesLeftPlayer);
 		alternateResourcesOfBothOpponents.add(alternateResourcesRightPlayer);
+		/*
 		Map<ResourceType, Integer> absoluteAmountAlternatingResourcesLeftPlayer = this.leftPlayer.getAbsoluteAlternateResourceAmount();	
 		Map<ResourceType, Integer> absoluteAmountAlternatingResourcesRightPlayer = this.rightPlayer.getAbsoluteAlternateResourceAmount();	
 		ArrayList<ResourceType> sortedRequiredResourcesLeftPlayer = Globals.sortMapByValue(absoluteAmountAlternatingResourcesLeftPlayer);
@@ -388,23 +389,22 @@ public class Player implements Serializable{
 			.filter(f -> checkedResources.get(f) != null && checkedResources.get(f) != true).collect(Collectors.toList());
 		sortedRequiredResourcesRightPlayer = (ArrayList<ResourceType>) sortedRequiredResourcesRightPlayer.stream()
 			.filter(f -> checkedResources.get(f) != null && checkedResources.get(f) != true).collect(Collectors.toList());
-	
-		ArrayList<Player> opponents = new ArrayList<Player>();
-		opponents.add(leftPlayer);
-		opponents.add(rightPlayer);
-		
-		for (int i=0; i<opponents.size(); i++) {
-			for (ResourceType t : missingResources.keySet()) {	
-				Integer amountRequired = missingResources.get(t);
-				for (int j=0; j<alternateResourcesOfBothOpponents.size();j++) {
-					for (int h=0; h<alternateResourcesOfBothOpponents.get(j).size(); h++) {
-						if( alternateResourcesOfBothOpponents.get(j).get(opponents.get(i)).get(h).get(t) >= amountRequired);
-						amountRequired -= alternateResourcesOfBothOpponents.get(j).get(opponents.get(i)).get(h).get(t);
-						if (opponents.get(i).equals(this.leftPlayer)) {
-							amountOfUsedResourcesLeftPlayer += alternateResourcesOfBothOpponents.get(j).get(opponents.get(i)).get(h).get(t);
+		 */
+
+		copy.clear();
+		copy = (HashMap) missingResources.clone();
+		for (ResourceType t : copy.keySet()) {	
+			Integer amountRequired = copy.get(t);
+			for (int map=0; map<alternateResourcesOfBothOpponents.size();map++) {
+				for (Player player : alternateResourcesOfBothOpponents.get(map).keySet()) {
+					for (int hashMap = 0; hashMap < alternateResourcesOfBothOpponents.get(map).get(player).size(); hashMap++) {
+						if (alternateResourcesOfBothOpponents.get(map).get(player).get(hashMap).get(t) >= 1);
+						amountRequired -= alternateResourcesOfBothOpponents.get(map).get(player).get(hashMap).get(t);
+						if (player.equals(this.leftPlayer)) {
+							amountOfUsedResourcesLeftPlayer += alternateResourcesOfBothOpponents.get(map).get(player).get(hashMap).get(t);
 						}
-						if (opponents.get(i).equals(this.rightPlayer)) {
-							amountOfUsedResourcesRightPlayer += alternateResourcesOfBothOpponents.get(j).get(opponents.get(i)).get(h).get(t);
+						if (player.equals(this.rightPlayer)) {
+							amountOfUsedResourcesRightPlayer += alternateResourcesOfBothOpponents.get(map).get(player).get(hashMap).get(t);
 						}
 						if (amountRequired <= 0) {
 							int totalAmountOfNeedeResources = amountOfUsedResourcesLeftPlayer + amountOfUsedResourcesRightPlayer;
@@ -421,7 +421,7 @@ public class Player implements Serializable{
 					}
 				}
 			}
-		
+
 		if(checkedResources.entrySet().stream().filter(b -> b.getValue() == false).count() <= 0) {
 			return true;
 		}
