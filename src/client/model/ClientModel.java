@@ -11,15 +11,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import com.sun.glass.ui.View;
-
 import client.ServicelocatorClient;
 import globals.ClientAction;
 import globals.Globals;
 import globals.ServerAction;
 import globals.message.ClientPlayerName;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import server.ServiceLocator;
@@ -144,7 +141,6 @@ public class ClientModel extends Thread {
 						@Override
 						public void run() {
 							ServicelocatorClient.getLobbyController().processNewGame();
-							ServicelocatorClient.getClientView().refreshAgeLabelFromModel();
 						}
 					});
 					break;					
