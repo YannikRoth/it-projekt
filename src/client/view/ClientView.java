@@ -68,7 +68,7 @@ public class ClientView {
 	
 	MenuItem itemM1, itemM2, itemM3, itemM4, itemM5, itemM6, itemM7, itemM8, itemM9, itemM10, itemM11, itemM12, itemM13, itemM14;
 	private Button playCard, buildWorldWonder, discardCard, okButton;
-	private Label playerName;
+	private Label playerName, age;
 	
 	public ClientView(Stage primaryStage, ClientModel model) {
 		this.stage = primaryStage;
@@ -123,10 +123,6 @@ public class ClientView {
 	 */
 	private void buildTablePoints() {
 		tablePoints = new TableView<>();
-//		if(this.model.getMyPlayer() != null &&
-//				this.model.getMyPlayer().getResources() != null &&
-//				this.model.getMyPlayer().getResources().getResourcesListObservable() != null)
-//			tablePoints.setItems(this.model.getMyPlayer().getResources().getResourcesListObservable());
 		tablePoints.setEditable(false);
 		
 		ColType		= new TableColumn<>();
@@ -202,17 +198,14 @@ public class ClientView {
 		cardPlayable7.setFitWidth(133);
 		cards[6] = cardPlayable7;
 		
-//		VBox vBoxTablePoints = new VBox();
-//		HBox hBoxEmpty = new HBox();
-//		hBoxEmpty.setPrefHeight(130);
-		
 		//Points
 		buildTablePoints();
-//		vBoxTablePoints.getChildren().addAll(tablePoints);
 		VBox vBoxPlayerPoints = new VBox();
 		playerName = new Label();
 		playerName.getStyleClass().add("myPlayerName");
-		vBoxPlayerPoints.getChildren().addAll(playerName, tablePoints);
+		age = new Label();
+		age.getStyleClass().add("myPlayerName");
+		vBoxPlayerPoints.getChildren().addAll(playerName, age, tablePoints);
 		hBoxPlayer.getChildren().addAll(borderPanePlayer, vBoxPlayerPoints);
 		vBoxPlayer.setPrefHeight(570);
 		vBoxPlayer.setMinWidth(1350);
@@ -246,7 +239,6 @@ public class ClientView {
 		discardCard.setDisable(true);
 		buttonBox.setSpacing(10);
 		buttonBox.setAlignment(Pos.CENTER);
-//		buttonBox.setPadding(new Insets(0,0,10,0));
 		
 		/**
 		 * @author philipp
@@ -405,6 +397,7 @@ public class ClientView {
 			this.okButton.setText(translator.getString("button.quitgame"));
 		
 		playerName.setText(translator.getString("column.player") + ": " + model.getMyPlayer().getPlayerName());
+		refreshAgeLabelFromModel();
 		
 		if(model.getMyPlayer() != null) {
 			//Alte Liste leeren
@@ -416,6 +409,14 @@ public class ClientView {
 					model.getMyPlayer().getResources().getResourcesListObservable());
 			System.out.println(model.getMyPlayer().getResources().getResourcesListObservable());
 		}
+	}
+	
+	/**
+	 * refresh label on ClientView with the current age as user information
+	 * @author david
+	 */
+	public void refreshAgeLabelFromModel() {
+			age.setText(translator.getString("label.age") + ": " + model.getCards().get(0).getCardAgeValue());
 	}
 
 	public void start() {
@@ -500,6 +501,13 @@ public class ClientView {
 	}
 	public void setPlayerName(Label playerName) {
 		this.playerName = playerName;
+	}
+	
+	public Label getAge() {
+		return age;
+	}
+	public void setAge(Label age) {
+		this.age = age;
 	}
 
 	public void updateClientViewEndGame(ArrayList<Player> winner) {

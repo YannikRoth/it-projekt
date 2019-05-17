@@ -70,9 +70,7 @@ public class ClientModel extends Thread {
 			objOutputStream.flush();
 			logger.info("Card " + playedcard.getCardName() + " sent to Server - with following Action: " + action);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			logger.info("Error occured while sending card");
+			logger.info("Error occured while sending card: " + e.getMessage());
 		}
 	}
 
@@ -120,6 +118,7 @@ public class ClientModel extends Thread {
 						public void run() {
 							//CardOptionView view = new CardOptionView(ServicelocatorClient.getClientModel());
 							ServicelocatorClient.getClientView().updatePlayableCardView();
+							ServicelocatorClient.getClientView().refreshAgeLabelFromModel();
 							ServicelocatorClient.getClientController().processClickOnImage();
 						}
 					});
@@ -146,6 +145,7 @@ public class ClientModel extends Thread {
 						@Override
 						public void run() {
 							ServicelocatorClient.getLobbyController().processNewGame();
+							ServicelocatorClient.getClientView().refreshAgeLabelFromModel();
 						}
 					});
 					break;					
@@ -287,4 +287,9 @@ public class ClientModel extends Thread {
 		else
 			this.inputPlayerName = inputPlayerName;
 	}
+	
+	public ObservableList<Card> getCards() {
+		return this.Cards;
+	}
+	
 }
