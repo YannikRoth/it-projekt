@@ -7,9 +7,7 @@ import java.util.ArrayList;
 
 import client.ClientMVC;
 import client.ServicelocatorClient;
-import client.model.ClientModel;
 import client.model.LobbyModel;
-import client.view.ClientView;
 import client.view.LobbyView;
 import globals.Globals;
 import globals.Translator;
