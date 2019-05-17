@@ -79,7 +79,7 @@ public class LobbyController {
 			}
 		});
 	}
-	public void processNewGame() {
+	public synchronized void processNewGame() {
 		view.disableDialogElements();
 		view.getButtonLeaderboard().setDisable(false);
 		handleInetAdress(view.getIpAdress(), view.getPort());
