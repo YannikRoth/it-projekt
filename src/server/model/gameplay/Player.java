@@ -152,7 +152,7 @@ public class Player implements Serializable{
 				this.addCoins((int)countOfOwnGreyCards + (int)countOfGreyCardsLeftPlayer + (int)countOfGreyCardsRightPlayer);
 			}
 			
-			//check if card was able to afford with trade, if yes, pay opponents
+			//check if card was able to afford with trade, if true, pay opponents
 			if (this.cardsTradingNeeded.containsKey(c)) {
 				for (Player p : this.cardsTradingNeeded.get(c).keySet()) {
 					p.addCoins(2*this.cardsTradingNeeded.get(c).get(p));
@@ -188,7 +188,7 @@ public class Player implements Serializable{
 			//this.militaryStrength += wwCard.getMilitaryPoints();
 			this.winningPoints += wwCard.getWinningPoints();
 			
-			//check if card was able to afford with trade, if yes, pay opponents
+			//check if card was able to afford with trade, if true, pay opponents
 			if (this.cardsTradingNeeded.containsKey(wwCard)) {
 				for (Player p : this.cardsTradingNeeded.get(wwCard).keySet()) {
 					p.addCoins(2*this.cardsTradingNeeded.get(wwCard).get(p));
@@ -319,14 +319,16 @@ public class Player implements Serializable{
 	}
 	
 	/**
+	 * This method evaluates if player can play the card with a trade. It returns true if so. The method currently just
+	 * checks if left or right player has the needed resource. It does not check if player has a discount on trading left or right
 	 * @author Roman Leuenberger
-	 * @param c
+	 * @param card
 	 * @param checkedResources
 	 * @param missingResources
 	 * @return
 	 */
 	
-	private Boolean isAbleToAffordCardWithTrade (Card c, Map<ResourceType, Boolean> checkedResources, HashMap<ResourceType, Integer> missingResources) {
+	private Boolean isAbleToAffordCardWithTrade (Card card, Map<ResourceType, Boolean> checkedResources, HashMap<ResourceType, Integer> missingResources) {
 		//card cannot be played with own resources...see if opponents got the required resources
 		Map<Player, Map<ResourceType, Integer>> resourcesOfBothOpponents = new HashMap<>();
 		Map<ResourceType, Integer> tempMapLeftPlayer = new HashMap<>();
@@ -362,7 +364,7 @@ public class Player implements Serializable{
 							Map<Player, Integer> tempMap = new HashMap<>();
 							tempMap.put(leftPlayer, amountOfUsedResourcesLeftPlayer);
 							tempMap.put(rightPlayer, amountOfUsedResourcesRightPlayer);
-							this.cardsTradingNeeded.put(c, tempMap);
+							this.cardsTradingNeeded.put(card, tempMap);
 							}
 						}
 					}
@@ -414,7 +416,7 @@ public class Player implements Serializable{
 								Map<Player, Integer> tempMap = new HashMap<>();
 								tempMap.put(leftPlayer, amountOfUsedResourcesLeftPlayer);
 								tempMap.put(rightPlayer, amountOfUsedResourcesRightPlayer);
-								this.cardsTradingNeeded.put(c, tempMap);
+								this.cardsTradingNeeded.put(card, tempMap);
 								}
 							}
 						}
