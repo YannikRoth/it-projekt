@@ -197,7 +197,7 @@ public class Player implements Serializable{
 
 	/**
 	 * This method provides evaluation if a card can be played or not. Check if player has enough resources
-	 * @param Card c
+	 * @param Card c The card which should be checked
 	 * @return <code>true</code> if the card can be played because the player has enough resources
 	 * @return <code>false</code> if the card can not be played because the player can't afford it
 	 * @author yannik roth
@@ -310,7 +310,7 @@ public class Player implements Serializable{
 	
 	/**
 	 * This method assigns a network socket to the player. It can be used from the server
-	 * @param Socket s
+	 * @param Socket s which is to be assigned
 	 */
 	public void assignSocket(Socket s) {
 		this.socket = s;
