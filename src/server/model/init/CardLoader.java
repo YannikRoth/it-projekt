@@ -137,7 +137,7 @@ public class CardLoader {
 	
 	/**
 	 * This method imports the master data (card) from the CSV file
-	 * @return a <code>Map<Integer,Card> </code> which can be accessed freely as a map
+	 * @return a <code>Map with key Integer and value Card </code> which can be accessed freely as a map
 	 * @author yannik roth
 	 */
 	public static Map<Integer, Card> importCards() {
