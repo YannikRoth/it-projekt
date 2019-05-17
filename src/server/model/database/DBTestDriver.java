@@ -17,6 +17,8 @@ public class DBTestDriver {
 		HighScore t4 = new HighScore("Roman", 10);
 		HighScore t5 = new HighScore("Philipp", 1);
 		
+		System.out.println("next pk is " + new PkHandler().getNextPk());
+		
 		t1.savePersistent();
 		t2.savePersistent();
 		t3.savePersistent();

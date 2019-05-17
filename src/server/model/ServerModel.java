@@ -19,6 +19,7 @@ import javafx.collections.ObservableList;
 import server.ServiceLocator;
 import server.model.clienthandling.ServerClientThread;
 import server.model.clienthandling.ServerRequestHandler;
+import server.model.database.HighScore;
 import server.model.gameplay.Board;
 import server.model.gameplay.Card;
 import server.model.gameplay.Player;
@@ -448,6 +449,10 @@ public class ServerModel implements Serializable{
 			
 			//clear all the cards from the player obj.
 			for(Player p : allPlayers) {
+				//add to highscore database
+				HighScore hs = new HighScore(p.getPlayerName(), p.getWinningPoints());
+				hs.savePersistent();
+				System.out.println(HighScore.getBestPlayers(5));
 				p.clearCurrentPlayableCards();
 			}
 			

@@ -46,8 +46,9 @@ public class HighScore implements Persistent{
 	}
 	
 	public HighScore(String playerName, int winningPoints, LocalDate date) {
-		this.id = pkCounter;
-		pkCounter++;
+		//this.id = pkCounter;
+		//pkCounter++;
+		this.id = new PkHandler().getNextPk();
 		this.playerName = playerName;
 		this.winningPoints = winningPoints;
 		this.dateOfAchievment = date;
