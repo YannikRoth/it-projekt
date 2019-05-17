@@ -452,9 +452,10 @@ public class ServerModel implements Serializable{
 				//add to highscore database
 				HighScore hs = new HighScore(p.getPlayerName(), p.getWinningPoints());
 				hs.savePersistent();
-				System.out.println(HighScore.getBestPlayers(5));
 				p.clearCurrentPlayableCards();
 			}
+			
+			HighScore.getBestPlayers(5).forEach(e -> System.out.println(e.toString()));
 			
 			
 			//this.cardAge = CardAge.THREE;
