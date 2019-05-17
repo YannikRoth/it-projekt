@@ -103,7 +103,7 @@ public class ServiceLocator {
 	
 	/**
 	 * Return a unique value on which a player can be identified
-	 * @return
+	 * @return an int of a unique id
 	 */
 	public static int getNewPlayerId() {
 		playerCounter++;
@@ -118,6 +118,13 @@ public class ServiceLocator {
 		return manualCardId;
 	}
 	
+	/**
+	 * This is a helper method to get a random number in a specified range
+	 * @param lowerBound (included)
+	 * @param upperBound (included)
+	 * @return A random int in the given range
+	 * @author yannik roth
+	 */
 	public static int getRandomNumberInRange(int lowerBound, int upperBound) {
 		Random rnd = new Random();
 		int i = rnd.nextInt(upperBound-lowerBound)+ lowerBound;

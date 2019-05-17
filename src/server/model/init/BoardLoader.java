@@ -137,6 +137,11 @@ public class BoardLoader {
 
 	}
 	
+	/**
+	 * This method imports all board directly into a ServerModel
+	 * @param m
+	 * @author yannik roth
+	 */
 	public static void importBoards(ServerModel m) {
 		try {
 			CSVParser parser = new CSVParserBuilder()
@@ -168,6 +173,10 @@ public class BoardLoader {
 		}
 	}
 	
+	/**
+	 * This method imports a board and returns them as a map
+	 * @return A <code>Map<Integer, Board><code> which can be used freely
+	 */
 	public static Map<Integer, Board> importBoards() {
 		Map<Integer, Board> boards = new HashMap<>();
 		

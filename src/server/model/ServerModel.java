@@ -129,19 +129,11 @@ public class ServerModel implements Serializable{
 
 	}
 
-	private void startGame() {
-		//send card set to all clients; iterate through player map
-		//wait for answer of each client
-		//Map<Card, ArrayList<String>> cardSet = new HashMap<>();
-		
-		/*
-		 * Idea of martin:
-		 * Send entire player object to client. Client then iterates through all cards and possible actions based on 
-		 * "isAbleToAffordCard" are evaluated.
-		 * Back to server, only the cardId is sent and the server updates the effectiv player-obj. The new player-onj is then sent 
-		 * back to the client
-		 */
-		
+	/**
+	 * This method starts the game. It can only be started from the ServerModel itself as it is marked private!
+	 * @author yannik roth
+	 */
+	private void startGame() {	
 		//load cards to play into ArrayList
 		loadGameCards();
 		
@@ -164,6 +156,7 @@ public class ServerModel implements Serializable{
 	 * This method shuffles the card set and assigns each player 7 cards
 	 * @param cardsToHandOut
 	 * @return void (updates the {@link Player} object)
+	 * @author yannik roth
 	 */
 	public boolean handoutCards(List<Card> cardsToHandOut) {
 		//consistency check

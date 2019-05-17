@@ -189,6 +189,7 @@ public class Player implements Serializable{
 	 * @param rm A ResourceMap
 	 * @param i Value condition to be excluded (normally zero)
 	 * @return a <code>Set</code> of entries in the format [ResourceType, Integer]
+	 * @author yannik roth
 	 */
 	private Set<Entry<ResourceType, Integer>> clearMap(ResourceMap rm, int i) {
 		return rm.entrySet().stream().filter(e -> e.getValue() > i).collect(Collectors.toSet());
@@ -454,6 +455,7 @@ public class Player implements Serializable{
 	 * The player will receive 3 coins
 	 * @param Card c to be discarded/sold to the bank
 	 * @return boolean if the operation was successful
+	 * @author yannik roth
 	 */
 	public boolean discardCard(Card c) {
 		this.addCoins(3);
