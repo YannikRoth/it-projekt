@@ -255,12 +255,12 @@ public class Player implements Serializable{
 			}
 			
 		}
-		
 		//evaluate the difficult ones : one card produces alternating products		
 		Map<ResourceType, Integer> absoluteAmountAlternatingResources = getAbsoluteAlternateResourceAmount();		
-		ArrayList<ResourceType> sortedRequiredResources = Globals.sortMapByValue(absoluteAmountAlternatingResources);		
+		ArrayList<ResourceType> sortedRequiredResources = Globals.sortMapByValue(absoluteAmountAlternatingResources);	
 		sortedRequiredResources = (ArrayList<ResourceType>) sortedRequiredResources.stream()
-				.filter(f -> checkedResources.get(f) != null).collect(Collectors.toList());
+				.filter(f -> checkedResources.get(f) != null && checkedResources.get(f) != true).collect(Collectors.toList());
+		
 		//this is needed to get all missing resources
 		for(ResourceType t : checkedResources.keySet()) {
 			if (checkedResources.get(t) == false) {
@@ -342,38 +342,91 @@ public class Player implements Serializable{
 				
 		int amountOfUsedResourcesLeftPlayer = 0;
 		int amountOfUsedResourcesRightPlayer = 0;
-				
+		
 		for (ResourceType t : missingResources.keySet()) {
 			Integer amountRequired = missingResources.get(t);
 			for (Player p : resourcesOfBothOpponents.keySet()) {
-				if(resourcesOfBothOpponents.get(p).get(t) != null) {
-					if(resourcesOfBothOpponents.get(p).get(t) > 0) {
-						amountRequired -= resourcesOfBothOpponents.get(p).get(t);
-						if (p.equals(this.leftPlayer)) {
-							amountOfUsedResourcesLeftPlayer += resourcesOfBothOpponents.get(p).get(t);
+				if(resourcesOfBothOpponents.get(p).get(t) != null && resourcesOfBothOpponents.get(p).get(t) > 0) {
+					amountRequired -= resourcesOfBothOpponents.get(p).get(t);
+					if (p.equals(this.leftPlayer)) {
+						amountOfUsedResourcesLeftPlayer += resourcesOfBothOpponents.get(p).get(t);
 						}
-						if (p.equals(this.rightPlayer)) {
-							amountOfUsedResourcesRightPlayer += resourcesOfBothOpponents.get(p).get(t);
+					if (p.equals(this.rightPlayer)) {
+						amountOfUsedResourcesRightPlayer += resourcesOfBothOpponents.get(p).get(t);
 						}
-						if (amountRequired <= 0) {
-							int totalAmountOfNeedeResources = amountOfUsedResourcesLeftPlayer + amountOfUsedResourcesRightPlayer;
-							if (2*totalAmountOfNeedeResources <= this.getCoins()) {
-								checkedResources.put(t, true);
-								Map<Player, Integer> tempMap = new HashMap<>();
-								tempMap.put(leftPlayer, amountOfUsedResourcesLeftPlayer);
-								tempMap.put(rightPlayer, amountOfUsedResourcesRightPlayer);
-								this.cardsTradingNeeded.put(c, tempMap);
+					if (amountRequired <= 0) {
+						int totalAmountOfNeededResources = amountOfUsedResourcesLeftPlayer + amountOfUsedResourcesRightPlayer;
+						if (2*totalAmountOfNeededResources <= this.getCoins()) {
+							checkedResources.put(t, true);
+							missingResources.remove(t);
+							Map<Player, Integer> tempMap = new HashMap<>();
+							tempMap.put(leftPlayer, amountOfUsedResourcesLeftPlayer);
+							tempMap.put(rightPlayer, amountOfUsedResourcesRightPlayer);
+							this.cardsTradingNeeded.put(c, tempMap);
 							}
 						}
 					}
 				}
 			}
+		if(checkedResources.entrySet().stream().filter(b -> b.getValue() == false).count() <= 0) {
+			return true;
 		}
-	if(checkedResources.entrySet().stream().filter(b -> b.getValue() == false).count() <= 0) {
-		return true;
-	}else {
+		
+		//wasn't able to afford card with normal resources of opponents, check if possible with alternate ones
+		ArrayList<Map<Player, ArrayList<HashMap<ResourceType, Integer>>>> alternateResourcesOfBothOpponents = new ArrayList<Map<Player, ArrayList<HashMap<ResourceType, Integer>>>>();
+		Map<Player, ArrayList<HashMap<ResourceType, Integer>>> alternateResourcesLeftPlayer = new HashMap();
+		alternateResourcesLeftPlayer.put(leftPlayer, leftPlayer.getAlternateResources());
+		Map<Player, ArrayList<HashMap<ResourceType, Integer>>> alternateResourcesRightPlayer = new HashMap();
+		alternateResourcesRightPlayer.put(leftPlayer, leftPlayer.getAlternateResources());
+		alternateResourcesOfBothOpponents.add(alternateResourcesLeftPlayer);
+		alternateResourcesOfBothOpponents.add(alternateResourcesRightPlayer);
+		Map<ResourceType, Integer> absoluteAmountAlternatingResourcesLeftPlayer = this.leftPlayer.getAbsoluteAlternateResourceAmount();	
+		Map<ResourceType, Integer> absoluteAmountAlternatingResourcesRightPlayer = this.rightPlayer.getAbsoluteAlternateResourceAmount();	
+		ArrayList<ResourceType> sortedRequiredResourcesLeftPlayer = Globals.sortMapByValue(absoluteAmountAlternatingResourcesLeftPlayer);
+		ArrayList<ResourceType> sortedRequiredResourcesRightPlayer = Globals.sortMapByValue(absoluteAmountAlternatingResourcesRightPlayer);
+		sortedRequiredResourcesLeftPlayer = (ArrayList<ResourceType>) sortedRequiredResourcesLeftPlayer.stream()
+			.filter(f -> checkedResources.get(f) != null && checkedResources.get(f) != true).collect(Collectors.toList());
+		sortedRequiredResourcesRightPlayer = (ArrayList<ResourceType>) sortedRequiredResourcesRightPlayer.stream()
+			.filter(f -> checkedResources.get(f) != null && checkedResources.get(f) != true).collect(Collectors.toList());
+	
+		ArrayList<Player> opponents = new ArrayList<Player>();
+		opponents.add(leftPlayer);
+		opponents.add(rightPlayer);
+		
+		for (int i=0; i<opponents.size(); i++) {
+			for (ResourceType t : missingResources.keySet()) {	
+				Integer amountRequired = missingResources.get(t);
+				for (int j=0; j<alternateResourcesOfBothOpponents.size();j++) {
+					for (int h=0; h<alternateResourcesOfBothOpponents.get(j).size(); h++) {
+						if( alternateResourcesOfBothOpponents.get(j).get(opponents.get(i)).get(h).get(t) >= amountRequired);
+						amountRequired -= alternateResourcesOfBothOpponents.get(j).get(opponents.get(i)).get(h).get(t);
+						if (opponents.get(i).equals(this.leftPlayer)) {
+							amountOfUsedResourcesLeftPlayer += alternateResourcesOfBothOpponents.get(j).get(opponents.get(i)).get(h).get(t);
+						}
+						if (opponents.get(i).equals(this.rightPlayer)) {
+							amountOfUsedResourcesRightPlayer += alternateResourcesOfBothOpponents.get(j).get(opponents.get(i)).get(h).get(t);
+						}
+						if (amountRequired <= 0) {
+							int totalAmountOfNeedeResources = amountOfUsedResourcesLeftPlayer + amountOfUsedResourcesRightPlayer;
+							if (2*totalAmountOfNeedeResources <= this.getCoins()) {
+								checkedResources.put(t, true);
+								missingResources.remove(t);
+								Map<Player, Integer> tempMap = new HashMap<>();
+								tempMap.put(leftPlayer, amountOfUsedResourcesLeftPlayer);
+								tempMap.put(rightPlayer, amountOfUsedResourcesRightPlayer);
+								this.cardsTradingNeeded.put(c, tempMap);
+								}
+							}
+						}
+					}
+				}
+			}
+		
+		if(checkedResources.entrySet().stream().filter(b -> b.getValue() == false).count() <= 0) {
+			return true;
+		}
+	
 		return false;
-		}
 	}
 
 	/**
