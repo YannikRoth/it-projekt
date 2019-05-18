@@ -375,13 +375,14 @@ public class Player implements Serializable{
 		}
 		
 		//wasn't able to afford card with normal resources of opponents, check if possible with alternate ones
-		ArrayList<Map<Player, ArrayList<HashMap<ResourceType, Integer>>>> alternateResourcesOfBothOpponents = new ArrayList<Map<Player, ArrayList<HashMap<ResourceType, Integer>>>>();
-		Map<Player, ArrayList<HashMap<ResourceType, Integer>>> alternateResourcesLeftPlayer = new HashMap();
-		alternateResourcesLeftPlayer.put(leftPlayer, leftPlayer.getAlternateResources());
-		Map<Player, ArrayList<HashMap<ResourceType, Integer>>> alternateResourcesRightPlayer = new HashMap();
-		alternateResourcesRightPlayer.put(rightPlayer, rightPlayer.getAlternateResources());
-		alternateResourcesOfBothOpponents.add(alternateResourcesLeftPlayer);
-		alternateResourcesOfBothOpponents.add(alternateResourcesRightPlayer);
+		Map<Player, ArrayList<HashMap<ResourceType, Integer>>> alternateResourcesOfBothOpponents = new HashMap<Player, ArrayList<HashMap<ResourceType, Integer>>>();
+		if (!leftPlayer.getAlternateResources().isEmpty()) {
+			alternateResourcesOfBothOpponents.put(leftPlayer, leftPlayer.getAlternateResources());
+		}
+		if (!rightPlayer.getAlternateResources().isEmpty()) {
+			alternateResourcesOfBothOpponents.put(rightPlayer, rightPlayer.getAlternateResources());
+		}
+		
 		/*
 		Map<ResourceType, Integer> absoluteAmountAlternatingResourcesLeftPlayer = this.leftPlayer.getAbsoluteAlternateResourceAmount();	
 		Map<ResourceType, Integer> absoluteAmountAlternatingResourcesRightPlayer = this.rightPlayer.getAbsoluteAlternateResourceAmount();	
@@ -395,24 +396,25 @@ public class Player implements Serializable{
 
 		copy.clear();
 		copy = (HashMap) missingResources.clone();
-		for (ResourceType t : copy.keySet()) {	
-			Integer amountRequired = copy.get(t);
-			for (int map=0; map<alternateResourcesOfBothOpponents.size();map++) {
-				for (Player player : alternateResourcesOfBothOpponents.get(map).keySet()) {
-					for (int hashMap = 0; hashMap < alternateResourcesOfBothOpponents.get(map).get(player).size(); hashMap++) {
-						if (alternateResourcesOfBothOpponents.get(map).get(player).get(hashMap).get(t) >= 1);
-						amountRequired -= alternateResourcesOfBothOpponents.get(map).get(player).get(hashMap).get(t);
+		for (ResourceType type : copy.keySet()) {	
+			Integer amountRequired = copy.get(type);
+			for (Player player : alternateResourcesOfBothOpponents.keySet()) {
+				for (int hashMap = 0; hashMap < alternateResourcesOfBothOpponents.get(player).size(); hashMap++) {
+					if (alternateResourcesOfBothOpponents.get(player).get(hashMap).get(type) != null &&
+							alternateResourcesOfBothOpponents.get(player).get(hashMap).get(type) >= 1) {
+					amountRequired -= alternateResourcesOfBothOpponents.get(player).get(hashMap).get(type);
+
 						if (player.equals(this.leftPlayer)) {
-							amountOfUsedResourcesLeftPlayer += alternateResourcesOfBothOpponents.get(map).get(player).get(hashMap).get(t);
+							amountOfUsedResourcesLeftPlayer += alternateResourcesOfBothOpponents.get(player).get(hashMap).get(type);
 						}
 						if (player.equals(this.rightPlayer)) {
-							amountOfUsedResourcesRightPlayer += alternateResourcesOfBothOpponents.get(map).get(player).get(hashMap).get(t);
+							amountOfUsedResourcesRightPlayer += alternateResourcesOfBothOpponents.get(player).get(hashMap).get(type);
 						}
 						if (amountRequired <= 0) {
 							int totalAmountOfNeedeResources = amountOfUsedResourcesLeftPlayer + amountOfUsedResourcesRightPlayer;
 							if (2*totalAmountOfNeedeResources <= this.getCoins()) {
-								checkedResources.put(t, true);
-								missingResources.remove(t);
+								checkedResources.put(type, true);
+								missingResources.remove(type);
 								Map<Player, Integer> tempMap = new HashMap<>();
 								tempMap.put(leftPlayer, amountOfUsedResourcesLeftPlayer);
 								tempMap.put(rightPlayer, amountOfUsedResourcesRightPlayer);

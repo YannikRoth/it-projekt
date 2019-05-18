@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import com.sun.media.jfxmedia.logging.Logger;
 
+import client.model.ClientModel;
 import globals.ResourceMapType;
 import globals.ResourceType;
 import server.ServiceLocator;
@@ -66,19 +67,19 @@ class WinnerEvaluationTest {
 		//player.getPlayableCards().add(model.getCard(11));
 		//player.getPlayableCards().add(model.getCard(25));
 		//player.getPlayableCards().add(model.getCard(42));
-		player.getPlayableCards().add(model.getCard(125));
+		player.getPlayableCards().add(model.getCard(15));
 
 		
 		//assign card to cardSet of LeftPlayer
 		cardSetLeftPlayer.add(model.getCard(3));
-		cardSetLeftPlayer.add(model.getCard(11));
+		//cardSetLeftPlayer.add(model.getCard(11));
 		leftPlayer.getPlayableCards().add(model.getCard(3));
-		leftPlayer.getPlayableCards().add(model.getCard(11));
+		//leftPlayer.getPlayableCards().add(model.getCard(11));
 		//assign card to cardSet of RightPlayer
-		cardSetRightPlayer.add(model.getCard(25));
-		cardSetRightPlayer.add(model.getCard(42));
-		rightPlayer.getPlayableCards().add(model.getCard(25));
-		rightPlayer.getPlayableCards().add(model.getCard(42));
+		//cardSetRightPlayer.add(model.getCard(6));
+		//cardSetRightPlayer.add(model.getCard(42));
+		//rightPlayer.getPlayableCards().add(model.getCard(6));
+		//rightPlayer.getPlayableCards().add(model.getCard(42));
 		
 		//play cards
 		for (Card c : cardSetPlayer) {
@@ -124,7 +125,7 @@ class WinnerEvaluationTest {
 		System.out.println(rightPlayer.getResources());
 		System.out.println(rightPlayer.getAlternateResources());
 		player.addCoins(20);
-		assertTrue(player.playCard(model.getCard(125)));
+		assertTrue(player.playCard(model.getCard(15)));
 		System.out.println(player.getResources());
 		System.out.println(leftPlayer.getResources());
 		System.out.println(rightPlayer.getResources());
