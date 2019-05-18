@@ -421,10 +421,13 @@ public class Player implements Serializable{
 								this.cardsTradingNeeded.put(card, tempMap);
 								}
 							}
+						}else {
+							System.out.println("value in trading is null");
 						}
 					}
 				}
 			}
+		}
 
 		if(checkedResources.entrySet().stream().filter(b -> b.getValue() == false).count() <= 0) {
 			return true;
