@@ -8,13 +8,11 @@ import client.ServicelocatorClient;
 import client.model.ClientModel;
 import globals.ResourceType;
 import globals.Translator;
-import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -35,7 +33,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import server.model.gameplay.Card;
 import server.model.gameplay.Player;
@@ -59,8 +56,10 @@ public class ClientView {
 	protected ImageView card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12, card13, card14, card15, card16, cardPlayable1, cardPlayable2, cardPlayable3, cardPlayable4, cardPlayable5, cardPlayable6, cardPlayable7, selectedCard = null;
 	
 	private TableView<Player> tableOpponents = new TableView<>();
-	private TableColumn<Player, String> colPlayer;
+	private TableColumn<Player, String> colPlayer, colSide;
 	private ObservableList<TableColumn<Player, String>> dynamicCols = FXCollections.observableArrayList();
+	SimpleStringProperty playerOnRightSide = new SimpleStringProperty();
+	SimpleStringProperty playerOnLeftSide = new SimpleStringProperty();
 	
 	private TableView<ResourceType> tablePoints = new TableView<>();
 	private TableColumn<ResourceType, String> ColType;
@@ -87,14 +86,31 @@ public class ClientView {
 		tableOpponents.setItems(model.getOtherPlayers());
 		
 		colPlayer = new TableColumn<Player, String>();
-		colPlayer.setPrefWidth(260);
+		colPlayer.setPrefWidth(130);
 		colPlayer.setCellValueFactory(new PropertyValueFactory<Player, String>("playerName"));
 		tableOpponents.getColumns().add(colPlayer);
+		
+		Callback<TableColumn.CellDataFeatures<Player, String>, ObservableValue<String>> callSide = 
+				new Callback<TableColumn.CellDataFeatures<Player, String>, ObservableValue<String>>() {
+			@Override
+			public ObservableValue<String> call(TableColumn.CellDataFeatures<Player, String> param) {
+				if(param.getValue().equals(model.getMyPlayer().getRightPlayer()))
+					return playerOnRightSide;
+				else if(param.getValue().equals(model.getMyPlayer().getLeftPlayer()))
+					return playerOnLeftSide;
+				else
+					return new SimpleStringProperty("");
+			}
+		};
+		colSide = new TableColumn<>();
+		colSide.setPrefWidth(130);
+		colSide.setCellValueFactory(callSide);
+		tableOpponents.getColumns().add(colSide);
 		
 		/**
 		 * Idea from https://stackoverflow.com/questions/21639108/javafx-tableview-objects-with-maps
 		 */
-        Callback<TableColumn.CellDataFeatures<Player, String>, ObservableValue<String>> callBack = 
+        Callback<TableColumn.CellDataFeatures<Player, String>, ObservableValue<String>> callBackData = 
                 new Callback<TableColumn.CellDataFeatures<Player, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Player, String> param) {
@@ -108,7 +124,7 @@ public class ClientView {
         for (ResourceType t : ResourceType.values()) {
         	TableColumn<Player, String> tmpCol = new TableColumn<>(t.toStringTranslate());
         	tmpCol.setUserData(t);
-        	tmpCol.setCellValueFactory(callBack);
+        	tmpCol.setCellValueFactory(callBackData);
         	dynamicCols.add(tmpCol);
         	tmpCol.setPrefWidth(100);
         	tmpCol.setStyle("-fx-alignment: CENTER");
@@ -361,7 +377,10 @@ public class ClientView {
 	public void setTexts() {
 		//Table opponents translations
 		colPlayer.setText(translator.getString("column.player"));
+		colSide.setText(translator.getString("column.side"));
 		dynamicCols.forEach(c -> c.setText(((ResourceType)c.getUserData()).toStringTranslate()));
+		playerOnRightSide.set(translator.getString("column.playeronright"));
+		playerOnLeftSide.set(translator.getString("column.playeronleft"));
 		
 		ColType.setText(translator.getString("column.type"));
 		ColAmount.setText(translator.getString("column.amount"));
