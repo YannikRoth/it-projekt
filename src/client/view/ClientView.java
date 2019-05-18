@@ -374,6 +374,10 @@ public class ClientView {
 		return translator.getString(identifier);
 	}
 	
+	/**
+	 * Translate view texts in programm runtime
+	 * @author david
+	 */
 	public void setTexts() {
 		//Table opponents translations
 		colPlayer.setText(translator.getString("column.player"));
@@ -424,7 +428,6 @@ public class ClientView {
 			//Listener setzen
 			getTablePoints().setItems(
 					model.getMyPlayer().getResources().getResourcesListObservable());
-			System.out.println(model.getMyPlayer().getResources().getResourcesListObservable());
 		}
 	}
 	
