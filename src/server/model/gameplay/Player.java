@@ -401,8 +401,8 @@ public class Player implements Serializable{
 			for (Player player : alternateResourcesOfBothOpponents.keySet()) {
 				for (int hashMap = 0; hashMap < alternateResourcesOfBothOpponents.get(player).size(); hashMap++) {
 					if (alternateResourcesOfBothOpponents.get(player).get(hashMap).get(type) != null &&
-							alternateResourcesOfBothOpponents.get(player).get(hashMap).get(type) >= 1) {
-					amountRequired -= alternateResourcesOfBothOpponents.get(player).get(hashMap).get(type);
+						alternateResourcesOfBothOpponents.get(player).get(hashMap).get(type) >= 1) {
+						amountRequired -= alternateResourcesOfBothOpponents.get(player).get(hashMap).get(type);
 
 						if (player.equals(this.leftPlayer)) {
 							amountOfUsedResourcesLeftPlayer += alternateResourcesOfBothOpponents.get(player).get(hashMap).get(type);
@@ -427,7 +427,6 @@ public class Player implements Serializable{
 					}
 				}
 			}
-		}
 
 		if(checkedResources.entrySet().stream().filter(b -> b.getValue() == false).count() <= 0) {
 			return true;
