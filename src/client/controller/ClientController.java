@@ -160,6 +160,7 @@ public class ClientController {
 				if(c.equals(this.selectedCard)) {
 					correct = v;
 					view.addImageView(correct);
+					correct.setDisable(true);
 					return;
 				}
 			}
@@ -204,16 +205,16 @@ public class ClientController {
 	 */
 	
 	public void processClickOnImage() {
-		for (int i = 0; i<view.getShownCards().length;i++) {
-			this.selectedCard = view.getCardsWithImages().get(view.getImageView(i));
-			ImageView tempImage = view.getImageView(i);
+		for (ImageView imageViewOne : view.getCardsWithImages().keySet()) {
+			this.selectedCard = view.getCardsWithImages().get(imageViewOne);
+			ImageView tempImage = imageViewOne;
 			tempImage.setOnMouseClicked(e ->{
 				tempImage.setEffect(new DropShadow(30, Color.GOLD));
-				for (int j = 0;j<view.getShownCards().length;j++) {
-					if(view.getImageView(j) != tempImage) {
-						view.getImageView(j).setEffect(null);
+				for (ImageView imageViewTwo : view.getCardsWithImages().keySet()) {
+					if(imageViewTwo != tempImage) {
+						imageViewTwo.setEffect(null);
 					}else {
-						this.selectedCard = view.getCardsWithImages().get(view.getImageView(j));
+						this.selectedCard = view.getCardsWithImages().get(imageViewTwo);
 						if(this.selectedCard == null) {
 							System.out.println("The selected card value is null!!");
 						}
