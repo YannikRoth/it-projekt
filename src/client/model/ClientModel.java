@@ -168,6 +168,7 @@ public class ClientModel extends Thread {
 						@Override
 						public void run() {
 							ServicelocatorClient.getClientView().updateClientViewEndGame(winnerList);
+							ServicelocatorClient.getClientController().updateClientViewEndGame();
 						}
 					});
 					

@@ -543,8 +543,5 @@ public class ClientView {
 		vBoxEndGame.setSpacing(15);
 		vBoxEndGame.setPadding(new Insets(30, 0, 0, 0));
 		vBoxEndGame.getStyleClass().add("vBoxEndGame");
-		this.okButton.setOnAction(e -> {
-			ServicelocatorClient.getClientController().handleCloseRequest();
-		});
 	}
 }

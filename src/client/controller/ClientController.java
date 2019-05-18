@@ -246,5 +246,15 @@ public class ClientController {
 		});
 	}
 
+	/**
+	 * Funtionality for winnerlist quit-Button
+	 * @author david
+	 */
+	public void updateClientViewEndGame() {
+		view.getOkButton().setOnAction(e -> {
+			callingLobbyController.showAndEnableView();
+			this.view.getStage().close();
+		});
+	}
 }
 
