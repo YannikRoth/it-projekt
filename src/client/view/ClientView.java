@@ -62,8 +62,7 @@ public class ClientView {
 	SimpleStringProperty playerOnLeftSide = new SimpleStringProperty();
 	
 	private TableView<ResourceType> tablePoints = new TableView<>();
-	private TableColumn<ResourceType, String> ColType;
-	private TableColumn<ResourceType, Integer> ColAmount;
+	private TableColumn<ResourceType, String> ColType, ColAmount;
 	
 	MenuItem itemM1, itemM2, itemM3, itemM4, itemM5, itemM6, itemM7, itemM8, itemM9, itemM10, itemM11, itemM12, itemM13, itemM14;
 	private Button playCard, buildWorldWonder, discardCard, okButton;
@@ -97,12 +96,14 @@ public class ClientView {
 				new Callback<TableColumn.CellDataFeatures<Player, String>, ObservableValue<String>>() {
 			@Override
 			public ObservableValue<String> call(TableColumn.CellDataFeatures<Player, String> param) {
-				if(param.getValue().equals(model.getMyPlayer().getRightPlayer()))
-					return playerOnRightSide;
-				else if(param.getValue().equals(model.getMyPlayer().getLeftPlayer()))
-					return playerOnLeftSide;
-				else
-					return new SimpleStringProperty("");
+				synchronized (param.getValue()) {
+					if(param.getValue().equals(model.getMyPlayer().getRightPlayer()))
+						return playerOnRightSide;
+					else if(param.getValue().equals(model.getMyPlayer().getLeftPlayer()))
+						return playerOnLeftSide;
+					else
+						return new SimpleStringProperty("");
+				}
 			}
 		};
 		colSide = new TableColumn<>();
@@ -117,11 +118,15 @@ public class ClientView {
                 new Callback<TableColumn.CellDataFeatures<Player, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Player, String> param) {
-                return param.getValue().getResources().containsKey(
-                        param.getTableColumn().getUserData())
-                        ? new SimpleStringProperty(Integer.toString(param.getValue().getResources().get(
-                        		param.getTableColumn().getUserData())))
-                        :new SimpleStringProperty("-");
+            	synchronized (param.getValue()) {
+            		return param.getValue().getResources().containsKey(
+            				param.getTableColumn().getUserData()) && 
+            				param.getValue().getResources().get(
+            						param.getTableColumn().getUserData()) != 0
+            				? new SimpleStringProperty(Integer.toString(param.getValue().getResources().get(
+            						param.getTableColumn().getUserData())))
+            						:new SimpleStringProperty("-");
+				}
             }
         };
         for (ResourceType t : ResourceType.values()) {
@@ -148,10 +153,22 @@ public class ClientView {
 		ColType.setMinWidth(130);
 		ColType.setCellValueFactory(cd -> Bindings.createStringBinding(() -> cd.getValue().toStringTranslate() ));
 
+		Callback<TableColumn.CellDataFeatures<ResourceType, String>, ObservableValue<String>> callAmount = 
+				new Callback<TableColumn.CellDataFeatures<ResourceType, String>, ObservableValue<String>>() {
+			@Override
+			public ObservableValue<String> call(TableColumn.CellDataFeatures<ResourceType, String> param) {
+				synchronized (param.getValue()) {
+					return model.getMyPlayer().getResources().get(param.getValue()) != 0
+							? new SimpleStringProperty(Integer.toString(model.getMyPlayer().getResources().get(param.getValue())))
+							: new SimpleStringProperty("-");
+				}
+			}
+		};
 		ColAmount	= new TableColumn<>();
 		ColAmount.setMinWidth(130);
 		ColAmount.setStyle("-fx-alignment: CENTER");
-		ColAmount.setCellValueFactory(cd -> Bindings.valueAt(this.model.getMyPlayer().getResources().getResourcesObservable(), cd.getValue()));
+		ColAmount.setCellValueFactory(callAmount);
+//		ColAmount.setCellValueFactory(cd -> Bindings.valueAt(this.model.getMyPlayer().getResources().getResourcesObservable(), cd.getValue()));
 		
 		tablePoints.getColumns().addAll(ColType, ColAmount);
 	}
