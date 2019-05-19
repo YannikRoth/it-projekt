@@ -360,6 +360,9 @@ public class Player implements Serializable{
 			return this.playerName.equals(((Player)o).getPlayerName());
 		else if(o != null)
 			logger.warning("Called player method with no \"Player\" object: " + o.getClass().getName());
+		else
+			logger.warning("Called Player.equals() method with no instance of param called");
+		
 		return false;
 	}
 	
