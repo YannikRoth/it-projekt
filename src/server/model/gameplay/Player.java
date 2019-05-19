@@ -358,7 +358,7 @@ public class Player implements Serializable{
 	public boolean equals(Object o) {
 		if(o instanceof Player)
 			return this.playerName.equals(((Player)o).getPlayerName());
-		else
+		else if(o != null)
 			logger.warning("Called player method with no \"Player\" object: " + o.getClass().getName());
 		return false;
 	}
