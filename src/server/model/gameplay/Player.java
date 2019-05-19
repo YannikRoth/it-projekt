@@ -3,6 +3,7 @@ package server.model.gameplay;
 import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -311,6 +312,7 @@ public class Player implements Serializable{
 			return true;
 		}
 		if(isAbleToAffordCardWithTrade(c, checkedResources, missingResources)){
+			System.out.println("Card can not be afforded myself, lets check trading options");
 			return true;
 		}else {
 			return false;
@@ -422,7 +424,7 @@ public class Player implements Serializable{
 								}
 							}
 						}else {
-							System.out.println("value in trading is null");
+							System.out.println("value in trading is null or opponets do not own required resouces");
 						}
 					}
 				}
