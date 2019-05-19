@@ -475,6 +475,7 @@ public class ClientView {
 	 * @author david
 	 */
 	public void refreshAgeLabelFromModel() {
+		if(model.getCards().size() > 0)
 			age.setText(translator.getString("label.age") + ": " + model.getCards().get(0).getCardAgeValue());
 	}
 
