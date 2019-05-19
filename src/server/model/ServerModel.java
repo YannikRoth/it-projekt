@@ -340,6 +340,7 @@ public class ServerModel implements Serializable{
 		}
 		scoreList.sort(Comparator.comparing(p -> p.getWinningPoints()));
 		Collections.reverse(scoreList);
+		logger.info("WinnerList: " + scoreList.toString());
 		return scoreList;
 	}
 	
