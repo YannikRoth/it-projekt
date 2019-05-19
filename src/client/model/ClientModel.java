@@ -113,18 +113,21 @@ public class ClientModel extends Thread {
 					}
 					//set neigbours manually on client side as references will be invalid
 					setneigbours();
+					
 					//update the view
 					Cards.setAll(getMyPlayer().getPlayableCards());
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							System.out.println("View ref: " + ServicelocatorClient.getClientView());
-									ServicelocatorClient.getClientView().updatePlayableCardView();
-									ServicelocatorClient.getClientView().refreshAgeLabelFromModel();
-									ServicelocatorClient.getClientController().processClickOnImage();
-						
-						}
-					});
+					if(getMyPlayer().getPlayableCards().size() > 1) {
+						Platform.runLater(new Runnable() {
+							@Override
+							public void run() {
+								System.out.println("View ref: " + ServicelocatorClient.getClientView());
+								ServicelocatorClient.getClientView().updatePlayableCardView();
+								ServicelocatorClient.getClientView().refreshAgeLabelFromModel();
+								ServicelocatorClient.getClientController().processClickOnImage();
+								
+							}
+						});
+					}
 					
 					break;
 
