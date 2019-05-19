@@ -171,3 +171,7 @@
 	-fx-background-color: transparent;
     -fx-base: transparent;
 }
+
+.hBoxCards {
+	-fx-effect: dropshadow(three-pass-box, #daa520, 40, 0, 0, 0);
+}

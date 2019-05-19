@@ -209,7 +209,7 @@ public class ClientController {
 			this.selectedCard = view.getCardsWithImages().get(imageViewOne);
 			ImageView tempImage = imageViewOne;
 			tempImage.setOnMouseClicked(e ->{
-				tempImage.setEffect(new DropShadow(30, Color.GOLD));
+				tempImage.setEffect(new DropShadow(40, Color.GOLD));
 				for (ImageView imageViewTwo : view.getCardsWithImages().keySet()) {
 					if(imageViewTwo != tempImage) {
 						imageViewTwo.setEffect(null);

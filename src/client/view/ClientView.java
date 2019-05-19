@@ -175,6 +175,7 @@ public class ClientView {
 		hBoxCards.setSpacing(-10);
 		hBoxCards.setMinHeight(120);
 		hBoxCards.setAlignment(Pos.CENTER);
+		hBoxCards.getStyleClass().add("hBoxCards");
 		borderPanePlayer.setPrefWidth(980);
 		hBoxPlayer.setHgrow(borderPanePlayer, Priority.ALWAYS);
 		
@@ -277,8 +278,8 @@ public class ClientView {
 		vBoxDeck.getChildren().addAll(playableCards, buttonBox);
 		playableCards.setAlignment(Pos.BASELINE_CENTER);
 		playableCards.setSpacing(2);
-		playableCards.setPadding(new Insets(0, 0, 0, 0));
-		playableCards.setPrefHeight(210);
+		playableCards.setPadding(new Insets(30, 0, 0, 0));
+		playableCards.setPrefHeight(235);
 		
 		//Menu "Game"
 		itemM1 = new MenuItem();
@@ -322,7 +323,6 @@ public class ClientView {
 		this.hBoxCards.getChildren().add(v);
 		v.setFitHeight(120);
 		v.setFitWidth(76);
-		v.setEffect(new DropShadow(30, Color.GOLD));
 	}
 	
 	public void addImageViewWorldWonderOne() {
@@ -330,7 +330,7 @@ public class ClientView {
 		this.hBoxWorldWonderCards.getChildren().add(v);
 		v.setFitHeight(120);
 		v.setFitWidth(76);
-		v.setEffect(new DropShadow(30, Color.GOLD));
+		v.setEffect(new DropShadow(40, Color.GOLD));
 	}
 	
 	public void addImageViewWorldWonderTwo() {
@@ -338,7 +338,7 @@ public class ClientView {
 		this.hBoxWorldWonderCards.getChildren().add(v);
 		v.setFitHeight(120);
 		v.setFitWidth(76);
-		v.setEffect(new DropShadow(30, Color.GOLD));
+		v.setEffect(new DropShadow(40, Color.GOLD));
 	}
 	
 	/**
