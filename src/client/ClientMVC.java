@@ -31,7 +31,8 @@ public class ClientMVC extends Application{
 	public static void main(String[] args) {
 		launch(args);
 	}
-
+	
+	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 //		if(this.callingLobbyController != null)
@@ -40,12 +41,12 @@ public class ClientMVC extends Application{
 //			this.model = new ClientModel();
 //		ServicelocatorClient.setClientModel(model);
 		this.model = ServicelocatorClient.getClientModel();
-		this.view = new ClientView(primaryStage, model);
-		view.start();
-		ServicelocatorClient.setClientView(view);
+		
+		ServicelocatorClient.setClientView(new ClientView(primaryStage, model));
+		this.view = ServicelocatorClient.getClientView();
 		this.control = new ClientController(model, view);
 		ServicelocatorClient.setClientController(control);
-		
+		view.start();
 		
 		logger.info("Client MVC started");
 	}

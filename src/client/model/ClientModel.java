@@ -83,13 +83,13 @@ public class ClientModel extends Thread {
 			objOutputStream.flush();
 			//waiting for Server input
 			while (((action = (ServerAction) objInputStream.readObject()) != null)) {
-				try {
-					//slowing the game to make user feel comfortable
-					Thread.sleep(100);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+//				try {
+//					//slowing the game to make user feel comfortable
+//					Thread.sleep(100);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 				switch (action) {
 				//server notifys client the connection is established and sends its own player object
 				case ESTABLISHED:
@@ -120,12 +120,11 @@ public class ClientModel extends Thread {
 						@Override
 						public void run() {
 							//CardOptionView view = new CardOptionView(ServicelocatorClient.getClientModel());
-							synchronized(getMyPlayer().getPlayableCards()) {
 							System.out.println("View ref: " + ServicelocatorClient.getClientView());
 									ServicelocatorClient.getClientView().updatePlayableCardView();
 									ServicelocatorClient.getClientView().refreshAgeLabelFromModel();
 									ServicelocatorClient.getClientController().processClickOnImage();
-							}
+						
 						}
 					});
 					
