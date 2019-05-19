@@ -116,6 +116,7 @@ public class ServerClientThread extends Thread {
 			objOutputStream.reset();
 			objOutputStream.writeObject(ServerAction.STARTGAME);
 			objOutputStream.flush();
+			OutputAllplayers(this.player);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

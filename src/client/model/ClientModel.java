@@ -144,24 +144,44 @@ public class ClientModel extends Thread {
 					ServicelocatorClient.getLobbyModel().setLobbyPlayerData(ListOfWaitingPlayers);
 					break;
 					
-				case STARTGAME:		
+				case STARTGAME:	
+					Player tempplayer1 = null;
+					//update own player object first
+					synchronized(objInputStream) {
+						setMyPlayer((Player) objInputStream.readObject());
+					}
+					logger.info("Own Player Object "+getMyPlayer().getPlayerName()+" received from Server");
+					otherPlayers.clear();
+					//update all other players
+					synchronized(otherPlayers) {
+						for (int i = 0; i < numberofPlayers - 1; i++) {
+							tempplayer1 = (Player) objInputStream.readObject();
+							otherPlayers.add(tempplayer1);
+							logger.info("Opponent player "+tempplayer1.getPlayerName()+" received from Server");						
+						}
+					}
+					//set neigbours manually on client side as references will be invalid
+					setneigbours();
+					//update the view
+					Cards.setAll(getMyPlayer().getPlayableCards());
 					//start the new game view 
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
 							ServicelocatorClient.getLobbyController().processNewGame();
+							logger.info("game started");		
 						}
 					});
 					break;					
 				case ENDGAME:	
 					//update the client with the winnerlist
 				    ArrayList<Player> winnerList = new ArrayList<>();
-				    Player tempplayer1 = null;
+				    Player tempplayer2 = null;
 					synchronized(winnerList) {
 						for (int i = 0; i < numberofPlayers; i++) {
-							tempplayer1 = (Player) objInputStream.readObject();
-							winnerList.add(tempplayer1);
-							logger.info("Number "+ i + tempplayer1.getPlayerName()+" received from Server");						
+							tempplayer2 = (Player) objInputStream.readObject();
+							winnerList.add(tempplayer2);
+							logger.info("Number "+ i + tempplayer2.getPlayerName()+" received from Server");						
 						}
 					}				    
 					Platform.runLater(new Runnable() {
