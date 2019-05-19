@@ -265,7 +265,7 @@ public class ClientView {
 		 * @author philipp
 		 */
 		this.hBoxWorldWonderCards = new HBox();
-		hBoxWorldWonderCards.setSpacing(330);
+		hBoxWorldWonderCards.setSpacing(340);
 		hBoxWorldWonderCards.setPadding(new Insets(0,0,0,10));
 		hBoxWorldWonderCards.setMinHeight(120);
 		hBoxWorldWonderCards.setAlignment(Pos.BOTTOM_LEFT);
