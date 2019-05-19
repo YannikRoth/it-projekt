@@ -76,7 +76,7 @@ public class ServerClientThread extends Thread {
 
 	public synchronized void establishconnection() {
 
-		// this sends the own player obj to the server and tells him the game is
+		// this sends the own player obj to the client and tells him the game is
 		// established
 		// =================================================================
 		try {
@@ -146,6 +146,16 @@ public class ServerClientThread extends Thread {
 				// and the thread stops
 				// =========================================================
 				if (servermodel.gameEnd) {
+					// notify the client that updated player objects will be sent
+					synchronized (objOutputStream) {
+						objOutputStream.writeObject(ServerAction.UPDATEVIEW);
+						objOutputStream.flush();
+					}
+					// send all playerobjects to client
+					OutputAllplayers(this.player);
+					
+					// this will notify the client that the game has ended and will send him the rankings
+					// =================================================================
 					synchronized (objOutputStream) {
 						objOutputStream.reset();
 						objOutputStream.writeObject(ServerAction.ENDGAME);
@@ -159,6 +169,7 @@ public class ServerClientThread extends Thread {
 						}
 						
 					}
+					//stopping the game after this method
 					stop = true;
 				} else {
 
@@ -176,10 +187,12 @@ public class ServerClientThread extends Thread {
 						switch (action) {
 						case PLAYCARD:
 							synchronized (objInputStream) {
+								//Client wants to play the incoming card 
 								cardplayed = (Card) objInputStream.readObject();
 								boolean check = this.player.playCard(cardplayed);
 								if(check == false) {
 									logger.warning("card could not be played, maybe a consistency problem?");
+									legalaction = false;
 								}
 							}
 							logger.info(cardplayed.getCardName() + " Cards received from " + player.getPlayerName()
@@ -188,18 +201,22 @@ public class ServerClientThread extends Thread {
 
 						case DISCARD:
 							synchronized (objInputStream) {
+								//Client wants to discard the incoming card 
 								cardplayed = (Card) objInputStream.readObject();
 								this.player.discardCard(cardplayed);
 							}
 							logger.info(cardplayed.getCardName() + "Cards received from " + player.getPlayerName()
 									+ " with following Action: " + action);
+							
 							break;
 						case BUILDWONDER:
 							synchronized (objInputStream) {
+								//Client wants to build a wonder with the incoming card 
 								cardplayed = (Card) objInputStream.readObject();
 								boolean check = this.player.playWorldWonder(this.player.getBoard().getNextWorldWonderStage());
 								this.player.removeCardFromCurrentPlayabled(cardplayed);
 								if(check == false) {
+									legalaction = false;
 									logger.warning("card could not be played, maybe a consistency problem?");
 								}
 							}
@@ -213,6 +230,7 @@ public class ServerClientThread extends Thread {
 							legalaction = false;
 							break;
 						}
+						//This loop will continue as long as the player sends illegal actions or cards (should not be possible)
 					} while (!legalaction);
 
 					// this method is used to Update the current game status
@@ -231,9 +249,8 @@ public class ServerClientThread extends Thread {
 	}
 
 	public void OutputAllplayers(Player curplayer) throws IOException {
-		// System.out.println("Sending players " + curplayer.getPlayerName() + " " +
-		// curplayer.getPlayableCards());
-		// System.out.println("Resources" + curplayer.getResources());
+
+		//Outputs all right players starting with the own player of this clientthread
 		synchronized (objOutputStream) {
 			objOutputStream.reset();
 			objOutputStream.writeObject(curplayer);

@@ -52,13 +52,14 @@ public class ClientModel extends Thread {
 	}
 
 	/**
-	 * Sends the played card to the server. It DOES NOT effectively plax the card on
+	 * Sends the played card to the server. It DOES NOT effectively play the card on
 	 * the player obj. To do so, use <code>getMyPlayer().playCard(Card c)</code>
 	 * 
 	 * @param playedcard
 	 * @param action
 	 */
 	public void sendPlayedCard(Card playedcard, ClientAction action) {
+		//sends the desired card and action to the server
 		try {
 
 			objOutputStream.writeObject(action);
@@ -74,22 +75,16 @@ public class ClientModel extends Thread {
 	public void run() {
 		//Join Game
 		ServerAction action;
-
+		//uses the IP adress and port number from the lobby
 		try (Socket socket = new Socket(Globals.getDefaultIPAddr(), Globals.getPortNr())) {
 			this.objInputStream = new ObjectInputStream(socket.getInputStream());
 			this.objOutputStream = new ObjectOutputStream(socket.getOutputStream());
+			//sends the playername to the server
 			ClientPlayerName cpn = new ClientPlayerName(inputPlayerName);
 			objOutputStream.writeObject(cpn);
 			objOutputStream.flush();
 			//waiting for Server input
 			while (((action = (ServerAction) objInputStream.readObject()) != null)) {
-//				try {
-//					//slowing the game to make user feel comfortable
-//					Thread.sleep(100);
-//				} catch (InterruptedException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
 				switch (action) {
 				//server notifys client the connection is established and sends its own player object
 				case ESTABLISHED:
@@ -102,11 +97,13 @@ public class ClientModel extends Thread {
 				//Server wants the client to update his views with the new player objects	
 				case UPDATEVIEW:
 					Player tempplayer = null;
+					//update own player object first
 					synchronized(objInputStream) {
 						setMyPlayer((Player) objInputStream.readObject());
 					}
 					logger.info("Own Player Object "+getMyPlayer().getPlayerName()+" received from Server");
 					otherPlayers.clear();
+					//update all other players
 					synchronized(otherPlayers) {
 						for (int i = 0; i < numberofPlayers - 1; i++) {
 							tempplayer = (Player) objInputStream.readObject();
@@ -114,12 +111,13 @@ public class ClientModel extends Thread {
 							logger.info("Opponent player "+tempplayer.getPlayerName()+" received from Server");						
 						}
 					}
+					//set neigbours manually on client side as references will be invalid
 					setneigbours();
+					//update the view
 					Cards.setAll(getMyPlayer().getPlayableCards());
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
-							//CardOptionView view = new CardOptionView(ServicelocatorClient.getClientModel());
 							System.out.println("View ref: " + ServicelocatorClient.getClientView());
 									ServicelocatorClient.getClientView().updatePlayableCardView();
 									ServicelocatorClient.getClientView().refreshAgeLabelFromModel();
@@ -130,7 +128,8 @@ public class ClientModel extends Thread {
 					
 					break;
 
-				case INFORMATION:	
+				case INFORMATION:
+					//receive the players already in the game of the server
 					Integer numberofPlayersConnected = 0;
 					numberofPlayersConnected = (Integer) objInputStream.readObject();
 				    ArrayList<Player> ListOfWaitingPlayers = new ArrayList<>();
@@ -146,6 +145,7 @@ public class ClientModel extends Thread {
 					break;
 					
 				case STARTGAME:		
+					//start the new game view 
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
@@ -154,6 +154,7 @@ public class ClientModel extends Thread {
 					});
 					break;					
 				case ENDGAME:	
+					//update the client with the winnerlist
 				    ArrayList<Player> winnerList = new ArrayList<>();
 				    Player tempplayer1 = null;
 					synchronized(winnerList) {
