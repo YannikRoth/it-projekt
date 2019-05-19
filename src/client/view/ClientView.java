@@ -68,6 +68,9 @@ public class ClientView {
 	MenuItem itemM1, itemM2, itemM3, itemM4, itemM5, itemM6, itemM7, itemM8, itemM9, itemM10, itemM11, itemM12, itemM13, itemM14;
 	private Button playCard, buildWorldWonder, discardCard, okButton;
 	private Label playerName, age;
+
+	private ArrayList<Player> winnerList = new ArrayList<>();
+	private ArrayList<Label> winnerLabel = new ArrayList<>();
 	
 	public ClientView(Stage primaryStage, ClientModel model) {
 		this.stage = primaryStage;
@@ -375,6 +378,41 @@ public class ClientView {
 	}
 	
 	/**
+	 * Create labels for winner list and a quit game button
+	 * @param winner
+	 * @author philipp
+	 */
+	public void updateClientViewEndGame(ArrayList<Player> winner) {
+		winnerList = winner;
+		VBox vBoxEndGame = new VBox();
+		vBoxEndGame.setAlignment(Pos.CENTER);
+		this.okButton = new Button(translator.getString("button.quitgame"));
+		for (int i = 0; i< winner.size(); i++) {
+			Label lblPlace = new Label("");
+			winnerLabel.add(lblPlace);
+			vBoxEndGame.getChildren().add(lblPlace);
+		}
+		setTranslateWinnerLabels();
+		this.playableCards.getChildren().add(vBoxEndGame);
+		vBoxEndGame.getChildren().add(okButton);
+		vBoxEndGame.setSpacing(15);
+		vBoxEndGame.setPadding(new Insets(30, 0, 0, 0));
+		vBoxEndGame.getStyleClass().add("vBoxEndGame");
+	}
+	
+	/**
+	 * translate and shows winner labels
+	 * @author david
+	 */
+	private void setTranslateWinnerLabels() {
+		if(winnerList.size() == 0 || winnerLabel.size() < winnerLabel.size())
+			return;
+		for (int i = 0; i < winnerList.size(); i++) {
+			winnerLabel.get(i).setText(translator.getString("label." + (i+1) + "place") + ": " + winnerList.get(i).getPlayerName());
+		}
+	}
+	
+	/**
 	 * Translate view texts in programm runtime
 	 * @author david
 	 */
@@ -416,6 +454,7 @@ public class ClientView {
 
 		if(this.okButton != null)
 			this.okButton.setText(translator.getString("button.quitgame"));
+		setTranslateWinnerLabels();
 		
 		playerName.setText(translator.getString("column.player") + ": " + model.getMyPlayer().getPlayerName());
 		refreshAgeLabelFromModel();
@@ -528,20 +567,5 @@ public class ClientView {
 	}
 	public void setAge(Label age) {
 		this.age = age;
-	}
-
-	public void updateClientViewEndGame(ArrayList<Player> winner) {
-		VBox vBoxEndGame = new VBox();
-		vBoxEndGame.setAlignment(Pos.CENTER);
-		this.okButton = new Button(translator.getString("button.quitgame"));
-		for (int i = 0; i< winner.size(); i++) {
-			Label lblPlace = new Label(i+1 +". Platz: "+winner.get(i).getPlayerName());
-			vBoxEndGame.getChildren().add(lblPlace);
-		}
-		this.playableCards.getChildren().add(vBoxEndGame);
-		vBoxEndGame.getChildren().add(okButton);
-		vBoxEndGame.setSpacing(15);
-		vBoxEndGame.setPadding(new Insets(30, 0, 0, 0));
-		vBoxEndGame.getStyleClass().add("vBoxEndGame");
 	}
 }
