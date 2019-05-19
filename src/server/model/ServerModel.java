@@ -386,7 +386,7 @@ public class ServerModel implements Serializable{
 			playerCards.add(players.get(i).getPlayableCards());
 		}
 		
-		if(direction.equals("left")) {
+		if(direction.equals("right")) {
 			playerCards.add(0, null);
 			playerCards.set(0, playerCards.get(playerCards.size()-1));
 			playerCards.remove(playerCards.size()-1);
