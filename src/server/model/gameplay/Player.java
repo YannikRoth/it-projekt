@@ -302,7 +302,7 @@ public class Player implements Serializable{
 			}else {
 				//should already be false, don't know if required
 				checkedResources.put(searchResourceType, false);
-				missingResources.put(searchResourceType, amountRequired);
+				missingResources.put(searchResourceType, amountRequired - this.resources.get(t));
 			}
 			
 		}
