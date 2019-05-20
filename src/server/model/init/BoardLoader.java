@@ -43,9 +43,9 @@ public class BoardLoader {
 		field_mapping.put(17,"stage1GainsStoff");
 		field_mapping.put(18,"stage1GainsPapyrus");
 		field_mapping.put(19,"stage1GaininCoins");
-		field_mapping.put(20,"stage1RewardinPoints");
+		field_mapping.put(20,"stage1Gainsinwinningpoints");
 		field_mapping.put(21,"stage1RewardFreecard");
-		field_mapping.put(22,"stage1RewardinMilitary");
+		field_mapping.put(22,"stage1Gainsinmilitarypoints");
 		field_mapping.put(23,"stage1RewardsFreeCardperAge");
 		field_mapping.put(24,"stage1RewardsScienceSchriften");
 		field_mapping.put(25,"stage1RewardsScienceKompass");
@@ -69,9 +69,9 @@ public class BoardLoader {
 		field_mapping.put(43,"stage2GainsStoff");
 		field_mapping.put(44,"stage2GainsPapyrus");
 		field_mapping.put(45,"stage2GaininCoins");
-		field_mapping.put(46,"stage2RewardinPoints");
+		field_mapping.put(46,"stage2Gainsinwinningpoints");
 		field_mapping.put(47,"stage2RewardFreecard");
-		field_mapping.put(48,"stage2RewardinMilitary");
+		field_mapping.put(48,"stage2Gainsinmilitarypoints");
 		field_mapping.put(49,"stage2RewardsFreeCardperAge");
 		field_mapping.put(50,"stage2RewardsScienceSchriften");
 		field_mapping.put(51,"stage2RewardsScienceKompass");
@@ -95,9 +95,9 @@ public class BoardLoader {
 		field_mapping.put(69,"stage3GainsStoff");
 		field_mapping.put(70,"stage3GainsPapyrus");
 		field_mapping.put(71,"stage3GaininCoins");
-		field_mapping.put(72,"stage3RewardinPoints");
+		field_mapping.put(72,"stage3Gainsinwinningpoints");
 		field_mapping.put(73,"stage3RewardFreecard");
-		field_mapping.put(74,"stage3RewardinMilitary");
+		field_mapping.put(74,"stage3Gainsinmilitarypoints");
 		field_mapping.put(75,"stage3RewardsFreeCardperAge");
 		field_mapping.put(76,"stage3RewardsScienceSchriften");
 		field_mapping.put(77,"stage3RewardsScienceKompass");
@@ -137,6 +137,11 @@ public class BoardLoader {
 
 	}
 	
+	/**
+	 * This method imports all board directly into a ServerModel
+	 * @param m
+	 * @author yannik roth
+	 */
 	public static void importBoards(ServerModel m) {
 		try {
 			CSVParser parser = new CSVParserBuilder()
@@ -166,6 +171,45 @@ public class BoardLoader {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * This method imports a board and returns them as a map
+	 * @return A <code>Map<Integer, Board><code> which can be used freely
+	 */
+	public static Map<Integer, Board> importBoards() {
+		Map<Integer, Board> boards = new HashMap<>();
+		
+		try {
+			CSVParser parser = new CSVParserBuilder()
+				.withSeparator(';')
+				.withIgnoreQuotations(true)
+				.build();
+				 
+			CSVReader csvReader = new CSVReaderBuilder(new FileReader("./resource/masterdata/board.csv"))
+			    .withSkipLines(1) //first line is header line, do not import
+			    .withCSVParser(parser)
+			    .build();
+			
+			List<String[]> myEntries = csvReader.readAll();
+
+			//i is the row
+			for(int i = 0; i < myEntries.size(); i++) {			
+				Board b = new Board(myEntries.get(i));
+				boards.put(b.getId(), b);
+			}
+
+			csvReader.close();
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return boards;
 	}
 	
 	public static Map<Integer, String> getFieldMapping() {

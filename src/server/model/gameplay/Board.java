@@ -26,6 +26,7 @@ public class Board implements Serializable {
 	private String boardSide;
 	private String boardName;
 	private ResourceType producingResource;
+	private int nextStageToBuild;
 	
 	public Board(String[] values) {
 		Map<Integer, String> mapping = BoardLoader.getFieldMapping();
@@ -35,6 +36,7 @@ public class Board implements Serializable {
 		this.worldWonders[1] = new WorldWonder();
 		this.worldWonders[2] = new WorldWonder();
 		this.worldWonders[3] = new WorldWonder();
+		this.nextStageToBuild = 0;
 		
 		for(int i = 0; i< values.length; i++) {
 			String fieldName = mapping.get(i);
@@ -108,15 +110,15 @@ public class Board implements Serializable {
 	
 	private void fillAttribute(int i, String field, String amount) {
 		if(!amount.equals("null") && this.worldWonders[i-1] != null) {
-			if (field.equals("rewardinpoints")) {
-				this.worldWonders[i - 1].rewardinPoints = Integer.parseInt(amount);
-			}
+//			if (field.equals("rewardinpoints")) {
+//				this.worldWonders[i - 1].rewardinPoints = Integer.parseInt(amount);
+//			}
 			if (field.equals("rewardfreecard")) {
 				this.worldWonders[i - 1].rewardFreecard = amount;
 			}
-			if (field.equals("rewardinmilitary")) {
-				this.worldWonders[i - 1].rewardinMilitary = Integer.parseInt(amount);
-			}
+//			if (field.equals("rewardinmilitary")) {
+//				this.worldWonders[i - 1].rewardinMilitary = Integer.parseInt(amount);
+//			}
 			if (field.equals("rewardsfreecardperage")) {
 				Boolean b = amount.equals("true") ? true : false;
 				this.worldWonders[i - 1].rewardsFreeCardperAge = b;
@@ -194,8 +196,14 @@ public class Board implements Serializable {
 			if(field.equals("gainspapyrus")) {
 				this.worldWonders[i-1].produce.put(ResourceType.PAPYRUS, Integer.parseInt(amount));
 			}
-			if(field.equals("gainincoins")) {
+			if(field.equals("gainsincoins")) {
 				this.worldWonders[i-1].produce.put(ResourceType.COIN, Integer.parseInt(amount));
+			}
+			if(field.equals("gainsinwinningpoints")) {
+				this.worldWonders[i-1].produce.put(ResourceType.WINNINGPOINTS, Integer.parseInt(amount));
+			}
+			if (field.equals("gainsinmilitarypoints")) {
+				this.worldWonders[i-1].produce.put(ResourceType.MILITARYPLUSPOINTS, Integer.parseInt(amount));
 			}
 			
 		}else {
@@ -211,6 +219,24 @@ public class Board implements Serializable {
 	
 	public ResourceType getProducingResource() {
 		return this.producingResource;
+	}
+	/**
+	 * @author Roman Leuenberger
+	 */
+	public void updateIndexOfNextWorldWonderStage() {
+		this.nextStageToBuild++;
+	}
+	/**
+	 * @author Roman Leuenberger
+	 * @return
+	 * This method returns the next WonderStage to build
+	 * returns null if last WonderStage was build
+	 */
+	public WorldWonder getNextWorldWonderStage () {
+		if (this.worldWonders[this.nextStageToBuild] != null) {
+			return this.worldWonders[this.nextStageToBuild];
+		}
+		return null;		
 	}
 
 }

@@ -1,34 +1,41 @@
 package client.view;
 
 import java.util.ArrayList;
-import java.util.Map.Entry;
+import java.util.HashMap;
+import java.util.Map;
 
+import client.ServicelocatorClient;
 import client.model.ClientModel;
 import globals.ResourceType;
 import globals.Translator;
-import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.collections.ObservableMap;
-import javafx.event.EventHandler;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
+import javafx.util.Callback;
+import server.model.gameplay.Card;
 import server.model.gameplay.Player;
-import server.model.gameplay.ResourceMap;
 
 /**
  * 
@@ -40,248 +47,256 @@ public class ClientView {
 	private Stage stage;
 	private ClientModel model;
 	private Translator translator = Translator.getTranslator();
-	Menu menuLanguage, menuHelp, menuGame;
+	private Menu menuLanguage, menuHelp, menuGame;
+	protected ImageView[] cards = new ImageView[7];
+	protected ImageView[] cards2 = new ImageView[12];
+	private Map<ImageView, Card> cardWithImages = new HashMap<>();
+	private HBox playableCards, hBoxCards, hBoxWorldWonderCards;
 	
-	protected ImageView card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12, card13, card14, card15, card16;
+	protected ImageView card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12, card13, card14, card15, card16, cardPlayable1, cardPlayable2, cardPlayable3, cardPlayable4, cardPlayable5, cardPlayable6, cardPlayable7, selectedCard = null;
 	
-	TableColumn<Player, String> ColPlayer, ColStone, ColOre, ColWood, ColGlass, ColClay, ColLoom, ColPaper, ColCoin, ColGeom, ColWrit, ColEng, ColShield, ColMilitary, ColWinning;
-	TableColumn<ResourceType, String> ColType;
-	TableColumn<ResourceType, Integer> ColAmount;
+	private TableView<Player> tableOpponents = new TableView<>();
+	private TableColumn<Player, String> colPlayer, colSide;
+	private ObservableList<TableColumn<Player, String>> dynamicCols = FXCollections.observableArrayList();
+	SimpleStringProperty playerOnRightSide = new SimpleStringProperty();
+	SimpleStringProperty playerOnLeftSide = new SimpleStringProperty();
 	
-	MenuItem itemM1, itemM2, itemM3, itemM4, itemM5, itemM6, itemM7, itemM8, itemM9, itemM10, itemM11, itemM12, itemM13;
+	private TableView<ResourceType> tablePoints = new TableView<>();
+	private TableColumn<ResourceType, String> ColType, ColAmount;
 	
+	MenuItem itemM1, itemM2, itemM3, itemM4, itemM5, itemM6, itemM7, itemM8, itemM9, itemM10, itemM11, itemM12, itemM13, itemM14;
+	private Button playCard, buildWorldWonder, discardCard, okButton;
+	private Label playerName, age;
 
+	private ArrayList<Player> winnerList = new ArrayList<>();
+	private ArrayList<Label> winnerLabel = new ArrayList<>();
+	
 	public ClientView(Stage primaryStage, ClientModel model) {
 		this.stage = primaryStage;
 		this.model = model;
-		model.start();
 		buildView();
 		setTexts();
 	}	
-	public void buildView() {
-		//Damit beim schliessen die Threads "gekillt" werden
-		this.stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-			@Override
-			public void handle(WindowEvent event) {
-				Platform.exit();
-				System.exit(0);
-			}
-		});
+	
+	
+	/**
+	 * Build TableView for other players
+	 * @author david
+	 */
+	private void buildTableOpponents() {
+		tableOpponents.setEditable(false);
+		tableOpponents.setItems(model.getOtherPlayers());
 		
+		colPlayer = new TableColumn<Player, String>();
+		colPlayer.setPrefWidth(130);
+		colPlayer.setCellValueFactory(new PropertyValueFactory<Player, String>("playerName"));
+		tableOpponents.getColumns().add(colPlayer);
+		
+		Callback<TableColumn.CellDataFeatures<Player, String>, ObservableValue<String>> callSide = 
+				new Callback<TableColumn.CellDataFeatures<Player, String>, ObservableValue<String>>() {
+			@Override
+			public ObservableValue<String> call(TableColumn.CellDataFeatures<Player, String> param) {
+				synchronized (param.getValue()) {
+					if(param.getValue().equals(model.getMyPlayer().getRightPlayer()))
+						return playerOnRightSide;
+					else if(param.getValue().equals(model.getMyPlayer().getLeftPlayer()))
+						return playerOnLeftSide;
+					else
+						return new SimpleStringProperty("");
+				}
+			}
+		};
+		colSide = new TableColumn<>();
+		colSide.setPrefWidth(130);
+		colSide.setCellValueFactory(callSide);
+		tableOpponents.getColumns().add(colSide);
+		
+		/**
+		 * Idea from https://stackoverflow.com/questions/21639108/javafx-tableview-objects-with-maps
+		 */
+        Callback<TableColumn.CellDataFeatures<Player, String>, ObservableValue<String>> callBackData = 
+                new Callback<TableColumn.CellDataFeatures<Player, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Player, String> param) {
+            	synchronized (param.getValue()) {
+            		return param.getValue().getResources().containsKey(
+            				param.getTableColumn().getUserData()) && 
+            				param.getValue().getResources().get(
+            						param.getTableColumn().getUserData()) != 0
+            				? new SimpleStringProperty(Integer.toString(param.getValue().getResources().get(
+            						param.getTableColumn().getUserData())))
+            						:new SimpleStringProperty("-");
+				}
+            }
+        };
+        for (ResourceType t : ResourceType.values()) {
+        	TableColumn<Player, String> tmpCol = new TableColumn<>(t.toStringTranslate());
+        	tmpCol.setUserData(t);
+        	tmpCol.setCellValueFactory(callBackData);
+        	dynamicCols.add(tmpCol);
+        	tmpCol.setPrefWidth(100);
+        	tmpCol.setStyle("-fx-alignment: CENTER");
+		}
+        tableOpponents.getColumns().addAll(dynamicCols);
+        tableOpponents.setPrefHeight(200);
+	}
+	
+	/**
+	 * Build table view for my points
+	 * @author david
+	 */
+	private void buildTablePoints() {
+		tablePoints = new TableView<>();
+		tablePoints.setEditable(false);
+		
+		ColType		= new TableColumn<>();
+		ColType.setMinWidth(130);
+		ColType.setCellValueFactory(cd -> Bindings.createStringBinding(() -> cd.getValue().toStringTranslate() ));
+
+		Callback<TableColumn.CellDataFeatures<ResourceType, String>, ObservableValue<String>> callAmount = 
+				new Callback<TableColumn.CellDataFeatures<ResourceType, String>, ObservableValue<String>>() {
+			@Override
+			public ObservableValue<String> call(TableColumn.CellDataFeatures<ResourceType, String> param) {
+				synchronized (param.getValue()) {
+					return model.getMyPlayer().getResources().get(param.getValue()) != 0
+							? new SimpleStringProperty(Integer.toString(model.getMyPlayer().getResources().get(param.getValue())))
+							: new SimpleStringProperty("-");
+				}
+			}
+		};
+		ColAmount	= new TableColumn<>();
+		ColAmount.setMinWidth(130);
+		ColAmount.setStyle("-fx-alignment: CENTER");
+		ColAmount.setCellValueFactory(callAmount);
+//		ColAmount.setCellValueFactory(cd -> Bindings.valueAt(this.model.getMyPlayer().getResources().getResourcesObservable(), cd.getValue()));
+		
+		tablePoints.getColumns().addAll(ColType, ColAmount);
+	}
+	
+	public void buildView() {
 		BorderPane borderPaneMain = new BorderPane();
 		
 		//Table View opponents
-		TableView<Player> tableOpponents = new TableView();
-		tableOpponents.setEditable(false);
-		tableOpponents.setItems(model.getOtherPlayers());
+		buildTableOpponents();
 		borderPaneMain.setCenter(tableOpponents);
 		
-		ColPlayer = new TableColumn<Player, String>("Player");
-		ColPlayer.setMinWidth(100);
-		ColPlayer.setCellValueFactory(new PropertyValueFactory<Player, String>("playerName"));
-		ColStone = new TableColumn("Stone");
-		ColStone.setMinWidth(100);
-		ColOre = new TableColumn("Ore");
-		ColOre.setMinWidth(100);
-		ColWood = new TableColumn("Wood");
-		ColWood.setMinWidth(100);
-		ColGlass = new TableColumn("Glass");
-		ColGlass.setMinWidth(100);
-		ColClay = new TableColumn("Clay");
-		ColClay.setMinWidth(100);
-		ColLoom = new TableColumn("Loom");
-		ColLoom.setMinWidth(100);
-		ColPaper = new TableColumn("Paper");
-		ColPaper.setMinWidth(100);
-		ColCoin = new TableColumn("Coin");
-		ColCoin.setMinWidth(100);
-		ColGeom = new TableColumn("Geom");
-		ColGeom.setMinWidth(100);
-		ColWrit = new TableColumn("Writ");
-		ColWrit.setMinWidth(100);
-		ColEng = new TableColumn("Eng");
-		ColEng.setMinWidth(100);
-		ColShield = new TableColumn("Shield");
-		ColShield.setMinWidth(100);
-		ColMilitary = new TableColumn("Military");
-		ColMilitary.setMinWidth(100);
-		ColWinning = new TableColumn("Winning");
-		ColWinning.setMinWidth(100);
-		
-		tableOpponents.getColumns().addAll(ColPlayer, ColStone, ColOre, ColWood, ColGlass, ColClay, ColLoom, ColPaper, ColCoin, ColGeom, ColWrit, ColEng, ColShield, ColMilitary, ColWinning);
-		
 		//Player Deck
+		VBox vBoxPlayer = new VBox();
 		HBox hBoxPlayer = new HBox();
-		borderPaneMain.setBottom(hBoxPlayer);
+		borderPaneMain.setBottom(vBoxPlayer);
 		
 		BorderPane borderPanePlayer = new BorderPane();
-		hBoxPlayer.getChildren().addAll(borderPanePlayer);
 		
-		HBox hBoxCards = new HBox();
-		hBoxCards.setSpacing(10);
-		hBoxCards.setPadding(new Insets(15,12,15,50));
-		borderPanePlayer.setTop(hBoxCards);
+		this.hBoxCards = new HBox();
+		hBoxCards.setPadding(new Insets(0,30,0,230));
+		hBoxCards.setSpacing(-10);
+		hBoxCards.setMinHeight(120);
+		hBoxCards.setAlignment(Pos.CENTER);
+		hBoxCards.getStyleClass().add("hBoxCards");
+		borderPanePlayer.setPrefWidth(980);
 		hBoxPlayer.setHgrow(borderPanePlayer, Priority.ALWAYS);
 		
 		//Cards
-		Image image = new Image("file:./resource/images/cards/SCN_0150.jpg");
-		Image image2 = new Image("file:./resource/images/cards/SCN_0151.jpg");
-//		Image image3 = new Image ("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(0).getImageFileName());
+		Image tempImage = new Image("file:./resource/images/cards/SCN_0150.jpg");
 		
-		card1 = new ImageView(image);
-		card1.setFitHeight(130);
-		card1.setFitWidth(86);
-		card1.setOnMouseClicked((e) -> {
-			System.out.println("Karte 1");
-			updateCardView(card1, 0);
-		});
+		//initiates back of the cards as default before loading playable cards of player
+		cardPlayable1 = new ImageView(tempImage);
+		cardPlayable1.setFitHeight(200);
+		cardPlayable1.setFitWidth(133);
+		cards[0] = cardPlayable1;
 		
-		card2 = new ImageView(image);
-		card2.setFitHeight(130);
-		card2.setFitWidth(86);
-		card2.setOnMouseClicked((e) -> {
-			System.out.println("Karte 2");
-			updateCardView(card2, 1);
-		});
+		cardPlayable2 = new ImageView(tempImage);
+		cardPlayable2.setFitHeight(200);
+		cardPlayable2.setFitWidth(133);
+		cards[1] = cardPlayable2;
 		
-		card3 = new ImageView(image);
-		card3.setFitHeight(130);
-		card3.setFitWidth(86);
-		card3.setOnMouseClicked((e) -> {
-			System.out.println("Karte 3");
-		});
+		cardPlayable3 = new ImageView(tempImage);
+		cardPlayable3.setFitHeight(200);
+		cardPlayable3.setFitWidth(133);
+		cards[2] = cardPlayable3;
 		
-		card4 = new ImageView(image);
-		card4.setFitHeight(130);
-		card4.setFitWidth(86);
-		card4.setOnMouseClicked((e) -> {
-			System.out.println("Karte 4");
-		});
+		cardPlayable4 = new ImageView(tempImage);
+		cardPlayable4.setFitHeight(200);
+		cardPlayable4.setFitWidth(133);
+		cards[3] = cardPlayable4;
 		
-		card5 = new ImageView(image);
-		card5.setFitHeight(130);
-		card5.setFitWidth(86);
-		card5.setOnMouseClicked((e) -> {
-			System.out.println("Karte 5");
-		});
+		cardPlayable5 = new ImageView(tempImage);
+		cardPlayable5.setFitHeight(200);
+		cardPlayable5.setFitWidth(133);
+		cards[4] = cardPlayable5;
 		
-		card6 = new ImageView(image);
-		card6.setFitHeight(130);
-		card6.setFitWidth(86);
-		card6.setOnMouseClicked((e) -> {
-			System.out.println("Karte 6");
-		});
+		cardPlayable6 = new ImageView(tempImage);
+		cardPlayable6.setFitHeight(200);
+		cardPlayable6.setFitWidth(133);
+		cards[5] = cardPlayable6;
 		
-		card7 = new ImageView(image2);
-		card7.setFitHeight(130);
-		card7.setFitWidth(86);
-		card7.setOnMouseClicked((e) -> {
-			System.out.println("Karte 7");
-		});
-		
-		card8 = new ImageView(image2);
-		card8.setFitHeight(130);
-		card8.setFitWidth(86);
-		card8.setOnMouseClicked((e) -> {
-			System.out.println("Karte 8");
-		});
-		
-		card9 = new ImageView(image2);
-		card9.setFitHeight(130);
-		card9.setFitWidth(86);
-		card9.setOnMouseClicked((e) -> {
-			System.out.println("Karte 9");
-		});
-		
-		card10 = new ImageView(image2);
-		card10.setFitHeight(130);
-		card10.setFitWidth(86);
-		card10.setOnMouseClicked((e) -> {
-			System.out.println("Karte 10");
-		});
-		
-		card11 = new ImageView(image2);
-		card11.setFitHeight(130);
-		card11.setFitWidth(86);
-		card11.setOnMouseClicked((e) -> {
-			System.out.println("Karte 11");
-		});
-		
-		card12 = new ImageView(image2);
-		card12.setFitHeight(130);
-		card12.setFitWidth(86);
-		card12.setOnMouseClicked((e) -> {
-			System.out.println("Karte 12");
-		});
-		
-		hBoxCards.getChildren().addAll(card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12);
-		
+		cardPlayable7 = new ImageView(tempImage);
+		cardPlayable7.setFitHeight(200);
+		cardPlayable7.setFitWidth(133);
+		cards[6] = cardPlayable7;
 		
 		//Points
-		/**
-		 * @author david
-		 */
-		TableView<ResourceType> tablePoints = new TableView<>(this.model.getMyPlayer().getResources().getResourcesListObservable());
-		
-		tablePoints.setEditable(false);
-		hBoxPlayer.getChildren().addAll(tablePoints);
-		
-		ColType		= new TableColumn();
-		ColType.setMinWidth(100);
-		/**
-		 * @author david
-		 */
-		ColType.setCellValueFactory(cd -> Bindings.createStringBinding(() -> cd.getValue().toStringTranslate() ));
-
-		ColAmount	= new TableColumn();
-		ColAmount.setMinWidth(100);
-		/**
-		 * @author david
-		 */
-		ColAmount.setCellValueFactory(cd -> Bindings.valueAt(this.model.getMyPlayer().getResources().getResourcesObservable(), cd.getValue()));
-		
-		tablePoints.getColumns().addAll(ColType, ColAmount);
+		buildTablePoints();
+		VBox vBoxPlayerPoints = new VBox();
+		playerName = new Label();
+		playerName.getStyleClass().add("myPlayerName");
+		age = new Label();
+		age.getStyleClass().add("myPlayerName");
+		vBoxPlayerPoints.getChildren().addAll(playerName, age, tablePoints);
+		hBoxPlayer.getChildren().addAll(borderPanePlayer, vBoxPlayerPoints);
+		vBoxPlayer.setPrefHeight(570);
+		vBoxPlayer.setMinWidth(1350);
+		vBoxPlayer.getStyleClass().add("vBoxPlayer");
 		
 		//Deck
-		HBox hBoxDeck = new HBox();
-		hBoxDeck.setPadding(new Insets(15,12,15,390));
-		//hBoxDeck.setSpacing(10);
-		borderPanePlayer.setCenter(hBoxDeck);
+		VBox vBoxDeck = new VBox();
+		vBoxDeck.setPadding(new Insets(30,0,0, 0));
+		vBoxDeck.setSpacing(5);
+		borderPanePlayer.setCenter(vBoxDeck);
 		
-		card13 = new ImageView(image2);
-		card13.setFitHeight(100);
-		card13.setFitWidth(66);
-		card13.setOnMouseClicked((e) -> {
-			System.out.println("Karte 13");
-		});
+		/**
+		 * @author Roman Leuenberger
+		 */
 		
-		card14 = new ImageView(image2);
-		card14.setFitHeight(100);
-		card14.setFitWidth(66);
-		card14.setOnMouseClicked((e) -> {
-			System.out.println("Karte 14");
-		});
+		//buttons for client action
+		this.playCard = new Button();
+		this.buildWorldWonder = new Button();
+		this.discardCard = new Button();
+		HBox buttonBox = new HBox();
+		buttonBox.getChildren().addAll(playCard, buildWorldWonder, discardCard);
+
 		
-		card15 = new ImageView(image2);
-		card15.setFitHeight(100);
-		card15.setFitWidth(66);
-		card15.setOnMouseClicked((e) -> {
-			System.out.println("Karte 15");
-		});
+		playCard.setMaxWidth(200);
+		buildWorldWonder.setMaxWidth(200);
+		discardCard.setMaxWidth(200);
 		
+		//disable Buttons as they get only activated if action is possible
+		playCard.setDisable(true);
+		buildWorldWonder.setDisable(true);
+		discardCard.setDisable(true);
+		buttonBox.setSpacing(10);
+		buttonBox.setAlignment(Pos.CENTER);
 		
-		HBox hBoxWorldWonderCards = new HBox();
-		hBoxWorldWonderCards.setSpacing(120);
-		hBoxWorldWonderCards.setPadding(new Insets(15,12,15,475));
-		hBoxWorldWonderCards.getChildren().addAll(card13, card14, card15);
-		borderPanePlayer.setBottom(hBoxWorldWonderCards);
+		/**
+		 * hbox for world wonder (back of the card)
+		 * @author philipp
+		 */
+		this.hBoxWorldWonderCards = new HBox();
+		hBoxWorldWonderCards.setSpacing(340);
+		hBoxWorldWonderCards.setPadding(new Insets(0,0,0,10));
+		hBoxWorldWonderCards.setMinHeight(120);
+		hBoxWorldWonderCards.setAlignment(Pos.BOTTOM_LEFT);
+		vBoxPlayer.getChildren().addAll(hBoxCards, hBoxPlayer, hBoxWorldWonderCards);
 		
-		
-		ImageView deck = new ImageView(new Image("file:./resource/images/boards/Board_01_A.jpg"));
-		deck.setFitHeight(250);
-		deck.setFitWidth(600);
-		
-		hBoxDeck.getChildren().addAll(deck);
+		//hbox for player's playable card
+		playableCards = new HBox();
+		playableCards.getChildren().addAll(cardPlayable1, cardPlayable2, cardPlayable3, cardPlayable4, cardPlayable5, cardPlayable6, cardPlayable7);
+				
+		vBoxDeck.getChildren().addAll(playableCards, buttonBox);
+		playableCards.setAlignment(Pos.BASELINE_CENTER);
+		playableCards.setSpacing(2);
+		playableCards.setPadding(new Insets(30, 0, 0, 0));
+		playableCards.setPrefHeight(235);
 		
 		//Menu "Game"
 		itemM1 = new MenuItem();
@@ -305,21 +320,13 @@ public class ClientView {
 		//Menu "Language"
 		itemM12 = new MenuItem();
 		itemM13 = new MenuItem();
+		itemM14 = new MenuItem();
 		menuLanguage = new Menu();
-		menuLanguage.getItems().addAll(itemM12, itemM13);
+		menuLanguage.getItems().addAll(itemM12, itemM13, itemM14);
 		
 		
 		MenuBar menuBar = new MenuBar(menuHelp, menuLanguage);
 		borderPaneMain.setTop(menuBar);
-		
-		//DropDown Menu
-		ContextMenu contextMenu = new ContextMenu(menuGame);
-		borderPaneMain.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
-            @Override
-            public void handle(ContextMenuEvent event) {
-                contextMenu.show(borderPaneMain, event.getScreenX(), event.getScreenY());
-            }
-        });
 		
 		this.stage.setResizable(false);
 		Scene scene = new Scene(borderPaneMain);
@@ -329,37 +336,110 @@ public class ClientView {
 		this.stage.show();
 	}
 	
-	protected void updateCardView(ImageView v, int i) {
-		if(i >= model.getMyPlayer().getPlayedCards().size()) {
-			//do nothing
-		}else {
-			v.setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(i).getImageFileName()));
-		}
-
-		
+	public void addImageView(ImageView v) {
+		this.hBoxCards.getChildren().add(v);
+		v.setFitHeight(120);
+		v.setFitWidth(76);
 	}
+	
+	public void addImageViewWorldWonderOne() {
+		ImageView v = new ImageView(new Image("file:./resource/images/cards/SCN_0150.jpg"));
+		this.hBoxWorldWonderCards.getChildren().add(v);
+		v.setFitHeight(120);
+		v.setFitWidth(76);
+		v.setEffect(new DropShadow(40, Color.GOLD));
+	}
+	
+	public void addImageViewWorldWonderTwo() {
+		ImageView v = new ImageView(new Image("file:./resource/images/cards/SCN_0151.jpg"));
+		this.hBoxWorldWonderCards.getChildren().add(v);
+		v.setFitHeight(120);
+		v.setFitWidth(76);
+		v.setEffect(new DropShadow(40, Color.GOLD));
+	}
+	
+	/**
+	 * @author Roman Leuenberger
+	 */
+	
+	public void updatePlayableCardView() {
+		this.playableCards.getChildren().clear();
+		cards = new ImageView[model.getMyPlayer().getPlayableCards().size()];
+		System.out.println(model.getMyPlayer().getPlayableCards());
+		for (int i = 0; i < model.getMyPlayer().getPlayableCards().size(); i++) {
+			cards[i] = new ImageView(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayableCards().get(i).getImageFileName()));
+			cards[i].setFitHeight(200);
+			cards[i].setFitWidth(133);
+			this.playableCards.getChildren().add(cards[i]);
+			cardWithImages.put(cards[i], model.getMyPlayer().getPlayableCards().get(i));
+		}
+	}
+	/**
+	 * @author Roman Leuenberger
+	 */
+	
+	public void disableButtons() {
+		this.playCard.setDisable(true);
+		this.buildWorldWonder.setDisable(true);
+		this.discardCard.setDisable(true);
+	}
+	
+	public void disableCards() {
+		this.playableCards.getChildren().clear();
+	}
+	
 	private String getLanguageDescription(String identifier) {
 		if(Translator.getDefaultLocale().getLanguage().substring(0, 2).equalsIgnoreCase(translator.getString(identifier).substring(0, 2)))
 			return translator.getString(identifier) + " " + translator.getString("language.default");
 		return translator.getString(identifier);
 	}
 	
+	/**
+	 * Create labels for winner list and a quit game button
+	 * @param winner
+	 * @author philipp
+	 */
+	public void updateClientViewEndGame(ArrayList<Player> winner) {
+		winnerList = winner;
+		VBox vBoxEndGame = new VBox();
+		vBoxEndGame.setAlignment(Pos.CENTER);
+		this.okButton = new Button(translator.getString("button.quitgame"));
+		for (int i = 0; i< winner.size(); i++) {
+			Label lblPlace = new Label("");
+			winnerLabel.add(lblPlace);
+			vBoxEndGame.getChildren().add(lblPlace);
+		}
+		setTranslateWinnerLabels();
+		this.playableCards.getChildren().add(vBoxEndGame);
+		vBoxEndGame.getChildren().add(okButton);
+		vBoxEndGame.setSpacing(15);
+		vBoxEndGame.setPadding(new Insets(30, 0, 0, 0));
+		vBoxEndGame.getStyleClass().add("vBoxEndGame");
+	}
+	
+	/**
+	 * translate and shows winner labels
+	 * @author david
+	 */
+	private void setTranslateWinnerLabels() {
+		if(winnerList.size() == 0 || winnerLabel.size() < winnerLabel.size())
+			return;
+		for (int i = 0; i < winnerList.size(); i++) {
+			winnerLabel.get(i).setText(translator.getString("label." + (i+1) + "place") + ": " + winnerList.get(i).getPlayerName());
+		}
+	}
+	
+	/**
+	 * Translate view texts in programm runtime
+	 * @author david
+	 */
 	public void setTexts() {
-		ColPlayer.setText(translator.getString("column.player"));
-		ColStone.setText(translator.getString("column.stone"));
-		ColOre.setText(translator.getString("column.ore"));
-		ColWood.setText(translator.getString("column.wood"));
-		ColGlass.setText(translator.getString("column.glas"));
-		ColClay.setText(translator.getString("column.brick"));
-		ColLoom.setText(translator.getString("column.loom"));
-		ColPaper.setText(translator.getString("column.papyrus"));
-		ColCoin.setText(translator.getString("column.coin"));
-		ColGeom.setText(translator.getString("column.geom"));
-		ColWrit.setText(translator.getString("column.writ"));
-		ColEng.setText(translator.getString("column.fabric"));
-		ColShield.setText(translator.getString("column.shield"));
-		ColMilitary.setText(translator.getString("column.military"));
-		ColWinning.setText(translator.getString("column.winning"));
+		//Table opponents translations
+		colPlayer.setText(translator.getString("column.player"));
+		colSide.setText(translator.getString("column.side"));
+		dynamicCols.forEach(c -> c.setText(((ResourceType)c.getUserData()).toStringTranslate()));
+		playerOnRightSide.set(translator.getString("column.playeronright"));
+		playerOnLeftSide.set(translator.getString("column.playeronleft"));
 		
 		ColType.setText(translator.getString("column.type"));
 		ColAmount.setText(translator.getString("column.amount"));
@@ -377,21 +457,43 @@ public class ClientView {
 		itemM11.setText(translator.getString("item.quit"));
 		itemM12.setText(this.getLanguageDescription("language.german"));
 		itemM13.setText(this.getLanguageDescription("language.english"));
+		itemM14.setText(this.getLanguageDescription("language.french"));
 		
 		menuHelp.setText(translator.getString("menu.help"));
 		menuGame.setText(translator.getString("menu.game"));
 		menuLanguage.setText(translator.getString("menu.language"));
 		
+		playCard.setText(translator.getString("button.playCard"));
+		buildWorldWonder.setText(translator.getString("button.buildWorldWonder"));
+		discardCard.setText(translator.getString("button.discardCard"));
+		
 		stage.setTitle(translator.getString("clientGame.name"));
 
-		//TODO fix translations
-		/*
-		this.model.getMyPlayer().getResources().getResourcesObservable().clear();
-		for(Entry<ResourceType, Integer> entry : this.model.getMyPlayer().getResources().entrySet()) {
-			ResourceType t = entry.getKey();
-			Integer v = entry.getValue();
-			this.model.getMyPlayer().getResources().getResourcesObservable().put(t, v);
-		}*/
+		if(this.okButton != null)
+			this.okButton.setText(translator.getString("button.quitgame"));
+		setTranslateWinnerLabels();
+		
+		playerName.setText(translator.getString("column.player") + ": " + model.getMyPlayer().getPlayerName());
+		refreshAgeLabelFromModel();
+		
+		if(model.getMyPlayer() != null) {
+			//Alte Liste leeren
+			getTablePoints().getItems().clear();
+			//Liste neu aufbauen
+			model.getMyPlayer().getResources().refreshObservableMap();
+			//Listener setzen
+			getTablePoints().setItems(
+					model.getMyPlayer().getResources().getResourcesListObservable());
+		}
+	}
+	
+	/**
+	 * refresh label on ClientView with the current age as user information
+	 * @author david
+	 */
+	public void refreshAgeLabelFromModel() {
+		if(model.getCards().size() > 0)
+			age.setText(translator.getString("label.age") + ": " + model.getCards().get(0).getCardAgeValue());
 	}
 
 	public void start() {
@@ -430,5 +532,58 @@ public class ClientView {
 	
 	public MenuItem getEnglishItem() {
 		return this.itemM13;
+	}
+	public MenuItem getFrenchItem() {
+		return this.itemM14;
+	}
+	
+	public ImageView getImageView (int i) {
+		return cards[i];
+	}
+	
+	public ImageView[] getShownCards() {
+		return this.cards;
+	}
+	
+	public Button getPlayCardButton() {
+		return this.playCard;
+	}
+	
+	public Button getBuildWorldWonderButton() {
+		return this.buildWorldWonder;
+	}
+	
+	public Button getDiscardCardButton() {
+		return this.discardCard;
+	}
+	
+	public Button getOkButton() {
+		return this.okButton;
+	}
+	
+	public Map<ImageView, Card> getCardsWithImages(){
+		return this.cardWithImages;
+	}
+	
+	public TableView<Player> getTableOpponents() {
+		return tableOpponents;
+	}
+	
+	public TableView<ResourceType> getTablePoints() {
+		return tablePoints;
+	}
+
+	public Label getPlayerName() {
+		return playerName;
+	}
+	public void setPlayerName(Label playerName) {
+		this.playerName = playerName;
+	}
+	
+	public Label getAge() {
+		return age;
+	}
+	public void setAge(Label age) {
+		this.age = age;
 	}
 }

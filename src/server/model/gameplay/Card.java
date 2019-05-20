@@ -86,6 +86,7 @@ public class Card implements Serializable{
 	/**
 	 * Constructor of card. Will iterate through all fieldMappings.
 	 * @param values array in the same order as the masterdata, usually given by default
+	 * @author yannik roth
 	 */
 	public Card(String[] values) {
 		Map<Integer, String> mapping = CardLoader.getFieldMapping();
@@ -353,10 +354,11 @@ public class Card implements Serializable{
 		this.cost = cost;
 		this.produce = produce;
 		this.id = ServiceLocator.getmanualCardId();
+		this.cardName = "fake WW card";
 	}
 	
 	/**
-	 * Required for import --> select correct Array-Index
+	 * Required for import, select correct Array-Index
 	 * @return int value of CardAge
 	 */
 	public int getCardAgeValue() {
@@ -493,6 +495,29 @@ public class Card implements Serializable{
 	
 	public List<String> getFreeCards(){
 		return this.freeCards;
+	}
+	
+	/**
+	 * This method overrides its inherited equals method.
+	 * returns <code>true</code> if the card is equal in its name and its ID, else returns false
+	 * @author yannik roth
+	 */
+	@Override
+	public boolean equals(Object o) {
+		Card c = (Card) o;
+		//if(this.cardName == c.getCardName() && this.id == c.getId()) {
+		if(this.cardName.equals(c.getCardName()) && this.id == c.getId()) {
+			System.out.println("An equal card was found");
+			return true;
+		}else {
+			System.out.println("No equal card was found");
+			return false;
+		}
+	}
+	
+	@Override
+	public String toString() {
+		return "Cardname: " + this.cardName + "-> ID: " + this.id;
 	}
 	
 }

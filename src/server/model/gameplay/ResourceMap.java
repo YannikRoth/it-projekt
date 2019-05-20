@@ -1,5 +1,7 @@
 package server.model.gameplay;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import globals.ResourceMapType;
@@ -43,6 +45,12 @@ public class ResourceMap extends HashMap<ResourceType, Integer>{
 				} else {
 					resourcesListObservable.add(change.getKey());
 				}
+				Collections.sort(resourcesListObservable, new Comparator<ResourceType>() {
+					@Override
+					public int compare(ResourceType r1, ResourceType r2) {
+						return r1.ordinal() - r2.ordinal();
+					}
+				});
 			}
 		});
 	}
@@ -85,6 +93,27 @@ public class ResourceMap extends HashMap<ResourceType, Integer>{
 	public void clear() {
 		resourcesObservable.clear();
 		super.clear();
+	}
+	
+	/**
+	 * Function to refresh observable map after refresh player from server
+	 * Observable maps and lists are not synchronizable
+	 * @author david & yannik
+	 */
+	public void refreshObservableMap() {
+		if(this.resourcesObservable != null) {
+			this.resourcesObservable.clear();
+		}else {
+			resourcesObservable = FXCollections.observableHashMap();
+			resourcesListObservable = FXCollections.observableArrayList();
+			handleObservable();
+		}
+		
+		for(Entry<ResourceType, Integer> entry : this.entrySet()) {
+			ResourceType t = entry.getKey();
+			Integer v = entry.getValue();
+			resourcesObservable.put(t, v);
+		}
 	}
 	
 	public ObservableMap<ResourceType, Integer> getResourcesObservable() {

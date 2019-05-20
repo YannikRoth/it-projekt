@@ -25,19 +25,20 @@ import server.model.init.CardLoader;
 class RealGamePlayTest {
 
 	private ArrayList<Card> cardSet = new ArrayList<>();
-	private ServerModel model = new ServerModel();
+	//private ServerModel model = new ServerModel();
+	Map<Integer, Card> cards = CardLoader.importCards();
 	private Player player = new Player("Yannik");
 	
 	//this list contains filtered lists of card per age
 	private List<Set<Entry<Integer, Card>>> activeCards = new ArrayList<>();
 	
 	public RealGamePlayTest() {
-		cardSet.add(model.getCard(2)); //free card produces fabric
+		//cardSet.add(model.getCard(2)); //free card produces fabric
 		filterCards();
 	}
 	
 	private void filterCards() {
-		Map<Integer, Card> myCards = model.getCards();
+		Map<Integer, Card> myCards = cards;
 		List<Map<Integer, Card>> yearCards = new ArrayList<>();
 		Map<Integer, Card> ageOne = new HashMap<>();
 		Map<Integer, Card> ageTwo = new HashMap<>();
@@ -63,42 +64,64 @@ class RealGamePlayTest {
 
 	@Test
 	void playFreeCard() {
-		assertTrue(player.playCard(model.getCard(2)));
+		ArrayList<Card> set = new ArrayList<>();
+		set.add(cards.get(2));
+		player.updateCardset(set);
+		
+		assertTrue(player.playCard(cards.get(2)));
 	}
 	
 	@Test
 	void playCostCard() {
-		assertFalse(player.playCard(model.getCard(3)));
+		ArrayList<Card> set = new ArrayList<>();
+		set.add(cards.get(3));
+		player.updateCardset(set);
+		System.out.println(player.getCoins());
+		assertTrue(player.playCard(cards.get(3)));
 	}
 	
 	@Test
 	void playCostCardWithAddCoins() {
+		ArrayList<Card> set = new ArrayList<>();
+		set.add(cards.get(3));
+		set.add(cards.get(6));
+		player.updateCardset(set);
+		
 		player.addCoins(3);
-		assertTrue(player.playCard(model.getCard(3)));
-		assertTrue(player.playCard(model.getCard(6)));
+		assertTrue(player.playCard(cards.get(3)));
+		assertTrue(player.playCard(cards.get(6)));
 	}
 	
 	@Test
 	void checkAffordWithSortedList() {
+		ArrayList<Card> listcards = new ArrayList<>();
+		new ArrayList<>(cards.values());
+		listcards.add(cards.get(3));
+		listcards.add(cards.get(25));
+		player.updateCardset(listcards);
 		player.addCoins(3);
-		player.playCard(model.getCard(3));
-		player.playCard(model.getCard(25));
+		player.playCard(cards.get(3));
+		player.playCard(cards.get(25));
 		
-		Card c = model.getCard(2);
+		Card c = cards.get(2);
 		ResourceMap rm = new ResourceMap(ResourceMapType.COST);
 		rm.put(ResourceType.BRICK, 1);
 		rm.put(ResourceType.STONE, 1);
 		//rm.put(ResourceType.ORE, 1);
 		c.setCost(rm);
-		assertTrue(player.playCard(c));
+		//assertTrue(player.playCard(c));
+		assertTrue(player.isAbleToAffordCard(c));
 	}
 	
 	@Test
 	void checkBuildingChain() {
+		ArrayList<Card> set = new ArrayList<>();
+		set.add(cards.get(18));
+		player.updateCardset(set);
 		player.addCoins(3);
-		player.playCard(model.getCard(18)); //free card -> building chain to play card 51 for free
-		assertTrue(player.isAbleToAffordCard(model.getCard(51)));
-		assertFalse(player.isAbleToAffordCard(model.getCard(53)));
+		player.playCard(cards.get(18)); //free card -> building chain to play card 51 for free
+		assertTrue(player.isAbleToAffordCard(cards.get(51)));
+		assertFalse(player.isAbleToAffordCard(cards.get(53)));
 	}
 
 }

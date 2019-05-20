@@ -65,10 +65,17 @@ public class Player implements Serializable{
 	
 	public Player(String name) {
 		setPlayerName(name);
-		this.playerID = ServiceLocator.getNewPlayerId();
+		this.setPlayerID(ServiceLocator.getNewPlayerId());
 		this.resources = new ResourceMap(ResourceMapType.PRODUCE);
+		for (ResourceType r : ResourceType.values()) {
+			this.resources.put(r, 0);
+		}
 		this.alternateResources = new ArrayList<>();
 		this.cards = new ArrayList<>();
+		this.worldWonderCards = new ArrayList<>();
+		
+		//init player according to rules
+		this.addCoins(3);
 	}
 	
 	/**
@@ -143,14 +150,10 @@ public class Player implements Serializable{
 				this.addCoins((int)countOfOwnGreyCards + (int)countOfGreyCardsLeftPlayer + (int)countOfGreyCardsRightPlayer);
 			}
 			
-			//int currentMilPoints = this.resources.get(ResourceType.MILITARYPLUSPOINTS);
-			//this.resources.put(ResourceType.MILITARYPLUSPOINTS, currentMilPoints + c.getMilitaryPoints());
-			//this.militaryStrength += c.getMilitaryPoints();
-			//int currentWinningPoints = this.resources.get(ResourceType.WINNINPOINTS);
-			//this.resources.put(ResourceType.WINNINPOINTS, currentWinningPoints + c.getWinningPoints());
-			//this.winningPoints += c.getWinningPoints();
+			removeCardFromCurrentPlayabled(c);
 			
 			return true;
+			
 		}else {
 			logger.info("Can not afford card");
 			return false;
@@ -165,14 +168,15 @@ public class Player implements Serializable{
 	public boolean playWorldWonder(WorldWonder ww) {
 		Card wwCard = ww.getWorldWonderCard();
 		if(isAbleToAffordCard(wwCard)) {
+			this.playerBoard.updateIndexOfNextWorldWonderStage();
 			this.updateResource(wwCard.getCost());
 			this.updateResource(wwCard.getProduction());
 			
 			//Karte wird in die Liste worldWonderCards eingefügt. Dies würde dann gebraucht, wenn wir die Gilden vom 3. Zeitalter noch implementieren
 			this.worldWonderCards.add(wwCard);
-			this.updateMilitaryPlusPoints(wwCard.getMilitaryPoints());
-			//this.militaryStrength += wwCard.getMilitaryPoints();
-			this.winningPoints += wwCard.getWinningPoints();
+			//this.updateMilitaryPlusPoints(wwCard.getMilitaryPoints());
+			//this.addWinningPoints(wwCard.getWinningPoints());
+			
 			return true;
 		} else {
 			logger.info("Can not afford card");
@@ -185,6 +189,7 @@ public class Player implements Serializable{
 	 * @param rm A ResourceMap
 	 * @param i Value condition to be excluded (normally zero)
 	 * @return a <code>Set</code> of entries in the format [ResourceType, Integer]
+	 * @author yannik roth
 	 */
 	private Set<Entry<ResourceType, Integer>> clearMap(ResourceMap rm, int i) {
 		return rm.entrySet().stream().filter(e -> e.getValue() > i).collect(Collectors.toSet());
@@ -192,7 +197,7 @@ public class Player implements Serializable{
 
 	/**
 	 * This method provides evaluation if a card can be played or not. Check if player has enough resources
-	 * @param Card c
+	 * @param Card c The card which should be checked
 	 * @return <code>true</code> if the card can be played because the player has enough resources
 	 * @return <code>false</code> if the card can not be played because the player can't afford it
 	 * @author yannik roth
@@ -305,7 +310,7 @@ public class Player implements Serializable{
 	
 	/**
 	 * This method assigns a network socket to the player. It can be used from the server
-	 * @param Socket s
+	 * @param Socket s which is to be assigned
 	 */
 	public void assignSocket(Socket s) {
 		this.socket = s;
@@ -318,8 +323,8 @@ public class Player implements Serializable{
 	 * @param i
 	 */
 	public void addCoins(int i) {
-		this.resources.put(ResourceType.COIN, i);
-//		this.resourcesObservable.put(ResourceType.COIN, i);
+		int newAmountOfCoins = this.resources.get(ResourceType.COIN)+i;
+		this.resources.put(ResourceType.COIN, newAmountOfCoins);
 	}
 	
 	/**
@@ -340,8 +345,7 @@ public class Player implements Serializable{
 	 * @param playerName
 	 * @author david
 	 */
-	public void setPlayerName(String playerName) {
-		//TODO: Check if other players has the same name - name has to be unique
+	private void setPlayerName(String playerName) {
 		this.playerName = playerName;
 	}
 	
@@ -354,13 +358,16 @@ public class Player implements Serializable{
 	public boolean equals(Object o) {
 		if(o instanceof Player)
 			return this.playerName.equals(((Player)o).getPlayerName());
+		else if(o != null)
+			logger.warning("Called player method with no \"Player\" object: " + o.getClass().getName());
+		else
+			logger.warning("Called Player.equals() method with no instance of param called");
 		
-		logger.warning("Called player method with no \"Player\" object: " + o.getClass().getName());
 		return false;
 	}
 	
-	public void updateCardset(ArrayList<Card> Cards) {
-		currentPlayableCards = Cards;
+	public void updateCardset(ArrayList<Card> cards) {
+		currentPlayableCards = cards;
 	}
 	
 	@Override
@@ -404,17 +411,7 @@ public class Player implements Serializable{
 	 * @return
 	 */
 	public int getMilitaryStrength() {
-		return this.getMilitaryPlusPoints() - this.getMilitaryMinusPoints();
-		//return this.militaryStrength;
-	}
-	
-	/**
-	 * This method returns the absolute amount of militaryPlusPoints
-	 * @return
-	 */
-	public int getMilitaryPlusPoints() {
 		return this.resources.get(ResourceType.MILITARYPLUSPOINTS);
-		//return this.militaryPlusPoints;
 	}
 
 	/**
@@ -425,16 +422,6 @@ public class Player implements Serializable{
 	public void updateMilitaryPlusPoints(int points) {
 		int currentMilPoints = this.resources.get(ResourceType.MILITARYPLUSPOINTS);
 		this.resources.put(ResourceType.MILITARYPLUSPOINTS, currentMilPoints + points);
-		//this.militaryPlusPoints += points;
-	}
-	
-	/**
-	 * This method return the absolute amount of militaryMinusPoints
-	 * @param points
-	 */
-	public int getMilitaryMinusPoints() {
-		return this.resources.get(ResourceType.MILITARYMINUSPOINTS);
-		//return this.militaryMinusPoints;
 	}
 	
 	/**
@@ -445,17 +432,14 @@ public class Player implements Serializable{
 	public void updateMilitaryMinusPoints(int points) {
 		int currentMilPoints = this.resources.get(ResourceType.MILITARYMINUSPOINTS);
 		this.resources.put(ResourceType.MILITARYMINUSPOINTS, currentMilPoints + points);
-		//this.militaryMinusPoints =+ points;
 	}
 	public int getWinningPoints() {
 		return this.resources.get(ResourceType.WINNINGPOINTS);
-		//return this.winningPoints;
 	}
 	
 	public void addWinningPoints (int points) {
 		int currentWinPoints = this.resources.get(ResourceType.WINNINGPOINTS);
 		this.resources.put(ResourceType.WINNINGPOINTS, currentWinPoints + points);
-		//this.winningPoints += points;
 	}
 	
 	public ResourceMap getResources() {
@@ -463,5 +447,47 @@ public class Player implements Serializable{
 	}
 	public ArrayList<HashMap<ResourceType, Integer>> getAlternateResources(){
 		return this.alternateResources;
+	}
+	
+	public Board getPlayerBoard() {
+		return this.playerBoard;
+	}
+	
+	/**
+	 * This method is used to sell the card to the bank.
+	 * The player will receive 3 coins
+	 * @param Card c to be discarded/sold to the bank
+	 * @return boolean if the operation was successful
+	 * @author yannik roth
+	 */
+	public boolean discardCard(Card c) {
+		this.addCoins(3);
+		removeCardFromCurrentPlayabled(c);
+		return true;
+	}
+	
+	public void removeCardFromCurrentPlayabled(Card c) {
+		Card cr = this.currentPlayableCards.remove(this.currentPlayableCards.indexOf(c));
+		System.out.println("removed card: " + cr);
+		System.out.println("now available cards: " + currentPlayableCards);
+	}
+	
+	public Board getBoard() {
+		return this.playerBoard;
+	}
+	
+	/**
+	 * Used when game ends. No card should be playable anymore
+	 */
+	public void clearCurrentPlayableCards() {
+		this.currentPlayableCards.clear();
+	}
+
+	public int getPlayerID() {
+		return playerID;
+	}
+
+	public void setPlayerID(int playerID) {
+		this.playerID = playerID;
 	}
 }

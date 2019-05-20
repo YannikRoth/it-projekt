@@ -3,6 +3,7 @@ package client;
 import java.util.logging.Logger;
 
 import client.controller.ClientController;
+import client.controller.LobbyController;
 import client.model.ClientModel;
 import client.view.ClientView;
 import javafx.application.Application;
@@ -22,15 +23,29 @@ public class ClientMVC extends Application{
 	private ClientController control;
 	private Logger logger = ServiceLocator.getLogger();
 	
+	public ClientMVC() {
+		
+	}
+
+	
 	public static void main(String[] args) {
 		launch(args);
 	}
-
+	
+	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		this.model = new ClientModel();
-		this.view = new ClientView(primaryStage, model);
+//		if(this.callingLobbyController != null)
+//			this.model = new ClientModel(this.callingLobbyController.getView().getPlayerName().getText());
+//		else
+//			this.model = new ClientModel();
+//		ServicelocatorClient.setClientModel(model);
+		this.model = ServicelocatorClient.getClientModel();
+		
+		ServicelocatorClient.setClientView(new ClientView(primaryStage, model));
+		this.view = ServicelocatorClient.getClientView();
 		this.control = new ClientController(model, view);
+		ServicelocatorClient.setClientController(control);
 		view.start();
 		
 		logger.info("Client MVC started");

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import globals.CardType;
+import server.ServiceLocator;
 
 public class HalloWelt {
 
@@ -38,6 +39,8 @@ public class HalloWelt {
 		for(Integer ii : temp) {
 			System.out.println(ii);
 		}
+		
+		System.out.println(ServiceLocator.getRandomNumberInRange(1, 2));
 	}
 
 }

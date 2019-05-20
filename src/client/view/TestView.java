@@ -1,14 +1,10 @@
 package client.view;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-
-import com.sun.xml.internal.ws.api.streaming.XMLStreamReaderFactory.Woodstox;
+import java.util.Random;
 
 import globals.ResourceType;
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,71 +19,57 @@ import server.model.gameplay.Player;
 
 public class TestView extends Application {
 
+	public static void main(String[] args) {
+		launch();
+	}
+	
     @Override
     public void start(Stage primaryStage) {
-        ObservableList<Player> players = FXCollections.observableArrayList();
+        ObservableList<Player> players = FXCollections.observableArrayList(
+            new Player("jack")
+            ,new Player("john")
+            ,new Player("jill")
+            ,new Player("jane")
+        );
         
-        for (int i = 0; i < 5; i++) {
-			Player p = new Player("Player " + i);
-			p.getResources().put(ResourceType.WOOD, 15);
-			players.add(p);
-		}
+        TableView<Player> playerTable = new TableView<>(players);
         
-        TableView<ResourceType> studentTable = new TableView(players);
-//        TableColumn<Player, String> nameCol = new TableColumn("name");
-//        nameCol.setCellValueFactory(new PropertyValueFactory<Player, String>("playerName"));
-//        studentTable.getColumns().add(nameCol);
+        TableColumn<Player, String> nameCol = new TableColumn<>("name");
+        	nameCol.setCellValueFactory(new PropertyValueFactory<>("playerName"));
+        	playerTable.getColumns().add(nameCol);
 
-        
-        Callback<TableColumn.CellDataFeatures<ResourceType, String>, ObservableValue<String>> callBack = 
-                new Callback<TableColumn.CellDataFeatures<ResourceType, String>, ObservableValue<String>>() {
+        Random rand = new Random();
+        for (Player p:players)
+            for (ResourceType t:ResourceType.values()) 
+            	p.getResources().put(t, rand.nextInt(99));
+
+        Callback<TableColumn.CellDataFeatures<Player, String>, ObservableValue<String>> callBack = 
+                new Callback<TableColumn.CellDataFeatures<Player, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<ResourceType, String> param) {
-            	System.out.println(param.getTableColumn().getUserData());
-                return new SimpleStringProperty(Integer.toString(players.get((int)param.getTableColumn().getUserData()).getResources().getResourcesObservable().get(
-                		param.getValue())));
-//                        return param.getValue().getResources().getResourcesObservable().containsKey(
-//                        		Integer.toString((int)param.getTableColumn().getUserData()))
-//                        		? new SimpleStringProperty(String.format("%.1f",100d*param.getValue().getResources().getResourcesObservable().get(
-//                        				Integer.toString((int)param.getTableColumn().getUserData()))))
-//                        				:new SimpleStringProperty("");
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Player, String> param) {
+                return param.getValue().getResources().containsKey(
+                        param.getTableColumn().getUserData())
+                        ? new SimpleStringProperty(Integer.toString(param.getValue().getResources().get(
+                        		param.getTableColumn().getUserData())))
+                        :new SimpleStringProperty("");
             }
         };
 
-        ObservableList<TableColumn<ResourceType, String>> resCols = FXCollections.observableArrayList();
-        int i = 0;
-        for (ResourceType r : ResourceType.values()) {
-        	TableColumn<ResourceType, String> tmpCol = new TableColumn(r.toStringTranslate());
-        	tmpCol.setUserData(i);
+        ObservableList<TableColumn<Player, String>> cols = FXCollections.observableArrayList();
+        for (ResourceType t : ResourceType.values()) {
+        	TableColumn<Player, String> tmpCol = new TableColumn<>(t.toStringTranslate());
+        	tmpCol.setUserData(t);
         	tmpCol.setCellValueFactory(callBack);
-        	resCols.add(tmpCol);
-        	++i;
-        }
-        studentTable.getColumns().addAll(resCols);
+        	cols.add(tmpCol);
+			
+		}
+        playerTable.getColumns().addAll(cols);
 
-        VBox root = new VBox(studentTable);
-        Scene scene = new Scene(root, 500, 250);
+        VBox root = new VBox(playerTable);
+        Scene scene = new Scene(root, 900, 250);
 
         primaryStage.setTitle("Table with map");
         primaryStage.setScene(scene);
         primaryStage.show();
-    }
-
-    public class Student {
-
-        private final StringProperty firstName = new SimpleStringProperty();
-        public StringProperty firstNameProperty(){return firstName;}
-        public final HashMap<String, Double> map;
-
-        public Student(String fn) {
-            firstName.set(fn);
-            map = new LinkedHashMap<>();
-            for (int i = 1; i <= 10; i++) {
-                double grade = Math.random();
-                if (grade > .5) {
-                    map.put("ass" + Integer.toString(i), grade);
-                }
-            }
-        }
     }
 }

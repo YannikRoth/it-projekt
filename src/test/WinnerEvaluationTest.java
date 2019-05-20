@@ -96,7 +96,11 @@ class WinnerEvaluationTest {
 		System.out.println(player.getResources());
 		System.out.println(leftPlayer.getResources());
 		System.out.println(rightPlayer.getResources());
-		List<Player> winnerList = model.evaluateWinner(player, leftPlayer, rightPlayer);
+		List<Player> players = new ArrayList<>();
+		players.add(player);
+		players.add(leftPlayer);
+		players.add(rightPlayer);
+		List<Player> winnerList = model.evaluateWinner(players);
 		System.out.println(player.getResources());
 		System.out.println(leftPlayer.getResources());
 		System.out.println(rightPlayer.getResources());
