@@ -1,23 +1,16 @@
 package server.view;
 
-import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import globals.Globals;
 import globals.Translator;
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -26,10 +19,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import server.ServiceLocator;
 import server.model.ServerModel;
 import server.model.gameplay.ServerAction;
@@ -47,12 +41,15 @@ public class ServerView {
 	Menu menuLanguage;
 	MenuItem itemGerman;
 	MenuItem itemEnglish;
+	MenuItem itemFrench;
 	
 	private TextField fieldDomain;
 	private TextField fieldIpAdress;
 	private TextField fieldPort;
-	private Button btnChangePort;
-	private Button btnRestartServer;
+	private Label lblDomain;
+	private Label lblIpAdress;
+	private Label lblPort;
+	private Button btnLeaderboard;
 	
 	TableColumn<ServerAction,String> tblcolTimestamp;
 	TableColumn<ServerAction,String> tblcolIpAdress;
@@ -83,41 +80,53 @@ public class ServerView {
 		
 		itemGerman = new MenuItem();
 		itemEnglish = new MenuItem();
-		menuLanguage.getItems().addAll(itemGerman, itemEnglish);
+		itemFrench = new MenuItem();
+		menuLanguage.getItems().addAll(itemGerman, itemEnglish, itemFrench);
 		
 		//HBox Center
 		HBox hBox = new HBox();
 		pane.setCenter(hBox);
 		
-		//TODO: Insert correct values from model
 		fieldDomain	= new TextField();
 		fieldDomain.setEditable(false);
 		
 		fieldIpAdress = new TextField();
 		fieldIpAdress.setEditable(false);
 		fieldIpAdress.setPrefWidth(100);
-		try {
-			fieldIpAdress.setText(Inet4Address.getLocalHost().getHostAddress());
-		} catch (UnknownHostException e) {
-			ServiceLocator.getLogger().warning(e.getLocalizedMessage());
-		}
+		fieldIpAdress.setText(model.getHostAddress());
+		fieldDomain.setText(model.getHostName());
 		fieldPort		= new TextField();
 		fieldPort.setEditable(false);
 		fieldPort.setText(Integer.toString(Globals.getPortNr()));
 		fieldPort.setPrefWidth(50);
 		
-		this.btnChangePort		= new Button();
-		this.btnRestartServer	= new Button("Restart Server");
+		lblDomain = new Label();
+		lblIpAdress = new Label();
+		lblPort = new Label();
+		
+		FileInputStream input = null;
+		try {
+			input = new FileInputStream("resource/images/information.jpg");
+		} catch (FileNotFoundException e) {
+			ServiceLocator.getLogger().warning(e.getLocalizedMessage());
+		}
+		Image image = new Image(input);
+		ImageView imageViewLeaderboard = new ImageView(image);
+		imageViewLeaderboard.setFitHeight(30);
+		imageViewLeaderboard.setFitWidth(30);
+		btnLeaderboard = new Button("Leaderboard", imageViewLeaderboard);
 		
 		/**
 		 * disabled till the functionality can be implemented
 		 * @author david
 		 */
-		this.btnChangePort.setDisable(true);
-		this.btnRestartServer.setDisable(true);
+//		this.btnChangePort.setDisable(true);
+//		this.btnRestartServer.setDisable(true);
 		
-		hBox.getChildren().addAll(fieldDomain, fieldIpAdress, fieldPort, btnChangePort, btnRestartServer);
-		hBox.setSpacing(2);
+//		hBox.getChildren().addAll(fieldDomain, fieldIpAdress, fieldPort, btnChangePort, btnRestartServer);
+		hBox.getChildren().addAll(lblDomain, fieldDomain, lblIpAdress, fieldIpAdress, lblPort, fieldPort, btnLeaderboard);
+		hBox.setSpacing(5);
+		hBox.setAlignment(Pos.CENTER);
 
 		
 		//TableView Bottom
@@ -144,6 +153,7 @@ public class ServerView {
 		tableView.getColumns().addAll(tblcolTimestamp, tblcolIpAdress, tblcolPlayer, tblcolAction);
 		
 		//Final Initialisation
+		this.stage.setResizable(false);
 		Scene scene = new Scene(pane);
 		scene.getStylesheets().add(getClass().getResource("ServerStyle.css").toExternalForm());
 		this.stage.sizeToScene();
@@ -160,12 +170,15 @@ public class ServerView {
 		menuLanguage.setText(		translator.getString("menu.language"));
 		itemGerman.setText(			this.getLanguageDescription("language.german"));
 		itemEnglish.setText(		this.getLanguageDescription("language.english"));
+		itemFrench.setText(		this.getLanguageDescription("language.french"));
 		
 		fieldDomain.setPromptText(	translator.getString("text.nodomain"));
 		fieldIpAdress.setPromptText(translator.getString("text.noipadress"));
-		fieldPort.setPromptText(	translator.getString("text.noport"));
-		btnChangePort.setText(		translator.getString("button.changeport"));
-		btnRestartServer.setText(	translator.getString("button.restartserver"));
+		fieldPort.setPromptText(translator.getString("text.noport"));
+		lblDomain.setText(translator.getString("label.domain"));
+		lblIpAdress.setText(translator.getString("label.ipadress"));
+		lblPort.setText(translator.getString("label.port"));
+		btnLeaderboard.setText(translator.getString("button.leaderboard"));
 		
 		tblcolTimestamp.setText(	translator.getString("column.timestamp"));
 		tblcolIpAdress.setText(		translator.getString("column.ipadress"));
@@ -217,11 +230,8 @@ public class ServerView {
 		return this.stage;
 	}
 	
-	public Button getButtonChangePort() {
-		return this.btnChangePort;
-	}
-	public Button getButtonRestartServer() {
-		return this.btnRestartServer;
+	public Button getButtonLeaderboard() {
+		return this.btnLeaderboard;
 	}
 	
 	public Menu getMenuLanguage() {

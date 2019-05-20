@@ -1,20 +1,18 @@
 package server.controller;
 
-import java.util.Optional;
+import java.util.List;
 import java.util.logging.Logger;
 
-import globals.Globals;
 import globals.Translator;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
+import javafx.scene.control.Alert;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.WindowEvent;
 import server.ServiceLocator;
 import server.model.ServerModel;
-import server.model.gameplay.ServerAction;
+import server.model.database.HighScore;
 import server.view.ServerView;
 
 public class ServerController{
@@ -38,28 +36,18 @@ public class ServerController{
 	 * 
 	 */
 	private void AddViewButtonListeners() {
-		view.getButtonChangePort().setOnAction((event) -> {
-			//TODO: Notify Clients and Change ServerSocket Port (I think it's a model task...)
+		view.getButtonLeaderboard().setOnAction((e) -> {
+			Alert dialog = new Alert(AlertType.INFORMATION);
+			dialog.setTitle(Translator.getTranslator().getString("button.leaderboard"));
+			dialog.setHeaderText(Translator.getTranslator().getString("message.leaderboard"));
+			List<HighScore> highscores = HighScore.getBestPlayers(3);
+			String output = "";
+			for(HighScore h : highscores) {
+				output += h.toString() + "\n";
+			}
+			dialog.setContentText(output);
+			dialog.showAndWait();
 			
-			view.startNewPortDialog().ifPresent(name -> {
-				int port;
-				try {
-					port = Integer.parseInt(name);
-					if(Globals.getPortNr() != port)
-						Globals.setPortNr(port);
-					//TODO: Change server port
-				} catch (NumberFormatException e){
-					logger.info("Error cast port to \"" + name + "\", use default: 8080");
-					Globals.setPortNr(8080);
-				}
-			});
-			
-			model.getServerActionData().add(new ServerAction(model.getHostAddress(), "Server", "Port changed to: " + Globals.getPortNr()));
-		});
-		
-		view.getButtonRestartServer().setOnAction((event) -> {
-			//TODO: Restart ServerSocket
-			model.getServerActionData().add(new ServerAction(model.getHostAddress(), "Server", "Server restarted"));
 		});
 	}
 	

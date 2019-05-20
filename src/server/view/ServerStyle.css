@@ -65,7 +65,7 @@
 
 .root{
 	-fx-background-image: url("file:./resource/images/title-logo.jpg");
-    -fx-background-size: 610 520;
+    -fx-background-size: 620 520;
     -fx-effect: dropshadow(three-pass-box, white, 30, 0.5, 0, 0);
 }
 

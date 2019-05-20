@@ -22,7 +22,7 @@ import server.model.gameplay.ResourceMap;
 
 /**
  * This class needs to import all card from our db/csv and create card objects
- * @autor yannik roth
+ * @author yannik roth
  */
 public class CardLoader {
 	private static Logger logger = ServiceLocator.getLogger();
@@ -100,6 +100,8 @@ public class CardLoader {
 
 	/**
 	 * This method imports the master data (card) from the CSV file
+	 * @param ServerModel m to import the data directly into a model
+	 * @author yannik roth
 	 */
 	public static void importCards(ServerModel m) {
 		try {
@@ -135,6 +137,8 @@ public class CardLoader {
 	
 	/**
 	 * This method imports the master data (card) from the CSV file
+	 * @return a <code>Map with key Integer and value Card </code> which can be accessed freely as a map
+	 * @author yannik roth
 	 */
 	public static Map<Integer, Card> importCards() {
 		Map<Integer, Card> cards = new HashMap<>();
@@ -173,6 +177,7 @@ public class CardLoader {
 	
 	/**
 	 * This method returns field_mapping map of card objects
+	 * @author yannik roth
 	 * @param args
 	 */
 	public static Map<Integer, String> getFieldMapping(){

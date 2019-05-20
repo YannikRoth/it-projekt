@@ -19,6 +19,7 @@ import javafx.collections.ObservableList;
 import server.ServiceLocator;
 import server.model.clienthandling.ServerClientThread;
 import server.model.clienthandling.ServerRequestHandler;
+import server.model.database.HighScore;
 import server.model.gameplay.Board;
 import server.model.gameplay.Card;
 import server.model.gameplay.Player;
@@ -29,6 +30,7 @@ import server.model.init.CardLoader;
 public class ServerModel implements Serializable{
 	
 	private Logger logger = ServiceLocator.getLogger();
+	private String hostName;
 	private String hostAddress;
 	
 	public ObservableList<ServerAction> serverActionData;
@@ -59,6 +61,7 @@ public class ServerModel implements Serializable{
 	
 	public ServerModel() {
 		try {
+			setHostName(Inet4Address.getLocalHost().getHostName());
 			setHostAddress(Inet4Address.getLocalHost().getHostAddress());
 		} catch (UnknownHostException e) {
 			logger.warning(e.getLocalizedMessage());
@@ -105,7 +108,8 @@ public class ServerModel implements Serializable{
 		if(players.size() < NUMBEROFPLAYERS) {
 			//add player to active player list
 			players.put(client.getPlayer(), client);
-			//client.getPlayer().setBoard(boards.get(7));
+			client.establishconnection();
+			
 			logger.info("successfully added client");
 			ServiceLocator.getServerModel().getServerActionData().add(
 					new server.model.gameplay.ServerAction(client.getSocket().getInetAddress().toString(), client.getPlayer().getPlayerName(), "Connected"));
@@ -114,6 +118,10 @@ public class ServerModel implements Serializable{
 				ServiceLocator.getServerModel().getServerActionData().add(
 						new server.model.gameplay.ServerAction(getHostAddress(), "Server", "Game started"));
 				this.startGame();
+			}else {
+				for(Entry<Player, ServerClientThread> serverClientThread : players.entrySet()) {
+					serverClientThread.getValue().sendUpdateOfPlayers();
+				}
 			}
 		}else {
 			logger.info("client could not be added");
@@ -122,19 +130,11 @@ public class ServerModel implements Serializable{
 
 	}
 
-	private void startGame() {
-		//send card set to all clients; iterate through player map
-		//wait for answer of each client
-		//Map<Card, ArrayList<String>> cardSet = new HashMap<>();
-		
-		/*
-		 * Idea of martin:
-		 * Send entire player object to client. Client then iterates through all cards and possible actions based on 
-		 * "isAbleToAffordCard" are evaluated.
-		 * Back to server, only the cardId is sent and the server updates the effectiv player-obj. The new player-onj is then sent 
-		 * back to the client
-		 */
-		
+	/**
+	 * This method starts the game. It can only be started from the ServerModel itself as it is marked private!
+	 * @author yannik roth
+	 */
+	private void startGame() {	
 		//load cards to play into ArrayList
 		loadGameCards();
 		
@@ -157,6 +157,7 @@ public class ServerModel implements Serializable{
 	 * This method shuffles the card set and assigns each player 7 cards
 	 * @param cardsToHandOut
 	 * @return void (updates the {@link Player} object)
+	 * @author yannik roth
 	 */
 	public boolean handoutCards(List<Card> cardsToHandOut) {
 		//consistency check
@@ -339,6 +340,7 @@ public class ServerModel implements Serializable{
 		}
 		scoreList.sort(Comparator.comparing(p -> p.getWinningPoints()));
 		Collections.reverse(scoreList);
+		logger.info("WinnerList: " + scoreList.toString());
 		return scoreList;
 	}
 	
@@ -384,7 +386,7 @@ public class ServerModel implements Serializable{
 			playerCards.add(players.get(i).getPlayableCards());
 		}
 		
-		if(direction.equals("left")) {
+		if(direction.equals("right")) {
 			playerCards.add(0, null);
 			playerCards.set(0, playerCards.get(playerCards.size()-1));
 			playerCards.remove(playerCards.size()-1);
@@ -448,8 +450,13 @@ public class ServerModel implements Serializable{
 			
 			//clear all the cards from the player obj.
 			for(Player p : allPlayers) {
+				//add to highscore database
+				HighScore hs = new HighScore(p.getPlayerName(), p.getWinningPoints());
+				hs.savePersistent();
 				p.clearCurrentPlayableCards();
 			}
+			
+			HighScore.getBestPlayers(5).forEach(e -> System.out.println(e.toString()));
 			
 			
 			//this.cardAge = CardAge.THREE;
@@ -477,5 +484,13 @@ public class ServerModel implements Serializable{
 	}
 	public ArrayList<Player> getConnectedPlayerList() {
 		return connectedPlayerList;
+	}
+
+	public String getHostName() {
+		return hostName;
+	}
+
+	public void setHostName(String hostName) {
+		this.hostName = hostName;
 	}
 }

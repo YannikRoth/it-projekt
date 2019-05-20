@@ -8,6 +8,6 @@ import java.io.Serializable;
  *
  */
 public enum ServerAction implements Serializable {
-	INFORMATION, ESTABLISHED, UPDATEVIEW, ENDGAME;
+	INFORMATION, ESTABLISHED, UPDATEVIEW, STARTGAME, ENDGAME;
 
 }

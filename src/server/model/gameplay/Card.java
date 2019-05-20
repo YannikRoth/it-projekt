@@ -86,6 +86,7 @@ public class Card implements Serializable{
 	/**
 	 * Constructor of card. Will iterate through all fieldMappings.
 	 * @param values array in the same order as the masterdata, usually given by default
+	 * @author yannik roth
 	 */
 	public Card(String[] values) {
 		Map<Integer, String> mapping = CardLoader.getFieldMapping();
@@ -357,7 +358,7 @@ public class Card implements Serializable{
 	}
 	
 	/**
-	 * Required for import --> select correct Array-Index
+	 * Required for import, select correct Array-Index
 	 * @return int value of CardAge
 	 */
 	public int getCardAgeValue() {
@@ -496,6 +497,11 @@ public class Card implements Serializable{
 		return this.freeCards;
 	}
 	
+	/**
+	 * This method overrides its inherited equals method.
+	 * returns <code>true</code> if the card is equal in its name and its ID, else returns false
+	 * @author yannik roth
+	 */
 	@Override
 	public boolean equals(Object o) {
 		Card c = (Card) o;

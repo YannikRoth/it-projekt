@@ -1,22 +1,23 @@
 package client.view;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import client.ServicelocatorClient;
 import client.model.ClientModel;
 import globals.ResourceType;
 import globals.Translator;
-import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -32,7 +33,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import server.model.gameplay.Card;
 import server.model.gameplay.Player;
@@ -56,22 +56,24 @@ public class ClientView {
 	protected ImageView card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12, card13, card14, card15, card16, cardPlayable1, cardPlayable2, cardPlayable3, cardPlayable4, cardPlayable5, cardPlayable6, cardPlayable7, selectedCard = null;
 	
 	private TableView<Player> tableOpponents = new TableView<>();
-	private TableColumn<Player, String> colPlayer;
+	private TableColumn<Player, String> colPlayer, colSide;
 	private ObservableList<TableColumn<Player, String>> dynamicCols = FXCollections.observableArrayList();
+	SimpleStringProperty playerOnRightSide = new SimpleStringProperty();
+	SimpleStringProperty playerOnLeftSide = new SimpleStringProperty();
 	
 	private TableView<ResourceType> tablePoints = new TableView<>();
-	private TableColumn<ResourceType, String> ColType;
-	private TableColumn<ResourceType, Integer> ColAmount;
+	private TableColumn<ResourceType, String> ColType, ColAmount;
 	
-	MenuItem itemM1, itemM2, itemM3, itemM4, itemM5, itemM6, itemM7, itemM8, itemM9, itemM10, itemM11, itemM12, itemM13;
-	private Button playCard;
-	private Button buildWorldWonder;
-	private Button discardCard;
+	MenuItem itemM1, itemM2, itemM3, itemM4, itemM5, itemM6, itemM7, itemM8, itemM9, itemM10, itemM11, itemM12, itemM13, itemM14;
+	private Button playCard, buildWorldWonder, discardCard, okButton;
+	private Label playerName, age;
+
+	private ArrayList<Player> winnerList = new ArrayList<>();
+	private ArrayList<Label> winnerLabel = new ArrayList<>();
 	
 	public ClientView(Stage primaryStage, ClientModel model) {
 		this.stage = primaryStage;
 		this.model = model;
-		model.start();
 		buildView();
 		setTexts();
 	}	
@@ -86,30 +88,54 @@ public class ClientView {
 		tableOpponents.setItems(model.getOtherPlayers());
 		
 		colPlayer = new TableColumn<Player, String>();
-		colPlayer.setPrefWidth(260);
+		colPlayer.setPrefWidth(130);
 		colPlayer.setCellValueFactory(new PropertyValueFactory<Player, String>("playerName"));
 		tableOpponents.getColumns().add(colPlayer);
+		
+		Callback<TableColumn.CellDataFeatures<Player, String>, ObservableValue<String>> callSide = 
+				new Callback<TableColumn.CellDataFeatures<Player, String>, ObservableValue<String>>() {
+			@Override
+			public ObservableValue<String> call(TableColumn.CellDataFeatures<Player, String> param) {
+				synchronized (param.getValue()) {
+					if(param.getValue().equals(model.getMyPlayer().getRightPlayer()))
+						return playerOnRightSide;
+					else if(param.getValue().equals(model.getMyPlayer().getLeftPlayer()))
+						return playerOnLeftSide;
+					else
+						return new SimpleStringProperty("");
+				}
+			}
+		};
+		colSide = new TableColumn<>();
+		colSide.setPrefWidth(130);
+		colSide.setCellValueFactory(callSide);
+		tableOpponents.getColumns().add(colSide);
 		
 		/**
 		 * Idea from https://stackoverflow.com/questions/21639108/javafx-tableview-objects-with-maps
 		 */
-        Callback<TableColumn.CellDataFeatures<Player, String>, ObservableValue<String>> callBack = 
+        Callback<TableColumn.CellDataFeatures<Player, String>, ObservableValue<String>> callBackData = 
                 new Callback<TableColumn.CellDataFeatures<Player, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Player, String> param) {
-                return param.getValue().getResources().containsKey(
-                        param.getTableColumn().getUserData())
-                        ? new SimpleStringProperty(Integer.toString(param.getValue().getResources().get(
-                        		param.getTableColumn().getUserData())))
-                        :new SimpleStringProperty("-");
+            	synchronized (param.getValue()) {
+            		return param.getValue().getResources().containsKey(
+            				param.getTableColumn().getUserData()) && 
+            				param.getValue().getResources().get(
+            						param.getTableColumn().getUserData()) != 0
+            				? new SimpleStringProperty(Integer.toString(param.getValue().getResources().get(
+            						param.getTableColumn().getUserData())))
+            						:new SimpleStringProperty("-");
+				}
             }
         };
         for (ResourceType t : ResourceType.values()) {
         	TableColumn<Player, String> tmpCol = new TableColumn<>(t.toStringTranslate());
         	tmpCol.setUserData(t);
-        	tmpCol.setCellValueFactory(callBack);
+        	tmpCol.setCellValueFactory(callBackData);
         	dynamicCols.add(tmpCol);
-        	tmpCol.setPrefWidth(90);
+        	tmpCol.setPrefWidth(100);
+        	tmpCol.setStyle("-fx-alignment: CENTER");
 		}
         tableOpponents.getColumns().addAll(dynamicCols);
         tableOpponents.setPrefHeight(200);
@@ -121,16 +147,28 @@ public class ClientView {
 	 */
 	private void buildTablePoints() {
 		tablePoints = new TableView<>();
-//		tablePoints.setItems(this.model.getMyPlayer().getResources().getResourcesListObservable());
 		tablePoints.setEditable(false);
 		
 		ColType		= new TableColumn<>();
 		ColType.setMinWidth(130);
 		ColType.setCellValueFactory(cd -> Bindings.createStringBinding(() -> cd.getValue().toStringTranslate() ));
 
+		Callback<TableColumn.CellDataFeatures<ResourceType, String>, ObservableValue<String>> callAmount = 
+				new Callback<TableColumn.CellDataFeatures<ResourceType, String>, ObservableValue<String>>() {
+			@Override
+			public ObservableValue<String> call(TableColumn.CellDataFeatures<ResourceType, String> param) {
+				synchronized (param.getValue()) {
+					return model.getMyPlayer().getResources().get(param.getValue()) != 0
+							? new SimpleStringProperty(Integer.toString(model.getMyPlayer().getResources().get(param.getValue())))
+							: new SimpleStringProperty("-");
+				}
+			}
+		};
 		ColAmount	= new TableColumn<>();
 		ColAmount.setMinWidth(130);
-		ColAmount.setCellValueFactory(cd -> Bindings.valueAt(this.model.getMyPlayer().getResources().getResourcesObservable(), cd.getValue()));
+		ColAmount.setStyle("-fx-alignment: CENTER");
+		ColAmount.setCellValueFactory(callAmount);
+//		ColAmount.setCellValueFactory(cd -> Bindings.valueAt(this.model.getMyPlayer().getResources().getResourcesObservable(), cd.getValue()));
 		
 		tablePoints.getColumns().addAll(ColType, ColAmount);
 	}
@@ -143,24 +181,25 @@ public class ClientView {
 		borderPaneMain.setCenter(tableOpponents);
 		
 		//Player Deck
+		VBox vBoxPlayer = new VBox();
 		HBox hBoxPlayer = new HBox();
-		borderPaneMain.setBottom(hBoxPlayer);
+		borderPaneMain.setBottom(vBoxPlayer);
 		
 		BorderPane borderPanePlayer = new BorderPane();
 		
 		this.hBoxCards = new HBox();
-		hBoxCards.setPadding(new Insets(0,50,0,0));
-		hBoxCards.setPrefHeight(130);
-		hBoxCards.setMinWidth(980);
+		hBoxCards.setPadding(new Insets(0,30,0,230));
+		hBoxCards.setSpacing(-10);
+		hBoxCards.setMinHeight(120);
 		hBoxCards.setAlignment(Pos.CENTER);
-		borderPanePlayer.setTop(hBoxCards);
-		borderPanePlayer.setPrefWidth(985);
+		hBoxCards.getStyleClass().add("hBoxCards");
+		borderPanePlayer.setPrefWidth(980);
 		hBoxPlayer.setHgrow(borderPanePlayer, Priority.ALWAYS);
 		
 		//Cards
 		Image tempImage = new Image("file:./resource/images/cards/SCN_0150.jpg");
 		
-		//initiates back of the cards as default
+		//initiates back of the cards as default before loading playable cards of player
 		cardPlayable1 = new ImageView(tempImage);
 		cardPlayable1.setFitHeight(200);
 		cardPlayable1.setFitWidth(133);
@@ -196,20 +235,23 @@ public class ClientView {
 		cardPlayable7.setFitWidth(133);
 		cards[6] = cardPlayable7;
 		
-		VBox vBoxTablePoints = new VBox();
-		HBox hBoxEmpty = new HBox();
-		hBoxEmpty.setPrefHeight(130);
-		
 		//Points
 		buildTablePoints();
-		vBoxTablePoints.getChildren().addAll(hBoxEmpty, tablePoints);
-		hBoxPlayer.getChildren().addAll(borderPanePlayer, vBoxTablePoints);
-		hBoxPlayer.getStyleClass().add("hBoxDeck");
+		VBox vBoxPlayerPoints = new VBox();
+		playerName = new Label();
+		playerName.getStyleClass().add("myPlayerName");
+		age = new Label();
+		age.getStyleClass().add("myPlayerName");
+		vBoxPlayerPoints.getChildren().addAll(playerName, age, tablePoints);
+		hBoxPlayer.getChildren().addAll(borderPanePlayer, vBoxPlayerPoints);
+		vBoxPlayer.setPrefHeight(570);
+		vBoxPlayer.setMinWidth(1350);
+		vBoxPlayer.getStyleClass().add("vBoxPlayer");
 		
 		//Deck
 		VBox vBoxDeck = new VBox();
-		vBoxDeck.setPadding(new Insets(30,0,15, 0));
-		vBoxDeck.setSpacing(10);
+		vBoxDeck.setPadding(new Insets(30,0,0, 0));
+		vBoxDeck.setSpacing(5);
 		borderPanePlayer.setCenter(vBoxDeck);
 		
 		/**
@@ -234,18 +276,17 @@ public class ClientView {
 		discardCard.setDisable(true);
 		buttonBox.setSpacing(10);
 		buttonBox.setAlignment(Pos.CENTER);
-		buttonBox.setPadding(new Insets(0,0,10,0));
 		
 		/**
+		 * hbox for world wonder (back of the card)
 		 * @author philipp
 		 */
-		
-		//hbox for world wonder (back of the card)
 		this.hBoxWorldWonderCards = new HBox();
-		hBoxWorldWonderCards.setSpacing(250);
-		hBoxWorldWonderCards.setPadding(new Insets(0,0,0,20));
-		hBoxWorldWonderCards.setPrefHeight(110);
-		borderPanePlayer.setBottom(hBoxWorldWonderCards);
+		hBoxWorldWonderCards.setSpacing(340);
+		hBoxWorldWonderCards.setPadding(new Insets(0,0,0,10));
+		hBoxWorldWonderCards.setMinHeight(120);
+		hBoxWorldWonderCards.setAlignment(Pos.BOTTOM_LEFT);
+		vBoxPlayer.getChildren().addAll(hBoxCards, hBoxPlayer, hBoxWorldWonderCards);
 		
 		//hbox for player's playable card
 		playableCards = new HBox();
@@ -255,8 +296,7 @@ public class ClientView {
 		playableCards.setAlignment(Pos.BASELINE_CENTER);
 		playableCards.setSpacing(2);
 		playableCards.setPadding(new Insets(30, 0, 0, 0));
-		playableCards.setPrefHeight(230);
-		playableCards.setPrefWidth(985);
+		playableCards.setPrefHeight(235);
 		
 		//Menu "Game"
 		itemM1 = new MenuItem();
@@ -280,8 +320,9 @@ public class ClientView {
 		//Menu "Language"
 		itemM12 = new MenuItem();
 		itemM13 = new MenuItem();
+		itemM14 = new MenuItem();
 		menuLanguage = new Menu();
-		menuLanguage.getItems().addAll(itemM12, itemM13);
+		menuLanguage.getItems().addAll(itemM12, itemM13, itemM14);
 		
 		
 		MenuBar menuBar = new MenuBar(menuHelp, menuLanguage);
@@ -297,33 +338,25 @@ public class ClientView {
 	
 	public void addImageView(ImageView v) {
 		this.hBoxCards.getChildren().add(v);
-		v.setFitHeight(130);
-		v.setFitWidth(86);
-		v.setEffect(new DropShadow(5, Color.GOLD));
+		v.setFitHeight(120);
+		v.setFitWidth(76);
 	}
 	
-	public void addImageViewWorldWonder() {
+	public void addImageViewWorldWonderOne() {
 		ImageView v = new ImageView(new Image("file:./resource/images/cards/SCN_0150.jpg"));
 		this.hBoxWorldWonderCards.getChildren().add(v);
-		v.setFitHeight(110);
-		v.setFitWidth(73);
-		v.setEffect(new DropShadow(5, Color.GOLD));
+		v.setFitHeight(120);
+		v.setFitWidth(76);
+		v.setEffect(new DropShadow(40, Color.GOLD));
 	}
 	
-//	public void updatePlayedCardView() {
-//		System.out.println(model.getMyPlayer().getPlayedCards());
-//		for(int i = 0; i < model.getMyPlayer().getPlayedCards().size(); i++) {
-//			this.cards2[i].setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(i).getImageFileName()));
-//		}
-//	}
-//	
-	
-//	protected void updatePlayableCardView() {
-//		System.out.println(model.getMyPlayer().getPlayedCards());
-//		for(int i = 0; i < model.getMyPlayer().getPlayedCards().size(); i++) {
-//			this.cards2[i].setImage(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayedCards().get(i).getImageFileName()));
-//		}
-//	}
+	public void addImageViewWorldWonderTwo() {
+		ImageView v = new ImageView(new Image("file:./resource/images/cards/SCN_0151.jpg"));
+		this.hBoxWorldWonderCards.getChildren().add(v);
+		v.setFitHeight(120);
+		v.setFitWidth(76);
+		v.setEffect(new DropShadow(40, Color.GOLD));
+	}
 	
 	/**
 	 * @author Roman Leuenberger
@@ -361,10 +394,52 @@ public class ClientView {
 		return translator.getString(identifier);
 	}
 	
+	/**
+	 * Create labels for winner list and a quit game button
+	 * @param winner
+	 * @author philipp
+	 */
+	public void updateClientViewEndGame(ArrayList<Player> winner) {
+		winnerList = winner;
+		VBox vBoxEndGame = new VBox();
+		vBoxEndGame.setAlignment(Pos.CENTER);
+		this.okButton = new Button(translator.getString("button.quitgame"));
+		for (int i = 0; i< winner.size(); i++) {
+			Label lblPlace = new Label("");
+			winnerLabel.add(lblPlace);
+			vBoxEndGame.getChildren().add(lblPlace);
+		}
+		setTranslateWinnerLabels();
+		this.playableCards.getChildren().add(vBoxEndGame);
+		vBoxEndGame.getChildren().add(okButton);
+		vBoxEndGame.setSpacing(15);
+		vBoxEndGame.setPadding(new Insets(30, 0, 0, 0));
+		vBoxEndGame.getStyleClass().add("vBoxEndGame");
+	}
+	
+	/**
+	 * translate and shows winner labels
+	 * @author david
+	 */
+	private void setTranslateWinnerLabels() {
+		if(winnerList.size() == 0 || winnerLabel.size() < winnerLabel.size())
+			return;
+		for (int i = 0; i < winnerList.size(); i++) {
+			winnerLabel.get(i).setText(translator.getString("label." + (i+1) + "place") + ": " + winnerList.get(i).getPlayerName());
+		}
+	}
+	
+	/**
+	 * Translate view texts in programm runtime
+	 * @author david
+	 */
 	public void setTexts() {
 		//Table opponents translations
 		colPlayer.setText(translator.getString("column.player"));
+		colSide.setText(translator.getString("column.side"));
 		dynamicCols.forEach(c -> c.setText(((ResourceType)c.getUserData()).toStringTranslate()));
+		playerOnRightSide.set(translator.getString("column.playeronright"));
+		playerOnLeftSide.set(translator.getString("column.playeronleft"));
 		
 		ColType.setText(translator.getString("column.type"));
 		ColAmount.setText(translator.getString("column.amount"));
@@ -382,6 +457,7 @@ public class ClientView {
 		itemM11.setText(translator.getString("item.quit"));
 		itemM12.setText(this.getLanguageDescription("language.german"));
 		itemM13.setText(this.getLanguageDescription("language.english"));
+		itemM14.setText(this.getLanguageDescription("language.french"));
 		
 		menuHelp.setText(translator.getString("menu.help"));
 		menuGame.setText(translator.getString("menu.game"));
@@ -393,14 +469,31 @@ public class ClientView {
 		
 		stage.setTitle(translator.getString("clientGame.name"));
 
-		//TODO fix translations in right bottom corner
-		/*
-		this.model.getMyPlayer().getResources().getResourcesObservable().clear();
-		for(Entry<ResourceType, Integer> entry : this.model.getMyPlayer().getResources().entrySet()) {
-			ResourceType t = entry.getKey();
-			Integer v = entry.getValue();
-			this.model.getMyPlayer().getResources().getResourcesObservable().put(t, v);
-		}*/
+		if(this.okButton != null)
+			this.okButton.setText(translator.getString("button.quitgame"));
+		setTranslateWinnerLabels();
+		
+		playerName.setText(translator.getString("column.player") + ": " + model.getMyPlayer().getPlayerName());
+		refreshAgeLabelFromModel();
+		
+		if(model.getMyPlayer() != null) {
+			//Alte Liste leeren
+			getTablePoints().getItems().clear();
+			//Liste neu aufbauen
+			model.getMyPlayer().getResources().refreshObservableMap();
+			//Listener setzen
+			getTablePoints().setItems(
+					model.getMyPlayer().getResources().getResourcesListObservable());
+		}
+	}
+	
+	/**
+	 * refresh label on ClientView with the current age as user information
+	 * @author david
+	 */
+	public void refreshAgeLabelFromModel() {
+		if(model.getCards().size() > 0)
+			age.setText(translator.getString("label.age") + ": " + model.getCards().get(0).getCardAgeValue());
 	}
 
 	public void start() {
@@ -440,6 +533,9 @@ public class ClientView {
 	public MenuItem getEnglishItem() {
 		return this.itemM13;
 	}
+	public MenuItem getFrenchItem() {
+		return this.itemM14;
+	}
 	
 	public ImageView getImageView (int i) {
 		return cards[i];
@@ -461,6 +557,10 @@ public class ClientView {
 		return this.discardCard;
 	}
 	
+	public Button getOkButton() {
+		return this.okButton;
+	}
+	
 	public Map<ImageView, Card> getCardsWithImages(){
 		return this.cardWithImages;
 	}
@@ -471,5 +571,19 @@ public class ClientView {
 	
 	public TableView<ResourceType> getTablePoints() {
 		return tablePoints;
+	}
+
+	public Label getPlayerName() {
+		return playerName;
+	}
+	public void setPlayerName(Label playerName) {
+		this.playerName = playerName;
+	}
+	
+	public Label getAge() {
+		return age;
+	}
+	public void setAge(Label age) {
+		this.age = age;
 	}
 }

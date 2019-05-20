@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 import com.sun.glass.ui.View;
 
+import client.ServicelocatorClient;
 import client.model.ClientModel;
 import client.view.CardOptionView;
 import client.view.ClientView;
@@ -36,25 +37,40 @@ public class ClientController {
 	private ClientView view;
 	private Card selectedCard;
 	private Logger logger = ServiceLocator.getLogger();
-	private LobbyController callingLobbyController;
+	private LobbyController callingLobbyController = ServicelocatorClient.getLobbyController();
 	
-	public ClientController(ClientModel model, ClientView view, LobbyController callingLobbyController) {
+	public ClientController(ClientModel model, ClientView view) {
 		this.model = model;
 		this.view = view;
-		this.callingLobbyController = callingLobbyController;
 		processRulesItem();
 		processHintItem();
 		processAboutItem();
 		processQuitItem();
 		processGermanItem();
 		processEnglishItem();
+		processFrenchItem();
 		processPlayCardButton();
 		processBuildWorldWonderButton();
 		processDiscardCardButton();
 		processClickOnImage();
 		handleCloseRequest();
+		
+		if(model.getMyPlayer() != null &&
+				model.getMyPlayer().getResources() != null &&
+				model.getMyPlayer().getResources().getResourcesListObservable() != null)
+			view.getTablePoints().setItems(model.getMyPlayer().getResources().getResourcesListObservable());
 	}
 	
+	private void processFrenchItem() {
+		view.getFrenchItem().setOnAction((e) -> {
+			MenuItem i = (MenuItem) e.getSource();
+			String newLanguage = i.getText().toLowerCase().substring(0, 2);
+			if(!Translator.getTranslator().getLocale().getLanguage().equalsIgnoreCase(newLanguage)) {
+				Translator.getTranslator().setLanguage(newLanguage);
+				view.setTexts();
+			}
+		});
+	}
 	private void processEnglishItem() {
 		view.getEnglishItem().setOnAction((e) -> {
 			MenuItem i = (MenuItem) e.getSource();
@@ -130,12 +146,10 @@ public class ClientController {
 
 	private void processPlayCardButton() {
 		view.getPlayCardButton().setOnAction(e -> {
-			//model.getMyPlayer().playCard(this.selectedCard);
 			model.sendPlayedCard(this.selectedCard, ClientAction.PLAYCARD);
 			logger.info("Played Card");
 			view.disableCards();
 			view.disableButtons();
-//			view.updatePlayedCardView();
 
 			ImageView correct = null;
 			
@@ -146,6 +160,7 @@ public class ClientController {
 				if(c.equals(this.selectedCard)) {
 					correct = v;
 					view.addImageView(correct);
+					correct.setDisable(true);
 					return;
 				}
 			}
@@ -159,12 +174,15 @@ public class ClientController {
 	
 	private void processBuildWorldWonderButton() {
 		view.getBuildWorldWonderButton().setOnAction(e -> {
-			//model.getMyPlayer().playCard(this.selectedCard);
 			model.sendPlayedCard(this.selectedCard, ClientAction.BUILDWONDER);
 			logger.info("Build WorldWonder");
 			view.disableCards();
 			view.disableButtons();
-			view.addImageViewWorldWonder();
+			if(this.selectedCard.getCardAgeValue() == 1) {
+				view.addImageViewWorldWonderOne();
+			} else {
+				view.addImageViewWorldWonderTwo();
+			}
 		});
 	}
 	
@@ -179,8 +197,6 @@ public class ClientController {
 			logger.info("DiscardCard");
 			view.disableCards();
 			view.disableButtons();
-//			ImageView v = (ImageView) e.getSource();
-			//view.updatePlayedCardView();
 		});
 	}
 	
@@ -189,16 +205,16 @@ public class ClientController {
 	 */
 	
 	public void processClickOnImage() {
-		for (int i = 0; i<view.getShownCards().length;i++) {
-			this.selectedCard = view.getCardsWithImages().get(view.getImageView(i));
-			ImageView tempImage = view.getImageView(i);
+		for (ImageView imageViewOne : view.getCardsWithImages().keySet()) {
+			this.selectedCard = view.getCardsWithImages().get(imageViewOne);
+			ImageView tempImage = imageViewOne;
 			tempImage.setOnMouseClicked(e ->{
-				tempImage.setEffect(new DropShadow(5, Color.GOLD));
-				for (int j = 0;j<view.getShownCards().length;j++) {
-					if(view.getImageView(j) != tempImage) {
-						view.getImageView(j).setEffect(null);
+				tempImage.setEffect(new DropShadow(40, Color.GOLD));
+				for (ImageView imageViewTwo : view.getCardsWithImages().keySet()) {
+					if(imageViewTwo != tempImage) {
+						imageViewTwo.setEffect(null);
 					}else {
-						this.selectedCard = view.getCardsWithImages().get(view.getImageView(j));
+						this.selectedCard = view.getCardsWithImages().get(imageViewTwo);
 						if(this.selectedCard == null) {
 							System.out.println("The selected card value is null!!");
 						}
@@ -231,5 +247,15 @@ public class ClientController {
 		});
 	}
 
+	/**
+	 * Funtionality for winnerlist quit-Button
+	 * @author david
+	 */
+	public void updateClientViewEndGame() {
+		view.getOkButton().setOnAction(e -> {
+			callingLobbyController.showAndEnableView();
+			this.view.getStage().close();
+		});
+	}
 }
 

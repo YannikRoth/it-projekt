@@ -110,15 +110,15 @@ public class Board implements Serializable {
 	
 	private void fillAttribute(int i, String field, String amount) {
 		if(!amount.equals("null") && this.worldWonders[i-1] != null) {
-			if (field.equals("rewardinpoints")) {
-				this.worldWonders[i - 1].rewardinPoints = Integer.parseInt(amount);
-			}
+//			if (field.equals("rewardinpoints")) {
+//				this.worldWonders[i - 1].rewardinPoints = Integer.parseInt(amount);
+//			}
 			if (field.equals("rewardfreecard")) {
 				this.worldWonders[i - 1].rewardFreecard = amount;
 			}
-			if (field.equals("rewardinmilitary")) {
-				this.worldWonders[i - 1].rewardinMilitary = Integer.parseInt(amount);
-			}
+//			if (field.equals("rewardinmilitary")) {
+//				this.worldWonders[i - 1].rewardinMilitary = Integer.parseInt(amount);
+//			}
 			if (field.equals("rewardsfreecardperage")) {
 				Boolean b = amount.equals("true") ? true : false;
 				this.worldWonders[i - 1].rewardsFreeCardperAge = b;
@@ -196,8 +196,14 @@ public class Board implements Serializable {
 			if(field.equals("gainspapyrus")) {
 				this.worldWonders[i-1].produce.put(ResourceType.PAPYRUS, Integer.parseInt(amount));
 			}
-			if(field.equals("gainincoins")) {
+			if(field.equals("gainsincoins")) {
 				this.worldWonders[i-1].produce.put(ResourceType.COIN, Integer.parseInt(amount));
+			}
+			if(field.equals("gainsinwinningpoints")) {
+				this.worldWonders[i-1].produce.put(ResourceType.WINNINGPOINTS, Integer.parseInt(amount));
+			}
+			if (field.equals("gainsinmilitarypoints")) {
+				this.worldWonders[i-1].produce.put(ResourceType.MILITARYPLUSPOINTS, Integer.parseInt(amount));
 			}
 			
 		}else {

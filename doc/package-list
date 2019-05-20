@@ -1,0 +1,16 @@
+client
+client.controller
+client.model
+client.view
+globals
+globals.exception
+globals.message
+server
+server.controller
+server.model
+server.model.clienthandling
+server.model.database
+server.model.gameplay
+server.model.init
+server.view
+test

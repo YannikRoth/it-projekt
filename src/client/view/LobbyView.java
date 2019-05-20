@@ -2,25 +2,13 @@ package client.view;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Optional;
 
-import client.ClientMVC;
-import client.ServicelocatorClient;
-import client.controller.ClientController;
-import client.controller.LobbyController;
-import client.model.ClientModel;
 import client.model.LobbyModel;
-import globals.Globals;
 import globals.Translator;
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -28,7 +16,6 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -36,10 +23,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import server.ServiceLocator;
 import server.model.gameplay.Player;
-import server.model.gameplay.ServerAction;
 
 /**
  * 
@@ -52,13 +37,13 @@ public class LobbyView {
 	private Stage stage;
 	private Translator translator = Translator.getTranslator();
 	
-	private Button btnNewGame, btnRules, btnQuit, btnConnect;
+	private Button btnNewGame, btnRules, btnQuit, btnConnect, btnLeaderboard;
 	private Label player, ipAdressLabel, portLabel;
 	private TextField playerName, ipAdress, port;
 
 	Menu menuLanguage;
 	
-	MenuItem itemGerman, itemEnglish;
+	MenuItem itemGerman, itemEnglish, itemFrench;
 	
 	TableColumn<Player,String> tblcolNr;
 	TableColumn<Player,String> tblcolWaitingPlayer;
@@ -118,7 +103,6 @@ public class LobbyView {
 		this.btnQuit = new Button("Quit", imageViewQuit);
 
 		hBoxButton.setPadding(new Insets(0, 0, 10, 0));
-		
 		hBoxButton.getChildren().addAll(btnNewGame, btnRules, btnQuit);
 		
 		this.player = new Label();
@@ -138,7 +122,20 @@ public class LobbyView {
 		port.setPrefWidth(50);
 		ipAdress.setPrefWidth(80);
 		
-		hBoxIpAdress.getChildren().addAll(ipAdressLabel, ipAdress, portLabel, port);
+		FileInputStream input4 = null;
+		try {
+			input4 = new FileInputStream("resource/images/information.jpg");
+		} catch (FileNotFoundException e) {
+			ServiceLocator.getLogger().warning(e.getLocalizedMessage());
+		}
+		Image image4 = new Image(input4);
+		ImageView imageViewLeaderboard = new ImageView(image4);
+		imageViewLeaderboard.setFitHeight(30);
+		imageViewLeaderboard.setFitWidth(30);
+		btnLeaderboard = new Button("Leaderboard", imageViewLeaderboard);
+		btnLeaderboard.setDisable(true);
+		
+		hBoxIpAdress.getChildren().addAll(ipAdressLabel, ipAdress, portLabel, port, btnLeaderboard);
 		hBoxIpAdress.setSpacing(5);
 		
 		this.btnConnect = new Button();
@@ -161,6 +158,7 @@ public class LobbyView {
 		
 		tblcolNr	= new TableColumn<>();
 		tblcolNr.setMinWidth(90);
+		tblcolNr.setStyle("-fx-alignment: CENTER");
 		tblcolNr.setCellValueFactory(new PropertyValueFactory<Player,String>("playerID"));
 		
 		tblcolWaitingPlayer	= new TableColumn<>();
@@ -173,8 +171,9 @@ public class LobbyView {
 		//Menu "Language"
 		itemGerman = new MenuItem();
 		itemEnglish = new MenuItem();
+		itemFrench = new MenuItem();
 		menuLanguage = new Menu();
-		menuLanguage.getItems().addAll(itemGerman, itemEnglish);
+		menuLanguage.getItems().addAll(itemGerman, itemEnglish, itemFrench);
 		
 		MenuBar menuBar = new MenuBar(menuLanguage);
 		borderPaneMain.setTop(menuBar);
@@ -198,6 +197,7 @@ public class LobbyView {
 		btnRules.setText(translator.getString("button.rules"));
 		btnQuit.setText(translator.getString("button.quit"));
 		btnConnect.setText(translator.getString("button.connect"));
+		btnLeaderboard.setText(translator.getString("button.leaderboard"));
 		
 		player.setText(translator.getString("label.player"));
 		playerName.setPromptText(translator.getString("textfield.player"));
@@ -208,6 +208,7 @@ public class LobbyView {
 		
 		itemGerman.setText(this.getLanguageDescription("language.german"));
 		itemEnglish.setText(this.getLanguageDescription("language.english"));
+		itemFrench.setText(this.getLanguageDescription("language.french"));
 		
 		menuLanguage.setText(translator.getString("menu.language"));
 		
@@ -269,12 +270,19 @@ public class LobbyView {
 		return this.btnQuit;
 	}
 	
+	public Button getButtonLeaderboard() {
+		return this.btnLeaderboard;
+	}
+	
 	public MenuItem getGermanItem2() {
 		return this.itemGerman;
 	}
 	
 	public MenuItem getEnglishItem2() {
 		return this.itemEnglish;
+	}
+	public MenuItem getFrenchItem2() {
+		return this.itemFrench;
 	}
 	
 	public String getIpAdress() {

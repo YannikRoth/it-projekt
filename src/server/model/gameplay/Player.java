@@ -78,7 +78,6 @@ public class Player implements Serializable{
 		
 		//init player according to rules
 		this.addCoins(3);
-		//this.playerBoard = model.getBoard(7);
 	}
 	
 	/**
@@ -209,6 +208,7 @@ public class Player implements Serializable{
 	 * @param rm A ResourceMap
 	 * @param i Value condition to be excluded (normally zero)
 	 * @return a <code>Set</code> of entries in the format [ResourceType, Integer]
+	 * @author yannik roth
 	 */
 	private Set<Entry<ResourceType, Integer>> clearMap(ResourceMap rm, int i) {
 		return rm.entrySet().stream().filter(e -> e.getValue() > i).collect(Collectors.toSet());
@@ -216,7 +216,7 @@ public class Player implements Serializable{
 
 	/**
 	 * This method provides evaluation if a card can be played or not. Check if player has enough resources
-	 * @param Card c
+	 * @param Card c The card which should be checked
 	 * @return <code>true</code> if the card can be played because the player has enough resources
 	 * @return <code>false</code> if the card can not be played because the player can't afford it
 	 * @author yannik roth
@@ -462,7 +462,7 @@ public class Player implements Serializable{
 	
 	/**
 	 * This method assigns a network socket to the player. It can be used from the server
-	 * @param Socket s
+	 * @param Socket s which is to be assigned
 	 */
 	public void assignSocket(Socket s) {
 		this.socket = s;
@@ -477,7 +477,6 @@ public class Player implements Serializable{
 	public void addCoins(int i) {
 		int newAmountOfCoins = this.resources.get(ResourceType.COIN)+i;
 		this.resources.put(ResourceType.COIN, newAmountOfCoins);
-//		this.resourcesObservable.put(ResourceType.COIN, i);
 	}
 	
 	/**
@@ -498,8 +497,7 @@ public class Player implements Serializable{
 	 * @param playerName
 	 * @author david
 	 */
-	public void setPlayerName(String playerName) {
-		//TODO: Check if other players has the same name - name has to be unique
+	private void setPlayerName(String playerName) {
 		this.playerName = playerName;
 	}
 	
@@ -512,13 +510,15 @@ public class Player implements Serializable{
 	public boolean equals(Object o) {
 		if(o instanceof Player)
 			return this.playerName.equals(((Player)o).getPlayerName());
+		else if(o != null)
+			logger.warning("Called player method with no \"Player\" object: " + o.getClass().getName());
+		else
+			logger.warning("Called Player.equals() method with no instance of param called");
 		
-		logger.warning("Called player method with no \"Player\" object: " + o.getClass().getName());
 		return false;
 	}
 	
 	public void updateCardset(ArrayList<Card> cards) {
-		//currentPlayableCards.clear();
 		currentPlayableCards = cards;
 	}
 	
@@ -564,7 +564,6 @@ public class Player implements Serializable{
 	 */
 	public int getMilitaryStrength() {
 		return this.resources.get(ResourceType.MILITARYPLUSPOINTS);
-		//return this.militaryStrength;
 	}
 
 	/**
@@ -575,7 +574,6 @@ public class Player implements Serializable{
 	public void updateMilitaryPlusPoints(int points) {
 		int currentMilPoints = this.resources.get(ResourceType.MILITARYPLUSPOINTS);
 		this.resources.put(ResourceType.MILITARYPLUSPOINTS, currentMilPoints + points);
-		//this.militaryPlusPoints += points;
 	}
 	
 	/**
@@ -586,17 +584,14 @@ public class Player implements Serializable{
 	public void updateMilitaryMinusPoints(int points) {
 		int currentMilPoints = this.resources.get(ResourceType.MILITARYMINUSPOINTS);
 		this.resources.put(ResourceType.MILITARYMINUSPOINTS, currentMilPoints + points);
-		//this.militaryMinusPoints =+ points;
 	}
 	public int getWinningPoints() {
 		return this.resources.get(ResourceType.WINNINGPOINTS);
-		//return this.winningPoints;
 	}
 	
 	public void addWinningPoints (int points) {
 		int currentWinPoints = this.resources.get(ResourceType.WINNINGPOINTS);
 		this.resources.put(ResourceType.WINNINGPOINTS, currentWinPoints + points);
-		//this.winningPoints += points;
 	}
 	
 	public ResourceMap getResources() {
@@ -615,10 +610,10 @@ public class Player implements Serializable{
 	 * The player will receive 3 coins
 	 * @param Card c to be discarded/sold to the bank
 	 * @return boolean if the operation was successful
+	 * @author yannik roth
 	 */
 	public boolean discardCard(Card c) {
 		this.addCoins(3);
-		//this.cards.add(c);
 		removeCardFromCurrentPlayabled(c);
 		return true;
 	}
