@@ -107,6 +107,10 @@ public class HighScore implements Persistent{
 		return this.playerName;
 	}
 	
+	/**
+	 * translated HighScore information
+	 * @author david
+	 */
 	@Override
 	public String toString() {
 		String s = Translator.getTranslator().getString("text.winnerlist");
