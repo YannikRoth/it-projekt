@@ -96,6 +96,8 @@ public class LobbyController {
 	private void processNewGameButton() {
 		view.getNewGameButton().setOnAction((e) -> {
 			if(!ServicelocatorClient.getClientModel().isAlive()) {
+				Globals.setDefaultIPAddr(view.getIpAdress());
+				Globals.setPortNr(view.getPort());
 				ServicelocatorClient.getClientModel().setInputPlayerName(view.getPlayerName().getText());
 				ServicelocatorClient.getClientModel().start();
 				view.disableDialogElements();
