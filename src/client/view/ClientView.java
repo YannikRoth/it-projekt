@@ -361,13 +361,13 @@ public class ClientView {
 	}
 	
 	/**
+	 * Method updates the view of the currently playable cards
 	 * @author Roman Leuenberger
 	 */
 	
 	public void updatePlayableCardView() {
 		this.playableCards.getChildren().clear();
 		cards = new ImageView[model.getMyPlayer().getPlayableCards().size()];
-		System.out.println(model.getMyPlayer().getPlayableCards());
 		for (int i = 0; i < model.getMyPlayer().getPlayableCards().size(); i++) {
 			cards[i] = new ImageView(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayableCards().get(i).getImageFileName()));
 			cards[i].setFitHeight(200);
