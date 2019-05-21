@@ -153,6 +153,7 @@ public class ServerView {
 		tableView.getColumns().addAll(tblcolTimestamp, tblcolIpAdress, tblcolPlayer, tblcolAction);
 		
 		//Final Initialisation
+		this.stage.getIcons().add(ServiceLocator.getSevenLogo());
 		this.stage.setResizable(false);
 		Scene scene = new Scene(pane);
 		scene.getStylesheets().add(getClass().getResource("ServerStyle.css").toExternalForm());

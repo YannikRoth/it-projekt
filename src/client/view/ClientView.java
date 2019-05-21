@@ -34,6 +34,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import server.ServiceLocator;
 import server.model.gameplay.Card;
 import server.model.gameplay.Player;
 
@@ -328,6 +329,7 @@ public class ClientView {
 		MenuBar menuBar = new MenuBar(menuHelp, menuLanguage);
 		borderPaneMain.setTop(menuBar);
 		
+		this.stage.getIcons().add(ServiceLocator.getSevenLogo());
 		this.stage.setResizable(false);
 		Scene scene = new Scene(borderPaneMain);
 		scene.getStylesheets().add(getClass().getResource("ClientStyle.css").toExternalForm());
