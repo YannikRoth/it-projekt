@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
@@ -43,6 +44,28 @@ class WonderStageTest {
 		//test to build wonder stage
 		assertTrue(testPlayer.isAbleToAffordCard(boards.get(7).getNextWorldWonderStage(testPlayer).getWorldWonderCard()));
 		
+	}
+	
+	@Test
+	void test_build_worldwonder_with_trade() {
+		Map<Integer, Card> cards = CardLoader.importCards();
+		Map<Integer, Board> boards = BoardLoader.importBoards();
+		
+		Player testPlayer1 = new Player("Testplayer 1");
+		testPlayer1.getResources().put(ResourceType.STONE, 1);
+		Player testPlayer2 = new Player("Testplayer 2");
+		testPlayer2.getResources().put(ResourceType.STONE, 1);
+		Player testPlayer3 = new Player("Testplayer 3");
+		testPlayer3.getResources().put(ResourceType.STONE, 1);
+		
+		testPlayer1.setLeftPlayer(testPlayer3);	testPlayer1.setRightPlayer(testPlayer2);
+		testPlayer2.setLeftPlayer(testPlayer1);	testPlayer2.setRightPlayer(testPlayer3);
+		testPlayer3.setLeftPlayer(testPlayer2);	testPlayer3.setRightPlayer(testPlayer1);
+		
+		//test to build wonder stage
+		assertTrue(testPlayer1.isAbleToAffordCard(boards.get(7).getNextWorldWonderStage(testPlayer1).getWorldWonderCard()));
+		assertTrue(testPlayer2.isAbleToAffordCard(boards.get(7).getNextWorldWonderStage(testPlayer2).getWorldWonderCard()));
+		assertTrue(testPlayer3.isAbleToAffordCard(boards.get(7).getNextWorldWonderStage(testPlayer3).getWorldWonderCard()));
 	}
 
 }
