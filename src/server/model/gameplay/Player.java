@@ -399,11 +399,16 @@ public class Player implements Serializable{
 
 		copy.clear();
 		copy = (HashMap) missingResources.clone();
+		System.out.println(copy.toString());
 		for (ResourceType type : copy.keySet()) {	
 			Integer amountRequired = copy.get(type);
+			System.out.println(alternateResourcesOfBothOpponents.toString());
 			for (Player player : alternateResourcesOfBothOpponents.keySet()) {
 				for (int hashMap = 0; hashMap < alternateResourcesOfBothOpponents.get(player).size(); hashMap++) {
-					if (alternateResourcesOfBothOpponents.get(player).get(hashMap).get(type) != null &&
+					System.out.println(type);
+					System.out.println(alternateResourcesOfBothOpponents.get(player).get(hashMap).get(type));
+					if (alternateResourcesOfBothOpponents.get(player).get(hashMap) != null &&
+						alternateResourcesOfBothOpponents.get(player).get(hashMap).get(type) != null &&
 						alternateResourcesOfBothOpponents.get(player).get(hashMap).get(type) >= 1) {
 						amountRequired -= alternateResourcesOfBothOpponents.get(player).get(hashMap).get(type);
 
@@ -424,7 +429,7 @@ public class Player implements Serializable{
 								this.cardsTradingNeeded.put(card, tempMap);
 								}
 							}
-						}else {
+						} else {
 							System.out.println("value in trading is null or opponets do not own required resouces");
 						}
 					}
