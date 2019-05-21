@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import globals.Translator;
+
 /**
  * This class represents the winners table which are stored in a database table
  * @author yannik
@@ -105,10 +107,17 @@ public class HighScore implements Persistent{
 		return this.playerName;
 	}
 	
+	/**
+	 * translated HighScore information
+	 * @author david
+	 */
 	@Override
 	public String toString() {
-		return this.playerName + " has " + this.winningPoints + 
-				" winning points. Played on " + this.dateOfAchievment;
+		String s = Translator.getTranslator().getString("text.winnerlist");
+		s = s.replaceAll("<name>", this.playerName);
+		s = s.replaceAll("<winningpoints>", Integer.toString(this.winningPoints));
+		s = s.replaceAll("<date>", this.dateOfAchievment.toString());
+		return s;
 	}
 	
 	@Override
