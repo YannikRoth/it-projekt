@@ -192,7 +192,7 @@ public class ServerClientThread extends Thread {
 								cardplayed = (Card) objInputStream.readObject();
 								boolean check = this.player.playCard(cardplayed);
 								if(check == false) {
-									logger.warning("card could not be played, maybe a consistency problem?");
+									logger.warning("PLAYCARD: card could not be played, maybe a consistency problem?");
 									legalaction = false;
 								}
 							}
@@ -214,11 +214,12 @@ public class ServerClientThread extends Thread {
 							synchronized (objInputStream) {
 								//Client wants to build a wonder with the incoming card 
 								cardplayed = (Card) objInputStream.readObject();
-								boolean check = this.player.playWorldWonder(this.player.getBoard().getNextWorldWonderStage());
+//								boolean check = this.player.playWorldWonder(this.player.getBoard().getNextWorldWonderStage());
+								boolean check = this.player.playWorldWonder(this.player.getBoard().getNextWorldWonderStage(this.player));
 								this.player.removeCardFromCurrentPlayabled(cardplayed);
 								if(check == false) {
 									legalaction = false;
-									logger.warning("card could not be played, maybe a consistency problem?");
+									logger.warning("BUILDWONDER: card could not be played, maybe a consistency problem?");
 								}
 							}
 							logger.info(cardplayed.getCardName() + "Cards received from " + player.getPlayerName()

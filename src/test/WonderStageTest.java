@@ -41,7 +41,7 @@ class WonderStageTest {
 		testPlayer.playCard(c2);
 		
 		//test to build wonder stage
-		assertTrue(testPlayer.isAbleToAffordCard(boards.get(7).getNextWorldWonderStage().getWorldWonderCard()));
+		assertTrue(testPlayer.isAbleToAffordCard(boards.get(7).getNextWorldWonderStage(testPlayer).getWorldWonderCard()));
 		
 	}
 

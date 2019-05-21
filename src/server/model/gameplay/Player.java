@@ -178,7 +178,7 @@ public class Player implements Serializable{
 	public boolean playWorldWonder(WorldWonder ww) {
 		Card wwCard = ww.getWorldWonderCard();
 		if(isAbleToAffordCard(wwCard)) {
-			this.playerBoard.updateIndexOfNextWorldWonderStage();
+			this.playerBoard.updateIndexOfNextWorldWonderStage(this);
 			this.updateResource(wwCard.getCost());
 			this.updateResource(wwCard.getProduction());
 			
@@ -312,9 +312,10 @@ public class Player implements Serializable{
 			return true;
 		}
 		if(isAbleToAffordCardWithTrade(c, checkedResources, missingResources)){
-			System.out.println("Card can not be afforded myself, lets check trading options");
+			ServiceLocator.getLogger().info("Card can be played by trade");
 			return true;
 		}else {
+			ServiceLocator.getLogger().info("Card cannot  be played by trade");
 			return false;
 		}
 

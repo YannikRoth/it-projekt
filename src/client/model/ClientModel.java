@@ -270,9 +270,9 @@ public class ClientModel extends Thread {
 			if (this.getMyPlayer().isAbleToAffordCard(c)) {
 				optionValues.replace(ClientAction.PLAYCARD, false, true);
 			}
-			if (getMyPlayer().getPlayerBoard().getNextWorldWonderStage() != null) {
+			if (getMyPlayer().getPlayerBoard().getNextWorldWonderStage(getMyPlayer()) != null) {
 				if (getMyPlayer().isAbleToAffordCard(
-						getMyPlayer().getPlayerBoard().getNextWorldWonderStage().getWorldWonderCard())) {
+						getMyPlayer().getPlayerBoard().getNextWorldWonderStage(getMyPlayer()).getWorldWonderCard())) {
 					optionValues.replace(ClientAction.BUILDWONDER, false, true);
 				}
 			}

@@ -1,6 +1,7 @@
 package server.model.gameplay;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -26,7 +27,7 @@ public class Board implements Serializable {
 	private String boardSide;
 	private String boardName;
 	private ResourceType producingResource;
-	private int nextStageToBuild;
+	private HashMap<Player, Integer> nextStageToBuild;
 	
 	public Board(String[] values) {
 		Map<Integer, String> mapping = BoardLoader.getFieldMapping();
@@ -36,7 +37,7 @@ public class Board implements Serializable {
 		this.worldWonders[1] = new WorldWonder();
 		this.worldWonders[2] = new WorldWonder();
 		this.worldWonders[3] = new WorldWonder();
-		this.nextStageToBuild = 0;
+		nextStageToBuild = new HashMap<>();
 		
 		for(int i = 0; i< values.length; i++) {
 			String fieldName = mapping.get(i);
@@ -223,8 +224,9 @@ public class Board implements Serializable {
 	/**
 	 * @author Roman Leuenberger
 	 */
-	public void updateIndexOfNextWorldWonderStage() {
-		this.nextStageToBuild++;
+	public void updateIndexOfNextWorldWonderStage(Player p) {
+		int i = this.nextStageToBuild.get(p);
+		this.nextStageToBuild.put(p, ++i);
 	}
 	/**
 	 * @author Roman Leuenberger
@@ -232,9 +234,11 @@ public class Board implements Serializable {
 	 * This method returns the next WonderStage to build
 	 * returns null if last WonderStage was build
 	 */
-	public WorldWonder getNextWorldWonderStage () {
-		if (this.worldWonders[this.nextStageToBuild] != null) {
-			return this.worldWonders[this.nextStageToBuild];
+	public WorldWonder getNextWorldWonderStage (Player p) {
+		if(!this.nextStageToBuild.containsKey(p))
+			this.nextStageToBuild.put(p, 0);
+		if (this.worldWonders[this.nextStageToBuild.get(p)] != null) {
+			return this.worldWonders[this.nextStageToBuild.get(p)];
 		}
 		return null;		
 	}
