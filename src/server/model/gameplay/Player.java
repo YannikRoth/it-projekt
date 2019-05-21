@@ -342,8 +342,8 @@ public class Player implements Serializable{
 		Map<ResourceType, Integer> tempMapRightPlayer = new HashMap<>();
 		for(ResourceType type : rightPlayer.getResources().keySet()) {
 			tempMapRightPlayer.put(type, rightPlayer.getResources().get(type));
-			resourcesOfBothOpponents.put(rightPlayer, tempMapRightPlayer);
 			}
+		resourcesOfBothOpponents.put(rightPlayer, tempMapRightPlayer);
 				
 		int amountOfUsedResourcesLeftPlayer = 0;
 		int amountOfUsedResourcesRightPlayer = 0;
