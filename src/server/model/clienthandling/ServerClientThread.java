@@ -248,8 +248,7 @@ public class ServerClientThread extends Thread {
 		}
 	}
 
-	public void OutputAllplayers(Player curplayer) throws IOException {
-
+	public synchronized void OutputAllplayers(Player curplayer) throws IOException {
 		//Outputs all right players starting with the own player of this clientthread
 		synchronized (objOutputStream) {
 			objOutputStream.reset();

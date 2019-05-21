@@ -418,8 +418,11 @@ public class Player implements Serializable{
 						if (player.equals(this.rightPlayer)) {
 							amountOfUsedResourcesRightPlayer += alternateResourcesOfBothOpponents.get(player).get(hashMap).get(type);
 						}
+						System.out.println("amountRequired: " + amountRequired);
 						if (amountRequired <= 0) {
 							int totalAmountOfNeedeResources = amountOfUsedResourcesLeftPlayer + amountOfUsedResourcesRightPlayer;
+							System.out.println("totalAmountOfNeedeResources: " + totalAmountOfNeedeResources);
+							System.out.println("this.getCoins(): " + this.getCoins());
 							if (2*totalAmountOfNeedeResources <= this.getCoins()) {
 								checkedResources.put(type, true);
 								missingResources.remove(type);
