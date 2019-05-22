@@ -97,7 +97,7 @@ public class ResourceMap extends HashMap<ResourceType, Integer>{
 	/**
 	 * Function to refresh observable map after refresh player from server
 	 * Observable maps and lists are not synchronizable
-	 * @author david & yannik
+	 * @author david and yannik
 	 */
 	public void refreshObservableMap() {
 		if(this.resourcesObservable != null) {

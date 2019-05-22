@@ -279,7 +279,7 @@ public class ServerModel implements Serializable{
 	
 	/**
 	 * This method evaluates the winner with the given game rules.
-	 * @param n amount of players. Normally these players will be a KeySet of the <code>Map<Player, []Thread> </code>
+	 * @param n amount of players. Normally these players will be a KeySet of the <code>Map key=Player, value=Thread> </code>
 	 * which are active in this game session
 	 * @return a list of players sorted by winning points. Winner is in index 0 and looser in last index.
 	 * @author Roman Leuenberger
