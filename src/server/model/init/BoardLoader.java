@@ -165,17 +165,15 @@ public class BoardLoader {
 			csvReader.close();
 			
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.warning(e.getMessage());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.warning(e.getMessage());
 		}
 	}
 	
 	/**
 	 * This method imports a board and returns them as a map
-	 * @return A <code>Map<Integer, Board><code> which can be used freely
+	 * @return A <code>Map key=Integer, value=Board</code> which can be used freely
 	 */
 	public static Map<Integer, Board> importBoards() {
 		Map<Integer, Board> boards = new HashMap<>();
@@ -202,11 +200,9 @@ public class BoardLoader {
 			csvReader.close();
 			
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.warning(e.getMessage());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.warning(e.getMessage());
 		}
 		
 		return boards;

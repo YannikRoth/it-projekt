@@ -27,7 +27,7 @@ import server.ServiceLocator;
 import server.model.gameplay.Player;
 
 /**
- * 
+ * Starts lobbyview after running the LobbyMVC
  * @author philipp
  *
  */
@@ -142,7 +142,6 @@ public class LobbyView {
 		hBoxConnect.getChildren().add(btnConnect);
 		
 		buttonAndPlayer.getChildren().addAll(hBoxIpAdress, hBoxButton, hBoxPlayer);
-//		buttonAndPlayer.getChildren().addAll(hBoxIpAdress, hBoxButton, hBoxPlayer, hBoxConnect);
 		hBoxButton.setAlignment(Pos.CENTER);
 		hBoxPlayer.setAlignment(Pos.CENTER);
 		hBoxIpAdress.setAlignment(Pos.CENTER);
@@ -151,7 +150,6 @@ public class LobbyView {
 		hBoxIpAdress.setPadding(new Insets(0, 0, 10, 0));
 		hBoxConnect.setPadding(new Insets(0, 0, 10, 0));
 		
-		//TODO: Wartende Personen anzeigen
 		TableView<Player> tableView = new TableView<>();
 		tableView.setPrefHeight(250);
 		tableView.setItems(model.getLobbyPlayerData());
@@ -178,6 +176,7 @@ public class LobbyView {
 		MenuBar menuBar = new MenuBar(menuLanguage);
 		borderPaneMain.setTop(menuBar);
 		
+		this.stage.getIcons().add(ServiceLocator.getSevenLogo());
 		this.stage.setResizable(false);
 		Scene scene = new Scene(borderPaneMain);
 		scene.getStylesheets().add(getClass().getResource("LobbyStyle.css").toExternalForm());

@@ -6,12 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import globals.Translator;
@@ -48,8 +43,6 @@ public class HighScore implements Persistent{
 	}
 	
 	public HighScore(String playerName, int winningPoints, LocalDate date) {
-		//this.id = pkCounter;
-		//pkCounter++;
 		this.id = new PkHandler().getNextPk();
 		this.playerName = playerName;
 		this.winningPoints = winningPoints;

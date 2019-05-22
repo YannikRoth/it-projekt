@@ -7,11 +7,8 @@ import java.io.IOException;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
 
-import com.sun.glass.ui.View;
-
 import client.ServicelocatorClient;
 import client.model.ClientModel;
-import client.view.CardOptionView;
 import client.view.ClientView;
 import globals.ClientAction;
 import globals.Translator;
@@ -106,7 +103,6 @@ public class ClientController {
 	}
 
 	private void processAboutItem() {
-		// TODO Auto-generated method stub
 		view.getAboutItem().setOnAction(e ->{
 			if (Desktop.isDesktopSupported()) {
 			    try {
@@ -120,12 +116,9 @@ public class ClientController {
 	}
 
 	private void processHintItem() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	private void processRulesItem() {
-		// TODO Auto-generated method stub
 		view.getRulesItem().setOnAction((e) -> {
 			if (Desktop.isDesktopSupported()) {
 			    try {
@@ -141,6 +134,7 @@ public class ClientController {
 	}
 	
 	/**
+	 * Method handels PlayCard-Button
 	 * @author Roman Leuenberger
 	 */
 
@@ -169,6 +163,7 @@ public class ClientController {
 	}
 	
 	/**
+	 * Method handels BuildWorldWonder-Button
 	 * @author Roman Leuenberger
 	 */
 	
@@ -187,12 +182,12 @@ public class ClientController {
 	}
 	
 	/**
+	 * Method handels DiscardCard-Button
 	 * @author Roman Leuenberger
 	 */
 	
 	private void processDiscardCardButton() {
 		view.getDiscardCardButton().setOnAction(e -> {
-			//TODO Method for discard card
 			model.sendPlayedCard(this.selectedCard, ClientAction.DISCARD);
 			logger.info("DiscardCard");
 			view.disableCards();
@@ -201,6 +196,8 @@ public class ClientController {
 	}
 	
 	/**
+	 * Method handels Layout of cards when a card gets clicked
+	 * Furthermore it handels if a Button is enabled or not
 	 * @author Roman Leuenberger
 	 */
 	

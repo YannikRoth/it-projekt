@@ -3,7 +3,6 @@ package server.model.init;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,11 +13,9 @@ import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 
-import globals.ResourceType;
 import server.ServiceLocator;
 import server.model.ServerModel;
 import server.model.gameplay.Card;
-import server.model.gameplay.ResourceMap;
 
 /**
  * This class needs to import all card from our db/csv and create card objects
@@ -127,11 +124,9 @@ public class CardLoader {
 			csvReader.close();
 			
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.warning(e.getMessage());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.warning(e.getMessage());
 		}
 	}
 	
@@ -145,7 +140,7 @@ public class CardLoader {
 		try {
 			CSVParser parser = new CSVParserBuilder()
 				.withSeparator(';')
-				.withIgnoreQuotations(true)
+				.withIgnoreQuotations(true) //ignore quotations
 				.build();
 				 
 			CSVReader csvReader = new CSVReaderBuilder(new FileReader("./resource/masterdata/card.csv"))
@@ -165,11 +160,9 @@ public class CardLoader {
 			csvReader.close();
 			
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.warning(e.getMessage());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.warning(e.getMessage());
 		}
 		
 		return cards;

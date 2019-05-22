@@ -44,6 +44,7 @@ public class Player implements Serializable{
 	private ArrayList<HashMap<ResourceType, Integer>> alternateResources; //only resources with alternating resource types
 	private List<Card> cards; //the cards that have been played by this player
 	private List<Card> worldWonderCards; //the cards/stages of world wonder which been played by this player, needed for a special Gilde-card
+	private Map<Card, Map<Player, Integer>> cardsTradingNeeded = new HashMap<>();
 	
 	//free cards (building chains) -> saved in lower case!
 	private Set<String> freePlayableCards = new HashSet<>();
@@ -55,10 +56,8 @@ public class Player implements Serializable{
 	private int winningPoints = 0; //winning points of the player (sum)
 	private int sciencePoints = 0; //these values are calculated after the game has ended
 	
-	//TODO: Handle name
 	//Player name has to be unique!!
 	private String playerName = new String();
-	//TODO: Implement every viewColumn as SimpleXXXProperty --> Every of them needs a getter-Method
 	
 	//game handling
 	private transient Socket socket;
@@ -134,8 +133,6 @@ public class Player implements Serializable{
 			c.getFreeCards().forEach(cardname -> this.freePlayableCards.add(cardname.toLowerCase()));
 			
 			this.cards.add(c);
-			//TODO any further requiremets that a card can be played?
-			//TODO any further updates of the player object
 			//update coins for brown or grey cards (applies for 4 yellow cards only)
 			if(c.getId() == 60 || c.getId() == 90) {
 				long countOfOwnBrownCards = this.cards.stream().filter(d -> d.getCardType().getColor() == CardColor.BROWN).count();
@@ -148,6 +145,14 @@ public class Player implements Serializable{
 				long countOfGreyCardsLeftPlayer = this.getLeftPlayer().getPlayedCards().stream().filter(e -> e.getCardType().getColor() == CardColor.GREY).count();
 				long countOfGreyCardsRightPlayer = this.getRightPlayer().getPlayedCards().stream().filter(f -> f.getCardType().getColor() == CardColor.GREY).count();
 				this.addCoins((int)countOfOwnGreyCards + (int)countOfGreyCardsLeftPlayer + (int)countOfGreyCardsRightPlayer);
+			}
+			
+			//check if card was able to afford with trade, if true, pay opponents
+			if (this.cardsTradingNeeded.containsKey(c)) {
+				for (Player p : this.cardsTradingNeeded.get(c).keySet()) {
+					p.addCoins(2*this.cardsTradingNeeded.get(c).get(p));
+					this.addCoins(-2*this.cardsTradingNeeded.get(c).get(p));
+				}
 			}
 			
 			removeCardFromCurrentPlayabled(c);
@@ -168,14 +173,23 @@ public class Player implements Serializable{
 	public boolean playWorldWonder(WorldWonder ww) {
 		Card wwCard = ww.getWorldWonderCard();
 		if(isAbleToAffordCard(wwCard)) {
-			this.playerBoard.updateIndexOfNextWorldWonderStage();
+			this.playerBoard.updateIndexOfNextWorldWonderStage(this);
 			this.updateResource(wwCard.getCost());
 			this.updateResource(wwCard.getProduction());
 			
 			//Karte wird in die Liste worldWonderCards eingefügt. Dies würde dann gebraucht, wenn wir die Gilden vom 3. Zeitalter noch implementieren
 			this.worldWonderCards.add(wwCard);
-			//this.updateMilitaryPlusPoints(wwCard.getMilitaryPoints());
-			//this.addWinningPoints(wwCard.getWinningPoints());
+			this.updateMilitaryPlusPoints(wwCard.getMilitaryPoints());
+			//this.militaryStrength += wwCard.getMilitaryPoints();
+			this.winningPoints += wwCard.getWinningPoints();
+			
+			//check if card was able to afford with trade, if true, pay opponents
+			if (this.cardsTradingNeeded.containsKey(wwCard)) {
+				for (Player p : this.cardsTradingNeeded.get(wwCard).keySet()) {
+					p.addCoins(2*this.cardsTradingNeeded.get(wwCard).get(p));
+					this.addCoins(-2*this.cardsTradingNeeded.get(wwCard).get(p));
+				}
+			}
 			
 			return true;
 		} else {
@@ -202,7 +216,7 @@ public class Player implements Serializable{
 	 * @return <code>false</code> if the card can not be played because the player can't afford it
 	 * @author yannik roth
 	 */
-	public boolean isAbleToAffordCard(Card c) {
+	public synchronized Boolean isAbleToAffordCard(Card c) {
 		//if card can be played for free because of an earlier played card, instantly return true
 		if(this.freePlayableCards.contains(c.getCardName().toLowerCase())) {
 			return true;
@@ -237,12 +251,22 @@ public class Player implements Serializable{
 			}
 			
 		}
-		
 		//evaluate the difficult ones : one card produces alternating products		
-		Map<ResourceType, Integer> absoluteAmountAlternatingResources = getAbsoluteAlternateResourceAmount();
-		ArrayList<ResourceType> sortedRequiredResources = Globals.sortMapByValue(absoluteAmountAlternatingResources);
+		Map<ResourceType, Integer> absoluteAmountAlternatingResources = getAbsoluteAlternateResourceAmount();		
+		ArrayList<ResourceType> sortedRequiredResources = Globals.sortMapByValue(absoluteAmountAlternatingResources);	
 		sortedRequiredResources = (ArrayList<ResourceType>) sortedRequiredResources.stream()
-				.filter(f -> checkedResources.get(f) != null).collect(Collectors.toList());
+				.filter(f -> checkedResources.get(f) != null && checkedResources.get(f) != true).collect(Collectors.toList());
+		
+		//this is needed to get all missing resources
+		for(ResourceType t : checkedResources.keySet()) {
+			if (checkedResources.get(t) == false) {
+				if (!sortedRequiredResources.contains(t)) {
+				sortedRequiredResources.add(t);
+				}
+			}
+		}
+		
+		HashMap<ResourceType, Integer> missingResources = new HashMap<>();
 		
 		for(ResourceType t : sortedRequiredResources) {	
 			//ResourceType searchResourceType = entry.getKey();
@@ -262,6 +286,7 @@ public class Player implements Serializable{
 							// afforded
 							amountRequired = 0;
 						}
+						
 						alternateResourceCopy.set(i, null);
 					}
 				}
@@ -272,6 +297,7 @@ public class Player implements Serializable{
 			}else {
 				//should already be false, don't know if required
 				checkedResources.put(searchResourceType, false);
+				missingResources.put(searchResourceType, amountRequired - this.resources.get(t));
 			}
 			
 		}
@@ -279,10 +305,129 @@ public class Player implements Serializable{
 		//if the entire checkedResource map only contains "true" values, then the card can be afforded
 		if(checkedResources.entrySet().stream().filter(b -> b.getValue() == false).count() <= 0) {
 			return true;
+		}
+		if(isAbleToAffordCardWithTrade(c, checkedResources, missingResources)){
+			ServiceLocator.getLogger().info("Card can be played by trade");
+			return true;
 		}else {
+			ServiceLocator.getLogger().info("Card cannot  be played by trade");
 			return false;
 		}
 
+	}
+	
+	/**
+	 * This method evaluates if player can play the card with a trade. It returns true if so. The method currently just
+	 * checks if left or right player has the needed resource. It does not check if player has a discount on trading left or right
+	 * @author Roman Leuenberger
+	 * @param card
+	 * @param checkedResources
+	 * @param missingResources
+	 * @return
+	 */
+	
+	private synchronized Boolean isAbleToAffordCardWithTrade (Card card, Map<ResourceType, Boolean> checkedResources, HashMap<ResourceType, Integer> missingResources) {
+		//card cannot be played with own resources...see if opponents got the required resources
+		Map<Player, Map<ResourceType, Integer>> resourcesOfBothOpponents = new HashMap<>();
+		Map<ResourceType, Integer> tempMapLeftPlayer = new HashMap<>();
+		for(ResourceType type : leftPlayer.getResources().keySet()) {
+			tempMapLeftPlayer.put(type, leftPlayer.getResources().get(type));
+		}
+		resourcesOfBothOpponents.put(leftPlayer, tempMapLeftPlayer);
+		Map<ResourceType, Integer> tempMapRightPlayer = new HashMap<>();
+		for(ResourceType type : rightPlayer.getResources().keySet()) {
+			tempMapRightPlayer.put(type, rightPlayer.getResources().get(type));
+			}
+		resourcesOfBothOpponents.put(rightPlayer, tempMapRightPlayer);
+				
+		int amountOfUsedResourcesLeftPlayer = 0;
+		int amountOfUsedResourcesRightPlayer = 0;
+		Map<ResourceType, Integer> copy = (HashMap) missingResources.clone(); //make a copy because items will be removed in loop
+		for (ResourceType t : copy.keySet()) {
+			Integer amountRequired = missingResources.get(t);
+			for (Player p : resourcesOfBothOpponents.keySet()) {
+				if(resourcesOfBothOpponents.get(p).get(t) != null && resourcesOfBothOpponents.get(p).get(t) > 0) {
+					amountRequired -= resourcesOfBothOpponents.get(p).get(t);
+					if (p.equals(this.leftPlayer)) {
+						amountOfUsedResourcesLeftPlayer += resourcesOfBothOpponents.get(p).get(t);
+						}
+					if (p.equals(this.rightPlayer)) {
+						amountOfUsedResourcesRightPlayer += resourcesOfBothOpponents.get(p).get(t);
+						}
+					if (amountRequired <= 0) {
+						int totalAmountOfNeededResources = amountOfUsedResourcesLeftPlayer + amountOfUsedResourcesRightPlayer;
+						if (2*totalAmountOfNeededResources <= this.getCoins()) {
+							checkedResources.put(t, true);
+							missingResources.remove(t);
+							Map<Player, Integer> tempMap = new HashMap<>();
+							tempMap.put(leftPlayer, amountOfUsedResourcesLeftPlayer);
+							tempMap.put(rightPlayer, amountOfUsedResourcesRightPlayer);
+							this.cardsTradingNeeded.put(card, tempMap);
+							}
+						}
+					}
+				}
+			}
+		if(checkedResources.entrySet().stream().filter(b -> b.getValue() == false).count() <= 0) {
+			return true;
+		}
+		
+		//wasn't able to afford card with normal resources of opponents, check if possible with alternate ones
+		Map<Player, ArrayList<HashMap<ResourceType, Integer>>> alternateResourcesOfBothOpponents = new HashMap<Player, ArrayList<HashMap<ResourceType, Integer>>>();
+		if (!leftPlayer.getAlternateResources().isEmpty()) {
+			alternateResourcesOfBothOpponents.put(leftPlayer, leftPlayer.getAlternateResources());
+		}
+		if (!rightPlayer.getAlternateResources().isEmpty()) {
+			alternateResourcesOfBothOpponents.put(rightPlayer, rightPlayer.getAlternateResources());
+		}
+		
+
+		copy.clear();
+		copy = (HashMap) missingResources.clone();
+		for (ResourceType type : copy.keySet()) {	
+			Integer amountRequired = copy.get(type);
+			System.out.println(alternateResourcesOfBothOpponents.toString());
+			for (Player player : alternateResourcesOfBothOpponents.keySet()) {
+				for (int hashMap = 0; hashMap < alternateResourcesOfBothOpponents.get(player).size(); hashMap++) {
+					System.out.println(type);
+					System.out.println(alternateResourcesOfBothOpponents.get(player).get(hashMap).get(type));
+					if (alternateResourcesOfBothOpponents.get(player).get(hashMap) != null &&
+						alternateResourcesOfBothOpponents.get(player).get(hashMap).get(type) != null &&
+						alternateResourcesOfBothOpponents.get(player).get(hashMap).get(type) >= 1) {
+						amountRequired -= alternateResourcesOfBothOpponents.get(player).get(hashMap).get(type);
+
+						if (player.equals(this.leftPlayer)) {
+							amountOfUsedResourcesLeftPlayer += alternateResourcesOfBothOpponents.get(player).get(hashMap).get(type);
+						}
+						if (player.equals(this.rightPlayer)) {
+							amountOfUsedResourcesRightPlayer += alternateResourcesOfBothOpponents.get(player).get(hashMap).get(type);
+						}
+						System.out.println("amountRequired: " + amountRequired);
+						if (amountRequired <= 0) {
+							int totalAmountOfNeedeResources = amountOfUsedResourcesLeftPlayer + amountOfUsedResourcesRightPlayer;
+							System.out.println("totalAmountOfNeedeResources: " + totalAmountOfNeedeResources);
+							System.out.println("this.getCoins(): " + this.getCoins());
+							if (2*totalAmountOfNeedeResources <= this.getCoins()) {
+								checkedResources.put(type, true);
+								missingResources.remove(type);
+								Map<Player, Integer> tempMap = new HashMap<>();
+								tempMap.put(leftPlayer, amountOfUsedResourcesLeftPlayer);
+								tempMap.put(rightPlayer, amountOfUsedResourcesRightPlayer);
+								this.cardsTradingNeeded.put(card, tempMap);
+								}
+							}
+						} else {
+							System.out.println("value in trading is null or opponets do not own required resouces");
+						}
+					}
+				}
+			}
+
+		if(checkedResources.entrySet().stream().filter(b -> b.getValue() == false).count() <= 0) {
+			return true;
+		}
+	
+		return false;
 	}
 
 	/**
@@ -468,8 +613,8 @@ public class Player implements Serializable{
 	
 	public void removeCardFromCurrentPlayabled(Card c) {
 		Card cr = this.currentPlayableCards.remove(this.currentPlayableCards.indexOf(c));
-		System.out.println("removed card: " + cr);
-		System.out.println("now available cards: " + currentPlayableCards);
+		logger.info("removed card: " + cr);
+		logger.info("now available cards: " + currentPlayableCards);
 	}
 	
 	public Board getBoard() {

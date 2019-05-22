@@ -47,7 +47,6 @@ public class DatabaseHandler {
 			Statement stmt = con.createStatement();
 			stmt.execute("DROP TABLE " + c.getSimpleName());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

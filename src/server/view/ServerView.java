@@ -26,7 +26,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import server.ServiceLocator;
 import server.model.ServerModel;
-import server.model.gameplay.ServerAction;
+import server.model.gameplay.ServerActionLog;
 /**
  * Server view for Server MVC
  * @author david
@@ -51,10 +51,10 @@ public class ServerView {
 	private Label lblPort;
 	private Button btnLeaderboard;
 	
-	TableColumn<ServerAction,String> tblcolTimestamp;
-	TableColumn<ServerAction,String> tblcolIpAdress;
-	TableColumn<ServerAction,String> tblcolPlayer;
-	TableColumn<ServerAction,String> tblcolAction;
+	TableColumn<ServerActionLog,String> tblcolTimestamp;
+	TableColumn<ServerActionLog,String> tblcolIpAdress;
+	TableColumn<ServerActionLog,String> tblcolPlayer;
+	TableColumn<ServerActionLog,String> tblcolAction;
 	
 	public ServerView(Stage primaryStage, ServerModel model) {
 		this.stage = primaryStage;
@@ -120,39 +120,36 @@ public class ServerView {
 		 * disabled till the functionality can be implemented
 		 * @author david
 		 */
-//		this.btnChangePort.setDisable(true);
-//		this.btnRestartServer.setDisable(true);
-		
-//		hBox.getChildren().addAll(fieldDomain, fieldIpAdress, fieldPort, btnChangePort, btnRestartServer);
 		hBox.getChildren().addAll(lblDomain, fieldDomain, lblIpAdress, fieldIpAdress, lblPort, fieldPort, btnLeaderboard);
 		hBox.setSpacing(5);
 		hBox.setAlignment(Pos.CENTER);
 
 		
 		//TableView Bottom
-		TableView<ServerAction> tableView = new TableView<ServerAction>();
+		TableView<ServerActionLog> tableView = new TableView<ServerActionLog>();
 		tableView.setItems(model.getServerActionData());
 		pane.setBottom(tableView);
 		
-		tblcolTimestamp= new TableColumn<ServerAction,String>();
-		tblcolTimestamp.setMinWidth(140);
-		tblcolTimestamp.setCellValueFactory(new PropertyValueFactory<ServerAction,String>("timestamp"));
+		tblcolTimestamp= new TableColumn<ServerActionLog,String>();
+		tblcolTimestamp.setMinWidth(160);
+		tblcolTimestamp.setCellValueFactory(new PropertyValueFactory<ServerActionLog,String>("timestamp"));
 		
-		tblcolIpAdress	= new TableColumn<ServerAction,String>();
-		tblcolIpAdress.setMinWidth(80);
-		tblcolIpAdress.setCellValueFactory(new PropertyValueFactory<ServerAction,String>("ipAdress"));
+		tblcolIpAdress	= new TableColumn<ServerActionLog,String>();
+		tblcolIpAdress.setMinWidth(90);
+		tblcolIpAdress.setCellValueFactory(new PropertyValueFactory<ServerActionLog,String>("ipAdress"));
 		
-		tblcolPlayer	= new TableColumn<ServerAction,String>();
-		tblcolPlayer.setMinWidth(90);
-		tblcolPlayer.setCellValueFactory(new PropertyValueFactory<ServerAction,String>("userName"));
+		tblcolPlayer	= new TableColumn<ServerActionLog,String>();
+		tblcolPlayer.setMinWidth(100);
+		tblcolPlayer.setCellValueFactory(new PropertyValueFactory<ServerActionLog,String>("userName"));
 		
-		tblcolAction	= new TableColumn<ServerAction,String>();
-		tblcolAction.setMinWidth(290);
-		tblcolAction.setCellValueFactory(new PropertyValueFactory<ServerAction,String>("action"));
+		tblcolAction	= new TableColumn<ServerActionLog,String>();
+		tblcolAction.setMinWidth(300);
+		tblcolAction.setCellValueFactory(new PropertyValueFactory<ServerActionLog,String>("action"));
 		
 		tableView.getColumns().addAll(tblcolTimestamp, tblcolIpAdress, tblcolPlayer, tblcolAction);
 		
 		//Final Initialisation
+		this.stage.getIcons().add(ServiceLocator.getSevenLogo());
 		this.stage.setResizable(false);
 		Scene scene = new Scene(pane);
 		scene.getStylesheets().add(getClass().getResource("ServerStyle.css").toExternalForm());

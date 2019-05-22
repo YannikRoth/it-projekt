@@ -23,7 +23,7 @@ import server.model.database.HighScore;
 import server.model.gameplay.Board;
 import server.model.gameplay.Card;
 import server.model.gameplay.Player;
-import server.model.gameplay.ServerAction;
+import server.model.gameplay.ServerActionLog;
 import server.model.init.BoardLoader;
 import server.model.init.CardLoader;
 
@@ -33,7 +33,7 @@ public class ServerModel implements Serializable{
 	private String hostName;
 	private String hostAddress;
 	
-	public ObservableList<ServerAction> serverActionData;
+	public ObservableList<ServerActionLog> serverActionData;
 	
 	private ArrayList<Player> connectedPlayerList = new ArrayList<>();
 	private Map<Player, ServerClientThread> players = new HashMap<>();
@@ -79,7 +79,7 @@ public class ServerModel implements Serializable{
 		requesthandler.start();
 		
 		serverActionData = FXCollections.observableArrayList();
-		serverActionData.add(new ServerAction(getHostAddress(), "Server", "StartUp"));
+		serverActionData.add(new ServerActionLog(getHostAddress(), "Server", "StartUp"));
 		//further code to follow
 	}
 	
@@ -104,7 +104,6 @@ public class ServerModel implements Serializable{
 	 *
 	 */
 	public void addClient(ServerClientThread client) {
-		// TODO Bedingungen wenn neuer Client erlaubt ist und wann nicht
 		if(players.size() < NUMBEROFPLAYERS) {
 			//add player to active player list
 			players.put(client.getPlayer(), client);
@@ -112,11 +111,11 @@ public class ServerModel implements Serializable{
 			
 			logger.info("successfully added client");
 			ServiceLocator.getServerModel().getServerActionData().add(
-					new server.model.gameplay.ServerAction(client.getSocket().getInetAddress().toString(), client.getPlayer().getPlayerName(), "Connected"));
+					new server.model.gameplay.ServerActionLog(client.getSocket().getInetAddress().toString(), client.getPlayer().getPlayerName(), "Connected"));
 			if(players.size() >= NUMBEROFPLAYERS) {
 				logger.info("game Startet");
 				ServiceLocator.getServerModel().getServerActionData().add(
-						new server.model.gameplay.ServerAction(getHostAddress(), "Server", "Game started"));
+						new server.model.gameplay.ServerActionLog(getHostAddress(), "Server", "Game started"));
 				this.startGame();
 			}else {
 				for(Entry<Player, ServerClientThread> serverClientThread : players.entrySet()) {
@@ -268,7 +267,6 @@ public class ServerModel implements Serializable{
 			try {
 				throw new DataConsistencyException("Consistency check failed while preparing cards for age 2. Take a look at masterdata");
 			} catch (DataConsistencyException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				logger.info("Consistency check failed while preparing cards for age 2. Take a look at masterdata");
 			}
@@ -287,7 +285,6 @@ public class ServerModel implements Serializable{
 	 * @author Roman Leuenberger
 	 */
 	
-	//public List<Player> evaluateWinner(Player...players ){
 	public List<Player> evaluateWinner(List<Player> players){
 		
 		//TODO count points for cards of 3. age
@@ -295,13 +292,7 @@ public class ServerModel implements Serializable{
 		List<Player> scoreList = new ArrayList<>();
 		
 		for(Player p : players) {
-			//check player performace
-			//on the player-object there is a list called "cards" which contains all cards
-			//that the player has played thorughout the game.
-			//To get the amount of coins, you can use the method player.getCoins;
 			dealMilitaryPoints(p);
-			//p.addWinningPoints(p.getMilitaryPlusPoints() - p.getMilitaryMinusPoints());
-			//p.addWinningPoints(p.getMilitaryStrength());
 			p.addWinningPoints(p.getCoins()/3); //get amount of coins
 			ArrayList<Card> cardsPlayedByPlayer = (ArrayList<Card>) p.getPlayedCards(); //get a list of all played cards
 			
@@ -471,7 +462,7 @@ public class ServerModel implements Serializable{
 		return this.gameWinners;
 	}
 	
-	public ObservableList<ServerAction> getServerActionData() {
+	public ObservableList<ServerActionLog> getServerActionData() {
 		return this.serverActionData;
 	}
 	

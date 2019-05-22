@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import client.ServicelocatorClient;
 import client.model.ClientModel;
 import globals.ResourceType;
 import globals.Translator;
@@ -34,11 +33,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import server.ServiceLocator;
 import server.model.gameplay.Card;
 import server.model.gameplay.Player;
 
 /**
- * 
+ * Starts clientview after running the ClientMVC
  * @author philipp
  *
  */
@@ -168,10 +168,15 @@ public class ClientView {
 		ColAmount.setMinWidth(130);
 		ColAmount.setStyle("-fx-alignment: CENTER");
 		ColAmount.setCellValueFactory(callAmount);
-//		ColAmount.setCellValueFactory(cd -> Bindings.valueAt(this.model.getMyPlayer().getResources().getResourcesObservable(), cd.getValue()));
 		
 		tablePoints.getColumns().addAll(ColType, ColAmount);
 	}
+	
+	/**
+	 * starts the clientview
+	 * @author philipp
+	 */
+	
 	
 	public void buildView() {
 		BorderPane borderPaneMain = new BorderPane();
@@ -180,7 +185,7 @@ public class ClientView {
 		buildTableOpponents();
 		borderPaneMain.setCenter(tableOpponents);
 		
-		//Player Deck
+		//sets the whole playerview with opponents
 		VBox vBoxPlayer = new VBox();
 		HBox hBoxPlayer = new HBox();
 		borderPaneMain.setBottom(vBoxPlayer);
@@ -196,10 +201,10 @@ public class ClientView {
 		borderPanePlayer.setPrefWidth(980);
 		hBoxPlayer.setHgrow(borderPanePlayer, Priority.ALWAYS);
 		
-		//Cards
+		//temporary image for the cards after starting the game
 		Image tempImage = new Image("file:./resource/images/cards/SCN_0150.jpg");
 		
-		//initiates back of the cards as default before loading playable cards of player
+		//initiates back of the cards (temporary image) as default before loading playable cards of player
 		cardPlayable1 = new ImageView(tempImage);
 		cardPlayable1.setFitHeight(200);
 		cardPlayable1.setFitWidth(133);
@@ -235,7 +240,7 @@ public class ClientView {
 		cardPlayable7.setFitWidth(133);
 		cards[6] = cardPlayable7;
 		
-		//Points
+		//vBox for playerview without opponents
 		buildTablePoints();
 		VBox vBoxPlayerPoints = new VBox();
 		playerName = new Label();
@@ -248,7 +253,7 @@ public class ClientView {
 		vBoxPlayer.setMinWidth(1350);
 		vBoxPlayer.getStyleClass().add("vBoxPlayer");
 		
-		//Deck
+		//playerdeck of played and playable cards
 		VBox vBoxDeck = new VBox();
 		vBoxDeck.setPadding(new Insets(30,0,0, 0));
 		vBoxDeck.setSpacing(5);
@@ -257,7 +262,6 @@ public class ClientView {
 		/**
 		 * @author Roman Leuenberger
 		 */
-		
 		//buttons for client action
 		this.playCard = new Button();
 		this.buildWorldWonder = new Button();
@@ -278,7 +282,7 @@ public class ClientView {
 		buttonBox.setAlignment(Pos.CENTER);
 		
 		/**
-		 * hbox for world wonder (back of the card)
+		 * hBox for played cards to build the world wonder
 		 * @author philipp
 		 */
 		this.hBoxWorldWonderCards = new HBox();
@@ -328,6 +332,7 @@ public class ClientView {
 		MenuBar menuBar = new MenuBar(menuHelp, menuLanguage);
 		borderPaneMain.setTop(menuBar);
 		
+		this.stage.getIcons().add(ServiceLocator.getSevenLogo());
 		this.stage.setResizable(false);
 		Scene scene = new Scene(borderPaneMain);
 		scene.getStylesheets().add(getClass().getResource("ClientStyle.css").toExternalForm());
@@ -359,13 +364,12 @@ public class ClientView {
 	}
 	
 	/**
+	 * Method updates the view of the currently playable cards
 	 * @author Roman Leuenberger
 	 */
-	
 	public void updatePlayableCardView() {
 		this.playableCards.getChildren().clear();
 		cards = new ImageView[model.getMyPlayer().getPlayableCards().size()];
-		System.out.println(model.getMyPlayer().getPlayableCards());
 		for (int i = 0; i < model.getMyPlayer().getPlayableCards().size(); i++) {
 			cards[i] = new ImageView(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayableCards().get(i).getImageFileName()));
 			cards[i].setFitHeight(200);
@@ -377,13 +381,14 @@ public class ClientView {
 	/**
 	 * @author Roman Leuenberger
 	 */
-	
 	public void disableButtons() {
 		this.playCard.setDisable(true);
 		this.buildWorldWonder.setDisable(true);
 		this.discardCard.setDisable(true);
 	}
 	
+	
+	//disable cards after playing a card before next round
 	public void disableCards() {
 		this.playableCards.getChildren().clear();
 	}
@@ -429,15 +434,10 @@ public class ClientView {
 		}
 	}
 	
-	/**
-	 * Translate view texts in programm runtime
-	 * @author david
-	 */
 	public void setTexts() {
 		//Table opponents translations
 		colPlayer.setText(translator.getString("column.player"));
 		colSide.setText(translator.getString("column.side"));
-		dynamicCols.forEach(c -> c.setText(((ResourceType)c.getUserData()).toStringTranslate()));
 		playerOnRightSide.set(translator.getString("column.playeronright"));
 		playerOnLeftSide.set(translator.getString("column.playeronleft"));
 		
@@ -469,6 +469,11 @@ public class ClientView {
 		
 		stage.setTitle(translator.getString("clientGame.name"));
 
+		/**
+		 * @author david
+		 */
+		dynamicCols.forEach(c -> c.setText(((ResourceType)c.getUserData()).toStringTranslate()));
+		
 		if(this.okButton != null)
 			this.okButton.setText(translator.getString("button.quitgame"));
 		setTranslateWinnerLabels();

@@ -70,7 +70,18 @@ public class ClientModel extends Thread {
 			logger.info("Error occured while sending card: " + e.getMessage());
 		}
 	}
-
+	/**
+	 * This is the run method of the Communication, this is split into several subprocesses:
+	 * The Client will open a Connection on the IP and Socket written in the Gamelobby - and it will send its playername to the Server
+	 * The Client will now loop as long as the Server sends ServerAction objects, these are as follow:
+	 * ESTABLISHED: here the Client receives his player Object and the number of players.
+	 * UPDATEVIEW: here the Client will update his View with all the received new players
+	 * INFORMATION: here the Client will update the Lobby with all the Current players.
+	 * STARTGAME: here the Client will open the GameView and Close the Lobby.
+	 * ENDGAME: here the Client will update the GameView with all the winners.
+	 * @author martin
+	 * 
+	 */
 	@Override
 	public void run() {
 		//Join Game
@@ -102,31 +113,35 @@ public class ClientModel extends Thread {
 						setMyPlayer((Player) objInputStream.readObject());
 					}
 					logger.info("Own Player Object "+getMyPlayer().getPlayerName()+" received from Server");
-					otherPlayers.clear();
 					//update all other players
 					synchronized(otherPlayers) {
+						otherPlayers.clear();
 						for (int i = 0; i < numberofPlayers - 1; i++) {
 							tempplayer = (Player) objInputStream.readObject();
 							otherPlayers.add(tempplayer);
 							logger.info("Opponent player "+tempplayer.getPlayerName()+" received from Server");						
 						}
 					}
-					//set neigbours manually on client side as references will be invalid
-					setneigbours();
 					
-					//update the view
-					Cards.setAll(getMyPlayer().getPlayableCards());
-					if(getMyPlayer().getPlayableCards().size() > 1) {
-						Platform.runLater(new Runnable() {
-							@Override
-							public void run() {
-								System.out.println("View ref: " + ServicelocatorClient.getClientView());
-								ServicelocatorClient.getClientView().updatePlayableCardView();
-								ServicelocatorClient.getClientView().refreshAgeLabelFromModel();
-								ServicelocatorClient.getClientController().processClickOnImage();
-								
-							}
-						});
+					synchronized (getMyPlayer()) {
+						//set neigbours manually on client side as references will be invalid
+						setneigbours();
+						
+						//update the view
+						Cards.setAll(getMyPlayer().getPlayableCards());
+						logger.info("Updated my cards: " + getMyPlayer().getPlayableCards());
+						if(getMyPlayer().getPlayableCards().size() > 1) {
+							Platform.runLater(new Runnable() {
+								@Override
+								public void run() {
+									System.out.println("View ref: " + ServicelocatorClient.getClientView());
+									ServicelocatorClient.getClientView().updatePlayableCardView();
+									ServicelocatorClient.getClientView().refreshAgeLabelFromModel();
+									ServicelocatorClient.getClientController().processClickOnImage();
+									
+								}
+							});
+						}
 					}
 					
 					break;
@@ -209,8 +224,12 @@ public class ClientModel extends Thread {
 			logger.info(e.getLocalizedMessage());
 		} 
 	}
-
-	private void setneigbours() {
+	/**
+	 * This method is needed on the Client Side as well to update the Object references which will not be correct after receiving the player objects.
+	 * @author martin
+	 * 
+	 */
+	private synchronized void setneigbours() {
 		// iterrate through all players
 		getMyPlayer().setRightPlayer(otherPlayers.get(0));
 		getMyPlayer().setLeftPlayer(otherPlayers.get(otherPlayers.size() - 1));
@@ -267,12 +286,12 @@ public class ClientModel extends Thread {
 			optionValues.put(ClientAction.PLAYCARD, false);
 			optionValues.put(ClientAction.BUILDWONDER, false);
 			optionValues.put(ClientAction.DISCARD, true);
-			if (getMyPlayer().isAbleToAffordCard(c)) {
+			if (this.getMyPlayer().isAbleToAffordCard(c)) {
 				optionValues.replace(ClientAction.PLAYCARD, false, true);
 			}
-			if (getMyPlayer().getPlayerBoard().getNextWorldWonderStage() != null) {
+			if (getMyPlayer().getPlayerBoard().getNextWorldWonderStage(getMyPlayer()) != null) {
 				if (getMyPlayer().isAbleToAffordCard(
-						getMyPlayer().getPlayerBoard().getNextWorldWonderStage().getWorldWonderCard())) {
+						getMyPlayer().getPlayerBoard().getNextWorldWonderStage(getMyPlayer()).getWorldWonderCard())) {
 					optionValues.replace(ClientAction.BUILDWONDER, false, true);
 				}
 			}
@@ -297,7 +316,7 @@ public class ClientModel extends Thread {
 		synchronized (this.player) {
 			player.getResources().refreshObservableMap();
 			if(ServicelocatorClient.getClientView() != null) {
-				//Liste lï¿½schen
+				//Liste löschen
 				ServicelocatorClient.getClientView().getTablePoints().getItems().clear();
 				//Listener mit neuer Liste
 				ServicelocatorClient.getClientView().getTablePoints().setItems(

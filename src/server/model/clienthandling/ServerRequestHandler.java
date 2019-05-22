@@ -12,7 +12,7 @@ import server.model.ServerModel;
 
 
 /**
- * 
+ * This Class manages all incoming Requests and sends them to the Servermodel
  * @author martin
  *
  */

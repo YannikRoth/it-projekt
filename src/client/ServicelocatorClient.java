@@ -5,8 +5,6 @@ import client.controller.LobbyController;
 import client.model.ClientModel;
 import client.model.LobbyModel;
 import client.view.ClientView;
-import server.ServiceLocator;
-import server.model.ServerModel;
 
 public class ServicelocatorClient {
 

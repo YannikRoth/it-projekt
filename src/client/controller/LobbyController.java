@@ -3,7 +3,6 @@ package client.controller;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import client.ClientMVC;
 import client.ServicelocatorClient;
@@ -96,6 +95,8 @@ public class LobbyController {
 	private void processNewGameButton() {
 		view.getNewGameButton().setOnAction((e) -> {
 			if(!ServicelocatorClient.getClientModel().isAlive()) {
+				Globals.setDefaultIPAddr(view.getIpAdress());
+				Globals.setPortNr(view.getPort());
 				ServicelocatorClient.getClientModel().setInputPlayerName(view.getPlayerName().getText());
 				ServicelocatorClient.getClientModel().start();
 				view.disableDialogElements();
@@ -186,11 +187,5 @@ public class LobbyController {
 	}
 	public void setView(LobbyView view) {
 		this.view = view;
-	}
-
-
-	public void updateWaitingPlayers(ArrayList<String> listOfWaitingPlayers) {
-		
-		
 	}
 }

@@ -46,9 +46,11 @@
 	-fx-font-family: "Broadway";
 	-fx-font-size: 12px;
 	-fx-font-weight: bold;
+	-fx-text-fill: white;
  	-fx-min-width: 110;
 	-fx-min-height: 20;
 	-fx-background-color: #daa520;
+	-fx-effect: dropshadow(three-pass-box, #daa520, 10, 0.5, 0, 0);
 }
 
 .label{
@@ -65,7 +67,7 @@
 
 .root{
 	-fx-background-image: url("file:./resource/images/title-logo.jpg");
-    -fx-background-size: 620 520;
+    -fx-background-size: 655 520;
     -fx-effect: dropshadow(three-pass-box, white, 30, 0.5, 0, 0);
 }
 
