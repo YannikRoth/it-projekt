@@ -120,10 +120,6 @@ public class ServerView {
 		 * disabled till the functionality can be implemented
 		 * @author david
 		 */
-//		this.btnChangePort.setDisable(true);
-//		this.btnRestartServer.setDisable(true);
-		
-//		hBox.getChildren().addAll(fieldDomain, fieldIpAdress, fieldPort, btnChangePort, btnRestartServer);
 		hBox.getChildren().addAll(lblDomain, fieldDomain, lblIpAdress, fieldIpAdress, lblPort, fieldPort, btnLeaderboard);
 		hBox.setSpacing(5);
 		hBox.setAlignment(Pos.CENTER);

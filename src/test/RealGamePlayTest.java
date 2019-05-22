@@ -1,22 +1,18 @@
 package test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
 import globals.ResourceMapType;
 import globals.ResourceType;
-import server.model.ServerModel;
 import server.model.gameplay.Card;
 import server.model.gameplay.Player;
 import server.model.gameplay.ResourceMap;
@@ -25,7 +21,7 @@ import server.model.init.CardLoader;
 class RealGamePlayTest {
 
 	private ArrayList<Card> cardSet = new ArrayList<>();
-	//private ServerModel model = new ServerModel();
+
 	Map<Integer, Card> cards = CardLoader.importCards();
 	private Player player = new Player("Yannik");
 	
@@ -33,7 +29,6 @@ class RealGamePlayTest {
 	private List<Set<Entry<Integer, Card>>> activeCards = new ArrayList<>();
 	
 	public RealGamePlayTest() {
-		//cardSet.add(model.getCard(2)); //free card produces fabric
 		filterCards();
 	}
 	

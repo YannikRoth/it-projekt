@@ -1,19 +1,13 @@
 package test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import com.sun.media.jfxmedia.logging.Logger;
-
-import client.model.ClientModel;
 import globals.ResourceMapType;
 import globals.ResourceType;
-import server.ServiceLocator;
 import server.model.ServerModel;
 import server.model.gameplay.Card;
 import server.model.gameplay.Player;

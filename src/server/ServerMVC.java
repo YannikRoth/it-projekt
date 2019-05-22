@@ -1,13 +1,12 @@
 package server;
 
+import java.util.logging.Logger;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 import server.controller.ServerController;
 import server.model.ServerModel;
-import server.model.clienthandling.ServerRequestHandler;
-import server.model.init.CardLoader;
 import server.view.ServerView;
-import java.util.logging.Logger;
 
 /**
  * 

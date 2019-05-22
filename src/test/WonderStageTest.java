@@ -1,11 +1,9 @@
 package test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +11,6 @@ import globals.ResourceType;
 import server.model.gameplay.Board;
 import server.model.gameplay.Card;
 import server.model.gameplay.Player;
-import server.model.gameplay.WorldWonder;
 import server.model.init.BoardLoader;
 import server.model.init.CardLoader;
 
