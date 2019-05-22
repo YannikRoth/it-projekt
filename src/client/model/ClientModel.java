@@ -70,7 +70,18 @@ public class ClientModel extends Thread {
 			logger.info("Error occured while sending card: " + e.getMessage());
 		}
 	}
-
+	/**
+	 * This is the run method of the Communication, this is split into several subprocesses:
+	 * The Client will open a Connection on the IP and Socket written in the Gamelobby - and it will send its playername to the Server
+	 * The Client will now loop as long as the Server sends ServerAction objects, these are as follow:
+	 * ESTABLISHED: here the Client receives his player Object and the number of players.
+	 * UPDATEVIEW: here the Client will update his View with all the received new players
+	 * INFORMATION: here the Client will update the Lobby with all the Current players.
+	 * STARTGAME: here the Client will open the GameView and Close the Lobby.
+	 * ENDGAME: here the Client will update the GameView with all the winners.
+	 * @author martin
+	 * 
+	 */
 	@Override
 	public void run() {
 		//Join Game
@@ -213,7 +224,11 @@ public class ClientModel extends Thread {
 			logger.info(e.getLocalizedMessage());
 		} 
 	}
-
+	/**
+	 * This method is needed on the Client Side as well to update the Object references which will not be correct after receiving the player objects.
+	 * @author martin
+	 * 
+	 */
 	private synchronized void setneigbours() {
 		// iterrate through all players
 		getMyPlayer().setRightPlayer(otherPlayers.get(0));
