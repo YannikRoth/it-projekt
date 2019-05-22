@@ -506,10 +506,8 @@ public class Card implements Serializable{
 	public boolean equals(Object o) {
 		Card c = (Card) o;
 		if(this.cardName.equals(c.getCardName()) && this.id == c.getId()) {
-			logger.info("An equal card was found");
 			return true;
 		}else {
-			logger.info("No equal card was found");
 			return false;
 		}
 	}
