@@ -214,7 +214,7 @@ public class ClientModel extends Thread {
 		} 
 	}
 
-	private void setneigbours() {
+	private synchronized void setneigbours() {
 		// iterrate through all players
 		getMyPlayer().setRightPlayer(otherPlayers.get(0));
 		getMyPlayer().setLeftPlayer(otherPlayers.get(otherPlayers.size() - 1));
@@ -301,7 +301,7 @@ public class ClientModel extends Thread {
 		synchronized (this.player) {
 			player.getResources().refreshObservableMap();
 			if(ServicelocatorClient.getClientView() != null) {
-				//Liste lï¿½schen
+				//Liste löschen
 				ServicelocatorClient.getClientView().getTablePoints().getItems().clear();
 				//Listener mit neuer Liste
 				ServicelocatorClient.getClientView().getTablePoints().setItems(

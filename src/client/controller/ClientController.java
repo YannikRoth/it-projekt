@@ -105,7 +105,6 @@ public class ClientController {
 	}
 
 	private void processAboutItem() {
-		// TODO Auto-generated method stub
 		view.getAboutItem().setOnAction(e ->{
 			if (Desktop.isDesktopSupported()) {
 			    try {
@@ -119,12 +118,9 @@ public class ClientController {
 	}
 
 	private void processHintItem() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	private void processRulesItem() {
-		// TODO Auto-generated method stub
 		view.getRulesItem().setOnAction((e) -> {
 			if (Desktop.isDesktopSupported()) {
 			    try {
@@ -194,7 +190,6 @@ public class ClientController {
 	
 	private void processDiscardCardButton() {
 		view.getDiscardCardButton().setOnAction(e -> {
-			//TODO Method for discard card
 			model.sendPlayedCard(this.selectedCard, ClientAction.DISCARD);
 			logger.info("DiscardCard");
 			view.disableCards();

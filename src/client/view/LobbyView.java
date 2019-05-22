@@ -151,7 +151,6 @@ public class LobbyView {
 		hBoxIpAdress.setPadding(new Insets(0, 0, 10, 0));
 		hBoxConnect.setPadding(new Insets(0, 0, 10, 0));
 		
-		//TODO: Wartende Personen anzeigen
 		TableView<Player> tableView = new TableView<>();
 		tableView.setPrefHeight(250);
 		tableView.setItems(model.getLobbyPlayerData());

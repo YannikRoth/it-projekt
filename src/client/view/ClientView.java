@@ -169,7 +169,6 @@ public class ClientView {
 		ColAmount.setMinWidth(130);
 		ColAmount.setStyle("-fx-alignment: CENTER");
 		ColAmount.setCellValueFactory(callAmount);
-//		ColAmount.setCellValueFactory(cd -> Bindings.valueAt(this.model.getMyPlayer().getResources().getResourcesObservable(), cd.getValue()));
 		
 		tablePoints.getColumns().addAll(ColType, ColAmount);
 	}

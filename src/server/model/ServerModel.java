@@ -23,7 +23,7 @@ import server.model.database.HighScore;
 import server.model.gameplay.Board;
 import server.model.gameplay.Card;
 import server.model.gameplay.Player;
-import server.model.gameplay.ServerAction;
+import server.model.gameplay.ServerActionLog;
 import server.model.init.BoardLoader;
 import server.model.init.CardLoader;
 
@@ -33,7 +33,7 @@ public class ServerModel implements Serializable{
 	private String hostName;
 	private String hostAddress;
 	
-	public ObservableList<ServerAction> serverActionData;
+	public ObservableList<ServerActionLog> serverActionData;
 	
 	private ArrayList<Player> connectedPlayerList = new ArrayList<>();
 	private Map<Player, ServerClientThread> players = new HashMap<>();
@@ -79,7 +79,7 @@ public class ServerModel implements Serializable{
 		requesthandler.start();
 		
 		serverActionData = FXCollections.observableArrayList();
-		serverActionData.add(new ServerAction(getHostAddress(), "Server", "StartUp"));
+		serverActionData.add(new ServerActionLog(getHostAddress(), "Server", "StartUp"));
 		//further code to follow
 	}
 	
@@ -112,11 +112,11 @@ public class ServerModel implements Serializable{
 			
 			logger.info("successfully added client");
 			ServiceLocator.getServerModel().getServerActionData().add(
-					new server.model.gameplay.ServerAction(client.getSocket().getInetAddress().toString(), client.getPlayer().getPlayerName(), "Connected"));
+					new server.model.gameplay.ServerActionLog(client.getSocket().getInetAddress().toString(), client.getPlayer().getPlayerName(), "Connected"));
 			if(players.size() >= NUMBEROFPLAYERS) {
 				logger.info("game Startet");
 				ServiceLocator.getServerModel().getServerActionData().add(
-						new server.model.gameplay.ServerAction(getHostAddress(), "Server", "Game started"));
+						new server.model.gameplay.ServerActionLog(getHostAddress(), "Server", "Game started"));
 				this.startGame();
 			}else {
 				for(Entry<Player, ServerClientThread> serverClientThread : players.entrySet()) {
@@ -465,7 +465,7 @@ public class ServerModel implements Serializable{
 		return this.gameWinners;
 	}
 	
-	public ObservableList<ServerAction> getServerActionData() {
+	public ObservableList<ServerActionLog> getServerActionData() {
 		return this.serverActionData;
 	}
 	

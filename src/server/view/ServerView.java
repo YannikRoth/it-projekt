@@ -26,7 +26,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import server.ServiceLocator;
 import server.model.ServerModel;
-import server.model.gameplay.ServerAction;
+import server.model.gameplay.ServerActionLog;
 /**
  * Server view for Server MVC
  * @author david
@@ -51,10 +51,10 @@ public class ServerView {
 	private Label lblPort;
 	private Button btnLeaderboard;
 	
-	TableColumn<ServerAction,String> tblcolTimestamp;
-	TableColumn<ServerAction,String> tblcolIpAdress;
-	TableColumn<ServerAction,String> tblcolPlayer;
-	TableColumn<ServerAction,String> tblcolAction;
+	TableColumn<ServerActionLog,String> tblcolTimestamp;
+	TableColumn<ServerActionLog,String> tblcolIpAdress;
+	TableColumn<ServerActionLog,String> tblcolPlayer;
+	TableColumn<ServerActionLog,String> tblcolAction;
 	
 	public ServerView(Stage primaryStage, ServerModel model) {
 		this.stage = primaryStage;
@@ -130,25 +130,25 @@ public class ServerView {
 
 		
 		//TableView Bottom
-		TableView<ServerAction> tableView = new TableView<ServerAction>();
+		TableView<ServerActionLog> tableView = new TableView<ServerActionLog>();
 		tableView.setItems(model.getServerActionData());
 		pane.setBottom(tableView);
 		
-		tblcolTimestamp= new TableColumn<ServerAction,String>();
+		tblcolTimestamp= new TableColumn<ServerActionLog,String>();
 		tblcolTimestamp.setMinWidth(160);
-		tblcolTimestamp.setCellValueFactory(new PropertyValueFactory<ServerAction,String>("timestamp"));
+		tblcolTimestamp.setCellValueFactory(new PropertyValueFactory<ServerActionLog,String>("timestamp"));
 		
-		tblcolIpAdress	= new TableColumn<ServerAction,String>();
+		tblcolIpAdress	= new TableColumn<ServerActionLog,String>();
 		tblcolIpAdress.setMinWidth(90);
-		tblcolIpAdress.setCellValueFactory(new PropertyValueFactory<ServerAction,String>("ipAdress"));
+		tblcolIpAdress.setCellValueFactory(new PropertyValueFactory<ServerActionLog,String>("ipAdress"));
 		
-		tblcolPlayer	= new TableColumn<ServerAction,String>();
+		tblcolPlayer	= new TableColumn<ServerActionLog,String>();
 		tblcolPlayer.setMinWidth(100);
-		tblcolPlayer.setCellValueFactory(new PropertyValueFactory<ServerAction,String>("userName"));
+		tblcolPlayer.setCellValueFactory(new PropertyValueFactory<ServerActionLog,String>("userName"));
 		
-		tblcolAction	= new TableColumn<ServerAction,String>();
+		tblcolAction	= new TableColumn<ServerActionLog,String>();
 		tblcolAction.setMinWidth(300);
-		tblcolAction.setCellValueFactory(new PropertyValueFactory<ServerAction,String>("action"));
+		tblcolAction.setCellValueFactory(new PropertyValueFactory<ServerActionLog,String>("action"));
 		
 		tableView.getColumns().addAll(tblcolTimestamp, tblcolIpAdress, tblcolPlayer, tblcolAction);
 		

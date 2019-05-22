@@ -57,10 +57,8 @@ public class Player implements Serializable{
 	private int winningPoints = 0; //winning points of the player (sum)
 	private int sciencePoints = 0; //these values are calculated after the game has ended
 	
-	//TODO: Handle name
 	//Player name has to be unique!!
 	private String playerName = new String();
-	//TODO: Implement every viewColumn as SimpleXXXProperty --> Every of them needs a getter-Method
 	
 	//game handling
 	private transient Socket socket;

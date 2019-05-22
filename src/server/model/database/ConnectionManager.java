@@ -17,6 +17,7 @@ public class ConnectionManager {
 	/**
 	 * This factory method return an SQL connection. Returns null on error
 	 * @return SQL connection or null on error
+	 * @author yannik roth
 	 */
 	public static Connection getDbConnection() {
 		try {

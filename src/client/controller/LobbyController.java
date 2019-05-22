@@ -189,10 +189,4 @@ public class LobbyController {
 	public void setView(LobbyView view) {
 		this.view = view;
 	}
-
-
-	public void updateWaitingPlayers(ArrayList<String> listOfWaitingPlayers) {
-		
-		
-	}
 }

@@ -127,11 +127,9 @@ public class CardLoader {
 			csvReader.close();
 			
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.warning(e.getMessage());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.warning(e.getMessage());
 		}
 	}
 	
@@ -165,11 +163,9 @@ public class CardLoader {
 			csvReader.close();
 			
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.warning(e.getMessage());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.warning(e.getMessage());
 		}
 		
 		return cards;
