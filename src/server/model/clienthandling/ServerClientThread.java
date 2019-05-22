@@ -19,7 +19,6 @@ import server.ServiceLocator;
 import server.model.ServerModel;
 import server.model.gameplay.Card;
 import server.model.gameplay.Player;
-import test.testclassserializable;
 
 /**
  * 
