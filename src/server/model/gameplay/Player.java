@@ -216,7 +216,7 @@ public class Player implements Serializable{
 	 * @return <code>false</code> if the card can not be played because the player can't afford it
 	 * @author yannik roth
 	 */
-	public Boolean isAbleToAffordCard(Card c) {
+	public synchronized Boolean isAbleToAffordCard(Card c) {
 		//if card can be played for free because of an earlier played card, instantly return true
 		if(this.freePlayableCards.contains(c.getCardName().toLowerCase())) {
 			return true;
@@ -326,7 +326,7 @@ public class Player implements Serializable{
 	 * @return
 	 */
 	
-	private Boolean isAbleToAffordCardWithTrade (Card card, Map<ResourceType, Boolean> checkedResources, HashMap<ResourceType, Integer> missingResources) {
+	private synchronized Boolean isAbleToAffordCardWithTrade (Card card, Map<ResourceType, Boolean> checkedResources, HashMap<ResourceType, Integer> missingResources) {
 		//card cannot be played with own resources...see if opponents got the required resources
 		Map<Player, Map<ResourceType, Integer>> resourcesOfBothOpponents = new HashMap<>();
 		Map<ResourceType, Integer> tempMapLeftPlayer = new HashMap<>();

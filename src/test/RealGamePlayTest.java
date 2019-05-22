@@ -117,5 +117,32 @@ class RealGamePlayTest {
 		player.playCard(cards.get(18)); //free card -> building chain to play card 51 for free
 		assertTrue(player.isAbleToAffordCard(cards.get(51)));
 	}
+	
+	@Test
+	void checkTradeWithAlternateRes() {
+		ArrayList<Card> set = new ArrayList<>();
+		set.add(cards.get(9));//Karawanserei
+		player.updateCardset(set);
+		player.addCoins(2);
+		
+		Player playerLeft = new Player("left");
+		ArrayList<Card> setLeft = new ArrayList<>();
+		setLeft.add(cards.get(70));//Forstwirtschaft
+		setLeft.add(cards.get(8));//Sägewerk
+		playerLeft.updateCardset(setLeft);
+		playerLeft.playCard(cards.get(70));
+		playerLeft.playCard(cards.get(8));
+		
+		Player playerR = new Player("right");
+		ArrayList<Card> setR = new ArrayList<>();
+		setR.add(cards.get(11));//Holzplatz
+		playerR.updateCardset(setR);
+		playerR.playCard(cards.get(11));
+		
+		player.setLeftPlayer(playerLeft);
+		player.setRightPlayer(playerR);
+		
+		assertTrue(player.isAbleToAffordCard(cards.get(9)));
+	}
 
 }

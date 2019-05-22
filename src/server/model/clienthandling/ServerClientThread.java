@@ -213,7 +213,7 @@ public class ServerClientThread extends Thread {
 								boolean check = this.player.playCard(cardplayed);
 								if(check == false) {
 									logger.warning("PLAYCARD: card could not be played, maybe a consistency problem?");
-									legalaction = false;
+									//legalaction = false;
 								}
 							}
 							logger.info(cardplayed.getCardName() + " Cards received from " + player.getPlayerName()
@@ -238,7 +238,7 @@ public class ServerClientThread extends Thread {
 								boolean check = this.player.playWorldWonder(this.player.getBoard().getNextWorldWonderStage(this.player));
 								this.player.removeCardFromCurrentPlayabled(cardplayed);
 								if(check == false) {
-									legalaction = false;
+									//legalaction = false;
 									logger.warning("BUILDWONDER: card could not be played, maybe a consistency problem?");
 								}
 							}
