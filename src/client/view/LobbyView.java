@@ -27,7 +27,7 @@ import server.ServiceLocator;
 import server.model.gameplay.Player;
 
 /**
- * 
+ * Starts lobbyview after running the LobbyMVC
  * @author philipp
  *
  */
