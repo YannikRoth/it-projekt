@@ -21,7 +21,8 @@ import server.model.gameplay.Card;
 import server.model.gameplay.Player;
 
 /**
- * 
+ * This Class Manages the Communication between one Client (Player) and the Gameplayserver.
+ * Each Client will have one running ServerClientThread. 
  * @author martin
  *
  */
@@ -33,7 +34,11 @@ public class ServerClientThread extends Thread {
 	private final Logger logger = ServiceLocator.getLogger();
 	private ObjectInputStream objInputStream;
 	private ObjectOutputStream objOutputStream;
-
+	/**
+	 * This method creates a new Thread for the Client and also creates the Playerobject with the incoming Name from the Client
+	 * @author martin
+	 * 
+	 */
 	public ServerClientThread(Socket socket, ServerModel model) {
 		// When the game starts the player object and numbers of players will be sent to
 		// the client
@@ -72,7 +77,11 @@ public class ServerClientThread extends Thread {
 			logger.warning(e.getLocalizedMessage());
 		}
 	}
-
+	/**
+	 * This method tells the Client that the Connection was successfully established and tells him how many players the game will have.
+	 * @author martin
+	 * 
+	 */
 	public synchronized void establishconnection() {
 
 		// this sends the own player obj to the client and tells him the game is
@@ -87,7 +96,11 @@ public class ServerClientThread extends Thread {
 			e.printStackTrace();
 		}
 	}
-
+	/**
+	 * This method will inform the Client if a new player joined a game so he can add the player in the List of the lobby
+	 * @author martin
+	 * 
+	 */
 	public synchronized void sendUpdateOfPlayers() {
 		// this updates the client with the list of players currently waiting in lobby
 		// =================================================================
@@ -106,7 +119,17 @@ public class ServerClientThread extends Thread {
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * This is the run method of the Communication, this is split into several subprocesses:
+	 * STARTGAME will tell the Client to start its Gameview after that the game will enter a loop that will stop when the game ends.
+	 * UPDATEVIEW the Server will send all PlayerObjects to the Client so he can update his current GameView with the newest PlayerObjects thus newest Gamestate.
+	 * After Sending all Objects the thread will wait until the Client sends a Card with a desired action this will be forwarded to the Servermodel to Execute it.
+	 * ENDGAME the thread checks each loop whether the game has ended if this is the Case it will inform the Client and leave the loop.
+	 * After the Cycle the Thread will tell the Servermodel to update its gamestatus.
+	 * @author martin
+	 * 
+	 */
 	@Override
 	public void run() {
 		// tells the client to start its gameview
@@ -246,6 +269,11 @@ public class ServerClientThread extends Thread {
 			}
 		}
 	}
+	/**
+	 * This method outputs all players going right round
+	 * @author martin
+	 * 
+	 */
 
 	public synchronized void OutputAllplayers(Player curplayer) throws IOException {
 		//Outputs all right players starting with the own player of this clientthread
