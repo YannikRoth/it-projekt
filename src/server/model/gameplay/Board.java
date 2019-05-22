@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import globals.ResourceType;
-import globals.exception.IllegalParameterException;
 import server.ServiceLocator;
 import server.model.init.BoardLoader;
 
@@ -111,15 +110,9 @@ public class Board implements Serializable {
 	
 	private void fillAttribute(int i, String field, String amount) {
 		if(!amount.equals("null") && this.worldWonders[i-1] != null) {
-//			if (field.equals("rewardinpoints")) {
-//				this.worldWonders[i - 1].rewardinPoints = Integer.parseInt(amount);
-//			}
 			if (field.equals("rewardfreecard")) {
 				this.worldWonders[i - 1].rewardFreecard = amount;
 			}
-//			if (field.equals("rewardinmilitary")) {
-//				this.worldWonders[i - 1].rewardinMilitary = Integer.parseInt(amount);
-//			}
 			if (field.equals("rewardsfreecardperage")) {
 				Boolean b = amount.equals("true") ? true : false;
 				this.worldWonders[i - 1].rewardsFreeCardperAge = b;

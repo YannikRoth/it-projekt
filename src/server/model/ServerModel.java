@@ -104,7 +104,6 @@ public class ServerModel implements Serializable{
 	 *
 	 */
 	public void addClient(ServerClientThread client) {
-		// TODO Bedingungen wenn neuer Client erlaubt ist und wann nicht
 		if(players.size() < NUMBEROFPLAYERS) {
 			//add player to active player list
 			players.put(client.getPlayer(), client);
@@ -268,7 +267,6 @@ public class ServerModel implements Serializable{
 			try {
 				throw new DataConsistencyException("Consistency check failed while preparing cards for age 2. Take a look at masterdata");
 			} catch (DataConsistencyException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				logger.info("Consistency check failed while preparing cards for age 2. Take a look at masterdata");
 			}
@@ -287,7 +285,6 @@ public class ServerModel implements Serializable{
 	 * @author Roman Leuenberger
 	 */
 	
-	//public List<Player> evaluateWinner(Player...players ){
 	public List<Player> evaluateWinner(List<Player> players){
 		
 		//TODO count points for cards of 3. age

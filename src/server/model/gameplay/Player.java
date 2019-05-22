@@ -3,7 +3,6 @@ package server.model.gameplay;
 import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -382,20 +381,9 @@ public class Player implements Serializable{
 			alternateResourcesOfBothOpponents.put(rightPlayer, rightPlayer.getAlternateResources());
 		}
 		
-		/*
-		Map<ResourceType, Integer> absoluteAmountAlternatingResourcesLeftPlayer = this.leftPlayer.getAbsoluteAlternateResourceAmount();	
-		Map<ResourceType, Integer> absoluteAmountAlternatingResourcesRightPlayer = this.rightPlayer.getAbsoluteAlternateResourceAmount();	
-		ArrayList<ResourceType> sortedRequiredResourcesLeftPlayer = Globals.sortMapByValue(absoluteAmountAlternatingResourcesLeftPlayer);
-		ArrayList<ResourceType> sortedRequiredResourcesRightPlayer = Globals.sortMapByValue(absoluteAmountAlternatingResourcesRightPlayer);
-		sortedRequiredResourcesLeftPlayer = (ArrayList<ResourceType>) sortedRequiredResourcesLeftPlayer.stream()
-			.filter(f -> checkedResources.get(f) != null && checkedResources.get(f) != true).collect(Collectors.toList());
-		sortedRequiredResourcesRightPlayer = (ArrayList<ResourceType>) sortedRequiredResourcesRightPlayer.stream()
-			.filter(f -> checkedResources.get(f) != null && checkedResources.get(f) != true).collect(Collectors.toList());
-		 */
 
 		copy.clear();
 		copy = (HashMap) missingResources.clone();
-		System.out.println(copy.toString());
 		for (ResourceType type : copy.keySet()) {	
 			Integer amountRequired = copy.get(type);
 			System.out.println(alternateResourcesOfBothOpponents.toString());
@@ -625,8 +613,8 @@ public class Player implements Serializable{
 	
 	public void removeCardFromCurrentPlayabled(Card c) {
 		Card cr = this.currentPlayableCards.remove(this.currentPlayableCards.indexOf(c));
-		System.out.println("removed card: " + cr);
-		System.out.println("now available cards: " + currentPlayableCards);
+		logger.info("removed card: " + cr);
+		logger.info("now available cards: " + currentPlayableCards);
 	}
 	
 	public Board getBoard() {

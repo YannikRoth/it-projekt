@@ -5,7 +5,6 @@ import java.util.Map;
 
 import globals.ResourceMapType;
 import globals.ResourceType;
-import server.ServiceLocator;
 
 /**
  * World wonders can be attached to a Board

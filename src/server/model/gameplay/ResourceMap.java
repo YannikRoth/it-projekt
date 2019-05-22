@@ -6,7 +6,6 @@ import java.util.HashMap;
 
 import globals.ResourceMapType;
 import globals.ResourceType;
-import globals.exception.IllegalParameterException;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
