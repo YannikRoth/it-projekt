@@ -3,7 +3,6 @@ package client.controller;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import client.ClientMVC;
 import client.ServicelocatorClient;

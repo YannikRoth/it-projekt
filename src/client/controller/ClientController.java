@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
 
-import com.sun.glass.ui.View;
-
 import client.ServicelocatorClient;
 import client.model.ClientModel;
 import client.view.ClientView;

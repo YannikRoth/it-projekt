@@ -142,7 +142,6 @@ public class LobbyView {
 		hBoxConnect.getChildren().add(btnConnect);
 		
 		buttonAndPlayer.getChildren().addAll(hBoxIpAdress, hBoxButton, hBoxPlayer);
-//		buttonAndPlayer.getChildren().addAll(hBoxIpAdress, hBoxButton, hBoxPlayer, hBoxConnect);
 		hBoxButton.setAlignment(Pos.CENTER);
 		hBoxPlayer.setAlignment(Pos.CENTER);
 		hBoxIpAdress.setAlignment(Pos.CENTER);
