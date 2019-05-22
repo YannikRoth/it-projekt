@@ -14,7 +14,7 @@ import server.ServiceLocator;
 
 public class WorldWonder implements Serializable {
 	//resource maps for cost and production
-	protected Map<ResourceType, Integer> cost = new ResourceMap(ResourceMapType.COST);;
+	protected Map<ResourceType, Integer> cost = new ResourceMap(ResourceMapType.COST);
 	protected Map<ResourceType, Integer> produce = new ResourceMap(ResourceMapType.PRODUCE);
 	private Card worldWonderCard;
 	

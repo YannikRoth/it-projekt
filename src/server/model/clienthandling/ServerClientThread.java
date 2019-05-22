@@ -135,11 +135,9 @@ public class ServerClientThread extends Thread {
 					// wait for model to allow thread to continue
 					logger.info("waiting...");
 					try {
-						//this.sleep(1000);
 						ServerClientThread.sleep(1000);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						logger.warning("waiting loop: " + e.getMessage());
 					}
 				}
 
@@ -192,7 +190,7 @@ public class ServerClientThread extends Thread {
 								cardplayed = (Card) objInputStream.readObject();
 								boolean check = this.player.playCard(cardplayed);
 								if(check == false) {
-									logger.warning("card could not be played, maybe a consistency problem?");
+									logger.warning("PLAYCARD: card could not be played, maybe a consistency problem?");
 									legalaction = false;
 								}
 							}
@@ -214,11 +212,12 @@ public class ServerClientThread extends Thread {
 							synchronized (objInputStream) {
 								//Client wants to build a wonder with the incoming card 
 								cardplayed = (Card) objInputStream.readObject();
-								boolean check = this.player.playWorldWonder(this.player.getBoard().getNextWorldWonderStage());
+//								boolean check = this.player.playWorldWonder(this.player.getBoard().getNextWorldWonderStage());
+								boolean check = this.player.playWorldWonder(this.player.getBoard().getNextWorldWonderStage(this.player));
 								this.player.removeCardFromCurrentPlayabled(cardplayed);
 								if(check == false) {
 									legalaction = false;
-									logger.warning("card could not be played, maybe a consistency problem?");
+									logger.warning("BUILDWONDER: card could not be played, maybe a consistency problem?");
 								}
 							}
 							logger.info(cardplayed.getCardName() + "Cards received from " + player.getPlayerName()
@@ -249,8 +248,7 @@ public class ServerClientThread extends Thread {
 		}
 	}
 
-	public void OutputAllplayers(Player curplayer) throws IOException {
-
+	public synchronized void OutputAllplayers(Player curplayer) throws IOException {
 		//Outputs all right players starting with the own player of this clientthread
 		synchronized (objOutputStream) {
 			objOutputStream.reset();

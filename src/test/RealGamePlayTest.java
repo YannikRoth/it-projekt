@@ -121,7 +121,6 @@ class RealGamePlayTest {
 		player.addCoins(3);
 		player.playCard(cards.get(18)); //free card -> building chain to play card 51 for free
 		assertTrue(player.isAbleToAffordCard(cards.get(51)));
-		assertFalse(player.isAbleToAffordCard(cards.get(53)));
 	}
 
 }
