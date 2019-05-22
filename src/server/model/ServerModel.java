@@ -295,13 +295,7 @@ public class ServerModel implements Serializable{
 		List<Player> scoreList = new ArrayList<>();
 		
 		for(Player p : players) {
-			//check player performace
-			//on the player-object there is a list called "cards" which contains all cards
-			//that the player has played thorughout the game.
-			//To get the amount of coins, you can use the method player.getCoins;
 			dealMilitaryPoints(p);
-			//p.addWinningPoints(p.getMilitaryPlusPoints() - p.getMilitaryMinusPoints());
-			//p.addWinningPoints(p.getMilitaryStrength());
 			p.addWinningPoints(p.getCoins()/3); //get amount of coins
 			ArrayList<Card> cardsPlayedByPlayer = (ArrayList<Card>) p.getPlayedCards(); //get a list of all played cards
 			

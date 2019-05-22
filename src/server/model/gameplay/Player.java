@@ -136,8 +136,6 @@ public class Player implements Serializable{
 			c.getFreeCards().forEach(cardname -> this.freePlayableCards.add(cardname.toLowerCase()));
 			
 			this.cards.add(c);
-			//TODO any further requiremets that a card can be played?
-			//TODO any further updates of the player object
 			//update coins for brown or grey cards (applies for 4 yellow cards only)
 			if(c.getId() == 60 || c.getId() == 90) {
 				long countOfOwnBrownCards = this.cards.stream().filter(d -> d.getCardType().getColor() == CardColor.BROWN).count();

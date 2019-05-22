@@ -11,7 +11,6 @@ import com.sun.glass.ui.View;
 
 import client.ServicelocatorClient;
 import client.model.ClientModel;
-import client.view.CardOptionView;
 import client.view.ClientView;
 import globals.ClientAction;
 import globals.Translator;
@@ -141,6 +140,7 @@ public class ClientController {
 	}
 	
 	/**
+	 * Method handels PlayCard-Button
 	 * @author Roman Leuenberger
 	 */
 
@@ -169,6 +169,7 @@ public class ClientController {
 	}
 	
 	/**
+	 * Method handels BuildWorldWonder-Button
 	 * @author Roman Leuenberger
 	 */
 	
@@ -187,6 +188,7 @@ public class ClientController {
 	}
 	
 	/**
+	 * Method handels DiscardCard-Button
 	 * @author Roman Leuenberger
 	 */
 	
@@ -201,6 +203,8 @@ public class ClientController {
 	}
 	
 	/**
+	 * Method handels Layout of cards when a card gets clicked
+	 * Furthermore it handels if a Button is enabled or not
 	 * @author Roman Leuenberger
 	 */
 	

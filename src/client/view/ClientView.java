@@ -34,6 +34,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import server.ServiceLocator;
 import server.model.gameplay.Card;
 import server.model.gameplay.Player;
 
@@ -328,6 +329,7 @@ public class ClientView {
 		MenuBar menuBar = new MenuBar(menuHelp, menuLanguage);
 		borderPaneMain.setTop(menuBar);
 		
+		this.stage.getIcons().add(ServiceLocator.getSevenLogo());
 		this.stage.setResizable(false);
 		Scene scene = new Scene(borderPaneMain);
 		scene.getStylesheets().add(getClass().getResource("ClientStyle.css").toExternalForm());
@@ -359,13 +361,13 @@ public class ClientView {
 	}
 	
 	/**
+	 * Method updates the view of the currently playable cards
 	 * @author Roman Leuenberger
 	 */
 	
 	public void updatePlayableCardView() {
 		this.playableCards.getChildren().clear();
 		cards = new ImageView[model.getMyPlayer().getPlayableCards().size()];
-		System.out.println(model.getMyPlayer().getPlayableCards());
 		for (int i = 0; i < model.getMyPlayer().getPlayableCards().size(); i++) {
 			cards[i] = new ImageView(new Image("file:./resource/images/cards/"+model.getMyPlayer().getPlayableCards().get(i).getImageFileName()));
 			cards[i].setFitHeight(200);

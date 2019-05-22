@@ -1,5 +1,7 @@
 package server;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -8,6 +10,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+import javafx.scene.image.Image;
 import server.model.ServerModel;
 
 public class ServiceLocator {
@@ -21,6 +24,8 @@ public class ServiceLocator {
 	
 	//card id for manual card creation
 	private static int manualCardId = 1000;
+	
+	private static Image sevenLogo;
 	
 	/**
 	 * Class initialization
@@ -131,4 +136,19 @@ public class ServiceLocator {
 		return i;
 	}
 	
+	/**
+	 * This is a helper for icons in views
+	 * @return the defined loga as Image
+	 * @author david
+	 */
+	public static Image getSevenLogo() {
+		if(sevenLogo == null) {
+			try {
+				sevenLogo = new Image(new FileInputStream("resource/images/seven.png"));
+			} catch (FileNotFoundException e) {
+				ServiceLocator.getLogger().warning("Icon Image not found: " + e.getMessage());
+			}
+		}
+		return sevenLogo;
+	}
 }

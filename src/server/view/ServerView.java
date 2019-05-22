@@ -135,24 +135,25 @@ public class ServerView {
 		pane.setBottom(tableView);
 		
 		tblcolTimestamp= new TableColumn<ServerAction,String>();
-		tblcolTimestamp.setMinWidth(140);
+		tblcolTimestamp.setMinWidth(160);
 		tblcolTimestamp.setCellValueFactory(new PropertyValueFactory<ServerAction,String>("timestamp"));
 		
 		tblcolIpAdress	= new TableColumn<ServerAction,String>();
-		tblcolIpAdress.setMinWidth(80);
+		tblcolIpAdress.setMinWidth(90);
 		tblcolIpAdress.setCellValueFactory(new PropertyValueFactory<ServerAction,String>("ipAdress"));
 		
 		tblcolPlayer	= new TableColumn<ServerAction,String>();
-		tblcolPlayer.setMinWidth(90);
+		tblcolPlayer.setMinWidth(100);
 		tblcolPlayer.setCellValueFactory(new PropertyValueFactory<ServerAction,String>("userName"));
 		
 		tblcolAction	= new TableColumn<ServerAction,String>();
-		tblcolAction.setMinWidth(290);
+		tblcolAction.setMinWidth(300);
 		tblcolAction.setCellValueFactory(new PropertyValueFactory<ServerAction,String>("action"));
 		
 		tableView.getColumns().addAll(tblcolTimestamp, tblcolIpAdress, tblcolPlayer, tblcolAction);
 		
 		//Final Initialisation
+		this.stage.getIcons().add(ServiceLocator.getSevenLogo());
 		this.stage.setResizable(false);
 		Scene scene = new Scene(pane);
 		scene.getStylesheets().add(getClass().getResource("ServerStyle.css").toExternalForm());

@@ -102,31 +102,35 @@ public class ClientModel extends Thread {
 						setMyPlayer((Player) objInputStream.readObject());
 					}
 					logger.info("Own Player Object "+getMyPlayer().getPlayerName()+" received from Server");
-					otherPlayers.clear();
 					//update all other players
 					synchronized(otherPlayers) {
+						otherPlayers.clear();
 						for (int i = 0; i < numberofPlayers - 1; i++) {
 							tempplayer = (Player) objInputStream.readObject();
 							otherPlayers.add(tempplayer);
 							logger.info("Opponent player "+tempplayer.getPlayerName()+" received from Server");						
 						}
 					}
-					//set neigbours manually on client side as references will be invalid
-					setneigbours();
 					
-					//update the view
-					Cards.setAll(getMyPlayer().getPlayableCards());
-					if(getMyPlayer().getPlayableCards().size() > 1) {
-						Platform.runLater(new Runnable() {
-							@Override
-							public void run() {
-								System.out.println("View ref: " + ServicelocatorClient.getClientView());
-								ServicelocatorClient.getClientView().updatePlayableCardView();
-								ServicelocatorClient.getClientView().refreshAgeLabelFromModel();
-								ServicelocatorClient.getClientController().processClickOnImage();
-								
-							}
-						});
+					synchronized (getMyPlayer()) {
+						//set neigbours manually on client side as references will be invalid
+						setneigbours();
+						
+						//update the view
+						Cards.setAll(getMyPlayer().getPlayableCards());
+						logger.info("Updated my cards: " + getMyPlayer().getPlayableCards());
+						if(getMyPlayer().getPlayableCards().size() > 1) {
+							Platform.runLater(new Runnable() {
+								@Override
+								public void run() {
+									System.out.println("View ref: " + ServicelocatorClient.getClientView());
+									ServicelocatorClient.getClientView().updatePlayableCardView();
+									ServicelocatorClient.getClientView().refreshAgeLabelFromModel();
+									ServicelocatorClient.getClientController().processClickOnImage();
+									
+								}
+							});
+						}
 					}
 					
 					break;
